@@ -171,6 +171,7 @@ border-radius: 6px; color: white; font-size: 1rem;
 }
 input:focus, select:focus, textarea:focus { border-color: var(--accent-color); outline: none; background: rgba(0,0,0,0.4); }
 select { cursor: pointer; }
+textarea { min-height: 90px; resize: vertical; font-family: inherit; }
 
 /* ===== SEARCH ===== */
 .search-wrap { position: relative; margin-bottom: 20px; }
@@ -338,6 +339,24 @@ text-transform: none; letter-spacing: normal; color: var(--text-main);
 .builder-hint { font-size: 0.75rem; color: var(--text-dim); margin: -10px 0 18px; line-height: 1.5; }
 .builder-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
 
+/* ===== FIELD EDITOR (task builder) ===== */
+.field-row {
+background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);
+border-radius: 8px; padding: 9px 10px; margin-bottom: 7px;
+font-size: 0.84rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.field-name { flex: 1; min-width: 120px; word-break: break-word; }
+.field-req-pick {
+display: flex; align-items: center; gap: 6px; font-size: 0.75rem;
+color: var(--text-dim); text-transform: none; letter-spacing: normal;
+margin-bottom: 0; cursor: pointer; white-space: nowrap;
+}
+.field-req-pick input { width: auto; margin: 0; accent-color: var(--accent-color); }
+.field-new-box {
+background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+border-radius: 10px; padding: 14px; margin-top: 6px;
+}
+
 .data-section { margin-top: 40px; }
 .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
 .data-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border-color); color: var(--text-dim);
@@ -369,12 +388,14 @@ padding: 15px; margin-bottom: 20px; position: relative;
 .copyable-text { word-break: break-all; font-size: 0.9rem; color: var(--text-dim); margin-bottom: 10px;
 padding-right: 70px; }
 .copy-btn { padding: 6px 12px; font-size: 0.75rem; position: absolute; top: 10px; right: 10px; }
-.radio-group { display: flex; gap: 20px; margin-bottom: 20px; }
-.radio-group label { display: flex; align-items: center; gap: 8px; margin-bottom: 0; cursor: pointer; }
-.radio-group input[type="radio"] { width: auto; margin: 0; }
-.time-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+
+/* ===== DYNAMIC ENTRY FORM ===== */
+.dyn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 20px; align-items: start; }
+.dyn-field { min-width: 0; }
+.dyn-wide { grid-column: 1 / -1; }
+.time-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 gap: 15px; margin-bottom: 20px; }
-.time-inputs input, .time-inputs select { margin-bottom: 0; }
+.time-inputs select { margin-bottom: 0; }
 
 @media (max-width: 820px) {
 .builder-cols { grid-template-columns: 1fr; }
@@ -484,166 +505,12 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <!-- MESSAGE TEMPLATE TILES (read-only, set by Jawad) -->
 <div id="template-tiles"></div>
 
-<!-- DEFAULT FORM -->
-<div id="form-default" class="hidden">
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
-<div class="ref-field">
-<label>Reference Number</label>
-<input type="number" id="field-ref" inputmode="numeric">
-</div>
-<div class="case-field">
-<label>Case Number</label>
-<input type="number" id="field-case" inputmode="numeric">
-</div>
-<div class="comment-field">
-<label>Comment</label>
-<input type="text" id="field-comment">
-</div>
-</div>
+<!-- DYNAMIC ENTRY FORM: built at runtime from the task's own field list -->
+<div id="form-dynamic" class="hidden">
+<div id="dyn-fields" class="dyn-grid"></div>
 <div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
-<button class="btn btn-primary" id="btn-temp-save-default" onclick="saveData('Temp')" style="display:none;">Temp Save</button>
-<button class="btn btn-primary" id="btn-final-save-default" onclick="saveData('Final')">Final Save</button>
-</div>
-</div>
-
-<!-- RIDER SCHEDULING FORM -->
-<div id="form-rider-scheduling" class="hidden">
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
-<div class="ref-field">
-<label>Reference Number</label>
-<input type="number" id="field-ref-rider" inputmode="numeric">
-</div>
-<div class="case-field">
-<label>Case Number</label>
-<input type="number" id="field-case-rider" inputmode="numeric">
-</div>
-<div class="comment-field">
-<label>Comment</label>
-<input type="text" id="field-comment-rider">
-</div>
-</div>
-<div class="time-inputs">
-<div>
-<label>Scheduled Date</label>
-<input type="date" id="field-date-rider">
-</div>
-<div>
-<label>Hour</label>
-<select id="field-hour-rider">
-<option value="">Hour</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-</select>
-</div>
-<div>
-<label>Minutes</label>
-<select id="field-min-rider">
-<option value="">Minutes</option>
-<option value="00">00</option>
-<option value="15">15</option>
-<option value="30">30</option>
-<option value="45">45</option>
-</select>
-</div>
-<div>
-<label>AM / PM</label>
-<select id="field-ampm-rider">
-<option value="">AM / PM</option>
-<option value="AM">AM</option>
-<option value="PM">PM</option>
-</select>
-</div>
-</div>
-<div>
-<label>Remarks</label>
-<input type="text" id="field-remarks-rider" placeholder="Anything worth noting about this visit">
-</div>
-<div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
-<button class="btn btn-primary" id="btn-temp-save-rider" onclick="saveRiderScheduling('Temp')" style="display:none;">Temp Save</button>
-<button class="btn btn-primary" id="btn-final-save-rider" onclick="saveRiderScheduling('Final')">Final Save</button>
-</div>
-</div>
-
-<!-- VISIT RATING FORM -->
-<div id="form-visit-rating" class="hidden">
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
-<div class="ref-field">
-<label>Reference Number</label>
-<input type="number" id="field-ref-rating" inputmode="numeric">
-</div>
-<div class="case-field">
-<label>Case Number</label>
-<input type="number" id="field-case-rating" inputmode="numeric">
-</div>
-<div class="comment-field">
-<label>Comment</label>
-<input type="text" id="field-comment-rating">
-</div>
-</div>
-<div>
-<label>Case Rating 1-10</label>
-<select id="field-rating">
-<option value="">Select Rating</option>
-<option value="1">1 - Poor</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5 - Average</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10 - Excellent</option>
-</select>
-</div>
-<div>
-<label>Remarks</label>
-<input type="text" id="field-remarks-rating" placeholder="Anything worth noting about this rating">
-</div>
-<div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
-<button class="btn btn-primary" onclick="saveVisitRating('Final')">Final Save</button>
-</div>
-</div>
-
-<!-- APPROVAL FORM -->
-<div id="form-approval" class="hidden">
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
-<div class="ref-field">
-<label>Reference Number</label>
-<input type="number" id="field-ref-approval" inputmode="numeric">
-</div>
-<div class="case-field">
-<label>Case Number</label>
-<input type="number" id="field-case-approval" inputmode="numeric">
-</div>
-<div class="comment-field">
-<label>Comment</label>
-<input type="text" id="field-comment-approval">
-</div>
-</div>
-<div class="radio-group">
-<label>
-<input type="radio" name="approval-status" value="Approved">
-<span>Approved</span>
-</label>
-<label>
-<input type="radio" name="approval-status" value="Rejected">
-<span>Rejected</span>
-</label>
-</div>
-<div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
-<button class="btn btn-primary" id="btn-temp-save-approval" onclick="saveApproval('Temp')" style="display:none;">Temp Save</button>
-<button class="btn btn-primary" id="btn-final-save-approval" onclick="saveApproval('Final')">Final Save</button>
+<button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
+<button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Final Save</button>
 </div>
 </div>
 
@@ -771,56 +638,124 @@ const STAFF = {
   "Sumaira": { role: "Recovery Officer" }
 };
 
-/* The form layouts Jawad can pick from. A new arrangement of fields
-   still needs code; everything else is configurable. */
-const LAYOUTS = [
-  { id: "default", label: "Plain (Ref / Case / Comment)" },
-  { id: "rider-scheduling", label: "Scheduling (date, time, remarks)" },
-  { id: "visit-rating", label: "Rating 1-10 (with remarks)" },
-  { id: "approval", label: "Approve / Reject" }
+/* =========================
+   FIELD SYSTEM
+   Every task carries its own list of fields. A field is either "built-in"
+   (points at one of the sheet's fixed, dedicated columns) or "custom"
+   (Jawad names it and picks a type; the backend appends a column for it
+   automatically the first time a value is saved).
+   ========================= */
+
+// The catalogue Jawad can pick from under "Add an existing field".
+// key   : ties a field back to the fixed sheet column it always means.
+// col   : the column name that field writes to.
+// locked: label/type/col can never be changed once picked - Ref and Case
+//         only, per the standing rule that they may not be renamed.
+const BUILTIN_FIELD_DEFS = [
+  { key: 'ref',            label: 'Reference Number', type: 'number',   col: 'RefNo',           locked: true },
+  { key: 'case',           label: 'Case Number',      type: 'number',   col: 'CaseNo',           locked: true },
+  { key: 'comment',        label: 'Comment',          type: 'text',     col: 'Comment',          locked: false },
+  { key: 'scheduledDate',  label: 'Scheduled Date',   type: 'date',     col: 'ScheduledDate',    locked: false },
+  { key: 'scheduledTime',  label: 'Scheduled Time',   type: 'time',     col: 'ScheduledTime',    locked: false },
+  { key: 'rating',         label: 'Case Rating 1-10', type: 'select',   col: 'Rating',           locked: false,
+    options: ['1','2','3','4','5','6','7','8','9','10'] },
+  { key: 'approvalStatus', label: 'Decision',         type: 'select',   col: 'ApprovalStatus',   locked: false,
+    options: ['Approved','Rejected'] },
+  { key: 'remarks',        label: 'Remarks',          type: 'textarea', col: 'Remarks',          locked: false }
 ];
 
+// Types Jawad can choose from when creating a brand new field of his own.
+const FIELD_TYPES = [
+  { id: 'text',     label: 'Text' },
+  { id: 'number',   label: 'Number' },
+  { id: 'date',     label: 'Date' },
+  { id: 'time',     label: 'Time' },
+  { id: 'select',   label: 'Dropdown' },
+  { id: 'textarea', label: 'Long text' },
+  { id: 'yesno',    label: 'Yes / No' }
+];
+
+function builtinDefByKey(key) {
+  for (let i = 0; i < BUILTIN_FIELD_DEFS.length; i++) {
+    if (BUILTIN_FIELD_DEFS[i].key === key) return BUILTIN_FIELD_DEFS[i];
+  }
+  return null;
+}
+
+function fieldTypeLabel(type) {
+  for (let i = 0; i < FIELD_TYPES.length; i++) {
+    if (FIELD_TYPES[i].id === type) return FIELD_TYPES[i].label;
+  }
+  return type;
+}
+
+// Builds a field entry for a task's seed data from the built-in catalogue.
+function bf(key, required) {
+  const def = builtinDefByKey(key);
+  if (!def) return null;
+  return {
+    id: def.key, key: def.key, label: def.label, type: def.type,
+    options: def.options ? def.options.slice() : [],
+    col: def.col, required: !!required, builtin: true, locked: !!def.locked
+  };
+}
+
+// Ref + Case, plus Comment only when the task takes Temp Save.
+function stdFields(temp) {
+  const f = [bf('ref'), bf('case')];
+  if (temp) f.push(bf('comment'));
+  return f;
+}
+
 /* Jawad's own screens. Kept in code so they can never be switched off
-   from the very screen used to switch things off. */
+   from the very screen used to switch things off. panel identifies which
+   admin screen renders instead of the dynamic field form. */
 const ADMIN_TASKS = [
-  { name: "Add / Edit Tasks", phase: "Admin", layout: "tasks",
-    temp: false, ref: "off", caseNo: "off", owners: [], slots: [], active: true, admin: true },
-  { name: "Task Chain", phase: "Admin", layout: "chain",
-    temp: false, ref: "off", caseNo: "off", owners: [], slots: [], active: true, admin: true },
-  { name: "Message Templates", phase: "Admin", layout: "templates",
-    temp: false, ref: "off", caseNo: "off", owners: [], slots: [], active: true, admin: true }
+  { name: "Add / Edit Tasks", phase: "Admin", panel: "tasks",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Task Chain", phase: "Admin", panel: "chain",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Message Templates", phase: "Admin", panel: "templates",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
 /* Seeded into the Tasks tab the first time it is empty. After that the
-   sheet is the only source of truth. */
+   sheet is the only source of truth. Existing sheets are never rewritten
+   from this list - it only matters on a completely empty Tasks tab. */
 const DEFAULT_TASKS = [
-  { name: "Save Contacts", phase: "Interaction", layout: "default", temp: true, ref: "optional", caseNo: "optional", owners: ["Samiya"], slots: [] },
-  { name: "Poll To Thank You Msg", phase: "Interaction", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Samiya"], slots: ["Poll Message", "Thank You Message"] },
-  { name: "Initial Documents", phase: "Interaction", layout: "default", temp: true, ref: "optional", caseNo: "optional", owners: ["Samiya"], slots: [] },
-  { name: "Visit Time Tieup", phase: "Interaction", layout: "rider-scheduling", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair","Waqas","Junaid"], slots: ["Message"] },
-  { name: "Rate To Visit", phase: "Pre Sales", layout: "visit-rating", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair","Waqas","Junaid"], slots: [] },
-  { name: "Approve/Reject Case", phase: "Pre Sales", layout: "approval", temp: true, ref: "optional", caseNo: "optional", owners: ["Uzair"], slots: ["Message"] },
-  { name: "Sale Input", phase: "Sales", layout: "default", temp: true, ref: "optional", caseNo: "optional", owners: ["Uzair","Waqas","Junaid"], slots: [] },
-  { name: "Voucher Input", phase: "Sales", layout: "default", temp: true, ref: "optional", caseNo: "optional", owners: ["Uzair","Waqas","Junaid"], slots: [] },
-  { name: "File Update", phase: "Sales", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair"], slots: [] },
-  { name: "Supporting Save In Soft", phase: "Sales", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Zuni"], slots: [] },
-  { name: "Supporting Save In Hard", phase: "Sales", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Junaid"], slots: [] },
-  { name: "Plan Share", phase: "Post Sale", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Chq Management", phase: "Post Sale", layout: "default", temp: true, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Recovery Follow Ups", phase: "Recovery", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Sumaira"], slots: [] },
-  { name: "Exmpt And Red Cases", phase: "Recovery", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Recovery Presentation", phase: "Recovery", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Ahmed"], slots: [] },
-  { name: "Instalment Recd", phase: "Entries", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair","Samiya","Zuni"], slots: [] },
-  { name: "Instalment Voucher", phase: "Entries", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Zuni"], slots: [] },
-  { name: "Inst File Update", phase: "Entries", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair"], slots: [] },
-  { name: "Updated Plan Share", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "File Tele", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair"], slots: [] },
-  { name: "Six Month Report To Taha", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Branch Wise And Salesman Wise To Taha", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Case Closure Msg", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Nabiha"], slots: [] },
-  { name: "Delivery Linkage & Aliens", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Junaid","Nabiha"], slots: [] },
-  { name: "Empty Mahana Temp Vir W", phase: "Recurring Tasks", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Uzair","Waqas","Junaid"], slots: [] },
-  { name: "Gift To Customer If Inst Paid Earlier", phase: "Admin", layout: "default", temp: false, ref: "optional", caseNo: "optional", owners: ["Jawad"], slots: [] }
+  { name: "Save Contacts", phase: "Interaction", temp: true, fields: stdFields(true), owners: ["Samiya"], slots: [] },
+  { name: "Poll To Thank You Msg", phase: "Interaction", temp: false, fields: stdFields(false), owners: ["Samiya"], slots: ["Poll Message", "Thank You Message"] },
+  { name: "Initial Documents", phase: "Interaction", temp: true, fields: stdFields(true), owners: ["Samiya"], slots: [] },
+  { name: "Visit Time Tieup", phase: "Interaction", temp: false,
+    fields: [bf('ref'), bf('case'), bf('scheduledDate'), bf('scheduledTime'), bf('remarks')],
+    owners: ["Uzair","Waqas","Junaid"], slots: ["Message"] },
+  { name: "Rate To Visit", phase: "Pre Sales", temp: false,
+    fields: [bf('ref'), bf('case'), bf('rating'), bf('remarks')],
+    owners: ["Uzair","Waqas","Junaid"], slots: [] },
+  { name: "Approve/Reject Case", phase: "Pre Sales", temp: true,
+    fields: [bf('ref'), bf('case'), bf('comment'), bf('approvalStatus')],
+    owners: ["Uzair"], slots: ["Message"] },
+  { name: "Sale Input", phase: "Sales", temp: true, fields: stdFields(true), owners: ["Uzair","Waqas","Junaid"], slots: [] },
+  { name: "Voucher Input", phase: "Sales", temp: true, fields: stdFields(true), owners: ["Uzair","Waqas","Junaid"], slots: [] },
+  { name: "File Update", phase: "Sales", temp: false, fields: stdFields(false), owners: ["Uzair"], slots: [] },
+  { name: "Supporting Save In Soft", phase: "Sales", temp: false, fields: stdFields(false), owners: ["Zuni"], slots: [] },
+  { name: "Supporting Save In Hard", phase: "Sales", temp: false, fields: stdFields(false), owners: ["Junaid"], slots: [] },
+  { name: "Plan Share", phase: "Post Sale", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "Chq Management", phase: "Post Sale", temp: true, fields: stdFields(true), owners: ["Nabiha"], slots: [] },
+  { name: "Recovery Follow Ups", phase: "Recovery", temp: false, fields: stdFields(false), owners: ["Sumaira"], slots: [] },
+  { name: "Exmpt And Red Cases", phase: "Recovery", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "Recovery Presentation", phase: "Recovery", temp: false, fields: stdFields(false), owners: ["Ahmed"], slots: [] },
+  { name: "Instalment Recd", phase: "Entries", temp: false, fields: stdFields(false), owners: ["Uzair","Samiya","Zuni"], slots: [] },
+  { name: "Instalment Voucher", phase: "Entries", temp: false, fields: stdFields(false), owners: ["Zuni"], slots: [] },
+  { name: "Inst File Update", phase: "Entries", temp: false, fields: stdFields(false), owners: ["Uzair"], slots: [] },
+  { name: "Updated Plan Share", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "File Tele", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Uzair"], slots: [] },
+  { name: "Six Month Report To Taha", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "Branch Wise And Salesman Wise To Taha", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "Case Closure Msg", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Nabiha"], slots: [] },
+  { name: "Delivery Linkage & Aliens", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Junaid","Nabiha"], slots: [] },
+  { name: "Empty Mahana Temp Vir W", phase: "Recurring Tasks", temp: false, fields: stdFields(false), owners: ["Uzair","Waqas","Junaid"], slots: [] },
+  { name: "Gift To Customer If Inst Paid Earlier", phase: "Admin", temp: false, fields: stdFields(false), owners: ["Jawad"], slots: [] }
 ];
 
 const DEFAULT_CHAIN = [
@@ -1070,17 +1005,31 @@ async function loadTasks() {
   }
 }
 
+function normaliseField(f) {
+  f = f || {};
+  return {
+    id: String(f.id || f.key || '').trim() || ('f_' + Math.random().toString(36).slice(2, 8)),
+    key: f.key || null,
+    label: String(f.label || '').trim() || 'Field',
+    type: String(f.type || 'text').trim(),
+    required: !!f.required,
+    options: Array.isArray(f.options) ? f.options.slice() : [],
+    col: String(f.col || f.label || '').trim(),
+    builtin: !!f.builtin,
+    locked: !!f.locked
+  };
+}
+
 function normaliseTask(t) {
   return {
     name: String(t.name || "").trim(),
     phase: String(t.phase || "Other").trim() || "Other",
-    layout: String(t.layout || "default").trim() || "default",
+    fields: Array.isArray(t.fields) ? t.fields.map(normaliseField) : [],
     temp: !!t.temp,
-    ref: String(t.ref || "optional").toLowerCase(),
-    caseNo: String(t.caseNo || "optional").toLowerCase(),
     owners: (t.owners || []).slice(),
     slots: (t.slots || []).slice(),
-    active: t.active !== false
+    active: t.active !== false,
+    panel: t.panel || null // admin-only: 'tasks' | 'chain' | 'templates'
   };
 }
 
@@ -1121,8 +1070,7 @@ function openBuilderTask(i) {
 
 function startNewTask() {
   builderTasks.push({
-    name: "", phase: "", layout: "default", temp: false,
-    ref: "optional", caseNo: "optional", owners: [], slots: [], active: true
+    name: "", phase: "", temp: false, fields: [], owners: [], slots: [], active: true
   });
   builderIndex = builderTasks.length - 1;
   markBuilderDirty();
@@ -1142,9 +1090,15 @@ function renderBuilderForm() {
   const phases = [];
   builderTasks.forEach(x => { if (x.phase && phases.indexOf(x.phase) === -1) phases.push(x.phase); });
 
-  const modeOptions = (val) => ['required','optional','off'].map(m =>
-    `<option value="${m}"${val === m ? ' selected' : ''}>${m.charAt(0).toUpperCase() + m.slice(1)}</option>`
-  ).join('');
+  const existingOptions = BUILTIN_FIELD_DEFS
+    .filter(d => !t.fields.some(f => f.key === d.key))
+    .map(d => `<option value="${encodeURIComponent(JSON.stringify({ kind: 'builtin', key: d.key }))}">${escapeHtml(d.label)} (built-in)</option>`)
+    .join('');
+
+  const customCatalog = allKnownCustomFields().filter(c => !t.fields.some(f => f.col === c.col));
+  const customOptions = customCatalog
+    .map(c => `<option value="${encodeURIComponent(JSON.stringify({ kind: 'custom', col: c.col, label: c.label, type: c.type, options: c.options }))}">${escapeHtml(c.label)} (existing custom field)</option>`)
+    .join('');
 
   box.innerHTML = `
     <div class="builder-row">
@@ -1161,26 +1115,6 @@ function renderBuilderForm() {
           ${phases.map(p => `<option value="${escapeHtml(p)}"></option>`).join('')}
         </datalist>
       </div>
-    </div>
-
-    <label>Form layout</label>
-    <select id="b-layout" onchange="updateBuilder('layout', this.value)">
-      ${LAYOUTS.map(l => `<option value="${l.id}"${t.layout === l.id ? ' selected' : ''}>${escapeHtml(l.label)}</option>`).join('')}
-    </select>
-
-    <div class="builder-row">
-      <div>
-        <label>Reference Number</label>
-        <select onchange="updateBuilder('ref', this.value)">${modeOptions(t.ref)}</select>
-      </div>
-      <div>
-        <label>Case Number</label>
-        <select onchange="updateBuilder('caseNo', this.value)">${modeOptions(t.caseNo)}</select>
-      </div>
-    </div>
-    <div class="builder-hint">
-      If both are Optional, at least one still has to be filled &mdash; the queue
-      needs a number to follow the case by. Set one to Off to hide it entirely.
     </div>
 
     <label>Who does this task</label>
@@ -1217,6 +1151,41 @@ function renderBuilderForm() {
     </div>
 
     <div style="border-top:1px solid var(--border-color); padding-top:16px; margin-top:4px;">
+      <label style="margin-bottom:10px;">Fields on this task</label>
+      <div id="field-list">${renderFieldEditorList(t)}</div>
+      <div class="builder-hint">
+        Reference Number and Case Number can be added or removed, but never
+        renamed. Final Save needs a value in at least one of whichever
+        numbers you include here.
+      </div>
+    </div>
+
+    <div>
+      <label>Add an existing field</label>
+      <select id="add-existing-field" onchange="if(this.value){addExistingFieldToBuilderTask(decodeURIComponent(this.value)); this.value='';}">
+        <option value="">Choose a field&hellip;</option>
+        ${existingOptions}
+        ${customOptions}
+      </select>
+    </div>
+
+    <div class="field-new-box">
+      <label style="margin-bottom:10px;">Or create a new field</label>
+      <div class="builder-row">
+        <div>
+          <input type="text" id="new-field-label" placeholder="Field name">
+        </div>
+        <div>
+          <select id="new-field-type" onchange="toggleNewFieldOptions()">
+            ${FIELD_TYPES.map(ft => `<option value="${ft.id}">${escapeHtml(ft.label)}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <input type="text" id="new-field-options" placeholder="Dropdown options, comma separated" class="hidden">
+      <button class="btn btn-small" onclick="addCustomFieldToBuilderTask()">+ Add field</button>
+    </div>
+
+    <div style="border-top:1px solid var(--border-color); padding-top:16px; margin-top:20px;">
       <button class="btn btn-small icon-cross" onclick="deleteBuilderTask(${builderIndex})">
         Delete this task
       </button>
@@ -1226,6 +1195,148 @@ function renderBuilderForm() {
         Entries already in Final and Temp are never touched.
       </div>
     </div>`;
+
+  toggleNewFieldOptions();
+}
+
+function toggleNewFieldOptions() {
+  const typeEl = document.getElementById('new-field-type');
+  const optEl = document.getElementById('new-field-options');
+  if (!typeEl || !optEl) return;
+  optEl.classList.toggle('hidden', typeEl.value !== 'select');
+}
+
+function renderFieldEditorList(t) {
+  if (!t.fields.length) {
+    return `<div class="chain-empty">No fields yet. Add Reference Number, Case Number, or anything else below.</div>`;
+  }
+  return t.fields.map((f, i) => `
+    <div class="field-row">
+      <span class="field-name">
+        ${escapeHtml(f.label)}
+        <span class="search-kind" style="margin-left:6px;">${escapeHtml(fieldTypeLabel(f.type))}</span>
+        ${f.locked ? '<span class="search-kind" style="margin-left:4px;">Locked</span>' : ''}
+      </span>
+      <label class="field-req-pick">
+        <input type="checkbox"${f.required ? ' checked' : ''} onchange="toggleFieldRequired('${f.id}', this.checked)">
+        Required
+      </label>
+      <span class="chain-btns">
+        <button class="chain-btn" onclick="moveBuilderField('${f.id}',-1)" title="Move up">&#9650;</button>
+        <button class="chain-btn" onclick="moveBuilderField('${f.id}',1)" title="Move down">&#9660;</button>
+        <button class="chain-btn" onclick="removeBuilderField('${f.id}')" title="Remove">&times;</button>
+      </span>
+    </div>`).join('');
+}
+
+// Every distinct custom field already used anywhere in the builder's
+// working copy, so a field created for one task can be picked for another
+// and land on the same shared column.
+function allKnownCustomFields() {
+  const map = {};
+  builderTasks.forEach(t => {
+    (t.fields || []).forEach(f => {
+      if (!f.builtin && f.col && !map[f.col]) {
+        map[f.col] = { col: f.col, label: f.label, type: f.type, options: f.options || [] };
+      }
+    });
+  });
+  return Object.keys(map).map(k => map[k]);
+}
+
+function sanitizeColName(label) {
+  const words = String(label || '').trim().replace(/[^a-zA-Z0-9]+/g, ' ').trim().split(' ').filter(Boolean);
+  if (!words.length) return 'Field' + Date.now();
+  return words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+}
+
+function addExistingFieldToBuilderTask(sourceJson) {
+  if (builderIndex < 0) return;
+  let data;
+  try { data = JSON.parse(sourceJson); } catch (e) { return; }
+  const t = builderTasks[builderIndex];
+  let field;
+
+  if (data.kind === 'builtin') {
+    if (t.fields.some(f => f.key === data.key)) return;
+    field = bf(data.key, false);
+    if (!field) return;
+  } else {
+    if (t.fields.some(f => f.col === data.col)) return;
+    field = {
+      id: 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      key: null, label: data.label, type: data.type,
+      options: data.options || [], col: data.col,
+      required: false, builtin: false, locked: false
+    };
+  }
+
+  t.fields.push(field);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function addCustomFieldToBuilderTask() {
+  if (builderIndex < 0) return;
+  const labelEl = document.getElementById('new-field-label');
+  const typeEl = document.getElementById('new-field-type');
+  const optionsEl = document.getElementById('new-field-options');
+
+  const label = labelEl.value.trim();
+  const type = typeEl.value;
+  if (!label) return toast('Name the field first.', true);
+
+  const col = sanitizeColName(label);
+  const t = builderTasks[builderIndex];
+  if (t.fields.some(f => f.col === col)) {
+    return toast('This task already has a field mapped to that name.', true);
+  }
+
+  const options = (type === 'select')
+    ? optionsEl.value.split(',').map(s => s.trim()).filter(Boolean)
+    : [];
+
+  t.fields.push({
+    id: 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    key: null, label: label, type: type, options: options, col: col,
+    required: false, builtin: false, locked: false
+  });
+
+  labelEl.value = '';
+  optionsEl.value = '';
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function removeBuilderField(fieldId) {
+  if (builderIndex < 0) return;
+  const t = builderTasks[builderIndex];
+  const f = t.fields.filter(x => x.id === fieldId)[0];
+  if (f && f.key === 'comment' && t.temp) {
+    return toast('Turn off Temp Save first \u2014 Comment is required while it is on.', true);
+  }
+  t.fields = t.fields.filter(x => x.id !== fieldId);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function toggleFieldRequired(fieldId, checked) {
+  if (builderIndex < 0) return;
+  const f = builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0];
+  if (f) f.required = checked;
+  markBuilderDirty();
+}
+
+function moveBuilderField(fieldId, delta) {
+  if (builderIndex < 0) return;
+  const arr = builderTasks[builderIndex].fields;
+  const idx = arr.findIndex(x => x.id === fieldId);
+  const to = idx + delta;
+  if (idx < 0 || to < 0 || to >= arr.length) return;
+  const moved = arr.splice(idx, 1)[0];
+  arr.splice(to, 0, moved);
+  markBuilderDirty();
+  renderBuilderForm();
 }
 
 function deleteBuilderTask(i) {
@@ -1244,9 +1355,18 @@ function deleteBuilderTask(i) {
 
 function updateBuilder(field, value) {
   if (builderIndex < 0) return;
-  builderTasks[builderIndex][field] = value;
+  const t = builderTasks[builderIndex];
+  t[field] = value;
+
+  // Temp Save requires a Comment, so the field appears the moment it's
+  // switched on rather than leaving staff with no way to fill it.
+  if (field === 'temp' && value === true && !t.fields.some(f => f.key === 'comment')) {
+    t.fields.push(bf('comment', false));
+  }
+
   markBuilderDirty();
   if (field === 'name' || field === 'phase' || field === 'active') renderTaskIndex();
+  if (field === 'temp') renderBuilderForm();
 }
 
 function updateBuilderSlots(value) {
@@ -1463,22 +1583,9 @@ function fillKeysFromPending(i) {
   if (p) fillKeys(p.refNo, p.caseNo);
 }
 
-const CASE_FIELD_BY_LAYOUT = {
-  'default': 'field-case',
-  'rider-scheduling': 'field-case-rider',
-  'visit-rating': 'field-case-rating',
-  'approval': 'field-case-approval'
-};
-const REF_FIELD_BY_LAYOUT = {
-  'default': 'field-ref',
-  'rider-scheduling': 'field-ref-rider',
-  'visit-rating': 'field-ref-rating',
-  'approval': 'field-ref-approval'
-};
-
-// Each number goes back into its own field. A Ref stays a Ref.
-// Both fields are always overwritten, so switching between chips can never
-// leave a stale number behind from the one clicked before.
+// Each number goes back into whichever of this task's own fields is Ref
+// or Case - found by key, not by a fixed layout id, since every task now
+// carries its own field list.
 function fillKeys(refNo, caseNo) {
   const t = taskByName(currentTask);
   if (!t) return;
@@ -1486,8 +1593,10 @@ function fillKeys(refNo, caseNo) {
   refNo = refNo || "";
   caseNo = caseNo || "";
 
-  const refEl = t.ref !== 'off' ? document.getElementById(REF_FIELD_BY_LAYOUT[t.layout]) : null;
-  const caseEl = t.caseNo !== 'off' ? document.getElementById(CASE_FIELD_BY_LAYOUT[t.layout]) : null;
+  const refField = t.fields.filter(f => f.key === 'ref')[0];
+  const caseField = t.fields.filter(f => f.key === 'case')[0];
+  const refEl = refField ? document.getElementById('dyn_' + refField.id) : null;
+  const caseEl = caseField ? document.getElementById('dyn_' + caseField.id) : null;
 
   if (refEl) refEl.value = refNo;
   if (caseEl) caseEl.value = caseNo;
@@ -2095,8 +2204,7 @@ function renderTaskSidebar() {
 }
 
 function hideAllForms() {
-  ['form-default','form-rider-scheduling','form-visit-rating','form-approval',
-   'form-templates','form-chain','form-tasks']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -2112,70 +2220,212 @@ function renderFormInterface() {
   if (dataSection) dataSection.style.display = t.temp ? 'block' : 'none';
 
   // Admin screens.
-  if (t.layout === "templates") {
+  if (t.panel === "templates") {
     document.getElementById('form-templates').classList.remove('hidden');
     renderTemplateEditor();
     if (!templatesLoaded) loadTemplates();
     return;
   }
-  if (t.layout === "chain") {
+  if (t.panel === "chain") {
     document.getElementById('form-chain').classList.remove('hidden');
     if (!chainLoaded) loadChain();
     else renderChainEditor();
     return;
   }
-  if (t.layout === "tasks") {
+  if (t.panel === "tasks") {
     document.getElementById('form-tasks').classList.remove('hidden');
     renderTaskBuilder();
     return;
   }
 
-  const formId = 'form-' + t.layout;
-  const form = document.getElementById(formId);
-  if (!form) {
-    document.getElementById('form-default').classList.remove('hidden');
-    return;
-  }
-  form.classList.remove('hidden');
+  document.getElementById('form-dynamic').classList.remove('hidden');
+  renderDynamicForm(t);
 
-  // Ref, Case and Comment visibility all follow the task's own settings.
-  form.querySelectorAll('.ref-field').forEach(el => {
-    el.style.display = t.ref === 'off' ? 'none' : 'block';
-  });
-  form.querySelectorAll('.case-field').forEach(el => {
-    el.style.display = t.caseNo === 'off' ? 'none' : 'block';
-  });
-  form.querySelectorAll('.comment-field').forEach(el => {
-    el.style.display = t.temp ? 'block' : 'none';
-  });
-
-  const tempBtnId = {
-    'default': 'btn-temp-save-default',
-    'rider-scheduling': 'btn-temp-save-rider',
-    'approval': 'btn-temp-save-approval'
-  }[t.layout];
-  if (tempBtnId) {
-    const btn = document.getElementById(tempBtnId);
-    if (btn) btn.style.display = t.temp ? 'block' : 'none';
-  }
+  const tempBtn = document.getElementById('btn-temp-save-dynamic');
+  if (tempBtn) tempBtn.style.display = t.temp ? 'inline-block' : 'none';
 }
 
-// Shared Ref/Case rule. Returns an error string, or null when it is fine.
-function checkKeys(ref, cas) {
-  const t = taskByName(currentTask);
-  if (!t) return null;
+/* =========================
+   DYNAMIC ENTRY FORM
+   Built at runtime from whatever fields the current task carries. Every
+   input's id is "dyn_" + the field's own id, so nothing has to remember
+   a fixed layout to find its value again.
+   ========================= */
 
-  if (t.ref === 'required' && !ref) return "Reference No required";
-  if (t.caseNo === 'required' && !cas) return "Case No required";
+function renderDynamicForm(task) {
+  const box = document.getElementById('dyn-fields');
+  if (!task.fields.length) {
+    box.innerHTML = `<div class="chain-empty">This task has no fields yet. Add some from Add / Edit Tasks.</div>`;
+    return;
+  }
+  box.innerHTML = task.fields.map(renderFieldHtml).join('');
+}
 
-  // Neither is required but at least one is on screen: the queue still
-  // needs a number to follow the case by, so ask for one of them.
-  const anyRequired = t.ref === 'required' || t.caseNo === 'required';
-  const anyVisible = t.ref !== 'off' || t.caseNo !== 'off';
-  if (!anyRequired && anyVisible && !ref && !cas) {
-    return "Reference No OR Case No required";
+function renderFieldHtml(f) {
+  const baseId = 'dyn_' + f.id;
+  const reqMark = f.required ? ' *' : '';
+  const wide = (f.type === 'time' || f.type === 'textarea') ? ' dyn-wide' : '';
+  let inputHtml;
+
+  if (f.type === 'textarea') {
+    inputHtml = `<textarea id="${baseId}"></textarea>`;
+  } else if (f.type === 'select') {
+    const opts = (f.options || []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
+    inputHtml = `<select id="${baseId}"><option value="">Select</option>${opts}</select>`;
+  } else if (f.type === 'yesno') {
+    inputHtml = `<select id="${baseId}"><option value="">Select</option><option value="Yes">Yes</option><option value="No">No</option></select>`;
+  } else if (f.type === 'date') {
+    inputHtml = `<input type="date" id="${baseId}">`;
+  } else if (f.type === 'time') {
+    inputHtml = `
+      <div class="time-inputs">
+        <select id="${baseId}_h"><option value="">Hour</option>${[1,2,3,4,5,6,7,8,9,10,11,12].map(h => `<option value="${h}">${h}</option>`).join('')}</select>
+        <select id="${baseId}_m"><option value="">Minutes</option>${['00','15','30','45'].map(m => `<option value="${m}">${m}</option>`).join('')}</select>
+        <select id="${baseId}_ap"><option value="">AM / PM</option><option value="AM">AM</option><option value="PM">PM</option></select>
+      </div>`;
+  } else if (f.type === 'number') {
+    inputHtml = `<input type="number" id="${baseId}" inputmode="numeric">`;
+  } else {
+    inputHtml = `<input type="text" id="${baseId}">`;
+  }
+
+  return `<div class="dyn-field${wide}">
+    <label>${escapeHtml(f.label)}${reqMark}</label>
+    ${inputHtml}
+  </div>`;
+}
+
+function valOf(id) {
+  const el = document.getElementById(id);
+  return el ? String(el.value || '').trim() : '';
+}
+
+function getFieldValue(f) {
+  const baseId = 'dyn_' + f.id;
+  if (f.type === 'time') {
+    const h = valOf(baseId + '_h'), m = valOf(baseId + '_m'), ap = valOf(baseId + '_ap');
+    return (h && m && ap) ? (h + ':' + m + ' ' + ap) : '';
+  }
+  return valOf(baseId);
+}
+
+// "2026-08-29" -> "29 Aug 26". Split as text rather than using new Date(),
+// which parses as UTC midnight and can shift back a day in local time.
+function formatDateDMY(iso) {
+  if (!iso) return "";
+  const p = String(iso).split('-');
+  if (p.length !== 3) return iso;
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return parseInt(p[2], 10) + " " + (months[parseInt(p[1], 10) - 1] || p[1]) + " " + p[0].slice(2);
+}
+
+// Splits a task's current field values into the fixed built-in slots the
+// backend already knows about, and an "extra" bag keyed by column name for
+// anything Jawad created himself.
+function collectDynamicEntry(task) {
+  const values = { comment: '', refNo: '', caseNo: '', scheduledDate: '', scheduledTime: '', rating: '', approvalStatus: '', remarks: '' };
+  const extra = {};
+
+  task.fields.forEach(f => {
+    let v = getFieldValue(f);
+    if (f.type === 'date' && v) v = formatDateDMY(v);
+
+    if (f.builtin && f.key) {
+      if (f.key === 'ref') values.refNo = v;
+      else if (f.key === 'case') values.caseNo = v;
+      else values[f.key] = v;
+    } else if (v) {
+      extra[f.col] = v;
+    }
+  });
+
+  return { values, extra };
+}
+
+function clearDynamicForm(task) {
+  task.fields.forEach(f => {
+    const baseId = 'dyn_' + f.id;
+    if (f.type === 'time') {
+      ['_h', '_m', '_ap'].forEach(suf => { const el = document.getElementById(baseId + suf); if (el) el.value = ''; });
+    } else {
+      const el = document.getElementById(baseId);
+      if (el) el.value = '';
+    }
+  });
+}
+
+// Shared Ref/Case rule, generalised to whichever fields the task actually
+// carries. Returns an error string, or null when it is fine to proceed.
+function validateDynamic(task, mode) {
+  if (mode === 'Temp') {
+    const commentField = task.fields.filter(f => f.key === 'comment')[0];
+    if (commentField && !getFieldValue(commentField)) return "Comment required for Temp Save";
+    return null;
+  }
+
+  // Final Save: every required field must have a value. Comment is never
+  // required at Final Save - only Temp Save cares about it.
+  for (let i = 0; i < task.fields.length; i++) {
+    const f = task.fields[i];
+    if (f.key === 'comment') continue;
+    if (f.required && !getFieldValue(f)) return f.label + " required";
+  }
+
+  const refField = task.fields.filter(f => f.key === 'ref')[0];
+  const caseField = task.fields.filter(f => f.key === 'case')[0];
+  if (refField || caseField) {
+    const refReq = refField && refField.required;
+    const caseReq = caseField && caseField.required;
+    const refVal = refField ? getFieldValue(refField) : '';
+    const caseVal = caseField ? getFieldValue(caseField) : '';
+    if (!refReq && !caseReq && !refVal && !caseVal) {
+      return "Reference No OR Case No required";
+    }
   }
   return null;
+}
+
+function savedMessage(result) {
+  if (result && result.nextTask) return "Saved. " + result.nextTask + " is now pending.";
+  return "Saved to central records.";
+}
+
+async function saveDynamicEntry(type) {
+  const task = taskByName(currentTask);
+  if (!task) return;
+
+  const err = validateDynamic(task, type);
+  if (err) return toast(err, true);
+
+  const { values, extra } = collectDynamicEntry(task);
+  const payload = Object.assign(
+    { targetStaffName: profile.name, taskName: currentTask },
+    values,
+    { extra: extra }
+  );
+
+  try {
+    if (type === 'Temp') {
+      const result = await apiCall('tempAdd', payload);
+      if (!result.ok) return toast(result.error || "Could not save entry", true);
+      addLocalTempEntry({
+        tempId: result.tempId, staffName: profile.name, taskName: currentTask,
+        comment: values.comment, refNo: values.refNo, caseNo: values.caseNo,
+        createdAt: result.createdAt || "Just now",
+        createdBy: result.createdBy || user.name
+      });
+      clearDynamicForm(task);
+      toast("Draft saved.");
+    } else {
+      const result = await apiCall('finalAdd', payload);
+      if (!result.ok) return toast(result.error || "Could not save entry", true);
+      clearDynamicForm(task);
+      toast(savedMessage(result));
+      loadPending();
+    }
+  } catch (e) {
+    toast("Network error while saving.", true);
+  }
 }
 
 /* =========================
@@ -2367,203 +2617,6 @@ function removeLocalTempEntry(tempId) {
   renderTable();
 }
 
-/* =========================
-   SAVE HANDLERS
-   ========================= */
-
-function savedMessage(result) {
-  if (result && result.nextTask) return "Saved. " + result.nextTask + " is now pending.";
-  return "Saved to central records.";
-}
-
-async function saveData(type) {
-  const ref = document.getElementById('field-ref').value.trim();
-  const cas = document.getElementById('field-case').value.trim();
-  const comment = document.getElementById('field-comment').value.trim();
-
-  if (type === 'Temp') {
-    if (!comment) return toast("Comment required for Temp Save", true);
-    try {
-      const result = await apiCall('tempAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      addLocalTempEntry({
-        tempId: result.tempId, staffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas,
-        createdAt: result.createdAt || "Just now",
-        createdBy: result.createdBy || user.name
-      });
-      clearFields(['field-ref','field-case','field-comment']);
-      toast("Draft saved.");
-    } catch (e) { toast("Network error while saving.", true); }
-  } else {
-    const err = checkKeys(ref, cas);
-    if (err) return toast(err, true);
-    try {
-      const result = await apiCall('finalAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      clearFields(['field-ref','field-case','field-comment']);
-      toast(savedMessage(result));
-      loadPending();
-    } catch (e) { toast("Network error while saving.", true); }
-  }
-}
-
-function clearFields(ids) {
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = "";
-  });
-}
-
-async function saveRiderScheduling(type) {
-  const ref = document.getElementById('field-ref-rider').value.trim();
-  const cas = document.getElementById('field-case-rider').value.trim();
-  const comment = document.getElementById('field-comment-rider').value.trim();
-  const date = document.getElementById('field-date-rider').value;
-  const hour = document.getElementById('field-hour-rider').value;
-  const min = document.getElementById('field-min-rider').value;
-  const ampm = document.getElementById('field-ampm-rider').value;
-  const remarks = document.getElementById('field-remarks-rider').value.trim();
-
-  const riderFields = ['field-ref-rider','field-case-rider','field-comment-rider',
-    'field-date-rider','field-hour-rider','field-min-rider','field-ampm-rider','field-remarks-rider'];
-
-  if (type === 'Temp') {
-    if (!comment) return toast("Comment required for Temp Save", true);
-    try {
-      const result = await apiCall('tempAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas,
-        scheduledDate: formatDateDMY(date),
-        scheduledTime: (hour && min && ampm) ? `${hour}:${min} ${ampm}` : "",
-        remarks: remarks
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      addLocalTempEntry({
-        tempId: result.tempId, staffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas, remarks: remarks,
-        createdAt: result.createdAt || "Just now",
-        createdBy: result.createdBy || user.name
-      });
-      clearFields(riderFields);
-      toast("Draft saved.");
-    } catch (e) { toast("Network error", true); }
-  } else {
-    const err = checkKeys(ref, cas);
-    if (err) return toast(err, true);
-    if (!date) return toast("Date required", true);
-    if (!hour || !min || !ampm) return toast("Time required", true);
-
-    // Built from parts so it is compared in local time, not UTC.
-    const dp = date.split('-');
-    const selectedDate = new Date(+dp[0], +dp[1] - 1, +dp[2]);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (selectedDate < today) return toast("Date cannot be in the past", true);
-
-    try {
-      const result = await apiCall('finalAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas,
-        scheduledDate: formatDateDMY(date),
-        scheduledTime: `${hour}:${min} ${ampm}`,
-        remarks: remarks
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      clearFields(riderFields);
-      toast(savedMessage(result));
-      loadPending();
-    } catch (e) { toast("Network error", true); }
-  }
-}
-
-// "2026-08-29" -> "29 Aug 26". Split as text rather than using new Date(),
-// which parses as UTC midnight and can shift back a day in local time.
-function formatDateDMY(iso) {
-  if (!iso) return "";
-  const p = String(iso).split('-');
-  if (p.length !== 3) return iso;
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  return parseInt(p[2], 10) + " " + (months[parseInt(p[1], 10) - 1] || p[1]) + " " + p[0].slice(2);
-}
-
-async function saveVisitRating() {
-  const ref = document.getElementById('field-ref-rating').value.trim();
-  const cas = document.getElementById('field-case-rating').value.trim();
-  const comment = document.getElementById('field-comment-rating').value.trim();
-  const rating = document.getElementById('field-rating').value;
-  const remarks = document.getElementById('field-remarks-rating').value.trim();
-
-  const err = checkKeys(ref, cas);
-  if (err) return toast(err, true);
-  if (!rating) return toast("Rating required", true);
-
-  try {
-    const result = await apiCall('finalAdd', {
-      targetStaffName: profile.name, taskName: currentTask,
-      comment, refNo: ref, caseNo: cas,
-      rating: rating, remarks: remarks
-    });
-    if (!result.ok) return toast(result.error || "Could not save entry", true);
-    clearFields(['field-ref-rating','field-case-rating','field-comment-rating',
-      'field-rating','field-remarks-rating']);
-    toast(savedMessage(result));
-    loadPending();
-  } catch (e) { toast("Network error", true); }
-}
-
-async function saveApproval(type) {
-  const ref = document.getElementById('field-ref-approval').value.trim();
-  const cas = document.getElementById('field-case-approval').value.trim();
-  const comment = document.getElementById('field-comment-approval').value.trim();
-  const status = document.querySelector('input[name="approval-status"]:checked');
-
-  if (!status) return toast("Approval status required", true);
-
-  if (type === 'Temp') {
-    if (!comment) return toast("Comment required for Temp Save", true);
-    try {
-      const result = await apiCall('tempAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas, approvalStatus: status.value
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      addLocalTempEntry({
-        tempId: result.tempId, staffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas, approvalStatus: status.value,
-        createdAt: result.createdAt || "Just now",
-        createdBy: result.createdBy || user.name
-      });
-      clearApprovalForm();
-      toast("Draft saved.");
-    } catch (e) { toast("Network error", true); }
-  } else {
-    const err = checkKeys(ref, cas);
-    if (err) return toast(err, true);
-    try {
-      const result = await apiCall('finalAdd', {
-        targetStaffName: profile.name, taskName: currentTask,
-        comment, refNo: ref, caseNo: cas, approvalStatus: status.value
-      });
-      if (!result.ok) return toast(result.error || "Could not save entry", true);
-      clearApprovalForm();
-      toast(savedMessage(result));
-      loadPending();
-    } catch (e) { toast("Network error", true); }
-  }
-}
-
-function clearApprovalForm() {
-  clearFields(['field-ref-approval','field-case-approval','field-comment-approval']);
-  document.querySelectorAll('input[name="approval-status"]').forEach(r => r.checked = false);
-}
-
 async function finalizeEntryWithInputs(tempId) {
   const refInput = document.querySelector(`.row-ref[data-id="${tempId}"]`);
   const caseInput = document.querySelector(`.row-case[data-id="${tempId}"]`);
@@ -2605,16 +2658,10 @@ function copyToClipboard(elementId) {
 /* =========================
    KEYBOARD SHORTCUTS
    ========================= */
-const FORM_ACTIONS = {
-  'form-default':          { save: saveData,            tempBtn: 'btn-temp-save-default' },
-  'form-rider-scheduling': { save: saveRiderScheduling, tempBtn: 'btn-temp-save-rider' },
-  'form-visit-rating':     { save: saveVisitRating,     tempBtn: null },
-  'form-approval':         { save: saveApproval,        tempBtn: 'btn-temp-save-approval' }
-};
 
 function handleEnterKey(e) {
   const el = e.target;
-  if (!el || el.tagName !== 'INPUT') return;
+  if (!el || (el.tagName !== 'INPUT' && el.tagName !== 'SELECT')) return;
 
   const isSearch = el.id === 'search-staff' || el.id === 'search-workspace';
 
@@ -2636,24 +2683,22 @@ function handleEnterKey(e) {
     return;
   }
 
-  const formDiv = el.closest('[id^="form-"]');
+  const formDiv = el.closest('#form-dynamic');
   if (!formDiv) return;
-  const cfg = FORM_ACTIONS[formDiv.id];
-  if (!cfg) return;
 
-  const id = el.id || "";
+  const task = taskByName(currentTask);
+  if (!task) return;
 
-  if (id.indexOf('field-comment') === 0) {
-    e.preventDefault();
-    const btn = cfg.tempBtn ? document.getElementById(cfg.tempBtn) : null;
-    if (btn && btn.style.display !== 'none') cfg.save('Temp');
+  e.preventDefault();
+
+  const commentField = task.fields.filter(f => f.key === 'comment')[0];
+  if (commentField && el.id === 'dyn_' + commentField.id) {
+    const btn = document.getElementById('btn-temp-save-dynamic');
+    if (btn && btn.style.display !== 'none') saveDynamicEntry('Temp');
     return;
   }
 
-  if (id.indexOf('field-ref') === 0 || id.indexOf('field-case') === 0) {
-    e.preventDefault();
-    cfg.save('Final');
-  }
+  saveDynamicEntry('Final');
 }
 
 document.addEventListener('keydown', handleEnterKey);
