@@ -671,6 +671,7 @@ const FIELD_TYPES = [
   { id: 'date',     label: 'Date' },
   { id: 'time',     label: 'Time' },
   { id: 'select',   label: 'Dropdown' },
+  { id: 'checkbox', label: 'Checkboxes' },
   { id: 'textarea', label: 'Long text' },
   { id: 'yesno',    label: 'Yes / No' }
 ];
@@ -1181,7 +1182,7 @@ function renderBuilderForm() {
           </select>
         </div>
       </div>
-      <input type="text" id="new-field-options" placeholder="Dropdown options, comma separated" class="hidden">
+      <input type="text" id="new-field-options" placeholder="Options, comma separated (Dropdown / Checkboxes)" class="hidden">
       <button class="btn btn-small" onclick="addCustomFieldToBuilderTask()">+ Add field</button>
     </div>
 
@@ -1203,7 +1204,8 @@ function toggleNewFieldOptions() {
   const typeEl = document.getElementById('new-field-type');
   const optEl = document.getElementById('new-field-options');
   if (!typeEl || !optEl) return;
-  optEl.classList.toggle('hidden', typeEl.value !== 'select');
+  const show = typeEl.value === 'select' || typeEl.value === 'checkbox';
+  optEl.classList.toggle('hidden', !show);
 }
 
 function renderFieldEditorList(t) {
@@ -1292,9 +1294,13 @@ function addCustomFieldToBuilderTask() {
     return toast('This task already has a field mapped to that name.', true);
   }
 
-  const options = (type === 'select')
+  const options = (type === 'select' || type === 'checkbox')
     ? optionsEl.value.split(',').map(s => s.trim()).filter(Boolean)
     : [];
+
+  if ((type === 'select' || type === 'checkbox') && !options.length) {
+    return toast('Add at least one option first.', true);
+  }
 
   t.fields.push({
     id: 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -2264,11 +2270,18 @@ function renderDynamicForm(task) {
 function renderFieldHtml(f) {
   const baseId = 'dyn_' + f.id;
   const reqMark = f.required ? ' *' : '';
-  const wide = (f.type === 'time' || f.type === 'textarea') ? ' dyn-wide' : '';
+  const wide = (f.type === 'time' || f.type === 'textarea' || f.type === 'checkbox') ? ' dyn-wide' : '';
   let inputHtml;
 
   if (f.type === 'textarea') {
     inputHtml = `<textarea id="${baseId}"></textarea>`;
+  } else if (f.type === 'checkbox') {
+    const boxes = (f.options || []).map((o, i) => `
+      <label class="owner-pick">
+        <input type="checkbox" id="${baseId}_opt${i}" onchange="this.parentElement.classList.toggle('on', this.checked)">
+        ${escapeHtml(o)}
+      </label>`).join('');
+    inputHtml = `<div class="owner-grid" style="margin-bottom:20px;">${boxes}</div>`;
   } else if (f.type === 'select') {
     const opts = (f.options || []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
     inputHtml = `<select id="${baseId}"><option value="">Select</option>${opts}</select>`;
@@ -2319,14 +2332,31 @@ function formatDateDMY(iso) {
   return parseInt(p[2], 10) + " " + (months[parseInt(p[1], 10) - 1] || p[1]) + " " + p[0].slice(2);
 }
 
+// True if at least one of a checkbox field's boxes is ticked.
+function checkboxAnyChecked(f) {
+  return (f.options || []).some((opt, i) => {
+    const el = document.getElementById('dyn_' + f.id + '_opt' + i);
+    return el && el.checked;
+  });
+}
+
 // Splits a task's current field values into the fixed built-in slots the
 // backend already knows about, and an "extra" bag keyed by column name for
-// anything Jawad created himself.
+// anything Jawad created himself. A checkbox field has no single value -
+// each ticked option becomes its own column, named "Field (Option)".
 function collectDynamicEntry(task) {
   const values = { comment: '', refNo: '', caseNo: '', scheduledDate: '', scheduledTime: '', rating: '', approvalStatus: '', remarks: '' };
   const extra = {};
 
   task.fields.forEach(f => {
+    if (f.type === 'checkbox') {
+      (f.options || []).forEach((opt, i) => {
+        const el = document.getElementById('dyn_' + f.id + '_opt' + i);
+        if (el && el.checked) extra[f.col + ' (' + opt + ')'] = 'Yes';
+      });
+      return;
+    }
+
     let v = getFieldValue(f);
     if (f.type === 'date' && v) v = formatDateDMY(v);
 
@@ -2347,6 +2377,11 @@ function clearDynamicForm(task) {
     const baseId = 'dyn_' + f.id;
     if (f.type === 'time') {
       ['_h', '_m', '_ap'].forEach(suf => { const el = document.getElementById(baseId + suf); if (el) el.value = ''; });
+    } else if (f.type === 'checkbox') {
+      (f.options || []).forEach((opt, i) => {
+        const el = document.getElementById(baseId + '_opt' + i);
+        if (el) { el.checked = false; el.parentElement.classList.remove('on'); }
+      });
     } else {
       const el = document.getElementById(baseId);
       if (el) el.value = '';
@@ -2368,7 +2403,12 @@ function validateDynamic(task, mode) {
   for (let i = 0; i < task.fields.length; i++) {
     const f = task.fields[i];
     if (f.key === 'comment') continue;
-    if (f.required && !getFieldValue(f)) return f.label + " required";
+    if (!f.required) continue;
+    if (f.type === 'checkbox') {
+      if (!checkboxAnyChecked(f)) return f.label + " required";
+    } else if (!getFieldValue(f)) {
+      return f.label + " required";
+    }
   }
 
   const refField = task.fields.filter(f => f.key === 'ref')[0];
