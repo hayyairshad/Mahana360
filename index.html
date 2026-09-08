@@ -696,7 +696,7 @@ function bf(key, required) {
   if (!def) return null;
   return {
     id: def.key, key: def.key, label: def.label, type: def.type,
-    options: def.options ? def.options.slice() : [],
+    options: (def.options || []).map(o => ({ id: 'o_' + Math.random().toString(36).slice(2, 8), label: o })),
     col: def.col, required: !!required, builtin: true, locked: !!def.locked
   };
 }
@@ -1227,7 +1227,7 @@ function renderFieldEditorList(t) {
       : `<input type="text" value="${escapeHtml(f.label)}" style="margin:0; padding:6px 8px; font-size:0.85rem; width:auto; min-width:120px;"
           onblur="renameField('${f.id}', this.value)">`;
 
-    const optionsUI = (!f.builtin && (f.type === 'select' || f.type === 'checkbox'))
+    const optionsUI = (f.type === 'select' || f.type === 'checkbox')
       ? renderOptionEditor(f) : '';
 
     return `<div class="field-row" style="flex-direction:column; align-items:stretch;">
