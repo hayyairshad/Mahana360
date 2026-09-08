@@ -263,7 +263,12 @@ color: var(--accent-color); font-weight: 700; margin-bottom: 8px;
 }
 #template-tiles .copyable-tile { margin-bottom: 14px; }
 #template-tiles .copyable-tile:last-child { margin-bottom: 24px; }
-#template-tiles .copyable-text { white-space: pre-wrap; word-break: normal; }
+#template-tiles .copyable-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ===== CHAIN EDITOR ===== */
 .chain-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
