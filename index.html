@@ -169,6 +169,9 @@ width: 100%; padding: 12px; margin-bottom: 20px;
 background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);
 border-radius: 6px; color: white; font-size: 1rem;
 }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent-color); outline: none; background: rgba(0,0,0,0.4); }
 select { cursor: pointer; }
 textarea { min-height: 90px; resize: vertical; font-family: inherit; }
