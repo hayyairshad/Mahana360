@@ -1006,6 +1006,9 @@ async function loadTasks() {
   }
 }
 
+function optionLabel(o) { return (typeof o === 'string') ? o : ((o && o.label) || ''); }
+function optionId(o) { return (typeof o === 'string') ? o : ((o && o.id) || ''); }
+
 function normaliseField(f) {
   f = f || {};
   return {
@@ -1014,7 +1017,7 @@ function normaliseField(f) {
     label: String(f.label || '').trim() || 'Field',
     type: String(f.type || 'text').trim(),
     required: !!f.required,
-    options: Array.isArray(f.options) ? f.options.slice() : [],
+    options: Array.isArray(f.options) ? f.options.map(o => (typeof o === 'string') ? o : Object.assign({}, o)) : [],
     col: String(f.col || f.label || '').trim(),
     builtin: !!f.builtin,
     locked: !!f.locked
@@ -1212,23 +1215,96 @@ function renderFieldEditorList(t) {
   if (!t.fields.length) {
     return `<div class="chain-empty">No fields yet. Add Reference Number, Case Number, or anything else below.</div>`;
   }
-  return t.fields.map((f, i) => `
-    <div class="field-row">
-      <span class="field-name">
-        ${escapeHtml(f.label)}
-        <span class="search-kind" style="margin-left:6px;">${escapeHtml(fieldTypeLabel(f.type))}</span>
-        ${f.locked ? '<span class="search-kind" style="margin-left:4px;">Locked</span>' : ''}
-      </span>
-      <label class="field-req-pick">
-        <input type="checkbox"${f.required ? ' checked' : ''} onchange="toggleFieldRequired('${f.id}', this.checked)">
-        Required
-      </label>
-      <span class="chain-btns">
-        <button class="chain-btn" onclick="moveBuilderField('${f.id}',-1)" title="Move up">&#9650;</button>
-        <button class="chain-btn" onclick="moveBuilderField('${f.id}',1)" title="Move down">&#9660;</button>
-        <button class="chain-btn" onclick="removeBuilderField('${f.id}')" title="Remove">&times;</button>
-      </span>
+  return t.fields.map((f, i) => {
+    const nameBlock = f.locked
+      ? `${escapeHtml(f.label)} <span class="search-kind">Locked</span>`
+      : `<input type="text" value="${escapeHtml(f.label)}" style="margin:0; padding:6px 8px; font-size:0.85rem; width:auto; min-width:120px;"
+          onblur="renameField('${f.id}', this.value)">`;
+
+    const optionsUI = (!f.builtin && (f.type === 'select' || f.type === 'checkbox'))
+      ? renderOptionEditor(f) : '';
+
+    return `<div class="field-row" style="flex-direction:column; align-items:stretch;">
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <span class="field-name">${nameBlock}</span>
+        <span class="search-kind">${escapeHtml(fieldTypeLabel(f.type))}</span>
+        <label class="field-req-pick">
+          <input type="checkbox"${f.required ? ' checked' : ''} onchange="toggleFieldRequired('${f.id}', this.checked)">
+          Required
+        </label>
+        <span class="chain-btns">
+          <button class="chain-btn" onclick="moveBuilderField('${f.id}',-1)" title="Move up">&#9650;</button>
+          <button class="chain-btn" onclick="moveBuilderField('${f.id}',1)" title="Move down">&#9660;</button>
+          <button class="chain-btn" onclick="removeBuilderField('${f.id}')" title="Remove">&times;</button>
+        </span>
+      </div>
+      ${optionsUI}
+    </div>`;
+  }).join('');
+}
+
+function renderOptionEditor(f) {
+  const rows = (f.options || []).map(o => `
+    <div style="display:flex; gap:6px; margin-bottom:6px; align-items:center;">
+      <input type="text" value="${escapeHtml(optionLabel(o))}" style="margin:0; padding:6px 8px; font-size:0.8rem;"
+        onblur="renameFieldOption('${f.id}', '${optionId(o)}', this.value)">
+      <button class="chain-btn" onclick="removeFieldOption('${f.id}', '${optionId(o)}')" title="Remove option">&times;</button>
     </div>`).join('');
+
+  return `<div style="margin-top:10px; padding-left:12px; border-left:2px solid var(--border-color);">
+    <div class="builder-hint" style="margin:0 0 8px;">Options</div>
+    ${rows}
+    <div style="display:flex; gap:6px;">
+      <input type="text" id="new-opt-${f.id}" placeholder="Add an option" style="margin:0; padding:6px 8px; font-size:0.8rem;">
+      <button class="chain-btn" onclick="addFieldOption('${f.id}')" title="Add option">+</button>
+    </div>
+  </div>`;
+}
+
+function renameField(fieldId, value) {
+  if (builderIndex < 0) return;
+  const f = builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0];
+  if (!f || f.locked) return;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === f.label) return;
+  f.label = trimmed;
+  if (!f.builtin) f.col = sanitizeColName(trimmed);
+  markBuilderDirty();
+}
+
+function renameFieldOption(fieldId, optId, value) {
+  if (builderIndex < 0) return;
+  const f = builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0];
+  if (!f) return;
+  const opt = (f.options || []).filter(o => optionId(o) === optId)[0];
+  if (!opt || typeof opt === 'string') return;
+  const trimmed = value.trim();
+  if (!trimmed) return;
+  opt.label = trimmed;
+  markBuilderDirty();
+}
+
+function addFieldOption(fieldId) {
+  if (builderIndex < 0) return;
+  const f = builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0];
+  if (!f) return;
+  const input = document.getElementById('new-opt-' + fieldId);
+  const label = input.value.trim();
+  if (!label) return;
+  f.options = f.options || [];
+  f.options.push({ id: 'o_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), label: label });
+  input.value = '';
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function removeFieldOption(fieldId, optId) {
+  if (builderIndex < 0) return;
+  const f = builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0];
+  if (!f) return;
+  f.options = (f.options || []).filter(o => optionId(o) !== optId);
+  markBuilderDirty();
+  renderBuilderForm();
 }
 
 // Every distinct custom field already used anywhere in the builder's
@@ -1296,6 +1372,7 @@ function addCustomFieldToBuilderTask() {
 
   const options = (type === 'select' || type === 'checkbox')
     ? optionsEl.value.split(',').map(s => s.trim()).filter(Boolean)
+        .map(label => ({ id: 'o_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), label: label }))
     : [];
 
   if ((type === 'select' || type === 'checkbox') && !options.length) {
@@ -2279,11 +2356,11 @@ function renderFieldHtml(f) {
     const boxes = (f.options || []).map((o, i) => `
       <label class="owner-pick">
         <input type="checkbox" id="${baseId}_opt${i}" onchange="this.parentElement.classList.toggle('on', this.checked)">
-        ${escapeHtml(o)}
+        ${escapeHtml(optionLabel(o))}
       </label>`).join('');
     inputHtml = `<div class="owner-grid" style="margin-bottom:20px;">${boxes}</div>`;
   } else if (f.type === 'select') {
-    const opts = (f.options || []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
+    const opts = (f.options || []).map(o => `<option value="${escapeHtml(optionLabel(o))}">${escapeHtml(optionLabel(o))}</option>`).join('');
     inputHtml = `<select id="${baseId}"><option value="">Select</option>${opts}</select>`;
   } else if (f.type === 'yesno') {
     inputHtml = `<select id="${baseId}"><option value="">Select</option><option value="Yes">Yes</option><option value="No">No</option></select>`;
@@ -2352,7 +2429,7 @@ function collectDynamicEntry(task) {
     if (f.type === 'checkbox') {
       (f.options || []).forEach((opt, i) => {
         const el = document.getElementById('dyn_' + f.id + '_opt' + i);
-        if (el && el.checked) extra[f.col + ' (' + opt + ')'] = 'Yes';
+        if (el && el.checked) extra[f.col + ' (' + optionLabel(opt) + ')'] = 'Yes';
       });
       return;
     }
