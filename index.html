@@ -2433,10 +2433,12 @@ function collectDynamicEntry(task) {
 
   task.fields.forEach(f => {
     if (f.type === 'checkbox') {
+      const checked = [];
       (f.options || []).forEach((opt, i) => {
         const el = document.getElementById('dyn_' + f.id + '_opt' + i);
-        if (el && el.checked) extra[f.col + ' (' + optionLabel(opt) + ')'] = 'Yes';
+        if (el && el.checked) checked.push(optionLabel(opt));
       });
+      if (checked.length) extra[f.col] = checked.join(', ');
       return;
     }
 
