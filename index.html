@@ -169,9 +169,6 @@ width: 100%; padding: 12px; margin-bottom: 20px;
 background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);
 border-radius: 6px; color: white; font-size: 1rem;
 }
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-input[type="number"] { -moz-appearance: textfield; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent-color); outline: none; background: rgba(0,0,0,0.4); }
 select { cursor: pointer; }
 textarea { min-height: 90px; resize: vertical; font-family: inherit; }
@@ -1038,6 +1035,7 @@ function normaliseTask(t) {
     name: String(t.name || "").trim(),
     phase: String(t.phase || "Other").trim() || "Other",
     fields: Array.isArray(t.fields) ? t.fields.map(normaliseField) : [],
+    description: String(t.description || "").trim(),
     temp: !!t.temp,
     owners: (t.owners || []).slice(),
     slots: (t.slots || []).slice(),
@@ -1128,6 +1126,14 @@ function renderBuilderForm() {
           ${phases.map(p => `<option value="${escapeHtml(p)}"></option>`).join('')}
         </datalist>
       </div>
+    </div>
+
+    <label>Full description (optional)</label>
+    <input type="text" id="b-description" value="${escapeHtml(t.description || '')}"
+      placeholder="Shown as the page heading instead of the task name, e.g. RATINGS OF VISIT DATA"
+      oninput="updateBuilder('description', this.value)">
+    <div class="builder-hint">
+      Leave blank to just show the task name as the heading. Buttons and the sidebar always keep showing the short task name above.
     </div>
 
     <label>Who does this task</label>
@@ -2234,7 +2240,8 @@ async function renderEntryScreen() {
   }
 
   tile.classList.add('hidden');
-  header.innerText = currentTask;
+  const currentT = taskByName(currentTask);
+  header.innerText = (currentT && currentT.description) ? currentT.description : currentTask;
   renderFormInterface();
   renderPendingStrip();
 
