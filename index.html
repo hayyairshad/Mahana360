@@ -1011,13 +1011,19 @@ function optionId(o) { return (typeof o === 'string') ? o : ((o && o.id) || '');
 
 function normaliseField(f) {
   f = f || {};
+  const options = Array.isArray(f.options) ? f.options.map(o => {
+    if (typeof o === 'string') {
+      return { id: 'o_' + Math.random().toString(36).slice(2, 8), label: o };
+    }
+    return Object.assign({}, o);
+  }) : [];
   return {
     id: String(f.id || f.key || '').trim() || ('f_' + Math.random().toString(36).slice(2, 8)),
     key: f.key || null,
     label: String(f.label || '').trim() || 'Field',
     type: String(f.type || 'text').trim(),
     required: !!f.required,
-    options: Array.isArray(f.options) ? f.options.map(o => (typeof o === 'string') ? o : Object.assign({}, o)) : [],
+    options: options,
     col: String(f.col || f.label || '').trim(),
     builtin: !!f.builtin,
     locked: !!f.locked
