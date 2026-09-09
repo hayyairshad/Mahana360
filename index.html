@@ -1604,7 +1604,8 @@ function renderNotifPanel() {
   } else {
     html += shown.map(p => `
       <div class="notif-item" data-task="${escapeHtml(p.taskName)}"
-           data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}">
+           data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}"
+           data-name="${escapeHtml(p.customerName || '')}" data-mobile="${escapeHtml(p.customerMobile || '')}">
         <div class="notif-task">${escapeHtml(p.taskName)}</div>
         <div class="notif-meta">${escapeHtml(keyLabel(p))} &middot; ${escapeHtml(p.createdAt || '')}</div>
       </div>`).join('');
@@ -1620,7 +1621,9 @@ document.addEventListener('click', function (e) {
   if (item) {
     openPendingItem(item.getAttribute('data-task'),
                     item.getAttribute('data-ref'),
-                    item.getAttribute('data-case'));
+                    item.getAttribute('data-case'),
+                    item.getAttribute('data-name'),
+                    item.getAttribute('data-mobile'));
     return;
   }
   if (!e.target.closest || (!e.target.closest('#notif-panel') && !e.target.closest('#btn-notifications'))) {
@@ -1629,7 +1632,7 @@ document.addEventListener('click', function (e) {
   }
 });
 
-function openPendingItem(taskName, refNo, caseNo) {
+function openPendingItem(taskName, refNo, caseNo, customerName, customerMobile) {
   document.getElementById('notif-panel').classList.add('hidden');
 
   let target = null;
@@ -1644,18 +1647,22 @@ function openPendingItem(taskName, refNo, caseNo) {
   }
   if (!target) { toast("That task is not in any workspace you can open.", true); return; }
 
-  pendingKeysToFill = { refNo: refNo || "", caseNo: caseNo || "" };
+  pendingKeysToFill = {
+    refNo: refNo || "", caseNo: caseNo || "",
+    customerName: customerName || "", customerMobile: customerMobile || ""
+  };
   window.location.hash = '#/staff/' + encodeURIComponent(target) +
                          '/' + encodeURIComponent(taskName);
 }
 
 let pendingKeysToFill = null;
 
-// "Ref 8823 · Case 4471", or just whichever one is filled in.
+// "Ref 8823 · Case 4471 · John Doe", or just whichever pieces are filled in.
 function keyLabel(p) {
   const parts = [];
   if (p.refNo) parts.push("Ref " + p.refNo);
   if (p.caseNo) parts.push("Case " + p.caseNo);
+  if (p.customerName) parts.push(p.customerName);
   return parts.join(" \u00b7 ") || "No number";
 }
 
@@ -1683,13 +1690,14 @@ function renderPendingStrip() {
 function fillKeysFromPending(i) {
   const items = pendingForTask(currentTask);
   const p = items[i];
-  if (p) fillKeys(p.refNo, p.caseNo);
+  if (p) fillKeys(p.refNo, p.caseNo, p.customerName, p.customerMobile);
 }
 
 // Each number goes back into whichever of this task's own fields is Ref
 // or Case - found by key, not by a fixed layout id, since every task now
-// carries its own field list.
-function fillKeys(refNo, caseNo) {
+// carries its own field list. Customer Name/Mobile fill the same way,
+// matched by column name, if this task happens to have those fields too.
+function fillKeys(refNo, caseNo, customerName, customerMobile) {
   const t = taskByName(currentTask);
   if (!t) return;
 
@@ -1704,6 +1712,9 @@ function fillKeys(refNo, caseNo) {
   if (refEl) refEl.value = refNo;
   if (caseEl) caseEl.value = caseNo;
 
+  if (customerName) fillFieldByCol(t, 'CustomerName', customerName);
+  if (customerMobile) fillFieldByCol(t, 'CustomerMobile', customerMobile);
+
   // Focus whichever field actually received a number.
   if (refEl && refNo) refEl.focus();
   else if (caseEl && caseNo) caseEl.focus();
@@ -1716,6 +1727,13 @@ function fillKeys(refNo, caseNo) {
       fallback.focus();
     }
   }
+}
+
+function fillFieldByCol(task, colName, value) {
+  const field = task.fields.filter(f => f.col === colName)[0];
+  if (!field) return;
+  const el = document.getElementById('dyn_' + field.id);
+  if (el) el.value = value;
 }
 
 function startBellTimer() {
@@ -2251,7 +2269,7 @@ async function renderEntryScreen() {
   renderPendingStrip();
 
   if (pendingKeysToFill) {
-    fillKeys(pendingKeysToFill.refNo, pendingKeysToFill.caseNo);
+    fillKeys(pendingKeysToFill.refNo, pendingKeysToFill.caseNo, pendingKeysToFill.customerName, pendingKeysToFill.customerMobile);
     pendingKeysToFill = null;
   }
 
