@@ -504,12 +504,6 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 
 <div id="empty-tile" class="empty-tile hidden"></div>
 
-<!-- PENDING CASES FOR THIS TASK -->
-<div id="pending-strip" class="pending-strip hidden">
-<div class="pending-strip-head" id="pending-strip-head"></div>
-<div class="pending-cases" id="pending-cases"></div>
-</div>
-
 <!-- MESSAGE TEMPLATE TILES (read-only, set by Jawad) -->
 <div id="template-tiles"></div>
 
@@ -519,6 +513,15 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
 <button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
 <button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Final Save</button>
+</div>
+</div>
+
+<!-- PENDING CASES FOR THIS TASK -->
+<div id="pending-strip-section" class="hidden" style="margin-top:30px;">
+<label style="margin-bottom:10px;">Pending Cases</label>
+<div id="pending-strip" class="pending-strip hidden">
+<div class="pending-strip-head" id="pending-strip-head"></div>
+<div class="pending-cases" id="pending-cases"></div>
 </div>
 </div>
 
@@ -1670,13 +1673,15 @@ function keyLabel(p) {
 }
 
 function renderPendingStrip() {
+  const section = document.getElementById('pending-strip-section');
   const strip = document.getElementById('pending-strip');
   const head = document.getElementById('pending-strip-head');
   const list = document.getElementById('pending-cases');
 
   const items = currentTask ? pendingForTask(currentTask) : [];
-  if (items.length === 0) { strip.classList.add('hidden'); return; }
+  if (items.length === 0) { section.classList.add('hidden'); strip.classList.add('hidden'); return; }
 
+  section.classList.remove('hidden');
   strip.classList.remove('hidden');
   head.innerText = items.length === 1
     ? '1 case waiting on this task'
@@ -2252,6 +2257,7 @@ async function renderEntryScreen() {
   if (!currentTask) {
     hideAllForms();
     document.getElementById('template-tiles').innerHTML = "";
+    document.getElementById('pending-strip-section').classList.add('hidden');
     document.getElementById('pending-strip').classList.add('hidden');
     document.getElementById('data-section-container').style.display = 'none';
     tile.classList.remove('hidden');
