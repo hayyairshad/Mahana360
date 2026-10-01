@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mahana Trackers | Portal</title>
+<title>Mahana360</title>
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
@@ -215,6 +215,7 @@ cursor: pointer; transition: 0.2s ease;
 .dashboard-item strong { display: block; font-size: 1.1rem; font-weight: 500; }
 .dashboard-item small { color: var(--text-dim); font-size: 0.75rem; }
 .entry-layout { display: grid; grid-template-columns: 180px 1fr; gap: 30px; }
+.entry-layout > div { min-width: 0; }
 .task-sidebar { display: flex; flex-direction: column; gap: 8px; border-right: 1px solid var(--border-color); padding-right: 18px; }
 .task-sidebar-item {
 cursor: pointer; padding: 10px 12px; border-radius: 8px; font-size: 0.85rem;
@@ -427,6 +428,43 @@ header { padding: 10px 15px; }
 .search-sub { display: none; }
 }
 
+
+/* ===== PARTIAL SAVE ===== */
+.partial-editing { font-size: 0.78rem; color: #ffcc80; }
+.partial-fill { color: var(--text-dim); font-size: 0.8rem; }
+
+/* ===== REPORTS + CHEQUES ===== */
+.report-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.report-meta { font-size: 0.75rem; color: var(--text-dim); }
+.report-search { margin: 0; padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 200px; }
+.report-legend { font-size: 0.78rem; color: var(--text-dim); line-height: 1.8; }
+.report-legend b { font-size: 1rem; margin: 0 2px 0 10px; }
+.report-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--border-color); border-radius: 10px; }
+.report-table { border-collapse: collapse; font-size: 0.82rem; min-width: 100%; }
+.report-table th, .report-table td { border: 1px solid rgba(255,255,255,0.1); padding: 6px 8px; text-align: center; white-space: nowrap; }
+.report-table thead th { position: sticky; top: 0; background: #b8860b; color: #1a1a1a; font-weight: 700; z-index: 2; }
+.report-table th.rot { writing-mode: vertical-rl; transform: rotate(180deg); height: 120px; padding: 8px 4px; vertical-align: bottom; }
+.report-table td.left { text-align: left; }
+.report-table tbody tr:hover td { background: rgba(255,255,255,0.05); }
+.report-table td.sym { font-size: 1.05rem; font-weight: 700; min-width: 26px; }
+.sym-done { color: #69f0ae; }
+.sym-temp { color: #ffcc80; }
+.sym-dup { color: #ff8a80; }
+.sym-wait { color: #80d8ff; }
+.sym-skip { color: var(--text-dim); }
+.report-table tr.overdue td { background: rgba(198,40,40,0.22); }
+.report-table td input, .report-table td select { margin: 0; padding: 4px 6px; font-size: 0.8rem; min-width: 110px; }
+.status-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
+.status-open { background: rgba(255,204,128,0.2); color: #ffcc80; }
+.status-done { background: rgba(105,240,174,0.18); color: #69f0ae; }
+.status-late { background: rgba(255,82,82,0.25); color: #ff8a80; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 18px; }
+.summary-card { background: rgba(0,0,0,0.18); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; }
+.summary-card h4 { margin: 0 0 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
+.summary-line { font-size: 0.9rem; margin-bottom: 14px; }
+.chain-btn.stop-on { background: #c62828; color: #fff; border-color: #c62828; }
+.chain-stop-line { font-size: 0.7rem; color: #ff8a80; text-transform: uppercase; letter-spacing: 1px; margin: -2px 0 8px 4px; }
+
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
   color: inherit;
@@ -513,6 +551,19 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
 <button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
 <button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Final Save</button>
+<button class="btn" id="btn-partial-save-dynamic" onclick="savePartial()">Partial Save</button>
+<span id="partial-editing" class="partial-editing hidden"></span>
+</div>
+</div>
+
+<!-- PARTIAL SAVES FOR THIS TASK -->
+<div id="partial-section" class="hidden" style="margin-top:30px;">
+<label style="margin-bottom:10px;">Partial Saves</label>
+<div style="overflow-x:auto;">
+<table class="data-table">
+<thead><tr><th>Saved</th><th>Ref No</th><th>Case No</th><th>Filled</th><th style="text-align:right">Action</th></tr></thead>
+<tbody id="partial-body"></tbody>
+</table>
 </div>
 </div>
 
@@ -561,6 +612,42 @@ list is the order cases move through.
 <button class="btn btn-primary" id="btn-save-chain" onclick="saveChain()">Save Chain</button>
 <button class="btn btn-small" onclick="resetChainToDefault()">Reset to default</button>
 </div>
+</div>
+
+<!-- REPORTS (Jawad only) -->
+<div id="form-reports" class="hidden">
+<div class="report-bar">
+<button class="phase-btn active" id="rep-tab-simple" onclick="showReportTab('simple')">Simple Report</button>
+<button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
+<button class="btn btn-small" onclick="refreshReports()">Refresh</button>
+<span id="report-meta" class="report-meta"></span>
+</div>
+<div id="report-simple">
+<div class="report-bar">
+<input type="text" id="report-search" class="report-search" placeholder="Search ref, case or name" oninput="renderSimpleReport()">
+<span class="report-legend"><b class="sym-done">&#9679;</b> Completed <b class="sym-temp">&#9675;</b> Temp / partial <b class="sym-dup">&equiv;</b> Double entry <b class="sym-wait">&#10003;</b> Waiting now <b class="sym-skip">&ndash;</b> Skipped &nbsp;Blank: not reached</span>
+</div>
+<div class="report-wrap"><table class="report-table" id="report-table"></table></div>
+</div>
+<div id="report-cheque" class="hidden">
+<div id="cheque-summary"></div>
+<div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
+</div>
+</div>
+
+<!-- CHEQUES (Jawad only) -->
+<div id="form-cheques" class="hidden">
+<div class="report-bar">
+<select id="cheque-filter" class="report-search" onchange="renderChequeAdmin()">
+<option value="open">With Salesman</option>
+<option value="overdue">Overdue</option>
+<option value="received">Received</option>
+<option value="all">All</option>
+</select>
+<input type="text" id="cheque-search" class="report-search" placeholder="Search ref, case, name, salesman" oninput="renderChequeAdmin()">
+<button class="btn btn-small" onclick="loadCheques(true)">Refresh</button>
+</div>
+<div class="report-wrap"><table class="report-table cheque-table" id="cheque-admin-table"></table></div>
 </div>
 
 <!-- TASK BUILDER (Jawad only) -->
@@ -728,8 +815,14 @@ const ADMIN_TASKS = [
   { name: "Task Chain", phase: "Admin", panel: "chain",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Message Templates", phase: "Admin", panel: "templates",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Reports", phase: "Admin", panel: "reports",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Cheques", phase: "Admin", panel: "cheques",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
+
+const CHEQUE_TASK = "Adv & Chq";
 
 /* Seeded into the Tasks tab the first time it is empty. After that the
    sheet is the only source of truth. Existing sheets are never rewritten
@@ -788,6 +881,14 @@ let templatesLoaded = false;
 let chainList = [];
 let recurringList = [];
 let chainLoaded = false;
+let chainStops = [];
+let partialItems = [];
+let currentPartialId = null;
+let reportData = null;
+let chequeItems = [];
+let chequesLoaded = false;
+let chequeOverdueDays = 5;
+let chequeEditId = null;
 let pendingItems = [];
 let lastBellHour = -1;
 
@@ -881,7 +982,12 @@ function getPhaseForTask(taskName) {
 
 function tasksInPhase(phase) {
   if (!phase) return [];
-  return staffTaskList().filter(t => getPhaseForTask(t) === phase);
+  const list = staffTaskList().filter(t => getPhaseForTask(t) === phase);
+  const rank = t => {
+    const i = chainList.indexOf(t);
+    return i === -1 ? 100000 + list.indexOf(t) : i;
+  };
+  return list.slice().sort((a, b) => rank(a) - rank(b));
 }
 
 function phasesForStaff() {
@@ -1896,9 +2002,11 @@ async function loadChain() {
         chainList = c.slice();
         recurringList = r.slice();
       }
+      chainStops = (result.stops || []).slice();
       reconcileChainWithTasks();
       chainLoaded = true;
       if (currentTask === "Task Chain") renderChainEditor();
+      if (profile) renderTaskSidebar();
     }
   } catch (e) {
     // Non-fatal. Nothing advances until the chain loads.
@@ -1929,18 +2037,31 @@ function renderChainColumn(elId, items, group) {
   const box = document.getElementById(elId);
   if (items.length === 0) { box.innerHTML = `<div class="chain-empty">Drop tasks here.</div>`; return; }
   const isChain = group === 'chain';
-  box.innerHTML = items.map((t, i) => `
+  box.innerHTML = items.map((t, i) => {
+    const stop = isChain && chainStops.indexOf(t) !== -1;
+    return `
     <div class="chain-item" draggable="true" data-task="${escapeHtml(t)}" data-group="${group}">
       ${isChain ? `<span class="chain-pos">${i + 1}</span>` : ''}
       <span class="chain-name">${escapeHtml(t)}</span>
       <span class="chain-btns">
         ${isChain ? `
+          <button class="chain-btn${stop ? ' stop-on' : ''}" onclick="toggleChainStop(${i})" title="${stop ? 'Remove stop point' : 'Stop the chain after this task'}">&#9632;</button>
           <button class="chain-btn" onclick="moveChainItem('${group}',${i},-1)" title="Move up">&#9650;</button>
           <button class="chain-btn" onclick="moveChainItem('${group}',${i},1)" title="Move down">&#9660;</button>` : ''}
         <button class="chain-btn" onclick="switchChainGroup('${group}',${i})"
           title="${isChain ? 'Move to Recurring' : 'Move to Chain'}">${isChain ? '&rarr;' : '&larr;'}</button>
       </span>
-    </div>`).join('');
+    </div>${stop && i < items.length - 1 ? '<div class="chain-stop-line">Chain stops here</div>' : ''}`;
+  }).join('');
+}
+
+function toggleChainStop(index) {
+  const t = chainList[index];
+  if (!t) return;
+  const at = chainStops.indexOf(t);
+  if (at === -1) chainStops.push(t);
+  else chainStops.splice(at, 1);
+  renderChainEditor();
 }
 
 function moveChainItem(group, index, delta) {
@@ -2022,7 +2143,10 @@ function renderChainPreview() {
   if (chainList.length === 0) {
     html = '<span style="font-style:italic">No chain set. Nothing will ever become pending.</span>';
   } else {
-    html = '<b>Cases move through</b><br>' + chainList.map(escapeHtml).join(' &rarr; ');
+    html = '<b>Cases move through</b><br>' + chainList.map((t, i) => {
+      const stop = chainStops.indexOf(t) !== -1 && i < chainList.length - 1;
+      return escapeHtml(t) + (stop ? ' <b style="color:#ff8a80">| stop</b>' : '');
+    }).join(' &rarr; ');
   }
   if (recurringList.length) {
     html += '<br><br><b>Recurring</b><br>' + recurringList.map(escapeHtml).join(', ');
@@ -2033,6 +2157,7 @@ function renderChainPreview() {
 function resetChainToDefault() {
   chainList = DEFAULT_CHAIN.slice();
   recurringList = [];
+  chainStops = [];
   renderChainEditor();
   toast("Reset to the default order. Not saved yet.");
 }
@@ -2041,13 +2166,15 @@ async function saveChain() {
   const btn = document.getElementById('btn-save-chain');
   btn.disabled = true;
   try {
-    const result = await apiCall('chainSave', { chain: chainList, recurring: recurringList });
+    const stops = chainStops.filter(t => chainList.indexOf(t) !== -1);
+    const result = await apiCall('chainSave', { chain: chainList, recurring: recurringList, stops: stops });
     if (!result.ok) {
       toast(result.error || "Could not save the chain", true);
       btn.disabled = false;
       return;
     }
     toast("Chain saved. " + chainList.length + " in the chain.");
+    renderTaskSidebar();
   } catch (e) {
     toast("Network error", true);
   }
@@ -2335,7 +2462,7 @@ function renderTaskSidebar() {
 }
 
 function hideAllForms() {
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'partial-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -2368,9 +2495,23 @@ function renderFormInterface() {
     renderTaskBuilder();
     return;
   }
+  if (t.panel === "reports") {
+    document.getElementById('form-reports').classList.remove('hidden');
+    showReportTab(reportTab);
+    return;
+  }
+  if (t.panel === "cheques") {
+    document.getElementById('form-cheques').classList.remove('hidden');
+    renderChequeAdmin();
+    loadCheques(true);
+    return;
+  }
 
   document.getElementById('form-dynamic').classList.remove('hidden');
   renderDynamicForm(t);
+  setPartialEditing(null);
+  document.getElementById('partial-section').classList.remove('hidden');
+  loadPartials();
 
   const tempBtn = document.getElementById('btn-temp-save-dynamic');
   if (tempBtn) tempBtn.style.display = t.temp ? 'inline-block' : 'none';
@@ -2553,8 +2694,9 @@ function validateDynamic(task, mode) {
 }
 
 function savedMessage(result) {
-  if (result && result.nextTask) return "Saved. " + result.nextTask + " is now pending.";
-  return "Saved to central records.";
+  let msg = (result && result.nextTask) ? "Saved. " + result.nextTask + " is now pending." : "Saved to central records.";
+  if (result && result.chequeNote) msg += " " + result.chequeNote;
+  return msg;
 }
 
 async function saveDynamicEntry(type) {
@@ -2568,8 +2710,9 @@ async function saveDynamicEntry(type) {
   const payload = Object.assign(
     { targetStaffName: profile.name, taskName: currentTask },
     values,
-    { extra: extra }
+    { extra: extra, partialId: currentPartialId || "" }
   );
+  const usedPartial = !!currentPartialId;
 
   try {
     if (type === 'Temp') {
@@ -2590,9 +2733,385 @@ async function saveDynamicEntry(type) {
       toast(savedMessage(result));
       loadPending();
     }
+    setPartialEditing(null);
+    if (usedPartial) loadPartials();
   } catch (e) {
     toast("Network error while saving.", true);
   }
+}
+
+function setPartialEditing(item) {
+  currentPartialId = item ? item.partialId : null;
+  const el = document.getElementById('partial-editing');
+  if (!el) return;
+  if (item) {
+    el.innerText = 'Editing partial save from ' + (item.createdAt || '');
+    el.classList.remove('hidden');
+  } else {
+    el.innerText = '';
+    el.classList.add('hidden');
+  }
+}
+
+function collectRawData(task) {
+  const data = {};
+  task.fields.forEach(f => {
+    const baseId = 'dyn_' + f.id;
+    if (f.type === 'checkbox') {
+      const picked = [];
+      (f.options || []).forEach((o, i) => {
+        const el = document.getElementById(baseId + '_opt' + i);
+        if (el && el.checked) picked.push(optionLabel(o));
+      });
+      if (picked.length) data[f.id] = picked;
+    } else if (f.type === 'time') {
+      const t = { h: valOf(baseId + '_h'), m: valOf(baseId + '_m'), ap: valOf(baseId + '_ap') };
+      if (t.h || t.m || t.ap) data[f.id] = t;
+    } else {
+      const v = valOf(baseId);
+      if (v) data[f.id] = v;
+    }
+  });
+  return data;
+}
+
+function applyRawData(task, data) {
+  clearDynamicForm(task);
+  task.fields.forEach(f => {
+    const v = data[f.id];
+    if (v === undefined || v === null) return;
+    const baseId = 'dyn_' + f.id;
+    if (f.type === 'checkbox') {
+      const picked = Array.isArray(v) ? v : String(v).split(',').map(x => x.trim());
+      (f.options || []).forEach((o, i) => {
+        const el = document.getElementById(baseId + '_opt' + i);
+        if (el && picked.indexOf(optionLabel(o)) !== -1) {
+          el.checked = true;
+          el.parentElement.classList.add('on');
+        }
+      });
+    } else if (f.type === 'time') {
+      ['h', 'm', 'ap'].forEach(k => {
+        const el = document.getElementById(baseId + '_' + k);
+        if (el && v[k] !== undefined) el.value = v[k];
+      });
+    } else {
+      const el = document.getElementById(baseId);
+      if (el) el.value = v;
+    }
+  });
+}
+
+async function savePartial() {
+  const task = taskByName(currentTask);
+  if (!task) return;
+  const data = collectRawData(task);
+  if (!Object.keys(data).length) return toast("Fill in at least one field first.", true);
+
+  const refField = task.fields.filter(f => f.key === 'ref')[0];
+  const caseField = task.fields.filter(f => f.key === 'case')[0];
+  const btn = document.getElementById('btn-partial-save-dynamic');
+  btn.disabled = true;
+  try {
+    const result = await apiCall('partialSave', {
+      targetStaffName: profile.name, taskName: currentTask,
+      refNo: refField ? getFieldValue(refField) : '',
+      caseNo: caseField ? getFieldValue(caseField) : '',
+      data: data, partialId: currentPartialId || ''
+    });
+    if (!result.ok) { toast(result.error || "Could not save", true); btn.disabled = false; return; }
+    clearDynamicForm(task);
+    setPartialEditing(null);
+    toast("Partial save stored. Pick it from the grid below to finish it later.");
+    loadPartials();
+  } catch (e) {
+    toast("Network error while saving.", true);
+  }
+  btn.disabled = false;
+}
+
+async function loadPartials() {
+  const body = document.getElementById('partial-body');
+  if (!body || !currentTask || !profile) return;
+  const forTask = currentTask;
+  body.innerHTML = `<tr><td colspan="5" style="color:var(--text-dim)">Loading...</td></tr>`;
+  try {
+    const result = await apiCall('partialList', { targetStaffName: profile.name, taskName: forTask });
+    if (forTask !== currentTask) return;
+    if (!result.ok) { body.innerHTML = `<tr><td colspan="5">${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
+    partialItems = result.items || [];
+    renderPartials();
+  } catch (e) {
+    body.innerHTML = `<tr><td colspan="5">Network error</td></tr>`;
+  }
+}
+
+function renderPartials() {
+  const body = document.getElementById('partial-body');
+  const task = taskByName(currentTask);
+  if (!body || !task) return;
+  if (!partialItems.length) {
+    body.innerHTML = `<tr><td colspan="5" style="color:var(--text-dim)">No partial saves on this task.</td></tr>`;
+    return;
+  }
+  body.innerHTML = partialItems.map((p, i) => {
+    const filled = task.fields.filter(f => p.data && p.data[f.id] !== undefined).map(f => f.label);
+    return `<tr${p.partialId === currentPartialId ? ' class="row-selected"' : ''}>
+      <td style="color:var(--text-dim); font-size:0.85rem;">${escapeHtml(p.createdAt || '')}</td>
+      <td>${escapeHtml(p.refNo || '')}</td>
+      <td>${escapeHtml(p.caseNo || '')}</td>
+      <td class="partial-fill">${escapeHtml(filled.join(', ') || '-')}</td>
+      <td style="text-align:right; white-space:nowrap;">
+        <button class="btn btn-small" onclick="loadPartialIntoForm(${i})">Load</button>
+        <button class="btn icon-btn icon-cross" onclick="removePartial(${i})" title="Delete">&#10005;</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function loadPartialIntoForm(i) {
+  const task = taskByName(currentTask);
+  const p = partialItems[i];
+  if (!task || !p) return;
+  applyRawData(task, p.data || {});
+  setPartialEditing(p);
+  renderPartials();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  toast("Loaded. Fill in the rest, then Temp or Final Save.");
+}
+
+async function removePartial(i) {
+  const p = partialItems[i];
+  if (!p) return;
+  try {
+    const result = await apiCall('partialDelete', { partialId: p.partialId });
+    if (!result.ok) return toast(result.error || "Could not delete", true);
+    if (currentPartialId === p.partialId) setPartialEditing(null);
+    partialItems.splice(i, 1);
+    renderPartials();
+    toast("Partial save deleted.");
+  } catch (e) { toast("Network error", true); }
+}
+
+let reportTab = 'simple';
+
+function showReportTab(tab) {
+  reportTab = tab;
+  document.getElementById('rep-tab-simple').classList.toggle('active', tab === 'simple');
+  document.getElementById('rep-tab-cheque').classList.toggle('active', tab === 'cheque');
+  document.getElementById('report-simple').classList.toggle('hidden', tab !== 'simple');
+  document.getElementById('report-cheque').classList.toggle('hidden', tab !== 'cheque');
+  if (tab === 'simple') {
+    if (reportData) renderSimpleReport(); else loadReport();
+  } else {
+    if (chequesLoaded) renderChequeReport(); else loadCheques(true);
+  }
+}
+
+function refreshReports() {
+  if (reportTab === 'simple') loadReport(); else loadCheques(true);
+}
+
+async function loadReport() {
+  const table = document.getElementById('report-table');
+  const meta = document.getElementById('report-meta');
+  table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Building report...</td></tr>`;
+  try {
+    const result = await apiCall('reportBuild');
+    if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
+    reportData = result;
+    meta.innerText = (result.rows || []).length + ' cases · built ' + (result.builtAt || '') + ' · also written to the Report tab';
+    renderSimpleReport();
+  } catch (e) {
+    table.innerHTML = `<tr><td>Network error</td></tr>`;
+  }
+}
+
+const SYM_CLASS = { '●': 'sym-done', '○': 'sym-temp', '≡': 'sym-dup', '✓': 'sym-wait', '–': 'sym-skip' };
+
+function renderSimpleReport() {
+  const table = document.getElementById('report-table');
+  if (!reportData) return;
+  const q = (document.getElementById('report-search').value || '').trim().toLowerCase();
+  const rows = (reportData.rows || []).filter(r => !q ||
+    String(r.refNo).toLowerCase().includes(q) ||
+    String(r.caseNo).toLowerCase().includes(q) ||
+    String(r.name).toLowerCase().includes(q));
+
+  const head = `<thead><tr><th>Ref No</th><th>Case No</th><th>Name</th><th>Days</th>${
+    reportData.tasks.map(t => `<th class="rot">${escapeHtml(t)}</th>`).join('')}</tr></thead>`;
+  const body = rows.length ? rows.map(r => `<tr>
+      <td>${escapeHtml(r.refNo)}</td><td>${escapeHtml(r.caseNo)}</td>
+      <td class="left">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
+      ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}">${escapeHtml(c)}</td>`).join('')}
+    </tr>`).join('') : `<tr><td colspan="${4 + reportData.tasks.length}" style="color:var(--text-dim)">No matching cases.</td></tr>`;
+  table.innerHTML = head + '<tbody>' + body + '</tbody>';
+}
+
+async function loadCheques(render) {
+  try {
+    const result = await apiCall('chequeList');
+    if (!result.ok) { toast(result.error || "Could not load cheques", true); return; }
+    chequeItems = result.items || [];
+    chequeOverdueDays = result.overdueDays || 5;
+    chequesLoaded = true;
+    if (render) {
+      if (currentTask === 'Cheques') renderChequeAdmin();
+      if (currentTask === 'Reports' && reportTab === 'cheque') renderChequeReport();
+    }
+  } catch (e) {
+    toast("Network error", true);
+  }
+}
+
+function chequeStatusPill(c) {
+  if (c.status === 'Received') return '<span class="status-pill status-done">Received</span>';
+  if (c.overdue) return '<span class="status-pill status-late">Overdue</span>';
+  return '<span class="status-pill status-open">With Salesman</span>';
+}
+
+function chequeKey(c) {
+  const parts = [];
+  if (c.refNo) parts.push('Ref ' + c.refNo);
+  if (c.caseNo) parts.push('Case ' + c.caseNo);
+  return parts.join(' · ');
+}
+
+function chequeGroupTable(title, field) {
+  const g = {};
+  chequeItems.forEach(c => {
+    const k = c[field] || '(not set)';
+    if (!g[k]) g[k] = { claimed: 0, received: 0, open: 0, overdue: 0 };
+    g[k].claimed++;
+    if (c.status === 'Received') g[k].received++; else g[k].open++;
+    if (c.overdue) g[k].overdue++;
+  });
+  const keys = Object.keys(g).sort((a, b) => g[b].open - g[a].open || a.localeCompare(b));
+  return `<div class="summary-card"><h4>${title}</h4>
+    <table class="report-table"><thead><tr><th>${title.replace('By ', '')}</th><th>Claimed</th><th>Received</th><th>With Salesman</th><th>Overdue</th></tr></thead><tbody>
+    ${keys.map(k => `<tr${g[k].overdue ? ' class="overdue"' : ''}><td class="left">${escapeHtml(k)}</td><td>${g[k].claimed}</td><td>${g[k].received}</td><td>${g[k].open}</td><td>${g[k].overdue}</td></tr>`).join('') || '<tr><td colspan="5">No cheques yet.</td></tr>'}
+    </tbody></table></div>`;
+}
+
+function renderChequeReport() {
+  const sum = document.getElementById('cheque-summary');
+  const table = document.getElementById('cheque-report-table');
+  const meta = document.getElementById('report-meta');
+  const total = chequeItems.length;
+  const received = chequeItems.filter(c => c.status === 'Received').length;
+  const open = total - received;
+  const overdue = chequeItems.filter(c => c.overdue).length;
+  meta.innerText = total + ' cheques · red after ' + chequeOverdueDays + ' days';
+
+  const bySalesman = {};
+  chequeItems.filter(c => c.status !== 'Received').forEach(c => {
+    const k = c.salesman || '(not set)';
+    bySalesman[k] = (bySalesman[k] || 0) + 1;
+  });
+  const withText = Object.keys(bySalesman).map(k => bySalesman[k] + ' with ' + k).join(', ');
+
+  sum.innerHTML = `<div class="summary-line"><b>${total}</b> claimed, <b>${received}</b> received, <b>${open}</b> outstanding${
+    overdue ? `, <b style="color:#ff8a80">${overdue} overdue</b>` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
+    <div class="summary-grid">${chequeGroupTable('By Salesman', 'salesman')}${chequeGroupTable('By Branch', 'branch')}</div>`;
+
+  const rows = chequeItems.slice().sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
+    rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''}>
+      <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
+      <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
+      <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+      <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
+    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--text-dim)">No cheques yet. They appear when Adv &amp; Chq is Final Saved.</td></tr>'
+  }</tbody>`;
+}
+
+function chequeFieldOptions(col) {
+  const t = taskByName(CHEQUE_TASK);
+  if (!t) return [];
+  const f = t.fields.filter(x => x.col === col)[0];
+  return f ? (f.options || []).map(optionLabel) : [];
+}
+
+function chequeSelect(id, col, value) {
+  const opts = chequeFieldOptions(col);
+  if (!opts.length) return `<input type="text" id="${id}" value="${escapeHtml(value || '')}">`;
+  if (value && opts.indexOf(value) === -1) opts.unshift(value);
+  return `<select id="${id}"><option value="">-</option>${opts.map(o =>
+    `<option value="${escapeHtml(o)}"${o === value ? ' selected' : ''}>${escapeHtml(o)}</option>`).join('')}</select>`;
+}
+
+function renderChequeAdmin() {
+  const table = document.getElementById('cheque-admin-table');
+  if (!table) return;
+  if (!chequesLoaded) { table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Loading cheques...</td></tr>`; return; }
+  const filter = document.getElementById('cheque-filter').value;
+  const q = (document.getElementById('cheque-search').value || '').trim().toLowerCase();
+  const rows = chequeItems.filter(c => {
+    if (filter === 'open' && c.status === 'Received') return false;
+    if (filter === 'received' && c.status !== 'Received') return false;
+    if (filter === 'overdue' && !c.overdue) return false;
+    if (!q) return true;
+    return [c.refNo, c.caseNo, c.customerName, c.salesman, c.branch].some(x => String(x || '').toLowerCase().includes(q));
+  }).sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
+
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th><th></th></tr></thead><tbody>${
+    rows.map(c => {
+      const id = escapeHtml(c.id);
+      if (c.id === chequeEditId) {
+        return `<tr>
+          <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
+          <td>${chequeSelect('ce-branch', 'Branch', c.branch)}</td>
+          <td>${chequeSelect('ce-salesman', 'Salesman', c.salesman)}</td>
+          <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+          <td>${c.days}</td><td>${chequeStatusPill(c)}</td>
+          <td><input type="text" id="ce-notes" value="${escapeHtml(c.notes)}"></td>
+          <td style="white-space:nowrap;">
+            <button class="btn btn-small btn-primary" onclick="saveChequeEdit('${id}')">Save</button>
+            <button class="btn btn-small" onclick="editCheque('')">Cancel</button>
+          </td></tr>`;
+      }
+      return `<tr${c.overdue ? ' class="overdue"' : ''}>
+        <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
+        <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
+        <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+        <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
+        <td style="white-space:nowrap;">
+          ${c.status === 'Received'
+            ? `<button class="btn btn-small" onclick="setChequeStatus('${id}','With Salesman')">Undo</button>`
+            : `<button class="btn btn-small btn-primary" onclick="setChequeStatus('${id}','Received')">Mark received</button>`}
+          <button class="btn btn-small" onclick="editCheque('${id}')">Edit</button>
+        </td></tr>`;
+    }).join('') || `<tr><td colspan="10" style="color:var(--text-dim)">Nothing here.</td></tr>`
+  }</tbody>`;
+}
+
+function editCheque(id) {
+  chequeEditId = id || null;
+  renderChequeAdmin();
+}
+
+async function updateCheque(id, changes, okMsg) {
+  try {
+    const result = await apiCall('chequeUpdate', { id: id, changes: changes });
+    if (!result.ok) return toast(result.error || "Could not update cheque", true);
+    const i = chequeItems.findIndex(c => c.id === id);
+    if (i !== -1) chequeItems[i] = result.item;
+    chequeEditId = null;
+    renderChequeAdmin();
+    toast(okMsg);
+  } catch (e) { toast("Network error", true); }
+}
+
+function setChequeStatus(id, status) {
+  updateCheque(id, { status: status }, status === 'Received' ? "Marked received." : "Moved back to With Salesman.");
+}
+
+function saveChequeEdit(id) {
+  updateCheque(id, {
+    branch: valOf('ce-branch'),
+    salesman: valOf('ce-salesman'),
+    notes: valOf('ce-notes')
+  }, "Cheque updated.");
 }
 
 /* =========================
@@ -2762,6 +3281,7 @@ async function finalizeSelected() {
     let note = `${done.length} saved to Final.`;
     if (skipped.length > 0) note += ` ${skipped.length} skipped.`;
     if (result.failed && result.failed.length > 0) note += ` ${result.failed.length} could not be saved.`;
+    if (result.chequeNote) note += ' ' + result.chequeNote;
     toast(note);
     loadPending();
   } catch (e) {
