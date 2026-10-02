@@ -8,17 +8,26 @@
 onerror="handleGsiLoadError()"></script>
 <style>
 :root {
---bg-color: #00332e;
---panel-color: rgba(255, 255, 255, 0.08);
---border-color: rgba(255, 255, 255, 0.15);
---accent-color: #00796b;
---text-main: #ffffff;
---text-dim: #b2dfdb;
+--bg-color: #0f1b1e;
+--panel-color: rgba(255, 255, 255, 0.04);
+--surface: #15252a;
+--border-color: rgba(255, 255, 255, 0.10);
+--accent-color: #2f8f83;
+--accent-hover: #37a093;
+--accent-soft: rgba(47, 143, 131, 0.18);
+--text-main: #e7eef0;
+--text-dim: #93a7ad;
+--ok: #4cc38a;
+--warn: #e3b341;
+--danger: #e5534b;
+--info: #58a6d6;
+--corp: #6f8ff5;
+--report-head: #c9a33f;
 }
 * { box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
 body {
 background: var(--bg-color);
-background-image: linear-gradient(180deg, #00332e 0%, #001a1a 100%);
+background-image: linear-gradient(180deg, #13232a 0%, #0b1518 100%);
 color: var(--text-main);
 margin: 0;
 min-height: 100vh;
@@ -82,7 +91,7 @@ stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
 .notif-dot {
 position: absolute; top: -3px; right: -3px;
 min-width: 16px; height: 16px; padding: 0 4px;
-background: #ff5252; color: #fff;
+background: var(--danger); color: #fff;
 border-radius: 8px; font-size: 0.65rem; font-weight: 700;
 display: flex; align-items: center; justify-content: center;
 }
@@ -91,7 +100,7 @@ display: flex; align-items: center; justify-content: center;
 .notif-panel {
 position: absolute; top: calc(100% + 10px); right: 0;
 width: 320px; max-width: 90vw; max-height: 400px; overflow-y: auto;
-background: #0a2f2b; border: 1px solid var(--border-color);
+background: var(--surface); border: 1px solid var(--border-color);
 border-radius: 12px; z-index: 1100;
 box-shadow: 0 16px 40px rgba(0,0,0,0.5);
 }
@@ -105,14 +114,14 @@ padding: 11px 15px; border-bottom: 1px solid rgba(255,255,255,0.06);
 cursor: pointer; transition: 0.15s ease;
 }
 .notif-item:last-child { border-bottom: none; }
-.notif-item:hover { background: rgba(0,121,107,0.3); }
+.notif-item:hover { background: rgba(47,143,131,0.3); }
 .notif-task { font-size: 0.88rem; font-weight: 600; }
 .notif-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 3px; }
 .notif-empty { padding: 22px 15px; color: var(--text-dim); font-size: 0.85rem; text-align: center; }
 
 /* ===== PENDING STRIP ON TASK SCREEN ===== */
 .pending-strip {
-background: rgba(0,121,107,0.18); border: 1px solid var(--accent-color);
+background: rgba(47,143,131,0.18); border: 1px solid var(--accent-color);
 border-radius: 10px; padding: 12px 15px; margin-bottom: 20px;
 }
 .pending-strip-head { font-size: 0.8rem; font-weight: 600; margin-bottom: 9px; }
@@ -130,23 +139,23 @@ cursor: pointer; transition: 0.15s ease; white-space: nowrap;
 #toast {
 position: fixed; bottom: 26px; left: 50%;
 transform: translateX(-50%) translateY(18px);
-background: rgba(0,60,52,0.97); border: 1px solid var(--accent-color);
+background: rgba(21,37,42,0.97); border: 1px solid var(--accent-color);
 color: var(--text-main); padding: 13px 24px; border-radius: 10px;
 font-size: 0.9rem; z-index: 3000; opacity: 0; pointer-events: none;
 transition: opacity 0.25s ease, transform 0.25s ease;
 box-shadow: 0 12px 34px rgba(0,0,0,0.5); max-width: 90vw; text-align: center;
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-#toast.error { border-color: #ff8a80; background: rgba(72,20,18,0.97); }
+#toast.error { border-color: var(--danger); background: rgba(58,24,24,0.97); }
 
 .btn-primary { background: var(--accent-color); border: none; font-weight: 600; }
-.btn-primary:hover { background: #00897b; }
+.btn-primary:hover { background: var(--accent-hover); }
 .btn-small { padding: 6px 12px; font-size: 0.75rem; }
 .icon-btn { padding: 6px 12px; font-size: 0.9rem; line-height: 1; font-weight: 700; }
-.icon-tick { color: #69f0ae; border-color: #69f0ae; }
-.icon-tick:hover { background: rgba(105,240,174,0.15); }
-.icon-cross { color: #ff8a80; border-color: #ff8a80; }
-.icon-cross:hover { background: rgba(255,138,128,0.15); }
+.icon-tick { color: var(--ok); border-color: var(--ok); }
+.icon-tick:hover { background: rgba(76,195,138,0.15); }
+.icon-cross { color: var(--danger); border-color: var(--danger); }
+.icon-cross:hover { background: rgba(229,83,75,0.15); }
 .main-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .glass-panel {
 background: var(--panel-color);
@@ -185,7 +194,7 @@ color: var(--text-dim); font-size: 0.85rem; pointer-events: none;
 }
 .search-results {
 position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-background: #0a2f2b;
+background: var(--surface);
 border: 1px solid var(--border-color); border-radius: 10px;
 max-height: 320px; overflow-y: auto; z-index: 900;
 box-shadow: 0 12px 30px rgba(0,0,0,0.45);
@@ -196,7 +205,7 @@ border-bottom: 1px solid rgba(255,255,255,0.06);
 display: flex; align-items: center; gap: 10px;
 }
 .search-item:last-child { border-bottom: none; }
-.search-item:hover, .search-item.active { background: rgba(0,121,107,0.35); }
+.search-item:hover, .search-item.active { background: rgba(47,143,131,0.35); }
 .search-kind {
 font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px;
 color: var(--text-dim); border: 1px solid var(--border-color);
@@ -225,7 +234,7 @@ transition: 0.15s ease; position: relative;
 .task-sidebar-item:hover { background: rgba(255,255,255,0.08); }
 .task-sidebar-item.active { background: var(--accent-color); border-color: var(--accent-color); font-weight: 600; }
 .sidebar-count {
-display: inline-block; margin-left: 6px; background: #ff5252; color: #fff;
+display: inline-block; margin-left: 6px; background: var(--danger); color: #fff;
 border-radius: 9px; padding: 1px 6px; font-size: 0.68rem; font-weight: 700;
 }
 
@@ -280,7 +289,7 @@ color: var(--accent-color); font-weight: 700; margin-bottom: 8px;
 background: rgba(0,0,0,0.18); border: 1px solid var(--border-color);
 border-radius: 12px; padding: 14px; min-height: 140px;
 }
-.chain-col.drop-target { border-color: var(--accent-color); background: rgba(0,121,107,0.16); }
+.chain-col.drop-target { border-color: var(--accent-color); background: rgba(47,143,131,0.16); }
 .chain-col-head { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px;
 color: var(--text-dim); margin-bottom: 4px; }
 .chain-col-note { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.5; }
@@ -376,14 +385,14 @@ font-size: 0.75rem; text-transform: uppercase; }
 width: 16px; height: 16px; padding: 0; margin: 0; cursor: pointer;
 accent-color: var(--accent-color);
 }
-.data-table tr.row-selected td { background: rgba(0,121,107,0.18); }
+.data-table tr.row-selected td { background: rgba(47,143,131,0.18); }
 .select-col { width: 36px; }
 
 /* ===== BULK ACTION BAR ===== */
 .bulk-bar {
 display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 margin-top: 15px; padding: 12px 15px;
-background: rgba(0,121,107,0.15);
+background: rgba(47,143,131,0.15);
 border: 1px solid var(--accent-color);
 border-radius: 8px;
 }
@@ -430,7 +439,7 @@ header { padding: 10px 15px; }
 
 
 /* ===== PARTIAL SAVE ===== */
-.partial-editing { font-size: 0.78rem; color: #ffcc80; }
+.partial-editing { font-size: 0.78rem; color: var(--warn); }
 .partial-fill { color: var(--text-dim); font-size: 0.8rem; }
 
 /* ===== REPORTS + CHEQUES ===== */
@@ -442,28 +451,59 @@ header { padding: 10px 15px; }
 .report-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--border-color); border-radius: 10px; }
 .report-table { border-collapse: collapse; font-size: 0.82rem; min-width: 100%; }
 .report-table th, .report-table td { border: 1px solid rgba(255,255,255,0.1); padding: 6px 8px; text-align: center; white-space: nowrap; }
-.report-table thead th { position: sticky; top: 0; background: #b8860b; color: #1a1a1a; font-weight: 700; z-index: 2; }
+.report-table thead th { position: sticky; top: 0; background: var(--report-head); color: #1a1a1a; font-weight: 700; z-index: 2; }
 .report-table th.rot { writing-mode: vertical-rl; transform: rotate(180deg); height: 120px; padding: 8px 4px; vertical-align: bottom; }
 .report-table td.left { text-align: left; }
 .report-table tbody tr:hover td { background: rgba(255,255,255,0.05); }
 .report-table td.sym { font-size: 1.05rem; font-weight: 700; min-width: 26px; }
-.sym-done { color: #69f0ae; }
-.sym-temp { color: #ffcc80; }
-.sym-dup { color: #ff8a80; }
-.sym-wait { color: #80d8ff; }
+.sym-done { color: var(--ok); }
+.sym-temp { color: var(--warn); }
+.sym-dup { color: var(--danger); }
+.sym-wait { color: var(--info); }
 .sym-skip { color: var(--text-dim); }
-.report-table tr.overdue td { background: rgba(198,40,40,0.22); }
+.report-table tr.overdue td { background: rgba(229,83,75,0.22); }
 .report-table td input, .report-table td select { margin: 0; padding: 4px 6px; font-size: 0.8rem; min-width: 110px; }
 .status-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; }
-.status-open { background: rgba(255,204,128,0.2); color: #ffcc80; }
-.status-done { background: rgba(105,240,174,0.18); color: #69f0ae; }
-.status-late { background: rgba(255,82,82,0.25); color: #ff8a80; }
+.status-open { background: rgba(227,179,65,0.2); color: var(--warn); }
+.status-done { background: rgba(76,195,138,0.18); color: var(--ok); }
+.status-late { background: rgba(229,83,75,0.25); color: var(--danger); }
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 18px; }
 .summary-card { background: rgba(0,0,0,0.18); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; }
 .summary-card h4 { margin: 0 0 8px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
 .summary-line { font-size: 0.9rem; margin-bottom: 14px; }
-.chain-btn.stop-on { background: #c62828; color: #fff; border-color: #c62828; }
-.chain-stop-line { font-size: 0.7rem; color: #ff8a80; text-transform: uppercase; letter-spacing: 1px; margin: -2px 0 8px 4px; }
+
+
+/* ===== CHAIN EXIT RULES ===== */
+.exit-rule { margin-top: 10px; padding: 8px 10px; border-radius: 8px; border: 1px dashed var(--border-color); }
+.exit-rule.on { border-style: solid; border-color: rgba(229,83,75,0.55); background: rgba(229,83,75,0.07); }
+.exit-section { margin-top: 26px; }
+
+
+/* ===== FULL SCREEN + FILTERS ===== */
+.fs-btn { margin-left: auto; font-size: 1rem; padding: 4px 10px; line-height: 1; }
+.fs-on { position: fixed; inset: 0; z-index: 2500; background: var(--bg-color); padding: 18px 22px; overflow: auto; }
+.fs-on .report-wrap { max-height: calc(100vh - 190px); }
+body.fs-mode .glass-panel { backdrop-filter: none; -webkit-backdrop-filter: none; transform: none; }
+body.fs-mode header { z-index: 1; }
+.inline-label { display: inline-flex; align-items: center; gap: 6px; margin: 0; text-transform: none; letter-spacing: normal; font-size: 0.8rem; color: var(--text-dim); }
+.inline-label input, .inline-label select { margin: 0; padding: 6px 8px; font-size: 0.8rem; width: auto; }
+.inline-label input[type="number"] { width: 70px; }
+.filter-panel { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: rgba(0,0,0,0.15); }
+.report-table thead th.filterable { cursor: pointer; }
+.report-table thead th.filtered { background: var(--accent-hover); color: #fff; }
+.report-table tr.section-row td { background: var(--surface); color: var(--text-main); text-align: left; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px; position: sticky; left: 0; }
+.sym-out { color: var(--danger); }
+.out-tag { color: var(--danger); font-weight: 700; font-size: 0.75rem; }
+.col-pop { position: fixed; z-index: 3000; background: var(--surface); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; min-width: 180px; max-height: 320px; overflow: auto; box-shadow: 0 14px 34px rgba(0,0,0,0.5); }
+.col-pop label { display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: normal; font-size: 0.85rem; color: var(--text-main); margin: 4px 0; cursor: pointer; }
+.col-pop input { width: auto; margin: 0; accent-color: var(--accent-color); }
+.col-pop .pop-actions { display: flex; gap: 6px; margin-top: 8px; }
+
+/* ===== CASE TAGS FROM THE FORM ===== */
+.case-chip.tag-sat, .notif-item.tag-sat { background: rgba(76,195,138,0.16); border-color: rgba(76,195,138,0.6); }
+.case-chip.tag-visit, .notif-item.tag-visit { background: rgba(227,179,65,0.14); border-color: rgba(227,179,65,0.6); }
+.case-chip.tag-corp, .notif-item.tag-corp { box-shadow: inset 4px 0 0 var(--corp); }
+.corp-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; background: rgba(111,143,245,0.22); color: var(--corp); vertical-align: middle; }
 
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
@@ -612,6 +652,14 @@ list is the order cases move through.
 <button class="btn btn-primary" id="btn-save-chain" onclick="saveChain()">Save Chain</button>
 <button class="btn btn-small" onclick="resetChainToDefault()">Reset to default</button>
 </div>
+<div class="exit-section">
+<div class="report-bar">
+<label style="margin:0;">Cases out of the chain</label>
+<label class="field-req-pick"><input type="checkbox" id="exit-show-back" onchange="renderExits()"> Show cases already put back</label>
+<button class="btn btn-small" onclick="loadExits()">Refresh</button>
+</div>
+<div class="report-wrap"><table class="report-table" id="exit-table"></table></div>
+</div>
 </div>
 
 <!-- REPORTS (Jawad only) -->
@@ -621,22 +669,42 @@ list is the order cases move through.
 <button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
+<button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
 </div>
 <div id="report-simple">
 <div class="report-bar">
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, case or name" oninput="renderSimpleReport()">
-<span class="report-legend"><b class="sym-done">&#9679;</b> Completed <b class="sym-temp">&#9675;</b> Temp / partial <b class="sym-dup">&equiv;</b> Double entry <b class="sym-wait">&#10003;</b> Waiting now <b class="sym-skip">&ndash;</b> Skipped &nbsp;Blank: not reached</span>
+<button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
+<label class="inline-label">Cases from <input type="date" id="report-from" onchange="saveReportFrom(this.value)"></label>
 </div>
+<div id="report-filters" class="filter-panel hidden">
+<label class="inline-label">Days from <input type="number" id="rf-dmin" min="0" oninput="renderSimpleReport()"></label>
+<label class="inline-label">to <input type="number" id="rf-dmax" min="0" oninput="renderSimpleReport()"></label>
+<label class="inline-label">Waiting on <select id="rf-wait" onchange="renderSimpleReport()"></select></label>
+<label class="inline-label">Branch <select id="rf-branch" onchange="renderSimpleReport()"></select></label>
+<label class="inline-label">Salesman <select id="rf-sales" onchange="renderSimpleReport()"></select></label>
+<label class="inline-label">Series <select id="rf-series" onchange="renderSimpleReport()"><option value="">All</option><option value="Form">Google Form</option><option value="Manual">Manual</option></select></label>
+<label class="inline-label">Chain <select id="rf-out" onchange="renderSimpleReport()"><option value="">All</option><option value="in">In chain</option><option value="out">Out of chain</option></select></label>
+<button class="btn btn-small" onclick="clearReportFilters()">Clear all filters</button>
+</div>
+<div class="report-legend" style="margin-bottom:10px;"><b class="sym-done">&#9679;</b> Completed <b class="sym-temp">&#9675;</b> Temp / partial <b class="sym-dup">&equiv;</b> Double entry <b class="sym-wait">&#10003;</b> Waiting now <b class="sym-skip">&ndash;</b> Skipped <b class="sym-out">&#10005;</b> Left the chain here &nbsp;Blank: not reached &nbsp;&middot;&nbsp; Click a column title to filter it</div>
 <div class="report-wrap"><table class="report-table" id="report-table"></table></div>
 </div>
 <div id="report-cheque" class="hidden">
 <div id="cheque-summary"></div>
+<div class="report-bar"><label class="field-req-pick"><input type="checkbox" id="cheque-show-received" onchange="renderChequeReport()"> Show received cheques</label></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
 </div>
 </div>
 
 <!-- CHEQUES (Jawad only) -->
 <div id="form-cheques" class="hidden">
+<div class="report-bar">
+<input type="text" id="quick-receive" class="report-search" placeholder="Ref or Case No" onkeydown="if(event.key==='Enter'){event.preventDefault();quickReceive();}">
+<button class="btn btn-small btn-primary" onclick="quickReceive()">Mark received</button>
+<span class="report-meta">Type the number on the cheque's case and press Enter.</span>
+<button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-cheques')" title="Full screen">&#x26F6;</button>
+</div>
 <div class="report-bar">
 <select id="cheque-filter" class="report-search" onchange="renderChequeAdmin()">
 <option value="open">With Salesman</option>
@@ -649,6 +717,8 @@ list is the order cases move through.
 </div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-admin-table"></table></div>
 </div>
+
+<div id="col-filter-pop" class="col-pop hidden"></div>
 
 <!-- TASK BUILDER (Jawad only) -->
 <div id="form-tasks" class="hidden">
@@ -663,7 +733,7 @@ together when you press Save All.
 <div class="builder-actions" style="margin-top:18px;">
 <button class="btn btn-primary" id="btn-save-tasks" onclick="saveTasks()">Save All</button>
 <button class="btn btn-small" onclick="startNewTask()">+ New task</button>
-<span id="tasks-dirty" style="color:#ffcc80; font-size:0.78rem;"></span>
+<span id="tasks-dirty" style="color:var(--warn); font-size:0.78rem;"></span>
 </div>
 </div>
 
@@ -881,7 +951,7 @@ let templatesLoaded = false;
 let chainList = [];
 let recurringList = [];
 let chainLoaded = false;
-let chainStops = [];
+let exitItems = [];
 let partialItems = [];
 let currentPartialId = null;
 let reportData = null;
@@ -1143,7 +1213,12 @@ function normaliseField(f) {
     options: options,
     col: String(f.col || f.label || '').trim(),
     builtin: !!f.builtin,
-    locked: !!f.locked
+    locked: !!f.locked,
+    exit: (f.exit && f.exit.on) ? {
+      on: true,
+      mode: f.exit.mode === 'values' ? 'values' : 'filled',
+      values: Array.isArray(f.exit.values) ? f.exit.values.map(String) : []
+    } : null
   };
 }
 
@@ -1371,8 +1446,89 @@ function renderFieldEditorList(t) {
         </span>
       </div>
       ${optionsUI}
+      ${(f.key === 'ref' || f.key === 'case') ? '' : renderExitEditor(f)}
     </div>`;
   }).join('');
+}
+
+function exitChoices(f) {
+  if (f.type === 'select' || f.type === 'checkbox') return (f.options || []).map(optionLabel);
+  if (f.type === 'yesno') return ['Yes', 'No'];
+  return null;
+}
+
+function renderExitEditor(f) {
+  const ex = f.exit || { on: false, mode: 'filled', values: [] };
+  const fid = f.id;
+  let detail = '';
+  if (ex.on) {
+    const choices = exitChoices(f);
+    let valuesUI = '';
+    if (ex.mode === 'values') {
+      valuesUI = choices
+        ? `<div class="owner-grid" style="margin:8px 0 0;">${choices.map(c => `
+            <label class="owner-pick${ex.values.indexOf(c) !== -1 ? ' on' : ''}">
+              <input type="checkbox"${ex.values.indexOf(c) !== -1 ? ' checked' : ''}
+                onchange="toggleExitValue('${fid}', '${escapeHtml(c).replace(/'/g, "\\'")}', this.checked)">
+              ${escapeHtml(c)}
+            </label>`).join('')}</div>`
+        : `<input type="text" value="${escapeHtml(ex.values.join(', '))}" placeholder="Values, comma separated"
+            style="margin:8px 0 0; padding:6px 8px; font-size:0.8rem;" onblur="setExitValuesText('${fid}', this.value)">`;
+    }
+    detail = `<div style="margin-top:8px;">
+      <select style="margin:0; padding:6px 8px; font-size:0.8rem; width:auto;" onchange="setExitMode('${fid}', this.value)">
+        <option value="filled"${ex.mode === 'filled' ? ' selected' : ''}>When this field is filled in</option>
+        <option value="values"${ex.mode === 'values' ? ' selected' : ''}>When the value is one of…</option>
+      </select>
+      ${valuesUI}
+    </div>`;
+  }
+  return `<div class="exit-rule${ex.on ? ' on' : ''}">
+    <label class="field-req-pick">
+      <input type="checkbox"${ex.on ? ' checked' : ''} onchange="toggleExit('${fid}', this.checked)">
+      Take the case out of the chain on Final Save
+    </label>
+    ${detail}
+  </div>`;
+}
+
+function builderField(fieldId) {
+  if (builderIndex < 0) return null;
+  return builderTasks[builderIndex].fields.filter(x => x.id === fieldId)[0] || null;
+}
+
+function toggleExit(fieldId, on) {
+  const f = builderField(fieldId);
+  if (!f) return;
+  f.exit = on ? (f.exit || { on: true, mode: exitChoices(f) ? 'values' : 'filled', values: [] }) : null;
+  if (f.exit) f.exit.on = true;
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function setExitMode(fieldId, mode) {
+  const f = builderField(fieldId);
+  if (!f || !f.exit) return;
+  f.exit.mode = mode === 'values' ? 'values' : 'filled';
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function toggleExitValue(fieldId, value, on) {
+  const f = builderField(fieldId);
+  if (!f || !f.exit) return;
+  const i = f.exit.values.indexOf(value);
+  if (on && i === -1) f.exit.values.push(value);
+  if (!on && i !== -1) f.exit.values.splice(i, 1);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function setExitValuesText(fieldId, text) {
+  const f = builderField(fieldId);
+  if (!f || !f.exit) return;
+  f.exit.values = String(text || '').split(',').map(x => x.trim()).filter(Boolean);
+  markBuilderDirty();
 }
 
 function renderOptionEditor(f) {
@@ -1412,6 +1568,10 @@ function renameFieldOption(fieldId, optId, value) {
   if (!opt || typeof opt === 'string') return;
   const trimmed = value.trim();
   if (!trimmed) return;
+  if (f.exit && f.exit.values) {
+    const at = f.exit.values.indexOf(opt.label);
+    if (at !== -1) f.exit.values[at] = trimmed;
+  }
   opt.label = trimmed;
   markBuilderDirty();
 }
@@ -1715,10 +1875,10 @@ function renderNotifPanel() {
     html += `<div class="notif-empty">Nothing waiting on you.</div>`;
   } else {
     html += shown.map(p => `
-      <div class="notif-item" data-task="${escapeHtml(p.taskName)}"
+      <div class="notif-item${caseTagClass(p)}" data-task="${escapeHtml(p.taskName)}"
            data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}"
            data-name="${escapeHtml(p.customerName || '')}" data-mobile="${escapeHtml(p.customerMobile || '')}">
-        <div class="notif-task">${escapeHtml(p.taskName)}</div>
+        <div class="notif-task">${escapeHtml(p.taskName)}${corpBadge(p)}</div>
         <div class="notif-meta">${escapeHtml(keyLabel(p))} &middot; ${escapeHtml(p.createdAt || '')}</div>
       </div>`).join('');
     if (pendingItems.length > shown.length) {
@@ -1794,8 +1954,8 @@ function renderPendingStrip() {
     : items.length + ' cases waiting on this task';
 
   list.innerHTML = items.map((p, i) => `
-    <span class="case-chip" onclick="fillKeysFromPending(${i})">
-      ${escapeHtml(keyLabel(p))}<small>${escapeHtml(p.createdAt || '')}</small>
+    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPending(${i})" title="${escapeHtml(p.inputs || '')}">
+      ${escapeHtml(keyLabel(p))}${corpBadge(p)}<small>${escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
 
@@ -2002,7 +2162,6 @@ async function loadChain() {
         chainList = c.slice();
         recurringList = r.slice();
       }
-      chainStops = (result.stops || []).slice();
       reconcileChainWithTasks();
       chainLoaded = true;
       if (currentTask === "Task Chain") renderChainEditor();
@@ -2038,30 +2197,19 @@ function renderChainColumn(elId, items, group) {
   if (items.length === 0) { box.innerHTML = `<div class="chain-empty">Drop tasks here.</div>`; return; }
   const isChain = group === 'chain';
   box.innerHTML = items.map((t, i) => {
-    const stop = isChain && chainStops.indexOf(t) !== -1;
     return `
     <div class="chain-item" draggable="true" data-task="${escapeHtml(t)}" data-group="${group}">
       ${isChain ? `<span class="chain-pos">${i + 1}</span>` : ''}
       <span class="chain-name">${escapeHtml(t)}</span>
       <span class="chain-btns">
         ${isChain ? `
-          <button class="chain-btn${stop ? ' stop-on' : ''}" onclick="toggleChainStop(${i})" title="${stop ? 'Remove stop point' : 'Stop the chain after this task'}">&#9632;</button>
           <button class="chain-btn" onclick="moveChainItem('${group}',${i},-1)" title="Move up">&#9650;</button>
           <button class="chain-btn" onclick="moveChainItem('${group}',${i},1)" title="Move down">&#9660;</button>` : ''}
         <button class="chain-btn" onclick="switchChainGroup('${group}',${i})"
           title="${isChain ? 'Move to Recurring' : 'Move to Chain'}">${isChain ? '&rarr;' : '&larr;'}</button>
       </span>
-    </div>${stop && i < items.length - 1 ? '<div class="chain-stop-line">Chain stops here</div>' : ''}`;
+    </div>`;
   }).join('');
-}
-
-function toggleChainStop(index) {
-  const t = chainList[index];
-  if (!t) return;
-  const at = chainStops.indexOf(t);
-  if (at === -1) chainStops.push(t);
-  else chainStops.splice(at, 1);
-  renderChainEditor();
 }
 
 function moveChainItem(group, index, delta) {
@@ -2143,10 +2291,7 @@ function renderChainPreview() {
   if (chainList.length === 0) {
     html = '<span style="font-style:italic">No chain set. Nothing will ever become pending.</span>';
   } else {
-    html = '<b>Cases move through</b><br>' + chainList.map((t, i) => {
-      const stop = chainStops.indexOf(t) !== -1 && i < chainList.length - 1;
-      return escapeHtml(t) + (stop ? ' <b style="color:#ff8a80">| stop</b>' : '');
-    }).join(' &rarr; ');
+    html = '<b>Cases move through</b><br>' + chainList.map(escapeHtml).join(' &rarr; ');
   }
   if (recurringList.length) {
     html += '<br><br><b>Recurring</b><br>' + recurringList.map(escapeHtml).join(', ');
@@ -2157,17 +2302,55 @@ function renderChainPreview() {
 function resetChainToDefault() {
   chainList = DEFAULT_CHAIN.slice();
   recurringList = [];
-  chainStops = [];
   renderChainEditor();
   toast("Reset to the default order. Not saved yet.");
+}
+
+async function loadExits() {
+  const table = document.getElementById('exit-table');
+  if (!table) return;
+  table.innerHTML = `<tr><td style="color:var(--text-dim); padding:12px;">Loading...</td></tr>`;
+  try {
+    const result = await apiCall('exitList');
+    if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
+    exitItems = result.items || [];
+    renderExits();
+  } catch (e) {
+    table.innerHTML = `<tr><td>Network error</td></tr>`;
+  }
+}
+
+function renderExits() {
+  const table = document.getElementById('exit-table');
+  if (!table) return;
+  const showBack = document.getElementById('exit-show-back').checked;
+  const rows = exitItems.filter(x => showBack || x.status === 'Out');
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Left at task</th><th>Because</th><th>When</th><th>By</th><th>Status</th><th></th></tr></thead><tbody>${
+    rows.map(x => `<tr>
+      <td>${escapeHtml(chequeKey(x))}</td><td>${escapeHtml(x.task)}</td>
+      <td>${escapeHtml(x.field)}: <b>${escapeHtml(x.value)}</b></td>
+      <td>${escapeHtml(x.exitedAt)}</td><td>${escapeHtml(x.exitedBy)}</td>
+      <td>${x.status === 'Out' ? '<span class="status-pill status-late">Out</span>' : '<span class="status-pill status-done">Put back ' + escapeHtml(x.backAt) + '</span>'}</td>
+      <td>${x.status === 'Out' ? `<button class="btn btn-small btn-primary" onclick="putBackExit('${escapeHtml(x.id)}')">Put back</button>` : ''}</td>
+    </tr>`).join('') || `<tr><td colspan="7" style="color:var(--text-dim)">No cases are out of the chain.</td></tr>`
+  }</tbody>`;
+}
+
+async function putBackExit(id) {
+  try {
+    const result = await apiCall('exitPutBack', { id: id });
+    if (!result.ok) return toast(result.error || "Could not put it back", true);
+    toast(result.opened ? "Back in the chain. " + result.next + " is now pending." : "Back in the chain.");
+    loadExits();
+    loadPending();
+  } catch (e) { toast("Network error", true); }
 }
 
 async function saveChain() {
   const btn = document.getElementById('btn-save-chain');
   btn.disabled = true;
   try {
-    const stops = chainStops.filter(t => chainList.indexOf(t) !== -1);
-    const result = await apiCall('chainSave', { chain: chainList, recurring: recurringList, stops: stops });
+    const result = await apiCall('chainSave', { chain: chainList, recurring: recurringList });
     if (!result.ok) {
       toast(result.error || "Could not save the chain", true);
       btn.disabled = false;
@@ -2461,7 +2644,24 @@ function renderTaskSidebar() {
   });
 }
 
+function caseTagClass(p) {
+  const inp = String(p.inputs || '').trim().toLowerCase();
+  let cls = '';
+  if (inp.indexOf('satisfied but') === 0) cls = ' tag-visit';
+  else if (inp === 'satisfied') cls = ' tag-sat';
+  if (String(p.corporate || '').trim()) cls += ' tag-corp';
+  return cls;
+}
+
+function corpBadge(p) {
+  const c = String(p.corporate || '').trim();
+  return c ? `<span class="corp-badge" title="${escapeHtml(c)}">Corp</span>` : '';
+}
+
 function hideAllForms() {
+  document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
+  document.body.classList.remove('fs-mode');
+  closeColFilter();
   ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'partial-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
@@ -2488,6 +2688,7 @@ function renderFormInterface() {
     document.getElementById('form-chain').classList.remove('hidden');
     if (!chainLoaded) loadChain();
     else renderChainEditor();
+    loadExits();
     return;
   }
   if (t.panel === "tasks") {
@@ -2921,32 +3122,200 @@ async function loadReport() {
     if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
     reportData = result;
     meta.innerText = (result.rows || []).length + ' cases · built ' + (result.builtAt || '') + ' · also written to the Report tab';
+    const from = document.getElementById('report-from');
+    if (from && result.reportFrom) from.value = result.reportFrom;
+    fillReportFilterOptions();
     renderSimpleReport();
   } catch (e) {
     table.innerHTML = `<tr><td>Network error</td></tr>`;
   }
 }
 
-const SYM_CLASS = { '●': 'sym-done', '○': 'sym-temp', '≡': 'sym-dup', '✓': 'sym-wait', '–': 'sym-skip' };
+const SYM_CLASS = { '●': 'sym-done', '○': 'sym-temp', '≡': 'sym-dup', '✓': 'sym-wait', '–': 'sym-skip', '✕': 'sym-out' };
+const SYM_NAME = { '●': 'Completed', '○': 'Temp / partial', '≡': 'Double entry', '✓': 'Waiting now', '–': 'Skipped', '✕': 'Left the chain', '': 'Not reached' };
+let colFilters = {};
+let colPopKey = null;
+
+function fillSelect(id, values, firstLabel) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const keep = el.value;
+  el.innerHTML = `<option value="">${firstLabel}</option>` + values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if (values.indexOf(keep) !== -1) el.value = keep;
+}
+
+function uniqueSorted(arr) {
+  return arr.filter((v, i) => v && arr.indexOf(v) === i).sort((a, b) => a.localeCompare(b));
+}
+
+function fillReportFilterOptions() {
+  if (!reportData) return;
+  const rows = reportData.rows || [];
+  fillSelect('rf-wait', reportData.tasks, 'Any task');
+  fillSelect('rf-branch', uniqueSorted(rows.map(r => r.branch || '')), 'All');
+  fillSelect('rf-sales', uniqueSorted(rows.map(r => r.salesman || '')), 'All');
+}
+
+function toggleReportFilters() {
+  document.getElementById('report-filters').classList.toggle('hidden');
+}
+
+function clearReportFilters() {
+  ['rf-dmin', 'rf-dmax', 'rf-wait', 'rf-branch', 'rf-sales', 'rf-series', 'rf-out', 'report-search'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  colFilters = {};
+  closeColFilter();
+  renderSimpleReport();
+}
+
+async function saveReportFrom(value) {
+  if (!value) return;
+  try {
+    const result = await apiCall('settingSave', { key: 'ReportFrom', value: value });
+    if (!result.ok) return toast(result.error || "Could not save", true);
+    toast("Report now starts from " + formatDateDMY(value) + ".");
+    loadReport();
+  } catch (e) { toast("Network error", true); }
+}
+
+function reportColValue(r, key) {
+  if (key.indexOf('t:') === 0) {
+    const i = reportData.tasks.indexOf(key.slice(2));
+    return i === -1 ? '' : r.cells[i];
+  }
+  if (key === 'branch') return r.branch || '';
+  if (key === 'salesman') return r.salesman || '';
+  if (key === 'status') return r.out ? 'Out of chain' : 'In chain';
+  return '';
+}
+
+function reportRowsFiltered() {
+  const rows = reportData.rows || [];
+  const q = (document.getElementById('report-search').value || '').trim().toLowerCase();
+  const dmin = valOf('rf-dmin'), dmax = valOf('rf-dmax');
+  const wait = valOf('rf-wait'), branch = valOf('rf-branch'), sales = valOf('rf-sales');
+  const series = valOf('rf-series'), out = valOf('rf-out');
+  const waitIdx = wait ? reportData.tasks.indexOf(wait) : -1;
+
+  return rows.filter(r => {
+    if (q && ![r.refNo, r.caseNo, r.name].some(x => String(x || '').toLowerCase().includes(q))) return false;
+    const d = Number(r.days);
+    if (dmin !== '' && !(d >= Number(dmin))) return false;
+    if (dmax !== '' && !(d <= Number(dmax))) return false;
+    if (waitIdx !== -1 && r.cells[waitIdx] !== '✓') return false;
+    if (branch && r.branch !== branch) return false;
+    if (sales && r.salesman !== sales) return false;
+    if (series && r.series !== series) return false;
+    if (out === 'in' && r.out) return false;
+    if (out === 'out' && !r.out) return false;
+    for (const key in colFilters) {
+      if (colFilters[key].indexOf(reportColValue(r, key)) === -1) return false;
+    }
+    return true;
+  });
+}
 
 function renderSimpleReport() {
   const table = document.getElementById('report-table');
   if (!reportData) return;
-  const q = (document.getElementById('report-search').value || '').trim().toLowerCase();
-  const rows = (reportData.rows || []).filter(r => !q ||
-    String(r.refNo).toLowerCase().includes(q) ||
-    String(r.caseNo).toLowerCase().includes(q) ||
-    String(r.name).toLowerCase().includes(q));
+  const rows = reportRowsFiltered();
+  const tasks = reportData.tasks;
+  const width = 7 + tasks.length;
+  const th = (key, label, cls) => `<th class="filterable${colFilters[key] ? ' filtered' : ''}${cls ? ' ' + cls : ''}" onclick="openColFilter('${escapeHtml(key).replace(/'/g, "\\'")}', this)">${escapeHtml(label)}</th>`;
 
   const head = `<thead><tr><th>Ref No</th><th>Case No</th><th>Name</th><th>Days</th>${
-    reportData.tasks.map(t => `<th class="rot">${escapeHtml(t)}</th>`).join('')}</tr></thead>`;
-  const body = rows.length ? rows.map(r => `<tr>
+    tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}</tr></thead>`;
+
+  const rowHtml = r => `<tr>
       <td>${escapeHtml(r.refNo)}</td><td>${escapeHtml(r.caseNo)}</td>
       <td class="left">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
-      ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}">${escapeHtml(c)}</td>`).join('')}
-    </tr>`).join('') : `<tr><td colspan="${4 + reportData.tasks.length}" style="color:var(--text-dim)">No matching cases.</td></tr>`;
+      ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
+      <td>${escapeHtml(r.branch || '')}</td><td>${escapeHtml(r.salesman || '')}</td>
+      <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td>
+    </tr>`;
+
+  let body = '';
+  [['Form', 'Google Form series'], ['Manual', 'Manual series (5xxx / 8xxx and others)']].forEach(sec => {
+    const part = rows.filter(r => r.series === sec[0]);
+    if (!part.length) return;
+    body += `<tr class="section-row"><td colspan="${width}">${sec[1]} · ${part.length}</td></tr>` + part.map(rowHtml).join('');
+  });
+  if (!body) body = `<tr><td colspan="${width}" style="color:var(--text-dim)">No matching cases.</td></tr>`;
+
+  const filtered = rows.length !== (reportData.rows || []).length;
+  document.getElementById('report-filter-btn').classList.toggle('btn-primary', filtered);
   table.innerHTML = head + '<tbody>' + body + '</tbody>';
 }
+
+function openColFilter(key, th) {
+  const pop = document.getElementById('col-filter-pop');
+  if (colPopKey === key && !pop.classList.contains('hidden')) { closeColFilter(); return; }
+  colPopKey = key;
+  const values = (reportData.rows || []).map(r => reportColValue(r, key));
+  const uniq = values.filter((v, i) => values.indexOf(v) === i);
+  const isTask = key.indexOf('t:') === 0;
+  const allowed = colFilters[key] || uniq;
+  pop.innerHTML = uniq.map((v, i) => `<label><input type="checkbox" data-v="${i}"${allowed.indexOf(v) !== -1 ? ' checked' : ''}>
+      ${isTask ? `<b class="${SYM_CLASS[v] || ''}" style="width:16px; display:inline-block; text-align:center;">${escapeHtml(v)}</b> ${escapeHtml(SYM_NAME[v] || v)}` : escapeHtml(v || '(blank)')}
+    </label>`).join('') +
+    `<div class="pop-actions"><button class="btn btn-small btn-primary" onclick="applyColFilter()">Apply</button>
+     <button class="btn btn-small" onclick="resetColFilter()">Show all</button></div>`;
+  pop.dataset.values = JSON.stringify(uniq);
+  const rect = th.getBoundingClientRect();
+  pop.classList.remove('hidden');
+  const left = Math.min(rect.left, window.innerWidth - pop.offsetWidth - 10);
+  pop.style.left = Math.max(10, left) + 'px';
+  pop.style.top = Math.min(rect.bottom + 4, window.innerHeight - pop.offsetHeight - 10) + 'px';
+}
+
+function applyColFilter() {
+  const pop = document.getElementById('col-filter-pop');
+  const uniq = JSON.parse(pop.dataset.values || '[]');
+  const picked = [];
+  pop.querySelectorAll('input[type="checkbox"]').forEach(cb => { if (cb.checked) picked.push(uniq[Number(cb.dataset.v)]); });
+  if (picked.length === uniq.length) delete colFilters[colPopKey];
+  else colFilters[colPopKey] = picked;
+  closeColFilter();
+  renderSimpleReport();
+}
+
+function resetColFilter() {
+  delete colFilters[colPopKey];
+  closeColFilter();
+  renderSimpleReport();
+}
+
+function closeColFilter() {
+  const pop = document.getElementById('col-filter-pop');
+  if (pop) pop.classList.add('hidden');
+  colPopKey = null;
+}
+
+document.addEventListener('mousedown', function (e) {
+  const pop = document.getElementById('col-filter-pop');
+  if (!pop || pop.classList.contains('hidden')) return;
+  if (e.target.closest && (e.target.closest('#col-filter-pop') || e.target.closest('th.filterable'))) return;
+  closeColFilter();
+});
+
+function toggleFullscreen(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const on = !el.classList.contains('fs-on');
+  document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
+  if (on) el.classList.add('fs-on');
+  document.body.classList.toggle('fs-mode', on);
+  closeColFilter();
+}
+
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  closeColFilter();
+  document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
+  document.body.classList.remove('fs-mode');
+});
 
 async function loadCheques(render) {
   try {
@@ -3011,17 +3380,19 @@ function renderChequeReport() {
   const withText = Object.keys(bySalesman).map(k => bySalesman[k] + ' with ' + k).join(', ');
 
   sum.innerHTML = `<div class="summary-line"><b>${total}</b> claimed, <b>${received}</b> received, <b>${open}</b> outstanding${
-    overdue ? `, <b style="color:#ff8a80">${overdue} overdue</b>` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
+    overdue ? `, <b style="color:var(--danger)">${overdue} overdue</b>` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
     <div class="summary-grid">${chequeGroupTable('By Salesman', 'salesman')}${chequeGroupTable('By Branch', 'branch')}</div>`;
 
-  const rows = chequeItems.slice().sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
+  const showReceived = document.getElementById('cheque-show-received').checked;
+  const rows = chequeItems.filter(c => showReceived || c.status !== 'Received')
+    .sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
   table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
     rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''}>
       <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
       <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
       <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
       <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
-    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--text-dim)">No cheques yet. They appear when Adv &amp; Chq is Final Saved.</td></tr>'
+    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--text-dim)">' + (chequeItems.length ? 'Every cheque has been received.' : 'No cheques yet. They appear when Adv &amp; Chq is Final Saved.') + '</td></tr>'
   }</tbody>`;
 }
 
@@ -3098,8 +3469,23 @@ async function updateCheque(id, changes, okMsg) {
     if (i !== -1) chequeItems[i] = result.item;
     chequeEditId = null;
     renderChequeAdmin();
+    if (currentTask === 'Reports') renderChequeReport();
     toast(okMsg);
   } catch (e) { toast("Network error", true); }
+}
+
+function quickReceive() {
+  const input = document.getElementById('quick-receive');
+  const v = String(input.value || '').trim();
+  if (!v) return toast("Type a Ref or Case No first.", true);
+  const hits = chequeItems.filter(c =>
+    String(c.refNo).split(',').map(x => x.trim()).indexOf(v) !== -1 ||
+    String(c.caseNo).split(',').map(x => x.trim()).indexOf(v) !== -1);
+  if (!hits.length) return toast("No cheque found for " + v + ".", true);
+  const open = hits.filter(c => c.status !== 'Received');
+  if (!open.length) return toast("That cheque is already marked received.", true);
+  input.value = '';
+  updateCheque(open[0].id, { status: 'Received' }, "Cheque for " + chequeKey(open[0]) + " marked received.");
 }
 
 function setChequeStatus(id, status) {
