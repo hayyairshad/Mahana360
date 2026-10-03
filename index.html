@@ -505,7 +505,7 @@ body.fs-mode header { z-index: 1; }
 .col-pop input { width: auto; margin: 0; accent-color: var(--accent-color); }
 .col-pop .pop-actions { display: flex; gap: 6px; margin-top: 8px; }
 
-.case-chip.tag-sat { background: var(--ok-soft); border-color: #9fd6b8; }
+.case-chip.tag-sat { background: var(--ok-soft); border-color: var(--ok); color: #1f6b43; }
 .case-chip.tag-visit { background: var(--warn-soft); border-color: #ebc77c; }
 .notif-item.tag-sat { background: #f3fbf6; border-left-color: var(--ok); }
 .notif-item.tag-visit { background: #fffaf0; border-left-color: var(--warn); }
@@ -543,6 +543,11 @@ body.fs-mode header { z-index: 1; }
 ::-webkit-scrollbar-thumb:hover { background: #a9bfc2; background-clip: padding-box; border: 2px solid transparent; }
 ::-webkit-scrollbar-track { background: transparent; }
 
+.hover-tip { position: fixed; z-index: 4000; pointer-events: none; background: #ffffff; color: var(--text-main); border: 1px solid var(--border-color); border-left: 3px solid var(--accent-color); border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; line-height: 1.6; white-space: pre-line; box-shadow: var(--shadow-lg); max-width: 280px; }
+.report-table td.cell-sat { background: var(--ok-soft) !important; color: #1f6b43; font-weight: 600; }
+.report-table td.cell-visit { background: var(--warn-soft) !important; color: #8a5a07; font-weight: 600; }
+.report-table td.cell-corp { box-shadow: inset 3px 0 0 var(--corp); }
+.date-bar { padding: 8px 12px; background: var(--surface-2); border: 1px solid var(--border-color); border-radius: 10px; }
 .version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
@@ -725,11 +730,16 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
 </div>
+<div class="report-bar date-bar">
+<label class="inline-label">From <input type="date" id="report-from" onchange="saveReportFrom(this.value)"></label>
+<label class="inline-label">To <input type="date" id="report-to" onchange="onReportTo()"></label>
+<button class="btn btn-small" onclick="clearReportTo()">Up to today</button>
+<span class="report-meta">By the date each case started. From is saved for everyone; To is just for this view.</span>
+</div>
 <div id="report-simple">
 <div class="report-bar">
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, case or name" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
-<label class="inline-label">Cases from <input type="date" id="report-from" onchange="saveReportFrom(this.value)"></label>
 </div>
 <div id="report-filters" class="filter-panel hidden">
 <label class="inline-label">Days from <input type="number" id="rf-dmin" min="0" oninput="renderSimpleReport()"></label>
@@ -741,7 +751,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">Chain <select id="rf-out" onchange="renderSimpleReport()"><option value="">All</option><option value="in">In chain</option><option value="out">Out of chain</option></select></label>
 <button class="btn btn-small" onclick="clearReportFilters()">Clear all filters</button>
 </div>
-<div class="report-legend" style="margin-bottom:10px;"><b class="sym-done">&#9679;</b> Completed <b class="sym-temp">&#9675;</b> Temp / partial <b class="sym-dup">&equiv;</b> Double entry <b class="sym-wait">&#10003;</b> Waiting now <b class="sym-skip">&ndash;</b> Skipped <b class="sym-out">&#10005;</b> Left the chain here &nbsp;Blank: not reached &nbsp;&middot;&nbsp; Click a column title to filter it</div>
+<div class="report-legend" style="margin-bottom:10px;"><b class="sym-done">&#9679;</b> Completed <b class="sym-temp">&#9675;</b> Temp / partial <b class="sym-dup">&equiv;</b> Double entry <b class="sym-wait">?</b> Waiting now <b class="sym-skip">&ndash;</b> Skipped <b class="sym-out">&#10005;</b> Left the chain here &nbsp;Blank: not reached &nbsp;&middot;&nbsp; Click a column title to filter it</div>
 <div class="report-wrap"><table class="report-table" id="report-table"></table></div>
 </div>
 <div id="report-timing" class="hidden">
@@ -838,6 +848,7 @@ Set each staff member's own hours and working days. Teal days are working days; 
 </div>
 
 <div id="col-filter-pop" class="col-pop hidden"></div>
+<div id="hover-tip" class="hover-tip hidden"></div>
 
 <!-- TASK BUILDER (Jawad only) -->
 <div id="form-tasks" class="hidden">
@@ -1069,7 +1080,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R4";
+const APP_VERSION = "R5";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2071,7 +2082,7 @@ function renderNotifPanel() {
     html += `<div class="notif-empty">Nothing waiting on you.</div>`;
   } else {
     html += shown.map(p => `
-      <div class="notif-item${caseTagClass(p)}" data-task="${escapeHtml(p.taskName)}"
+      <div class="notif-item${caseTagClass(p)}" data-tip="${escapeHtml(pendingTip(p))}" data-task="${escapeHtml(p.taskName)}"
            data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}"
            data-name="${escapeHtml(p.customerName || '')}" data-mobile="${escapeHtml(p.customerMobile || '')}">
         <div class="notif-task">${escapeHtml(p.taskName)}${corpBadge(p)}${p.late ? '<span class="late-badge">Late</span>' : ''}</div>
@@ -2150,7 +2161,7 @@ function renderPendingStrip() {
     : items.length + ' cases waiting on this task';
 
   list.innerHTML = items.map((p, i) => `
-    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPending(${i})" title="${escapeHtml(p.inputs || '')}">
+    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPending(${i})" data-tip="${escapeHtml(pendingTip(p))}">
       ${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
@@ -2852,6 +2863,30 @@ function renderTaskSidebar() {
   });
 }
 
+function caseTip(salesman, branch, days, inputs, corp) {
+  const lines = [
+    'Salesman: ' + (salesman || 'Not set yet'),
+    'Branch: ' + (branch || 'Not set yet'),
+    'Days: ' + (days === null || days === undefined || days === '' ? '-' : days)
+  ];
+  if (inputs) lines.push('Inputs: ' + inputs);
+  if (corp) lines.push('Corporate: ' + corp);
+  return lines.join('\n');
+}
+
+function caseCellClass(r) {
+  const inp = String(r.inputs || '').trim().toLowerCase();
+  let cls = '';
+  if (inp.indexOf('satisfied but') === 0) cls = 'cell-visit';
+  else if (inp === 'satisfied') cls = 'cell-sat';
+  if (String(r.corporate || '').trim()) cls += ' cell-corp';
+  return cls;
+}
+
+function pendingTip(p) {
+  return caseTip(p.salesman, p.branch, p.caseDays, p.inputs, p.corporate);
+}
+
 function caseTagClass(p) {
   const inp = String(p.inputs || '').trim().toLowerCase();
   let cls = p.late ? ' late' : '';
@@ -3322,10 +3357,13 @@ async function loadTiming() {
   const meta = document.getElementById('report-meta');
   document.getElementById('timing-table').innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Working it out...</td></tr>`;
   try {
-    const result = await apiCall('timingReport');
+    const to = valOf('report-to');
+    const result = await apiCall('timingReport', { to: to });
     if (!result.ok) return toast(result.error || "Could not load timing", true);
     timingData = result;
-    meta.innerText = (result.items || []).length + ' timed items since ' + formatDateDMY(result.reportFrom) + ' · built ' + (result.builtAt || '');
+    const from = document.getElementById('report-from');
+    if (from && result.reportFrom && !from.value) from.value = result.reportFrom;
+    meta.innerText = (result.items || []).length + ' timed items · ' + formatDateDMY(result.reportFrom) + (to ? ' to ' + formatDateDMY(to) : ' to today') + ' · built ' + (result.builtAt || '');
     fillSelect('tm-task', uniqueSorted((result.items || []).map(i => i.task)), 'All tasks');
     renderTiming();
     renderEmployees();
@@ -3359,8 +3397,8 @@ function renderTiming() {
   document.getElementById('timing-table').innerHTML = `<thead><tr><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>Allowed</th><th>Took</th><th>Finished</th><th>Status</th></tr></thead><tbody>${
     rows.map(it => `<tr${it.late ? ' class="overdue"' : ''}>
       <td class="left">${escapeHtml(it.task)}</td>
-      <td>${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
-      <td class="left">${escapeHtml(it.name || '')}</td>
+      <td class="${caseCellClass(it)}">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
+      <td class="left ${caseCellClass(it)}">${escapeHtml(it.name || '')}</td>
       <td>${escapeHtml(it.arrived)}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
       <td>${escapeHtml(it.done || '')}</td><td>${timingStatus(it)}</td>
     </tr>`).join('') || `<tr><td colspan="8" style="color:var(--text-dim)">Nothing to show.</td></tr>`
@@ -3389,7 +3427,7 @@ async function loadReport() {
     const result = await apiCall('reportBuild');
     if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
     reportData = result;
-    meta.innerText = (result.rows || []).length + ' cases · built ' + (result.builtAt || '') + ' · also written to the Report tab';
+    meta.innerText = (result.rows || []).length + ' cases since ' + formatDateDMY(result.reportFrom) + ' · built ' + (result.builtAt || '') + ' · also written to the Report tab';
     const from = document.getElementById('report-from');
     if (from && result.reportFrom) from.value = result.reportFrom;
     fillReportFilterOptions();
@@ -3399,8 +3437,8 @@ async function loadReport() {
   }
 }
 
-const SYM_CLASS = { '●': 'sym-done', '○': 'sym-temp', '≡': 'sym-dup', '✓': 'sym-wait', '–': 'sym-skip', '✕': 'sym-out' };
-const SYM_NAME = { '●': 'Completed', '○': 'Temp / partial', '≡': 'Double entry', '✓': 'Waiting now', '–': 'Skipped', '✕': 'Left the chain', '': 'Not reached' };
+const SYM_CLASS = { '●': 'sym-done', '○': 'sym-temp', '≡': 'sym-dup', '?': 'sym-wait', '✓': 'sym-wait', '–': 'sym-skip', '✕': 'sym-out' };
+const SYM_NAME = { '●': 'Completed', '○': 'Temp / partial', '≡': 'Double entry', '?': 'Waiting now', '✓': 'Waiting now', '–': 'Skipped', '✕': 'Left the chain', '': 'Not reached' };
 let colFilters = {};
 let colPopKey = null;
 
@@ -3438,13 +3476,33 @@ function clearReportFilters() {
   renderSimpleReport();
 }
 
+function onReportTo() {
+  if (reportTab === 'simple') renderSimpleReport();
+  else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
+  else renderChequeReport();
+}
+
+function clearReportTo() {
+  document.getElementById('report-to').value = '';
+  onReportTo();
+}
+
+function inReportRange(day) {
+  if (!day) return true;
+  const from = valOf('report-from'), to = valOf('report-to');
+  if (from && day < from) return false;
+  if (to && day > to) return false;
+  return true;
+}
+
 async function saveReportFrom(value) {
   if (!value) return;
   try {
     const result = await apiCall('settingSave', { key: 'ReportFrom', value: value });
     if (!result.ok) return toast(result.error || "Could not save", true);
     toast("Report now starts from " + formatDateDMY(value) + ".");
-    loadReport();
+    reportData = null; timingData = null;
+    refreshReports();
   } catch (e) { toast("Network error", true); }
 }
 
@@ -3472,7 +3530,9 @@ function reportRowsFiltered() {
     const d = Number(r.days);
     if (dmin !== '' && !(d >= Number(dmin))) return false;
     if (dmax !== '' && !(d <= Number(dmax))) return false;
-    if (waitIdx !== -1 && r.cells[waitIdx] !== '✓') return false;
+    if (waitIdx !== -1 && r.cells[waitIdx] !== '?' && r.cells[waitIdx] !== '✓') return false;
+    const to = valOf('report-to');
+    if (to && r.start && r.start > to) return false;
     if (branch && r.branch !== branch) return false;
     if (sales && r.salesman !== sales) return false;
     if (series && r.series !== series) return false;
@@ -3496,9 +3556,9 @@ function renderSimpleReport() {
   const head = `<thead><tr><th>Ref No</th><th>Case No</th><th>Name</th><th>Days</th>${
     tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}</tr></thead>`;
 
-  const rowHtml = r => `<tr>
-      <td>${escapeHtml(r.refNo)}</td><td>${escapeHtml(r.caseNo)}</td>
-      <td class="left">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
+  const rowHtml = r => `<tr data-tip="${escapeHtml(caseTip(r.salesman, r.branch, r.days, r.inputs, r.corporate))}">
+      <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td><td>${escapeHtml(r.caseNo)}</td>
+      <td class="left ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
       ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
       <td>${escapeHtml(r.branch || '')}</td><td>${escapeHtml(r.salesman || '')}</td>
       <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td>
@@ -3634,14 +3694,15 @@ function renderChequeReport() {
   const sum = document.getElementById('cheque-summary');
   const table = document.getElementById('cheque-report-table');
   const meta = document.getElementById('report-meta');
-  const total = chequeItems.length;
-  const received = chequeItems.filter(c => c.status === 'Received').length;
+  const inRange = chequeItems.filter(c => inReportRange(c.claimedDay));
+  const total = inRange.length;
+  const received = inRange.filter(c => c.status === 'Received').length;
   const open = total - received;
-  const overdue = chequeItems.filter(c => c.overdue).length;
-  meta.innerText = total + ' cheques · red after ' + chequeOverdueDays + ' days';
+  const overdue = inRange.filter(c => c.overdue).length;
+  meta.innerText = total + ' cheques claimed ' + (valOf('report-from') ? 'from ' + formatDateDMY(valOf('report-from')) : '') + (valOf('report-to') ? ' to ' + formatDateDMY(valOf('report-to')) : ' to today') + ' · red after ' + chequeOverdueDays + ' days';
 
   const bySalesman = {};
-  chequeItems.filter(c => c.status !== 'Received').forEach(c => {
+  inRange.filter(c => c.status !== 'Received').forEach(c => {
     const k = c.salesman || '(not set)';
     bySalesman[k] = (bySalesman[k] || 0) + 1;
   });
@@ -3652,7 +3713,7 @@ function renderChequeReport() {
     <div class="summary-grid">${chequeGroupTable('By Salesman', 'salesman')}${chequeGroupTable('By Branch', 'branch')}</div>`;
 
   const showReceived = document.getElementById('cheque-show-received').checked;
-  const rows = chequeItems.filter(c => showReceived || c.status !== 'Received')
+  const rows = inRange.filter(c => showReceived || c.status !== 'Received')
     .sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
   table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
     rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''}>
@@ -3743,6 +3804,32 @@ async function updateCheque(id, changes, okMsg) {
 }
 
 let workData = null;
+
+function setupHoverTips() {
+  const tip = document.getElementById('hover-tip');
+  if (!tip) return;
+  let cur = null;
+  const place = e => {
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = e.clientX + 14, y = e.clientY + 16;
+    if (x + w > window.innerWidth - 8) x = e.clientX - w - 14;
+    if (y + h > window.innerHeight - 8) y = e.clientY - h - 12;
+    tip.style.left = Math.max(8, x) + 'px';
+    tip.style.top = Math.max(8, y) + 'px';
+  };
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest ? e.target.closest('[data-tip]') : null;
+    if (el === cur) return;
+    cur = el;
+    if (!el || !el.dataset.tip) { tip.classList.add('hidden'); return; }
+    tip.textContent = el.dataset.tip;
+    tip.classList.remove('hidden');
+    place(e);
+  });
+  document.addEventListener('mousemove', e => { if (cur) place(e); });
+  document.addEventListener('scroll', () => { cur = null; tip.classList.add('hidden'); }, true);
+}
+document.addEventListener('DOMContentLoaded', setupHoverTips);
 let openItems = [];
 let openSel = {};
 
@@ -3776,9 +3863,9 @@ function openShown() {
 function renderOpen() {
   const rows = openShown();
   document.getElementById('open-table').innerHTML = `<thead><tr><th></th><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>From</th><th>Days</th><th>Note</th></tr></thead><tbody>${
-    rows.map(x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}">
+    rows.map(x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}" data-tip="${escapeHtml(caseTip(x.salesman, x.branch, x.caseDays, x.inputs, x.corporate))}">
       <td><input type="checkbox" ${openSel[x.id] ? 'checked' : ''} onchange="toggleOpenSel('${escapeHtml(x.id)}', this.checked)"></td>
-      <td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(chequeKey(x))}</td><td class="left">${escapeHtml(x.name || '')}</td>
+      <td class="left">${escapeHtml(x.task)}</td><td class="${caseCellClass(x)}">${escapeHtml(chequeKey(x))}</td><td class="left ${caseCellClass(x)}">${escapeHtml(x.name || '')}</td>
       <td>${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.createdBy)}</td><td>${x.days === null ? '' : x.days}</td>
       <td>${x.duplicate ? '<span class="status-pill status-late">Duplicate</span>' : x.finalised ? '<span class="status-pill status-done">Already in Final</span>' : ''}</td>
     </tr>`).join('') || `<tr><td colspan="8" class="report-meta">Nothing to show.</td></tr>`}</tbody>`;
