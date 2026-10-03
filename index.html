@@ -2362,7 +2362,7 @@ async function loadChain() {
         recurringList = [];
       } else {
         chains = list.length ? list.map(c => ({ name: c.name, tasks: c.tasks.slice() })) : [{ name: 'Chain 1', tasks: [] }];
-        recurringList = r.filter(t => { const k = taskByName(t); return !!(k && k.schedule && k.schedule.on); });
+        recurringList = r.slice();
       }
       chainList = chains[0].tasks;
       reconcileChainWithTasks();
