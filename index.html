@@ -524,6 +524,8 @@ body.fs-mode header { z-index: 1; }
 .day-btn.on { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 .clock-pick { display: inline-flex; gap: 4px; }
 .clock-pick select { margin: 0; padding: 6px; font-size: 0.8rem; width: auto; }
+.report-table td .clock-pick select { min-width: 0; width: auto; padding: 5px 4px; }
+#work-off td { padding: 5px 6px; }
 
 .day-btn.small { width: 38px; height: 30px; border-radius: 8px; font-size: 0.7rem; }
 .day-btn.off { background: var(--danger-soft); border-color: #f1b8b3; color: var(--danger); }
@@ -541,6 +543,7 @@ body.fs-mode header { z-index: 1; }
 ::-webkit-scrollbar-thumb:hover { background: #a9bfc2; background-clip: padding-box; border: 2px solid transparent; }
 ::-webkit-scrollbar-track { background: transparent; }
 
+.version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
   color: inherit;
@@ -573,7 +576,9 @@ a.task-sidebar-item.active { color: var(--accent-dark); }
 </button>
 <div id="notif-panel" class="notif-panel hidden"></div>
 </div>
+<div id="version-banner" class="version-banner hidden">The script is an older version than this website, so saving the chain is blocked. In Apps Script: Deploy, Manage deployments, edit, Version: New version, Deploy. Then refresh this page.</div>
 </header>
+
 
 <div class="main-content">
 
@@ -689,6 +694,9 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="chain-col-note">Standing work on a schedule. Set the repeat in Add / Edit Tasks.</div>
 <div id="recurring-list"></div>
 <select id="recurring-add" class="report-search" style="width:100%; margin-top:8px;" onchange="addRecurring(this.value)"></select>
+<div class="chain-col-head" style="margin-top:16px;">Not in any chain</div>
+<div class="chain-col-note">These tasks never get pending items from a chain. Add them to a chain on the left if they should.</div>
+<div id="unchained-list"></div>
 </div>
 </div>
 <div class="chain-preview" id="chain-preview"></div>
@@ -778,14 +786,44 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-admin-table"></table></div>
 </div>
 
+<div id="form-open" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Every pending item across all tasks. Use it to clear old backlog. Closing an item only removes it from Pending; nothing in Final changes.
+</p>
+<div class="filter-panel">
+<label class="inline-label">Task <select id="open-task" onchange="renderOpen()"></select></label>
+<label class="inline-label">Older than <input type="number" id="open-days" min="0" placeholder="0" oninput="renderOpen()"> days</label>
+<label class="inline-label">Show <select id="open-kind" onchange="renderOpen()"><option value="">All</option><option value="problem">Only duplicates and already done</option></select></label>
+<input type="text" id="open-search" class="report-search" placeholder="Search ref, case or name" oninput="renderOpen()">
+</div>
+<div class="bulk-bar">
+<span class="bulk-count" id="open-count">0 selected</span>
+<button class="btn btn-small" onclick="selectAllOpen(true)">Select all shown</button>
+<button class="btn btn-small" onclick="selectAllOpen(false)">Clear</button>
+<button class="btn btn-small icon-cross" id="btn-open-close" onclick="closeOpenSelected()">Close selected</button>
+</div>
+<div class="report-wrap" style="margin-top:12px;"><table class="report-table" id="open-table"></table></div>
+<div class="schedule-box" style="margin-top:18px;">
+<label>Fix stuck cases</label>
+<div class="report-meta" style="margin-bottom:10px; line-height:1.6;">
+Closes duplicate items and items already in Final, then creates the next step for every case Final Saved since this date whose next step never appeared. Rebuild and save the chain first.
+</div>
+<div class="report-bar" style="margin:0;">
+<label class="inline-label">Since <input type="date" id="open-since" value="2026-10-03"></label>
+<label class="inline-label">at <input type="time" id="open-since-time" value="14:00"></label>
+<button class="btn btn-primary btn-small" id="btn-open-repair" onclick="repairOpen()">Fix stuck cases</button>
+</div>
+<div id="open-repair-result" class="report-meta" style="margin-top:10px;"></div>
+</div>
+</div>
+
 <!-- WORKING HOURS (Jawad only) -->
 <div id="form-work" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Task timing only counts these hours. Off days and holidays don't count, so a weekend in the middle never makes a task late.
+Set each staff member's own hours and working days. Teal days are working days; tap a day to switch it off or on. Task timing only counts each person's own working time, so their off days and holidays never make a task late.
 </p>
-<label>Working hours (same for everyone)</label>
-<div class="report-bar" id="work-hours"></div>
-<label style="margin-top:14px;">Off days per person</label>
+<div class="report-bar" style="margin-bottom:8px;"><label style="margin:0;">Hours and working days per person</label>
+<button class="btn btn-small" onclick="applyDefaultToAll()">Copy the default row to everyone</button></div>
 <div class="report-wrap" style="max-height:none;"><table class="report-table" id="work-off"></table></div>
 <label style="margin-top:18px;">Holidays and vacation days (nobody works)</label>
 <div class="report-bar">
@@ -950,6 +988,8 @@ const ADMIN_TASKS = [
   { name: "Cheques", phase: "Admin", panel: "cheques",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Working Hours", phase: "Admin", panel: "work",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Open Items", phase: "Admin", panel: "open",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1029,11 +1069,20 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
+const APP_VERSION = "R4";
+let serverVersion = null;
+
+function showVersionBanner() {
+  const el = document.getElementById('version-banner');
+  if (!el) return;
+  el.classList.toggle('hidden', serverVersion === APP_VERSION);
+}
+
 async function apiCall(action, payload = {}) {
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action, idToken, ...payload })
+    body: JSON.stringify({ action, idToken, version: APP_VERSION, ...payload })
   });
   return res.json();
 }
@@ -1152,6 +1201,8 @@ async function completeLogin() {
       return;
     }
     user = { name: result.name, email: result.email, level: result.level };
+    serverVersion = result.version || 'old';
+    showVersionBanner();
 
     statusEl.innerText = "Loading tasks...";
     await loadTasks();
@@ -2311,7 +2362,7 @@ async function loadChain() {
         recurringList = [];
       } else {
         chains = list.length ? list.map(c => ({ name: c.name, tasks: c.tasks.slice() })) : [{ name: 'Chain 1', tasks: [] }];
-        recurringList = r.slice();
+        recurringList = r.filter(t => { const k = taskByName(t); return !!(k && k.schedule && k.schedule.on); });
       }
       chainList = chains[0].tasks;
       reconcileChainWithTasks();
@@ -2325,12 +2376,10 @@ async function loadChain() {
 
 function reconcileChainWithTasks() {
   const known = chainableTasks();
+  if (!known.length) return;
   chains.forEach(c => { c.tasks = c.tasks.filter(t => known.indexOf(t) !== -1); });
-  recurringList = recurringList.filter(t => known.indexOf(t) !== -1);
   const inChain = chainOrderAll();
-  known.forEach(t => {
-    if (inChain.indexOf(t) === -1 && recurringList.indexOf(t) === -1) recurringList.push(t);
-  });
+  recurringList = recurringList.filter(t => known.indexOf(t) !== -1 && inChain.indexOf(t) === -1);
   if (!chains.length) chains = [{ name: 'Chain 1', tasks: [] }];
   if (activeChain >= chains.length) activeChain = 0;
   chainList = chains[0].tasks;
@@ -2375,9 +2424,14 @@ function renderChainEditor() {
       <span class="chain-btns"><button class="chain-btn" onclick="removeRecurring(${i})" title="Remove from Recurring">&times;</button></span>
     </div>`;
   }).join('') : `<div class="chain-empty">Nothing recurring.</div>`;
-  const addRec = chainableTasks().filter(t => recurringList.indexOf(t) === -1);
+  const inAny = chainOrderAll();
+  const addRec = chainableTasks().filter(t => recurringList.indexOf(t) === -1 && inAny.indexOf(t) === -1);
   document.getElementById('recurring-add').innerHTML = `<option value="">Add a recurring task…</option>` +
     addRec.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+  const loose = chainableTasks().filter(t => inAny.indexOf(t) === -1 && recurringList.indexOf(t) === -1);
+  document.getElementById('unchained-list').innerHTML = loose.length
+    ? loose.map(t => `<span class="case-chip">${escapeHtml(t)}</span>`).join(' ')
+    : `<span class="report-meta">Every task is in a chain or in Recurring.</span>`;
 
   renderChainPreview();
 }
@@ -2436,15 +2490,13 @@ function moveChainItem(index, delta) {
 
 function addRecurring(t) {
   if (!t) return;
+  if (chainOrderAll().indexOf(t) !== -1) { toast("That task is in a chain. Remove it from the chain first.", true); return renderChainEditor(); }
   if (recurringList.indexOf(t) === -1) recurringList.push(t);
-  chains.forEach(c => { const i = c.tasks.indexOf(t); if (i !== -1) c.tasks.splice(i, 1); });
   renderChainEditor();
 }
 
 function removeRecurring(i) {
-  const t = recurringList[i];
   recurringList.splice(i, 1);
-  if (chainOrderAll().indexOf(t) === -1) chains[activeChain].tasks.push(t);
   renderChainEditor();
 }
 
@@ -2453,6 +2505,8 @@ function renderChainPreview() {
   let html = chains.map((c, i) => `<div style="margin-bottom:8px;"><b><span class="chain-dot" style="background:${chainColor(i)}"></span>${escapeHtml(c.name)}</b><br>${
     c.tasks.length ? c.tasks.map(escapeHtml).join(' &rarr; ') : '<i>Empty</i>'}</div>`).join('');
   if (recurringList.length) html += '<b>Recurring</b><br>' + recurringList.map(escapeHtml).join(', ');
+  const loose = chainableTasks().filter(t => chainOrderAll().indexOf(t) === -1 && recurringList.indexOf(t) === -1);
+  if (loose.length) html += '<div style="margin-top:8px;"><b>Not in any chain</b><br>' + loose.map(escapeHtml).join(', ') + '</div>';
   box.innerHTML = html;
 }
 
@@ -2508,6 +2562,8 @@ async function saveChain() {
   const btn = document.getElementById('btn-save-chain');
   btn.disabled = true;
   try {
+    if (serverVersion !== APP_VERSION) { toast("The script is an older version. Deploy it as a New version, then refresh.", true); btn.disabled = false; return; }
+    if (!chainOrderAll().length) { toast("Every chain is empty. Add tasks before saving.", true); btn.disabled = false; return; }
     const empty = chains.filter(c => !c.tasks.length);
     if (empty.length && chains.length > 1) { toast('"' + empty[0].name + '" has no tasks. Add some or delete it.', true); btn.disabled = false; return; }
     const result = await apiCall('chainSave', { chains: chains, recurring: recurringList });
@@ -2517,6 +2573,8 @@ async function saveChain() {
       return;
     }
     toast("Saved " + chains.length + (chains.length === 1 ? " chain." : " chains."));
+    chainLoaded = false;
+    await loadChain();
     renderTaskSidebar();
   } catch (e) {
     toast("Network error", true);
@@ -2812,7 +2870,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'partial-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'partial-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -2853,6 +2911,11 @@ function renderFormInterface() {
   if (t.panel === "work") {
     document.getElementById('form-work').classList.remove('hidden');
     loadWork();
+    return;
+  }
+  if (t.panel === "open") {
+    document.getElementById('form-open').classList.remove('hidden');
+    loadOpen();
     return;
   }
   if (t.panel === "cheques") {
@@ -3680,13 +3743,107 @@ async function updateCheque(id, changes, okMsg) {
 }
 
 let workData = null;
+let openItems = [];
+let openSel = {};
+
+async function loadOpen() {
+  document.getElementById('open-table').innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  try {
+    const result = await apiCall('openList');
+    if (!result.ok) { document.getElementById('open-table').innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
+    openItems = result.items || [];
+    openSel = {};
+    const cur = valOf('open-task');
+    const tasks = [...new Set(openItems.map(x => x.task))].sort();
+    document.getElementById('open-task').innerHTML = `<option value="">All tasks (${openItems.length})</option>` +
+      tasks.map(t => `<option value="${escapeHtml(t)}"${t === cur ? ' selected' : ''}>${escapeHtml(t)} (${openItems.filter(x => x.task === t).length})</option>`).join('');
+    renderOpen();
+  } catch (e) { toast("Network error", true); }
+}
+
+function openShown() {
+  const task = valOf('open-task');
+  const days = Number(valOf('open-days')) || 0;
+  const kind = valOf('open-kind');
+  const q = String(valOf('open-search') || '').trim().toLowerCase();
+  return openItems.filter(x =>
+    (!task || x.task === task) &&
+    (!days || (x.days !== null && x.days >= days)) &&
+    (!kind || x.duplicate || x.finalised) &&
+    (!q || [x.refNo, x.caseNo, x.name].join(' ').toLowerCase().indexOf(q) !== -1));
+}
+
+function renderOpen() {
+  const rows = openShown();
+  document.getElementById('open-table').innerHTML = `<thead><tr><th></th><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>From</th><th>Days</th><th>Note</th></tr></thead><tbody>${
+    rows.map(x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}">
+      <td><input type="checkbox" ${openSel[x.id] ? 'checked' : ''} onchange="toggleOpenSel('${escapeHtml(x.id)}', this.checked)"></td>
+      <td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(chequeKey(x))}</td><td class="left">${escapeHtml(x.name || '')}</td>
+      <td>${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.createdBy)}</td><td>${x.days === null ? '' : x.days}</td>
+      <td>${x.duplicate ? '<span class="status-pill status-late">Duplicate</span>' : x.finalised ? '<span class="status-pill status-done">Already in Final</span>' : ''}</td>
+    </tr>`).join('') || `<tr><td colspan="8" class="report-meta">Nothing to show.</td></tr>`}</tbody>`;
+  updateOpenCount();
+}
+
+function toggleOpenSel(id, on) {
+  if (on) openSel[id] = true; else delete openSel[id];
+  updateOpenCount();
+}
+
+function selectAllOpen(on) {
+  if (on) openShown().forEach(x => { openSel[x.id] = true; }); else openSel = {};
+  renderOpen();
+}
+
+function updateOpenCount() {
+  document.getElementById('open-count').innerText = Object.keys(openSel).length + ' selected';
+}
+
+async function closeOpenSelected() {
+  const ids = Object.keys(openSel);
+  if (!ids.length) return toast("Select some items first.", true);
+  const btn = document.getElementById('btn-open-close');
+  if (btn.dataset.confirm !== '1') {
+    btn.dataset.confirm = '1';
+    btn.innerText = 'Press again to close ' + ids.length;
+    setTimeout(() => { btn.dataset.confirm = ''; btn.innerText = 'Close selected'; }, 4000);
+    return;
+  }
+  btn.dataset.confirm = ''; btn.innerText = 'Close selected'; btn.disabled = true;
+  try {
+    const result = await apiCall('openClose', { ids: ids });
+    if (!result.ok) toast(result.error || "Could not close", true);
+    else { toast("Closed " + result.closed + " item(s)."); await loadOpen(); loadPending(); }
+  } catch (e) { toast("Network error", true); }
+  btn.disabled = false;
+}
+
+async function repairOpen() {
+  if (serverVersion !== APP_VERSION) return toast("The script is an older version. Deploy it as a New version, then refresh.", true);
+  const btn = document.getElementById('btn-open-repair');
+  btn.disabled = true;
+  const out = document.getElementById('open-repair-result');
+  out.innerText = 'Working...';
+  try {
+    const result = await apiCall('openClose', { repair: true, since: valOf('open-since') + ' ' + (valOf('open-since-time') || '00:00') });
+    if (!result.ok) { out.innerText = ''; toast(result.error || "Could not fix", true); }
+    else {
+      out.innerHTML = `Duplicates closed: <b>${result.duplicates}</b> · Already in Final, closed: <b>${result.alreadyDone}</b> · Next steps created: <b>${result.opened}</b>` +
+        (result.openedList && result.openedList.length ? '<br>' + result.openedList.map(escapeHtml).join(', ') : '');
+      toast("Done.");
+      await loadOpen();
+      loadPending();
+    }
+  } catch (e) { out.innerText = ''; toast("Network error", true); }
+  btn.disabled = false;
+}
 
 async function loadWork() {
-  document.getElementById('work-hours').innerHTML = '<span class="report-meta">Loading...</span>';
+  document.getElementById('work-off').innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
   try {
     const result = await apiCall('workGet');
     if (!result.ok) return toast(result.error || "Could not load working hours", true);
-    workData = { start: result.start, end: result.end, off: result.off || {}, defaultOff: result.defaultOff || [0], holidays: result.holidays || [] };
+    workData = { start: result.start, end: result.end, off: result.off || {}, hours: result.hours || {}, defaultOff: result.defaultOff || [0], holidays: result.holidays || [] };
     renderWork();
   } catch (e) { toast("Network error", true); }
 }
@@ -3695,29 +3852,67 @@ function workOffFor(name) {
   return workData.off[name] !== undefined ? workData.off[name] : workData.defaultOff;
 }
 
+function workHoursFor(name) {
+  return workData.hours[name] || { start: workData.start, end: workData.end };
+}
+
+function workStaff() {
+  return Object.keys(STAFF);
+}
+
+function workRow(label, idx, hrs, off, isDefault) {
+  const who = isDefault ? 'null' : idx;
+  return `<tr${isDefault ? ' class="section-row"' : ''}><td class="left"><b>${escapeHtml(label)}</b></td>
+    <td>${clockPicker('wh' + idx + 's', hrs.start, `setWorkHours(${who}, ${idx})`)}</td>
+    <td>${clockPicker('wh' + idx + 'e', hrs.end, `setWorkHours(${who}, ${idx})`)}</td>
+    ${DAY_NAMES.map((d, i) => {
+      const on = off.indexOf(i) === -1;
+      return `<td><button type="button" class="day-btn small${on ? ' on' : ' off'}" onclick="toggleWorkDay(${who}, ${i})" title="${on ? 'Working' : 'Off'}">${on ? d : 'Off'}</button></td>`;
+    }).join('')}</tr>`;
+}
+
 function renderWork() {
   if (!workData) return;
-  document.getElementById('work-hours').innerHTML =
-    `<label class="inline-label">Start ${clockPicker('work_start', workData.start, "workData.start = readClock('work_start')")}</label>
-     <label class="inline-label">End ${clockPicker('work_end', workData.end, "workData.end = readClock('work_end')")}</label>`;
-  document.getElementById('work-off').innerHTML = `<thead><tr><th>Staff</th>${DAY_NAMES.map(d => `<th>${d}</th>`).join('')}</tr></thead><tbody>${
-    Object.keys(STAFF).map(n => {
-      const off = workOffFor(n);
-      return `<tr><td class="left">${escapeHtml(n)}</td>${DAY_NAMES.map((d, i) =>
-        `<td><button type="button" class="day-btn small${off.indexOf(i) !== -1 ? ' off' : ''}" onclick="toggleOffDay('${escapeHtml(n).replace(/'/g, "\\'")}', ${i})" title="${off.indexOf(i) !== -1 ? 'Off' : 'Working'}">${off.indexOf(i) !== -1 ? 'Off' : ''}</button></td>`).join('')}</tr>`;
-    }).join('')}</tbody>`;
+  const staff = workStaff();
+  document.getElementById('work-off').innerHTML = `<thead><tr><th>Staff</th><th>Starts</th><th>Ends</th>${DAY_NAMES.map(d => `<th>${d}</th>`).join('')}</tr></thead><tbody>${
+    workRow('Everyone (default)', 0, { start: workData.start, end: workData.end }, workData.defaultOff, true) +
+    staff.map((n, k) => workRow(n, k + 1, workHoursFor(n), workOffFor(n), false)).join('')}</tbody>`;
   document.getElementById('work-hol-list').innerHTML = workData.holidays.length ? workData.holidays.map((h, i) => `
     <span class="case-chip">${escapeHtml(formatDateDMY(h.date))}${h.note ? ' · ' + escapeHtml(h.note) : ''}
       <button class="chain-btn" style="display:inline-flex; margin-left:6px;" onclick="removeHoliday(${i})" title="Remove">&times;</button></span>`).join(' ')
     : '<span class="report-meta">No holidays added.</span>';
 }
 
-function toggleOffDay(name, day) {
-  const off = workOffFor(name).slice();
-  const at = off.indexOf(day);
-  if (at === -1) off.push(day); else off.splice(at, 1);
-  workData.off[name] = off.sort();
+function setWorkHours(who, idx) {
+  const hrs = { start: readClock('wh' + idx + 's'), end: readClock('wh' + idx + 'e') };
+  if (who === null) { workData.start = hrs.start; workData.end = hrs.end; }
+  else workData.hours[workStaff()[who - 1]] = hrs;
   renderWork();
+}
+
+function toggleWorkDay(who, day) {
+  if (who === null) {
+    const off = workData.defaultOff.slice();
+    const at = off.indexOf(day);
+    if (at === -1) off.push(day); else off.splice(at, 1);
+    workData.defaultOff = off.sort();
+  } else {
+    const name = workStaff()[who - 1];
+    const off = workOffFor(name).slice();
+    const at = off.indexOf(day);
+    if (at === -1) off.push(day); else off.splice(at, 1);
+    workData.off[name] = off.sort();
+  }
+  renderWork();
+}
+
+function applyDefaultToAll() {
+  workStaff().forEach(n => {
+    workData.hours[n] = { start: workData.start, end: workData.end };
+    workData.off[n] = workData.defaultOff.slice();
+  });
+  renderWork();
+  toast("Copied to everyone. Press Save Working Hours to keep it.");
 }
 
 function addHoliday() {
@@ -3738,12 +3933,12 @@ function removeHoliday(i) {
 
 async function saveWork() {
   if (!workData) return;
-  const off = {};
-  Object.keys(STAFF).forEach(n => { off[n] = workOffFor(n); });
+  const off = {}, hours = {};
+  workStaff().forEach(n => { off[n] = workOffFor(n); hours[n] = workHoursFor(n); });
   const btn = document.getElementById('btn-save-work');
   btn.disabled = true;
   try {
-    const result = await apiCall('workSave', { start: workData.start, end: workData.end, off: off, holidays: workData.holidays });
+    const result = await apiCall('workSave', { start: workData.start, end: workData.end, off: off, hours: hours, defaultOff: workData.defaultOff, holidays: workData.holidays });
     if (!result.ok) toast(result.error || "Could not save", true);
     else toast("Working hours saved.");
   } catch (e) { toast("Network error", true); }
