@@ -548,6 +548,25 @@ body.fs-mode header { z-index: 1; }
 .report-table td.cell-visit { background: var(--warn-soft) !important; color: #8a5a07; font-weight: 600; }
 .report-table td.cell-corp { box-shadow: inset 3px 0 0 var(--corp); }
 .date-bar { padding: 8px 12px; background: var(--surface-2); border: 1px solid var(--border-color); border-radius: 10px; }
+.pt-in, .report-table td input.pt-in { width: 50px; min-width: 0; margin: 0; padding: 5px 6px; font-size: 0.8rem; }
+.pt-cell { white-space: nowrap; }
+.pt-cell small { color: var(--text-dim); margin: 0 3px; }
+.band-before { color: var(--ok); font-weight: 700; }
+.band-on { color: var(--accent-dark); font-weight: 700; }
+.band-after { color: var(--warn); font-weight: 700; }
+.band-late { color: var(--danger); font-weight: 700; }
+.pts-total { font-size: 1.6rem; font-weight: 700; color: var(--accent-dark); line-height: 1.1; }
+.pts-total.neg { color: var(--danger); }
+.assign-card { background: #fff; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-color); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
+.assign-card.late { border-left-color: var(--danger); background: #fffafa; }
+.assign-card.done { border-left-color: var(--ok); opacity: 0.85; }
+.assign-card h3 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; }
+.assign-card .assign-notes { white-space: pre-line; font-size: 0.88rem; color: var(--text-main); margin: 6px 0 10px; }
+.assign-card .report-bar { margin: 0; }
+.assign-card input.assign-note { margin: 0; flex: 1; min-width: 180px; padding: 8px 10px; font-size: 0.85rem; }
+.report-table tr.row-new td { background: var(--ok-soft) !important; }
+.notif-item.notif-done { background: #f3fbf6; border-left-color: var(--ok); }
+.notif-item.notif-assigned { border-left-color: var(--accent-color); }
 .version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
@@ -827,6 +846,40 @@ Closes duplicate items and items already in Final, then creates the next step fo
 </div>
 </div>
 
+<div id="form-points" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Pick a person, then set points for each of their tasks. <b>On</b> means finished within the task's Time allowed (for repeating tasks, by the due time). <b>Before</b> means finished at least the time you set earlier than that; <b>After</b> means late but within the time you set; <b>After that</b> is anything later and can be minus. Points go to whoever Final Saves, counted in that person's working hours.
+</p>
+<div class="report-bar" id="points-people"></div>
+<div class="report-meta" id="points-meta" style="margin-bottom:10px;"></div>
+<div class="report-wrap"><table class="report-table" id="points-table"></table></div>
+<div class="builder-actions" style="margin-top:16px;">
+<button class="btn btn-primary" id="btn-save-points" onclick="savePoints()">Save Points</button>
+<span class="report-meta" id="points-dirty"></span>
+</div>
+</div>
+
+<div id="form-assign" class="hidden">
+<div class="builder-form" id="assign-form"></div>
+<div class="report-bar" style="margin-top:22px;">
+<button class="phase-btn active" id="as-tab-open" onclick="setAssignTab('open')">Open</button>
+<button class="phase-btn" id="as-tab-late" onclick="setAssignTab('late')">Late</button>
+<button class="phase-btn" id="as-tab-done" onclick="setAssignTab('done')">Done</button>
+<button class="phase-btn" id="as-tab-all" onclick="setAssignTab('all')">All</button>
+<button class="btn btn-small" onclick="loadAssign()">Refresh</button>
+<input type="text" id="as-search" class="report-search" placeholder="Search title or person" oninput="renderAssignList()">
+</div>
+<div class="report-wrap"><table class="report-table" id="assign-table"></table></div>
+<label style="margin-top:20px;">Repeating assignments</label>
+<div class="report-wrap"><table class="report-table" id="assign-defs"></table></div>
+</div>
+
+<div id="form-myassigned" class="hidden">
+<div id="myassigned-list"></div>
+<label style="margin-top:20px;">Done in the last 7 days</label>
+<div id="myassigned-done"></div>
+</div>
+
 <!-- WORKING HOURS (Jawad only) -->
 <div id="form-work" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
@@ -1001,6 +1054,10 @@ const ADMIN_TASKS = [
   { name: "Working Hours", phase: "Admin", panel: "work",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Open Items", phase: "Admin", panel: "open",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Assign", phase: "Admin", panel: "assign", description: "Assign a Task",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Points", phase: "Admin", panel: "points",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1080,7 +1137,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R5";
+const APP_VERSION = "R6";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1116,8 +1173,12 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
+const MY_ASSIGNED = "My Assigned";
+const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassigned", description: "Tasks Assigned to You",
+  temp: false, fields: [], owners: [], slots: [], active: true };
+
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK]);
 }
 
 function taskByName(name) {
@@ -1136,13 +1197,15 @@ function phaseOrder() {
   return out;
 }
 
-function taskListFor(staffName) {
+function taskListFor(staffName, all) {
   if (user && user.level === 0 && staffName === user.name) {
     return allTasks().filter(t => t.admin || t.active).map(t => t.name);
   }
-  return TASKS
-    .filter(t => t.active && t.owners.indexOf(staffName) !== -1)
-    .map(t => t.name);
+  let list = TASKS.filter(t => t.active && t.owners.indexOf(staffName) !== -1);
+  if (!all && user && user.level !== 0) {
+    list = list.filter(t => !(t.schedule && t.schedule.on) || pendingItems.some(p => p.taskName === t.name));
+  }
+  return list.map(t => t.name).concat([MY_ASSIGNED]);
 }
 
 function staffTaskList() {
@@ -2027,8 +2090,11 @@ async function loadPending() {
     const result = await apiCall('pendingList', { taskNames: visibleTaskNames() });
     if (result.ok) {
       pendingItems = result.items || [];
+      assignedMine = (result.assigned && result.assigned.mine) || [];
+      assignedDone = (result.assigned && result.assigned.doneUnseen) || [];
       updateBell();
       if (currentTask) renderPendingStrip();
+      if (profile && !document.getElementById('scr-entry').classList.contains('hidden')) renderPhaseBar();
       renderTaskSidebar();
     }
   } catch (e) {
@@ -2042,18 +2108,22 @@ function visibleTaskNames() {
   const out = [];
   Object.keys(STAFF).forEach(name => {
     if (!canAccessStaffFrontend(name)) return;
-    taskListFor(name).forEach(t => { if (out.indexOf(t) === -1) out.push(t); });
+    taskListFor(name, true).forEach(t => { if (out.indexOf(t) === -1) out.push(t); });
   });
   return out;
 }
 
+let assignedMine = [];
+let assignedDone = [];
+
 function pendingForTask(taskName) {
+  if (taskName === MY_ASSIGNED) return (profile && user && profile.name === user.name) ? assignedMine : [];
   return pendingItems.filter(p => p.taskName === taskName);
 }
 
 function updateBell() {
   const badge = document.getElementById('notif-count');
-  const n = pendingItems.length;
+  const n = pendingItems.length + assignedMine.length + assignedDone.length;
   if (n === 0) badge.classList.add('hidden');
   else {
     badge.classList.remove('hidden');
@@ -2072,13 +2142,25 @@ function toggleNotifications() {
 function renderNotifPanel() {
   const panel = document.getElementById('notif-panel');
   const shown = pendingItems.slice(0, 30);
+  const total = pendingItems.length + assignedMine.length + assignedDone.length;
 
   let html = `<div class="notif-head">
-    <span>Pending${pendingItems.length ? ' (' + pendingItems.length + ')' : ''}</span>
+    <span>Pending${total ? ' (' + total + ')' : ''}</span>
     <span style="cursor:pointer" onclick="loadPending()">Refresh</span>
   </div>`;
 
-  if (shown.length === 0) {
+  html += assignedDone.map(a => `
+      <div class="notif-item notif-done" data-goto="assign">
+        <div class="notif-task">&#10003; Done: ${escapeHtml(a.title)}${a.late ? '<span class="late-badge">Late</span>' : ''}</div>
+        <div class="notif-meta">by ${escapeHtml(a.doneBy)} &middot; ${escapeHtml(a.doneAt)}${a.note ? ' &middot; ' + escapeHtml(a.note) : ''}</div>
+      </div>`).join('');
+  html += assignedMine.map(a => `
+      <div class="notif-item notif-assigned${a.late ? ' late' : ''}" data-goto="myassigned">
+        <div class="notif-task">Assigned: ${escapeHtml(a.title)}${a.late ? '<span class="late-badge">Late</span>' : ''}</div>
+        <div class="notif-meta">Due ${escapeHtml(a.due)}</div>
+      </div>`).join('');
+
+  if (shown.length === 0 && !assignedMine.length && !assignedDone.length) {
     html += `<div class="notif-empty">Nothing waiting on you.</div>`;
   } else {
     html += shown.map(p => `
@@ -2097,6 +2179,12 @@ function renderNotifPanel() {
 
 document.addEventListener('click', function (e) {
   const item = e.target.closest ? e.target.closest('.notif-item') : null;
+  if (item && item.getAttribute('data-goto')) {
+    document.getElementById('notif-panel').classList.add('hidden');
+    const page = item.getAttribute('data-goto') === 'assign' ? 'Assign' : MY_ASSIGNED;
+    window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/' + encodeURIComponent(page);
+    return;
+  }
   if (item) {
     openPendingItem(item.getAttribute('data-task'),
                     item.getAttribute('data-ref'),
@@ -2151,7 +2239,8 @@ function renderPendingStrip() {
   const head = document.getElementById('pending-strip-head');
   const list = document.getElementById('pending-cases');
 
-  const items = currentTask ? pendingForTask(currentTask) : [];
+  const curT = currentTask ? taskByName(currentTask) : null;
+  const items = currentTask && !(curT && curT.panel) ? pendingForTask(currentTask) : [];
   if (items.length === 0) { section.classList.add('hidden'); strip.classList.add('hidden'); return; }
 
   section.classList.remove('hidden');
@@ -2905,7 +2994,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'partial-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'partial-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -2951,6 +3040,22 @@ function renderFormInterface() {
   if (t.panel === "open") {
     document.getElementById('form-open').classList.remove('hidden');
     loadOpen();
+    return;
+  }
+  if (t.panel === "points") {
+    document.getElementById('form-points').classList.remove('hidden');
+    loadPoints();
+    return;
+  }
+  if (t.panel === "assign") {
+    document.getElementById('form-assign').classList.remove('hidden');
+    renderAssignForm();
+    loadAssign();
+    return;
+  }
+  if (t.panel === "myassigned") {
+    document.getElementById('form-myassigned').classList.remove('hidden');
+    loadMyAssigned();
     return;
   }
   if (t.panel === "cheques") {
@@ -3394,24 +3499,32 @@ function renderTiming() {
     if (q && ![it.refNo, it.caseNo, it.name, it.occurrence].some(x => String(x || '').toLowerCase().includes(q))) return false;
     return true;
   });
-  document.getElementById('timing-table').innerHTML = `<thead><tr><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>Allowed</th><th>Took</th><th>Finished</th><th>Status</th></tr></thead><tbody>${
+  document.getElementById('timing-table').innerHTML = `<thead><tr><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>Allowed</th><th>Took</th><th>Finished</th><th>Status</th><th>Points</th></tr></thead><tbody>${
     rows.map(it => `<tr${it.late ? ' class="overdue"' : ''}>
       <td class="left">${escapeHtml(it.task)}</td>
       <td class="${caseCellClass(it)}">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
       <td class="left ${caseCellClass(it)}">${escapeHtml(it.name || '')}</td>
       <td>${escapeHtml(it.arrived)}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
-      <td>${escapeHtml(it.done || '')}</td><td>${timingStatus(it)}</td>
-    </tr>`).join('') || `<tr><td colspan="8" style="color:var(--text-dim)">Nothing to show.</td></tr>`
+      <td>${escapeHtml(it.done || '')}${it.by ? ' <small class="report-meta">' + escapeHtml(it.by) + '</small>' : ''}</td><td>${timingStatus(it)}</td>
+      <td>${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : ''}</td>
+    </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-dim)">Nothing to show.</td></tr>`
   }</tbody>`;
 }
 
 function renderEmployees() {
   if (!timingData) return;
-  const people = (timingData.people || []).slice().sort((a, b) => (b.late + b.openLate) - (a.late + a.openLate));
+  const people = (timingData.people || []).slice().sort((a, b) => ((b.points || 0) - (a.points || 0)) || ((b.late + b.openLate) - (a.late + a.openLate)));
   document.getElementById('employee-cards').innerHTML = people.length ? people.map(P => `
     <div class="summary-card">
-      <h4>${escapeHtml(P.name)}</h4>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+        <h4>${escapeHtml(P.name)}</h4>
+        ${P.scoredCount ? `<div style="text-align:right;"><div class="pts-total${P.points < 0 ? ' neg' : ''}">${P.points > 0 ? '+' : ''}${P.points}</div><div class="report-meta">points · ${P.scoredCount} scored</div></div>` : ''}
+      </div>
       <div class="summary-line"><b style="color:var(--ok)">${P.onTime}</b> on time · <b style="color:var(--danger)">${P.late}</b> done late · <b style="color:var(--danger)">${P.openLate}</b> open and late</div>
+      ${(P.byTask || []).length ? `<table class="report-table" style="margin-bottom:12px;"><thead><tr><th>Task</th><th>Done</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>Points</th></tr></thead><tbody>${
+        P.byTask.map(B => `<tr><td class="left">${escapeHtml(B.task)}</td><td>${B.count}</td>
+          <td class="band-before">${B.before || ''}</td><td class="band-on">${B.on || ''}</td><td class="band-after">${B.after || ''}</td><td class="band-late">${B.late || ''}</td>
+          <td><b class="${B.points < 0 ? 'band-late' : 'band-on'}">${B.points > 0 ? '+' : ''}${B.points}</b></td></tr>`).join('')}</tbody></table>` : ''}
       ${P.items.length ? `<table class="report-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th></th></tr></thead><tbody>${
         P.items.map(it => `<tr class="overdue"><td class="left">${escapeHtml(it.task)}</td>
           <td style="color:var(--danger); font-weight:700;">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
@@ -3800,6 +3913,395 @@ async function updateCheque(id, changes, okMsg) {
     renderChequeAdmin();
     if (currentTask === 'Reports') renderChequeReport();
     toast(okMsg);
+  } catch (e) { toast("Network error", true); }
+}
+
+let pointsRows = {};
+let pointsDirty = {};
+let pointsPerson = null;
+let pointsFrom = '';
+const PT_KEYS = ['bd', 'bh', 'bp', 'op', 'ad', 'ah', 'ap', 'lp'];
+const BAND_NAME = { before: 'Before', on: 'On', after: 'After', late: 'After that' };
+
+async function loadPoints() {
+  document.getElementById('points-table').innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  try {
+    const result = await apiCall('pointsGet');
+    if (!result.ok) return toast(result.error || "Could not load points", true);
+    pointsRows = {};
+    (result.rows || []).forEach(r => { pointsRows[r.person + '|' + r.task] = r; });
+    pointsDirty = {};
+    pointsFrom = result.pointsFrom || '';
+    const people = pointsPeople();
+    if (!pointsPerson || people.indexOf(pointsPerson) === -1) pointsPerson = people[0] || null;
+    renderPoints();
+  } catch (e) { toast("Network error", true); }
+}
+
+function pointsPeople() {
+  return Object.keys(STAFF).filter(n => TASKS.some(t => t.active && t.owners.indexOf(n) !== -1));
+}
+
+function pointsTasksFor(person) {
+  return TASKS.filter(t => t.active && t.owners.indexOf(person) !== -1);
+}
+
+function slaText(sla) {
+  if (!sla) return '';
+  const d = Number(sla.days) || 0, h = Number(sla.hours) || 0;
+  return [d ? d + 'd' : '', h ? h + 'h' : ''].filter(Boolean).join(' ');
+}
+
+function pointsBasis(t) {
+  if (t.schedule && t.schedule.on) return 'Due ' + (t.schedule.time || '5:00 PM');
+  return slaText(t.sla);
+}
+
+function pickPointsPerson(n) {
+  pointsPerson = n;
+  renderPoints();
+}
+
+function ptVal(person, task, k) {
+  const r = pointsRows[person + '|' + task];
+  return r && r[k] !== undefined && r[k] !== 0 ? r[k] : '';
+}
+
+function ptInput(task, k, hint) {
+  return `<input type="number" class="pt-in" placeholder="${hint}" value="${escapeHtml(String(ptVal(pointsPerson, task, k)))}" oninput="setPoint('${escapeHtml(task).replace(/'/g, "\\'")}', '${k}', this.value)">`;
+}
+
+function renderPoints() {
+  const people = pointsPeople();
+  document.getElementById('points-people').innerHTML = people.map(n =>
+    `<button class="phase-btn${n === pointsPerson ? ' active' : ''}" onclick="pickPointsPerson('${escapeHtml(n).replace(/'/g, "\\'")}')">${escapeHtml(n)}</button>`).join('') ||
+    '<span class="report-meta">No staff have tasks yet.</span>';
+  document.getElementById('points-meta').innerText = pointsFrom
+    ? 'Points count for work done since ' + pointsFrom + '.'
+    : 'Points start counting from the moment you first press Save Points.';
+  const table = document.getElementById('points-table');
+  if (!pointsPerson) { table.innerHTML = ''; return; }
+  const tasks = pointsTasksFor(pointsPerson);
+  table.innerHTML = `<thead><tr><th>Task</th><th>On time means</th><th>Before<br><small>at least this early</small></th><th>Before<br>points</th><th>On<br>points</th><th>After<br><small>late up to</small></th><th>After<br>points</th><th>After that<br>points</th><th></th></tr></thead><tbody>${
+    tasks.map(t => {
+      const basis = pointsBasis(t);
+      const q = escapeHtml(t.name).replace(/'/g, "\\'");
+      if (!basis) return `<tr><td class="left"><b>${escapeHtml(t.name)}</b></td><td colspan="8" class="left report-meta">Set Time allowed first (Add / Edit Tasks)</td></tr>`;
+      return `<tr${pointsDirty[pointsPerson + '|' + t.name] ? ' class="row-new"' : ''}>
+        <td class="left"><b>${escapeHtml(t.name)}</b></td><td>${escapeHtml(basis)}</td>
+        <td class="pt-cell">${ptInput(t.name, 'bd', 'd')}<small>d</small>${ptInput(t.name, 'bh', 'h')}<small>h</small></td>
+        <td>${ptInput(t.name, 'bp', '0')}</td>
+        <td>${ptInput(t.name, 'op', '0')}</td>
+        <td class="pt-cell">${ptInput(t.name, 'ad', 'd')}<small>d</small>${ptInput(t.name, 'ah', 'h')}<small>h</small></td>
+        <td>${ptInput(t.name, 'ap', '0')}</td>
+        <td>${ptInput(t.name, 'lp', '0')}</td>
+        <td>${t.owners.length > 1 ? `<button class="btn btn-small" onclick="copyPointsToAll('${q}')" title="Copy this row to everyone who does this task">Copy to all</button>` : ''}</td>
+      </tr>`;
+    }).join('') || '<tr><td class="report-meta">No tasks for this person.</td></tr>'}</tbody>`;
+  const n = Object.keys(pointsDirty).length;
+  document.getElementById('points-dirty').innerText = n ? n + ' unsaved change' + (n === 1 ? '' : 's') : '';
+}
+
+function setPoint(task, k, v) {
+  const key = pointsPerson + '|' + task;
+  const r = pointsRows[key] || { person: pointsPerson, task: task, bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 };
+  r[k] = v === '' ? 0 : Number(v);
+  pointsRows[key] = r;
+  pointsDirty[key] = true;
+  const n = Object.keys(pointsDirty).length;
+  document.getElementById('points-dirty').innerText = n + ' unsaved change' + (n === 1 ? '' : 's');
+}
+
+function copyPointsToAll(task) {
+  const src = pointsRows[pointsPerson + '|' + task];
+  if (!src) return toast("Set this person's points for the task first.", true);
+  const t = taskByName(task);
+  let n = 0;
+  (t ? t.owners : []).forEach(o => {
+    if (o === pointsPerson) return;
+    const r = { person: o, task: task };
+    PT_KEYS.forEach(k => { r[k] = src[k] || 0; });
+    pointsRows[o + '|' + task] = r;
+    pointsDirty[o + '|' + task] = true;
+    n++;
+  });
+  renderPoints();
+  toast("Copied to " + n + " other " + (n === 1 ? "person" : "people") + ". Press Save Points to keep it.");
+}
+
+async function savePoints() {
+  const keys = Object.keys(pointsDirty);
+  if (!keys.length) return toast("Nothing changed.");
+  const btn = document.getElementById('btn-save-points');
+  btn.disabled = true;
+  try {
+    const result = await apiCall('pointsSave', { rows: keys.map(k => pointsRows[k]) });
+    if (!result.ok) toast(result.error || "Could not save", true);
+    else { toast("Points saved."); await loadPoints(); }
+  } catch (e) { toast("Network error", true); }
+  btn.disabled = false;
+}
+
+let assignDraft = null;
+let assignData = { assignments: [], items: [] };
+let assignTab = 'open';
+
+function newAssignDraft() {
+  return {
+    id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '5:00 PM', repeat: false,
+    schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 PM', start: todayYmd(), end: 'never', until: '', count: 5 },
+    pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
+  };
+}
+
+function asNum(v) { return v === '' || v === null || v === undefined ? 0 : Number(v) || 0; }
+
+function asSet(k, v) { assignDraft[k] = v; }
+function asSchedSet(k, v) { assignDraft.schedule[k] = v; if (k !== 'time') renderAssignForm(); }
+function asPointSet(k, v) { assignDraft.points[k] = asNum(v); }
+
+function asTogglePerson(n) {
+  const i = assignDraft.people.indexOf(n);
+  if (i === -1) assignDraft.people.push(n); else assignDraft.people.splice(i, 1);
+  renderAssignForm();
+}
+
+function asToggleDay(d) {
+  const days = assignDraft.schedule.days || [];
+  const i = days.indexOf(d);
+  if (i === -1) days.push(d); else days.splice(i, 1);
+  assignDraft.schedule.days = days.sort();
+  renderAssignForm();
+}
+
+function renderAssignForm() {
+  if (!assignDraft) assignDraft = newAssignDraft();
+  const d = assignDraft, sch = d.schedule;
+  const freq = sch.freq || 'weekly';
+  const staff = Object.keys(STAFF);
+  const pv = k => d.points[k] ? d.points[k] : '';
+  document.getElementById('assign-form').innerHTML = `
+    <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
+    <label>Title</label>
+    <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asSet('title', this.value)">
+    <label>Notes (optional)</label>
+    <textarea id="as-notes" placeholder="Details, links, what done looks like" oninput="asSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
+    <label>Assign to</label>
+    <div class="owner-grid">${staff.map(n => `<label class="owner-pick${d.people.indexOf(n) !== -1 ? ' on' : ''}"><input type="checkbox"${d.people.indexOf(n) !== -1 ? ' checked' : ''} onchange="asTogglePerson('${escapeHtml(n).replace(/'/g, "\\'")}')"> ${escapeHtml(n)}</label>`).join('')}</div>
+    ${d.people.length > 1 ? `<div class="report-bar"><select class="report-search" onchange="asSet('mode', this.value)">
+      <option value="each"${d.mode === 'each' ? ' selected' : ''}>Each person does their own copy</option>
+      <option value="shared"${d.mode === 'shared' ? ' selected' : ''}>One person finishing closes it for everyone</option>
+    </select></div>` : ''}
+    <div class="owner-grid" style="margin-top:6px;"><label class="owner-pick${d.repeat ? ' on' : ''}"><input type="checkbox"${d.repeat ? ' checked' : ''} onchange="assignDraft.repeat = this.checked; renderAssignForm()"> Repeat on a schedule</label></div>
+    ${d.repeat ? `<div class="schedule-box">
+      <div class="report-bar">
+        <select class="report-search" onchange="asSchedSet('freq', this.value)">
+          <option value="daily"${freq === 'daily' ? ' selected' : ''}>Daily</option>
+          <option value="weekly"${freq === 'weekly' ? ' selected' : ''}>Weekly</option>
+          <option value="monthly"${freq === 'monthly' ? ' selected' : ''}>Monthly</option>
+        </select>
+        <label class="inline-label">Every <input type="number" min="1" value="${sch.every || 1}" onchange="asSchedSet('every', Math.max(1, Number(this.value) || 1))"> ${freq === 'daily' ? 'day(s)' : freq === 'monthly' ? 'month(s)' : 'week(s)'}</label>
+      </div>
+      ${freq === 'weekly' ? `<div class="day-pick">${DAY_NAMES.map((dn, i) => `<button type="button" class="day-btn${(sch.days || []).indexOf(i) !== -1 ? ' on' : ''}" onclick="asToggleDay(${i})">${dn}</button>`).join('')}</div>` : ''}
+      <div class="report-bar">
+        <label class="inline-label">Due by ${clockPicker('as_rt', sch.time, "asSchedSet('time', readClock('as_rt'))")}</label>
+        <label class="inline-label">Starts <input type="date" value="${escapeHtml(sch.start || todayYmd())}" onchange="asSchedSet('start', this.value)"></label>
+      </div>
+      <div class="report-bar">
+        <select class="report-search" onchange="asSchedSet('end', this.value)">
+          <option value="never"${sch.end === 'never' || !sch.end ? ' selected' : ''}>Forever</option>
+          <option value="until"${sch.end === 'until' ? ' selected' : ''}>Until a date</option>
+          <option value="count"${sch.end === 'count' ? ' selected' : ''}>For a number of times</option>
+        </select>
+        ${sch.end === 'until' ? `<input type="date" class="report-search" value="${escapeHtml(sch.until || '')}" onchange="asSchedSet('until', this.value)">` : ''}
+        ${sch.end === 'count' ? `<label class="inline-label"><input type="number" min="1" value="${sch.count || 5}" onchange="asSchedSet('count', this.value)"> times</label>` : ''}
+      </div>
+      <div class="builder-hint" style="margin:0;">${escapeHtml(scheduleSummary(sch))}.</div>
+    </div>` : `<div class="report-bar">
+      <label class="inline-label">Due <input type="date" value="${escapeHtml(d.dueDate)}" onchange="asSet('dueDate', this.value)"></label>
+      <label class="inline-label">by ${clockPicker('as_due', d.dueTime, "asSet('dueTime', readClock('as_due'))")}</label>
+    </div>`}
+    <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label></div>
+    ${d.pointsOn ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
+      <span class="pt-cell"><b>Before</b> at least <input type="number" class="pt-in" value="${pv('bd')}" placeholder="d" oninput="asPointSet('bd', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('bh')}" placeholder="h" oninput="asPointSet('bh', this.value)"><small>h early</small> = <input type="number" class="pt-in" value="${pv('bp')}" placeholder="0" oninput="asPointSet('bp', this.value)"></span>
+      <span class="pt-cell"><b>On</b> time = <input type="number" class="pt-in" value="${pv('op')}" placeholder="0" oninput="asPointSet('op', this.value)"></span>
+      <span class="pt-cell"><b>After</b> up to <input type="number" class="pt-in" value="${pv('ad')}" placeholder="d" oninput="asPointSet('ad', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('ah')}" placeholder="h" oninput="asPointSet('ah', this.value)"><small>h late</small> = <input type="number" class="pt-in" value="${pv('ap')}" placeholder="0" oninput="asPointSet('ap', this.value)"></span>
+      <span class="pt-cell"><b>After that</b> = <input type="number" class="pt-in" value="${pv('lp')}" placeholder="0" oninput="asPointSet('lp', this.value)"></span>
+    </div><div class="builder-hint" style="margin:8px 0 0;">Measured against the due time, in the person's working hours. Points go to whoever presses Done.</div></div>` : ''}
+    <div class="builder-actions" style="margin-top:14px;">
+      <button class="btn btn-primary" id="btn-assign-save" onclick="saveAssign()">${d.id ? 'Save changes' : 'Assign'}</button>
+    </div>`;
+}
+
+function cancelAssignEdit() {
+  assignDraft = newAssignDraft();
+  renderAssignForm();
+}
+
+function localMs(ymd, clock) {
+  const m = String(ymd || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const c = String(clock || '').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!m || !c) return 0;
+  let h = Number(c[1]) % 12;
+  if (c[3].toUpperCase() === 'PM') h += 12;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), h, Number(c[2])).getTime();
+}
+
+async function saveAssign() {
+  const d = assignDraft;
+  if (!d.title.trim()) return toast("Give the task a title.", true);
+  if (!d.people.length) return toast("Pick at least one person.", true);
+  if (d.repeat && d.schedule.freq === 'weekly' && !(d.schedule.days || []).length) return toast("Pick at least one day.", true);
+  const payload = {
+    id: d.id, title: d.title.trim(), notes: d.notes, people: d.people, mode: d.people.length > 1 ? d.mode : 'each',
+    dueMs: d.repeat ? 0 : localMs(d.dueDate, d.dueTime),
+    schedule: d.repeat ? Object.assign({}, d.schedule, { on: true }) : null,
+    points: d.pointsOn ? d.points : null
+  };
+  if (!d.repeat && !payload.dueMs) return toast("Pick a due date and time.", true);
+  const btn = document.getElementById('btn-assign-save');
+  btn.disabled = true;
+  try {
+    const result = await apiCall('assignSave', payload);
+    if (!result.ok) { toast(result.error || "Could not save", true); btn.disabled = false; return; }
+    toast(d.id ? "Changes saved." : "Assigned to " + d.people.join(', ') + ".");
+    assignDraft = newAssignDraft();
+    renderAssignForm();
+    loadAssign();
+  } catch (e) { toast("Network error", true); btn.disabled = false; }
+}
+
+async function loadAssign() {
+  const table = document.getElementById('assign-table');
+  table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  try {
+    const result = await apiCall('assignList');
+    if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
+    assignData = { assignments: result.assignments || [], items: result.items || [] };
+    renderAssignList();
+    if (assignData.items.some(x => x.status === 'Done' && !x.seen)) {
+      apiCall('assignSeen').then(() => loadPending()).catch(() => {});
+    }
+  } catch (e) { table.innerHTML = '<tr><td>Network error</td></tr>'; }
+}
+
+function setAssignTab(tab) {
+  assignTab = tab;
+  ['open', 'late', 'done', 'all'].forEach(k => document.getElementById('as-tab-' + k).classList.toggle('active', k === tab));
+  renderAssignList();
+}
+
+function assignStatusPill(x) {
+  if (x.status === 'Done') return x.late ? '<span class="status-pill status-late">Done late</span>' : '<span class="status-pill status-done">Done</span>';
+  return x.late ? '<span class="status-pill status-late">Late</span>' : '<span class="status-pill status-open">Open</span>';
+}
+
+function renderAssignList() {
+  const q = String(valOf('as-search') || '').trim().toLowerCase();
+  const items = assignData.items.filter(x => {
+    if (assignTab === 'open' && x.status !== 'Open') return false;
+    if (assignTab === 'late' && !(x.status === 'Open' && x.late)) return false;
+    if (assignTab === 'done' && x.status !== 'Done') return false;
+    if (q && [x.title, (x.people || []).join(' '), x.doneBy].join(' ').toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+  const counts = { open: 0, late: 0, done: 0 };
+  assignData.items.forEach(x => { if (x.status === 'Open') { counts.open++; if (x.late) counts.late++; } else if (x.status === 'Done') counts.done++; });
+  document.getElementById('as-tab-open').innerText = 'Open (' + counts.open + ')';
+  document.getElementById('as-tab-late').innerText = 'Late (' + counts.late + ')';
+  document.getElementById('as-tab-done').innerText = 'Done (' + counts.done + ')';
+  document.getElementById('assign-table').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Due</th><th>Status</th><th>Done by</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>${
+    items.map(x => `<tr class="${x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
+      <td class="left"><b>${escapeHtml(x.title)}</b></td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
+      <td>${escapeHtml(x.due)}</td><td>${assignStatusPill(x)}</td><td>${escapeHtml(x.doneBy || '')}</td><td>${escapeHtml(x.doneAt || '')}</td>
+      <td class="left">${escapeHtml(x.note || '')}</td>
+      <td>${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button>` : ''}</td>
+    </tr>`).join('') || '<tr><td colspan="8" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
+  const defs = assignData.assignments.filter(a => a.schedule && a.schedule.on);
+  document.getElementById('assign-defs').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Repeat</th><th>Status</th><th></th></tr></thead><tbody>${
+    defs.map(a => `<tr><td class="left"><b>${escapeHtml(a.title)}</b></td><td class="left">${escapeHtml(a.people.join(', '))}${a.mode === 'shared' && a.people.length > 1 ? ' <small class="report-meta">(shared)</small>' : ''}</td>
+      <td class="left">${escapeHtml(scheduleSummary(a.schedule))}</td>
+      <td>${a.status === 'Active' ? '<span class="status-pill status-done">Active</span>' : '<span class="status-pill status-open">Stopped</span>'}</td>
+      <td>${a.status === 'Active' ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(a.id)}')">Edit</button> <button class="btn btn-small icon-cross" id="stop-${escapeHtml(a.id)}" onclick="stopAssign('${escapeHtml(a.id)}')">Stop</button>` : ''}</td>
+    </tr>`).join('') || '<tr><td colspan="5" class="report-meta">No repeating assignments.</td></tr>'}</tbody>`;
+}
+
+function assignDefById(id) {
+  return assignData.assignments.filter(a => a.id === id && a.status === 'Active')[0] || null;
+}
+
+function editAssign(id) {
+  const a = assignDefById(id);
+  if (!a) return toast("That assignment was stopped.", true);
+  const d = newAssignDraft();
+  d.id = a.id; d.title = a.title; d.notes = a.notes; d.people = a.people.slice(); d.mode = a.mode || 'each';
+  if (a.schedule && a.schedule.on) { d.repeat = true; d.schedule = Object.assign(d.schedule, a.schedule); }
+  else if (a.dueMs) {
+    const t = new Date(a.dueMs);
+    d.dueDate = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+    let h = t.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    const mm = String(Math.round(t.getMinutes() / 15) * 15 % 60).padStart(2, '0');
+    d.dueTime = h + ':' + mm + ' ' + ap;
+  }
+  if (a.points) { d.pointsOn = true; d.points = Object.assign(d.points, a.points); }
+  assignDraft = d;
+  renderAssignForm();
+  document.getElementById('assign-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function stopAssign(id) {
+  const btn = document.getElementById('stop-' + id);
+  if (btn && btn.dataset.confirm !== '1') {
+    btn.dataset.confirm = '1';
+    btn.innerText = 'Press again to stop';
+    setTimeout(() => { if (btn) { btn.dataset.confirm = ''; btn.innerText = 'Stop'; } }, 4000);
+    return;
+  }
+  try {
+    const result = await apiCall('assignStop', { id: id });
+    if (!result.ok) return toast(result.error || "Could not stop", true);
+    toast("Stopped. " + result.cancelled + " open item(s) cancelled.");
+    loadAssign();
+    loadPending();
+  } catch (e) { toast("Network error", true); }
+}
+
+async function loadMyAssigned() {
+  const list = document.getElementById('myassigned-list');
+  list.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const result = await apiCall('assignMine', { person: profile.name });
+    if (!result.ok) { list.innerHTML = `<div class="report-meta">${escapeHtml(result.error || 'Could not load')}</div>`; return; }
+    const canDo = user.name === profile.name || user.level === 0;
+    const items = result.items || [];
+    const open = items.filter(x => x.status === 'Open');
+    const done = items.filter(x => x.status === 'Done');
+    list.innerHTML = open.map(x => `
+      <div class="assign-card${x.late ? ' late' : ''}">
+        <h3>${escapeHtml(x.title)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
+        <div class="report-meta">Due ${escapeHtml(x.due)}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
+        ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
+        ${canDo ? `<div class="report-bar">
+          <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for Jawad (optional)">
+          <button class="btn btn-primary btn-small" onclick="markAssignedDone('${escapeHtml(x.id)}')">Done</button>
+        </div>` : ''}
+      </div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned right now.</div>';
+    document.getElementById('myassigned-done').innerHTML = done.map(x => `
+      <div class="assign-card done">
+        <h3>${escapeHtml(x.title)} ${x.late ? '<span class="status-pill status-late">Done late</span>' : '<span class="status-pill status-done">Done</span>'}</h3>
+        <div class="report-meta">${escapeHtml(x.doneAt)} by ${escapeHtml(x.doneBy)}${x.note ? ' · ' + escapeHtml(x.note) : ''}</div>
+      </div>`).join('') || '<div class="report-meta">Nothing yet.</div>';
+  } catch (e) { list.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+async function markAssignedDone(id) {
+  const el = document.getElementById('an-' + id);
+  try {
+    const result = await apiCall('assignDone', { id: id, note: el ? el.value : '' });
+    if (!result.ok) return toast(result.error || "Could not mark done", true);
+    toast(result.late ? "Marked done (late)." : "Marked done. Jawad will see it.");
+    loadMyAssigned();
+    loadPending();
   } catch (e) { toast("Network error", true); }
 }
 
