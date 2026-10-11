@@ -567,6 +567,9 @@ body.fs-mode header { z-index: 1; }
 .report-table tr.row-new td { background: var(--ok-soft) !important; }
 .notif-item.notif-done { background: #f3fbf6; border-left-color: var(--ok); }
 .notif-item.notif-assigned { border-left-color: var(--accent-color); }
+.task-sidebar-item.idle { opacity: 0.55; background: var(--surface-2); border-style: dashed; }
+.task-sidebar-item.idle:hover { opacity: 0.85; }
+.task-sidebar-item .idle-next { display: block; font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
 .version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
@@ -600,7 +603,7 @@ a.task-sidebar-item.active { color: var(--accent-dark); }
 </button>
 <div id="notif-panel" class="notif-panel hidden"></div>
 </div>
-<div id="version-banner" class="version-banner hidden">The script is an older version than this website, so saving the chain is blocked. In Apps Script: Deploy, Manage deployments, edit, Version: New version, Deploy. Then refresh this page.</div>
+<div id="version-banner" class="version-banner hidden">The script is an older version than this website, so saving the chain is blocked. In Apps Script: Deploy, Manage deployments, edit, Version: New version, Deploy. Then refresh this page.<span id="version-detail"></span></div>
 </header>
 
 
@@ -843,6 +846,14 @@ Closes duplicate items and items already in Final, then creates the next step fo
 <button class="btn btn-primary btn-small" id="btn-open-repair" onclick="repairOpen()">Fix stuck cases</button>
 </div>
 <div id="open-repair-result" class="report-meta" style="margin-top:10px;"></div>
+</div>
+<div class="schedule-box" style="margin-top:14px;">
+<label>Fix customer names</label>
+<div class="report-meta" style="margin-bottom:10px; line-height:1.6;">
+Makes every Save Contacts entry show the same customer staff saved in Final (fixes the one-off shift on refs 2073–2118), closes refs nobody used, and writes each Ref No into a "Mahana Ref No" column in the Google Form sheet. Safe to press more than once.
+</div>
+<button class="btn btn-primary btn-small" id="btn-fix-names" onclick="fixCustomerNames()">Fix customer names</button>
+<div id="fix-names-result" class="report-meta" style="margin-top:10px; line-height:1.6;"></div>
 </div>
 </div>
 
@@ -1137,13 +1148,15 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R6";
+const APP_VERSION = "R8";
 let serverVersion = null;
 
 function showVersionBanner() {
   const el = document.getElementById('version-banner');
   if (!el) return;
   el.classList.toggle('hidden', serverVersion === APP_VERSION);
+  const v = document.getElementById('version-detail');
+  if (v) v.innerText = ' (website ' + APP_VERSION + ', script ' + (serverVersion || '?') + ')';
 }
 
 async function apiCall(action, payload = {}) {
@@ -1201,10 +1214,7 @@ function taskListFor(staffName, all) {
   if (user && user.level === 0 && staffName === user.name) {
     return allTasks().filter(t => t.admin || t.active).map(t => t.name);
   }
-  let list = TASKS.filter(t => t.active && t.owners.indexOf(staffName) !== -1);
-  if (!all && user && user.level !== 0) {
-    list = list.filter(t => !(t.schedule && t.schedule.on) || pendingItems.some(p => p.taskName === t.name));
-  }
+  const list = TASKS.filter(t => t.active && t.owners.indexOf(staffName) !== -1);
   return list.map(t => t.name).concat([MY_ASSIGNED]);
 }
 
@@ -2157,7 +2167,7 @@ function renderNotifPanel() {
   html += assignedMine.map(a => `
       <div class="notif-item notif-assigned${a.late ? ' late' : ''}" data-goto="myassigned">
         <div class="notif-task">Assigned: ${escapeHtml(a.title)}${a.late ? '<span class="late-badge">Late</span>' : ''}</div>
-        <div class="notif-meta">Due ${escapeHtml(a.due)}</div>
+        <div class="notif-meta">Due ${escapeHtml(a.due)}${a.next ? ' &middot; Next: ' + escapeHtml(a.next) : ''}</div>
       </div>`).join('');
 
   if (shown.length === 0 && !assignedMine.length && !assignedDone.length) {
@@ -2225,7 +2235,7 @@ function openPendingItem(taskName, refNo, caseNo, customerName, customerMobile) 
 let pendingKeysToFill = null;
 
 function keyLabel(p) {
-  if (p.recurring) return 'Due ' + (p.due || '');
+  if (p.recurring) return 'Due ' + (p.due || '') + (p.next ? ' \u00b7 Next: ' + p.next : '');
   const parts = [];
   if (p.refNo) parts.push("Ref " + p.refNo);
   if (p.caseNo) parts.push("Case " + p.caseNo);
@@ -2250,9 +2260,16 @@ function renderPendingStrip() {
     : items.length + ' cases waiting on this task';
 
   list.innerHTML = items.map((p, i) => `
-    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPending(${i})" data-tip="${escapeHtml(pendingTip(p))}">
+    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
       ${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
+}
+
+function fillKeysFromPendingId(id, i) {
+  const items = pendingForTask(currentTask);
+  const p = (id && items.filter(x => x.pendingId === id)[0]) || (!id ? items[i] : null);
+  if (!p) { toast("That case was just updated. The list has been refreshed.", true); renderPendingStrip(); return; }
+  fillKeys(p.refNo, p.caseNo, p.customerName, p.customerMobile);
 }
 
 function fillKeysFromPending(i) {
@@ -2947,9 +2964,46 @@ function renderTaskSidebar() {
     const anyLate = pend.some(p => p.late);
     const badge = n > 0 ? `<span class="sidebar-count${anyLate ? ' late' : ''}">${n}</span>` : '';
     const href = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(t);
+    const tk = taskByName(t);
+    const idle = !n && tk && tk.schedule && tk.schedule.on;
+    const nextTxt = idle ? nextDueText(tk.schedule) : '';
     sb.insertAdjacentHTML('beforeend', `
-      <a class="task-sidebar-item${active ? ' active' : ''}" href="${href}">${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span></a>`);
+      <a class="task-sidebar-item${active ? ' active' : ''}${idle ? ' idle' : ''}" href="${href}"${idle ? ` data-tip="Not due today${nextTxt ? '. Next: ' + escapeHtml(nextTxt) : ''}"` : ''}>${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span>${idle ? `<small class="idle-next">${nextTxt ? 'Next: ' + escapeHtml(nextTxt) : 'No more dates'}</small>` : ''}</a>`);
   });
+}
+
+function ymdLocal(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function schedOccurs(sch, day) {
+  const sm = String(sch.start || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!sm) return false;
+  const start = new Date(Number(sm[1]), Number(sm[2]) - 1, Number(sm[3]));
+  if (day < start) return false;
+  if (sch.end === 'until' && sch.until && ymdLocal(day) > sch.until) return false;
+  const every = Math.max(1, Number(sch.every) || 1);
+  const dayDiff = Math.round((day - start) / 86400000);
+  if (sch.freq === 'daily') return dayDiff % every === 0;
+  if (sch.freq === 'monthly') {
+    const months = (day.getFullYear() - start.getFullYear()) * 12 + day.getMonth() - start.getMonth();
+    return months % every === 0 && day.getDate() === start.getDate();
+  }
+  const days = (sch.days && sch.days.length) ? sch.days.map(Number) : [start.getDay()];
+  if (days.indexOf(day.getDay()) === -1) return false;
+  const weekStart = new Date(start.getFullYear(), start.getMonth(), start.getDate() - start.getDay());
+  const weekIdx = Math.floor(Math.round((day - weekStart) / 86400000) / 7);
+  return weekIdx % every === 0;
+}
+
+function nextDueText(sch) {
+  const now = new Date();
+  for (let k = 1; k <= 400; k++) {
+    const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k);
+    if (sch.end === 'until' && sch.until && ymdLocal(day) > sch.until) return '';
+    if (schedOccurs(sch, day)) return day.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+  return '';
 }
 
 function caseTip(salesman, branch, days, inputs, corp) {
@@ -3239,7 +3293,17 @@ function savedMessage(result) {
   return msg;
 }
 
+let savingEntry = false;
+
+function setSaveButtons(disabled) {
+  ['btn-final-save-dynamic', 'btn-temp-save-dynamic', 'btn-partial-save-dynamic'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = disabled;
+  });
+}
+
 async function saveDynamicEntry(type) {
+  if (savingEntry) return;
   const task = taskByName(currentTask);
   if (!task) return;
 
@@ -3254,6 +3318,8 @@ async function saveDynamicEntry(type) {
   );
   const usedPartial = !!currentPartialId;
 
+  savingEntry = true;
+  setSaveButtons(true);
   try {
     if (type === 'Temp') {
       const result = await apiCall('tempAdd', payload);
@@ -3277,6 +3343,9 @@ async function saveDynamicEntry(type) {
     if (usedPartial) loadPartials();
   } catch (e) {
     toast("Network error while saving.", true);
+  } finally {
+    savingEntry = false;
+    setSaveButtons(false);
   }
 }
 
@@ -4279,7 +4348,7 @@ async function loadMyAssigned() {
     list.innerHTML = open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
         <h3>${escapeHtml(x.title)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
-        <div class="report-meta">Due ${escapeHtml(x.due)}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
+        <div class="report-meta">Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
         ${canDo ? `<div class="report-bar">
           <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for Jawad (optional)">
@@ -4404,6 +4473,28 @@ async function closeOpenSelected() {
     if (!result.ok) toast(result.error || "Could not close", true);
     else { toast("Closed " + result.closed + " item(s)."); await loadOpen(); loadPending(); }
   } catch (e) { toast("Network error", true); }
+  btn.disabled = false;
+}
+
+async function fixCustomerNames() {
+  if (serverVersion !== APP_VERSION) return toast("The script is an older version. Deploy it as a New version, then refresh.", true);
+  const btn = document.getElementById('btn-fix-names');
+  const out = document.getElementById('fix-names-result');
+  btn.disabled = true;
+  out.innerText = 'Working...';
+  try {
+    const r = await apiCall('openClose', { fixNames: true });
+    if (!r.ok) { out.innerText = ''; toast(r.error || "Could not fix", true); }
+    else {
+      const f = r.formRefs || {};
+      out.innerHTML = `Save Contacts entries corrected: <b>${r.fixed}</b> · unused refs closed: <b>${r.phantom}</b> · Ref Nos written into the form sheet: <b>${f.written || 0}</b>` +
+        (f.error ? '<br><span style="color:var(--danger)">Form sheet: ' + escapeHtml(f.error) + '</span>' : '') +
+        ((r.changes || []).length ? '<br>' + r.changes.map(escapeHtml).join('<br>') : '');
+      toast("Done.");
+      loadOpen();
+      loadPending();
+    }
+  } catch (e) { out.innerText = ''; toast("Network error", true); }
   btn.disabled = false;
 }
 
