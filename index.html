@@ -570,6 +570,16 @@ body.fs-mode header { z-index: 1; }
 .task-sidebar-item.idle { opacity: 0.55; background: var(--surface-2); border-style: dashed; }
 .task-sidebar-item.idle:hover { opacity: 0.85; }
 .task-sidebar-item .idle-next { display: block; font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+.project-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.project-nav .crumbs { font-size: 1rem; color: var(--accent-dark); }
+.project-nav .chain-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-spacer { flex: 1; }
+.project-tile strong { font-size: 1.15rem; }
+.project-tile { padding: 34px 20px; }
+#project-tiles { margin-bottom: 10px; }
+.admin-project-bar { padding: 8px 12px; background: var(--accent-softer); border: 1px solid #bfe3dd; border-radius: 10px; }
+.project-card.off { opacity: 0.6; }
+.my-assigned-btn .sidebar-count { margin-left: 4px; }
 .version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
 a.dashboard-item, a.task-sidebar-item {
   text-decoration: none;
@@ -643,9 +653,14 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div id="search-workspace-results" class="search-results hidden"></div>
 </div>
 
+<div id="project-nav" class="project-nav hidden"></div>
+<div id="project-tiles" class="dashboard-grid hidden"></div>
+
 <div id="phase-bar" class="phase-bar hidden"></div>
 
-<div class="entry-layout">
+<div id="admin-project-bar" class="report-bar admin-project-bar hidden"></div>
+
+<div class="entry-layout" id="entry-layout">
 <div id="task-sidebar" class="task-sidebar"></div>
 <div>
 <h2 id="bold-task-header" style="font-weight: 600;"></h2>
@@ -854,6 +869,18 @@ Makes every Save Contacts entry show the same customer staff saved in Final (fix
 </div>
 <button class="btn btn-primary btn-small" id="btn-fix-names" onclick="fixCustomerNames()">Fix customer names</button>
 <div id="fix-names-result" class="report-meta" style="margin-top:10px; line-height:1.6;"></div>
+</div>
+</div>
+
+<div id="form-projects" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Each project has its own chains, phases and tasks. Tick who can see each project. To add tasks or chains to a project, open Add / Edit Tasks or Task Chain and pick the project at the top.
+</p>
+<div id="projects-list"></div>
+<div class="builder-actions" style="margin-top:14px;">
+<button class="btn btn-small" onclick="addProjectRow()">+ New project</button>
+<button class="btn btn-primary" id="btn-save-projects" onclick="saveProjects()">Save Projects</button>
+<span class="report-meta" id="projects-dirty"></span>
 </div>
 </div>
 
@@ -1069,6 +1096,8 @@ const ADMIN_TASKS = [
   { name: "Assign", phase: "Admin", panel: "assign", description: "Assign a Task",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Points", phase: "Admin", panel: "points",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Projects", phase: "Admin", panel: "projects", description: "Projects",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1148,7 +1177,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R8";
+const APP_VERSION = "R9";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1185,6 +1214,17 @@ function escapeHtml(s) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+const DEFAULT_PROJECT = "P1";
+const ADMIN_PROJECT = "__admin";
+const ASSIGNED_PROJECT = "__assigned";
+const MORE_CHAIN = "__more";
+let PROJECTS = [];
+let currentProject = null;
+let currentChain = null;
+let adminProject = DEFAULT_PROJECT;
+let allChains = [];
+let allRecurring = [];
 
 const MY_ASSIGNED = "My Assigned";
 const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassigned", description: "Tasks Assigned to You",
@@ -1227,20 +1267,156 @@ function getPhaseForTask(taskName) {
   return t ? t.phase : "Other";
 }
 
+function projOfTask(name) {
+  const t = taskByName(name);
+  if (!t) return DEFAULT_PROJECT;
+  if (t.admin) return ADMIN_PROJECT;
+  if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
+  return t.project || DEFAULT_PROJECT;
+}
+
+function projectName(pid) {
+  if (pid === ADMIN_PROJECT) return 'Admin';
+  if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
+  const p = PROJECTS.filter(x => x.id === pid)[0];
+  return p ? p.name : pid;
+}
+
+function visibleProjects() {
+  if (!profile || !user) return [];
+  const own = user.level === 0 && profile.name === user.name;
+  const list = PROJECTS.filter(p => p.active !== false && (own || (p.staff || []).indexOf(profile.name) !== -1))
+    .map(p => ({ id: p.id, name: p.name }));
+  if (!PROJECTS.length) list.push({ id: DEFAULT_PROJECT, name: 'Tasks' });
+  if (own) list.push({ id: ADMIN_PROJECT, name: 'Admin' });
+  return list;
+}
+
+function projectTasks(pid) {
+  return staffTaskList().filter(t => projOfTask(t) === pid);
+}
+
+function projectChains(pid) {
+  if (pid === ADMIN_PROJECT || pid === ASSIGNED_PROJECT) return [];
+  const mine = projectTasks(pid);
+  const out = allChains.filter(c => c.project === pid).map((c, i) => ({ id: c.name, name: c.name, color: chainColor(i), tasks: c.tasks.filter(t => mine.indexOf(t) !== -1) }))
+    .filter(c => c.tasks.length);
+  const inAny = {};
+  allChains.filter(c => c.project === pid).forEach(c => c.tasks.forEach(t => { inAny[t] = true; }));
+  const rest = mine.filter(t => !inAny[t]);
+  const allRecur = rest.length && rest.every(t => { const k = taskByName(t); return (k && k.schedule && k.schedule.on) || allRecurring.indexOf(t) !== -1; });
+  if (rest.length) out.push({ id: MORE_CHAIN, name: allRecur ? 'Recurring' : (out.length ? 'Other tasks' : 'Tasks'), color: '#a3b2b6', tasks: rest });
+  return out;
+}
+
+function currentChainTasks() {
+  if (!currentProject) return [];
+  if (currentProject === ADMIN_PROJECT || currentProject === ASSIGNED_PROJECT) return projectTasks(currentProject);
+  const c = projectChains(currentProject).filter(x => x.id === currentChain)[0];
+  return c ? c.tasks : [];
+}
+
 function tasksInPhase(phase) {
   if (!phase) return [];
-  const list = staffTaskList().filter(t => getPhaseForTask(t) === phase);
-  const order = chainOrderAll();
-  const rank = t => {
-    const i = order.indexOf(t);
-    return i === -1 ? 100000 + list.indexOf(t) : i;
-  };
-  return list.slice().sort((a, b) => rank(a) - rank(b));
+  return currentChainTasks().filter(t => getPhaseForTask(t) === phase);
 }
 
 function phasesForStaff() {
-  const mine = staffTaskList();
-  return phaseOrder().filter(p => mine.some(t => getPhaseForTask(t) === p));
+  const out = [];
+  currentChainTasks().forEach(t => { const p = getPhaseForTask(t); if (out.indexOf(p) === -1) out.push(p); });
+  return out;
+}
+
+function ensureNavState() {
+  const projs = visibleProjects();
+  if (currentProject && currentProject !== ASSIGNED_PROJECT && !projs.some(p => p.id === currentProject)) currentProject = null;
+  if (!currentProject && projs.length === 1) currentProject = projs[0].id;
+  if (!currentProject) { currentChain = null; return; }
+  const ch = projectChains(currentProject);
+  if (ch.length && !ch.some(c => c.id === currentChain)) currentChain = ch[0].id;
+  if (!ch.length) currentChain = null;
+  const ph = phasesForStaff();
+  if (currentPhase && ph.indexOf(currentPhase) === -1) currentPhase = null;
+  if (!currentPhase && ph.length) currentPhase = ph[0];
+}
+
+function placeTask(task) {
+  currentProject = projOfTask(task);
+  const ch = projectChains(currentProject);
+  if (ch.length && !ch.some(c => c.id === currentChain && c.tasks.indexOf(task) !== -1)) {
+    const hit = ch.filter(c => c.tasks.indexOf(task) !== -1)[0];
+    currentChain = hit ? hit.id : ch[0].id;
+  }
+  currentPhase = getPhaseForTask(task);
+}
+
+function goProjects() {
+  currentProject = null; currentChain = null; currentPhase = null; currentTask = null;
+  showProjectTiles = true;
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name);
+  renderEntryScreen();
+}
+
+let showProjectTiles = false;
+
+function setProject(pid) {
+  showProjectTiles = false;
+  currentProject = pid; currentChain = null; currentPhase = null;
+  ensureNavState();
+  if (currentTask) { currentTask = null; window.location.hash = '#/staff/' + encodeURIComponent(profile.name); return; }
+  renderEntryScreen();
+}
+
+function setChain(cid) {
+  currentChain = cid; currentPhase = null;
+  ensureNavState();
+  if (currentTask && tasksInPhase(currentPhase).indexOf(currentTask) === -1) {
+    currentTask = null; window.location.hash = '#/staff/' + encodeURIComponent(profile.name); return;
+  }
+  renderEntryScreen();
+}
+
+function openMyAssigned() {
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_ASSIGNED);
+}
+
+function renderProjectNav() {
+  const nav = document.getElementById('project-nav');
+  const tiles = document.getElementById('project-tiles');
+  const projs = visibleProjects();
+  const mineAssigned = profile && user && profile.name === user.name ? assignedMine.length : 0;
+  const assignedBtn = `<button class="btn btn-small my-assigned-btn${currentProject === ASSIGNED_PROJECT ? ' btn-primary' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? ' <span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
+  if (!currentProject) {
+    nav.classList.remove('hidden');
+    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${assignedBtn}`;
+    tiles.classList.remove('hidden');
+    tiles.innerHTML = projs.map(p => {
+      const n = pendingCountForProject(p.id);
+      return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
+        <strong>${escapeHtml(p.name)}</strong>
+        <small>${p.id === ADMIN_PROJECT ? 'Settings and reports' : projectChains(p.id).length + ' chain' + (projectChains(p.id).length === 1 ? '' : 's')}</small>
+        ${n ? `<span class="sidebar-count${n.late ? ' late' : ''}" style="margin-top:8px;">${n.count} pending</span>` : ''}
+      </a>`;
+    }).join('') || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
+    return;
+  }
+  tiles.classList.add('hidden');
+  nav.classList.remove('hidden');
+  const back = projs.length > 1 || currentProject === ASSIGNED_PROJECT ? `<button class="btn btn-small" onclick="goProjects()">&#8592; Projects</button>` : '';
+  const ch = projectChains(currentProject);
+  nav.innerHTML = `${back}<div class="crumbs"><b>${escapeHtml(projectName(currentProject))}</b></div>
+    <div class="chain-tabs">${ch.map(c => {
+      const n = c.tasks.reduce((a, t) => a + pendingForTask(t).length, 0);
+      return `<button class="phase-btn chain-tab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${n ? ' <small>' + n + '</small>' : ''}</button>`;
+    }).join('')}</div>
+    <div class="nav-spacer"></div>${currentProject === ASSIGNED_PROJECT ? '' : assignedBtn}`;
+}
+
+function pendingCountForProject(pid) {
+  if (pid === ADMIN_PROJECT) return null;
+  let count = 0, late = false;
+  projectTasks(pid).forEach(t => { const p = pendingForTask(t); count += p.length; if (p.some(x => x.late)) late = true; });
+  return count ? { count: count, late: late } : null;
 }
 
 function isAdminPanel() {
@@ -1299,7 +1475,7 @@ async function completeLogin() {
     document.getElementById('active-user-display').innerText = user.name;
 
     loadTemplates();
-    loadChain();
+    await Promise.all([loadChain(), loadProjects()]);
     loadPending();
     startBellTimer();
 
@@ -1320,7 +1496,7 @@ function doLogout() {
   localStorage.removeItem('mahana_idToken');
   user = null; profile = null; currentTask = null; currentPhase = null;
   templates = {}; templatesLoaded = false;
-  chainList = []; recurringList = []; chains = []; chainLoaded = false;
+  chainList = []; recurringList = []; chains = []; chainLoaded = false; allChains = []; allRecurring = []; PROJECTS = []; currentProject = null; currentChain = null;
   pendingItems = []; TASKS = []; tasksLoaded = false;
   selectedIds = {}; rowEdits = {};
   google.accounts.id.disableAutoSelect();
@@ -1406,7 +1582,8 @@ function normaliseTask(t) {
     sla: (t.sla && ((Number(t.sla.days) || 0) + (Number(t.sla.hours) || 0)) > 0)
       ? { days: Number(t.sla.days) || 0, hours: Number(t.sla.hours) || 0 } : null,
     schedule: t.schedule && t.schedule.on ? Object.assign({}, t.schedule, { days: (t.schedule.days || []).slice() }) : null,
-    panel: t.panel || null
+    panel: t.panel || null,
+    project: String(t.project || DEFAULT_PROJECT)
   };
 }
 
@@ -1420,13 +1597,14 @@ function renderTaskBuilder() {
 function renderTaskIndex() {
   const box = document.getElementById('task-index');
   const phases = [];
-  builderTasks.forEach(t => { if (phases.indexOf(t.phase) === -1) phases.push(t.phase); });
+  const inProj = t => (t.project || DEFAULT_PROJECT) === adminProject;
+  builderTasks.forEach(t => { if (inProj(t) && phases.indexOf(t.phase) === -1) phases.push(t.phase); });
 
   let html = '';
   phases.forEach(p => {
     html += `<div class="task-index-phase">${escapeHtml(p)}</div>`;
     builderTasks.forEach((t, i) => {
-      if (t.phase !== p) return;
+      if (t.phase !== p || !inProj(t)) return;
       const label = t.name || 'Untitled task';
       html += `<div class="task-index-item${i === builderIndex ? ' active' : ''}${t.active ? '' : ' off'}"
         onclick="openBuilderTask(${i})">${escapeHtml(label)}</div>`;
@@ -1443,7 +1621,7 @@ function openBuilderTask(i) {
 
 function startNewTask() {
   builderTasks.push({
-    name: "", phase: "", temp: false, fields: [], owners: [], slots: [], active: true
+    name: "", phase: "", temp: false, fields: [], owners: [], slots: [], active: true, project: adminProject
   });
   builderIndex = builderTasks.length - 1;
   markBuilderDirty();
@@ -1460,8 +1638,12 @@ function renderBuilderForm() {
   }
 
   const t = builderTasks[builderIndex];
+  if ((t.project || DEFAULT_PROJECT) !== adminProject) {
+    box.innerHTML = `<div class="chain-empty">Pick a task on the left, or add a new one.</div>`;
+    return;
+  }
   const phases = [];
-  builderTasks.forEach(x => { if (x.phase && phases.indexOf(x.phase) === -1) phases.push(x.phase); });
+  builderTasks.forEach(x => { if (x.phase && (x.project || DEFAULT_PROJECT) === adminProject && phases.indexOf(x.phase) === -1) phases.push(x.phase); });
 
   const existingOptions = BUILTIN_FIELD_DEFS
     .filter(d => !t.fields.some(f => f.key === d.key))
@@ -1479,6 +1661,10 @@ function renderBuilderForm() {
         <label>Task name</label>
         <input type="text" id="b-name" value="${escapeHtml(t.name)}"
           placeholder="What staff will see" oninput="updateBuilder('name', this.value)">
+      </div>
+      <div>
+        <label>Project</label>
+        <select id="b-project" onchange="moveTaskProject(this.value)">${PROJECTS.map(p => `<option value="${escapeHtml(p.id)}"${p.id === (t.project || DEFAULT_PROJECT) ? ' selected' : ''}>${escapeHtml(p.name)}</option>`).join('')}</select>
       </div>
       <div>
         <label>Phase</label>
@@ -2085,6 +2271,7 @@ async function saveTasks() {
     builderTasks = TASKS.map(normaliseTask);
     markBuilderClean();
     renderTaskIndex();
+    renderBuilderForm();
     renderPhaseBar();
     renderTaskSidebar();
     toast(cleaned.length + " tasks saved.");
@@ -2104,7 +2291,7 @@ async function loadPending() {
       assignedDone = (result.assigned && result.assigned.doneUnseen) || [];
       updateBell();
       if (currentTask) renderPendingStrip();
-      if (profile && !document.getElementById('scr-entry').classList.contains('hidden')) renderPhaseBar();
+      if (profile && !document.getElementById('scr-entry').classList.contains('hidden')) { renderProjectNav(); if (currentProject) renderPhaseBar(); }
       renderTaskSidebar();
     }
   } catch (e) {
@@ -2384,7 +2571,7 @@ function renderTemplateEditor() {
   const list = document.getElementById('template-editor-list');
   list.innerHTML = "";
 
-  const withSlots = tasksWithSlots();
+  const withSlots = tasksWithSlots().filter(t => projOfTask(t.name) === adminProject);
   if (!withSlots.length) {
     list.innerHTML = `<div class="chain-empty">No task has message boxes yet. Add one from Add / Edit Tasks.</div>`;
     return;
@@ -2461,11 +2648,12 @@ function chainsOfTask(t) {
 }
 
 function chainDots(t) {
-  return chainsOfTask(t).map(i => `<span class="chain-dot" style="background:${chainColor(i)}" title="${escapeHtml(chains[i].name)}"></span>`).join('');
+  const pc = allChains.filter(c => c.project === projOfTask(t));
+  return pc.map((c, i) => c.tasks.indexOf(t) !== -1 ? `<span class="chain-dot" style="background:${chainColor(i)}" title="${escapeHtml(c.name)}"></span>` : '').join('');
 }
 
 function chainableTasks() {
-  return TASKS.filter(t => t.active).map(t => t.name);
+  return TASKS.filter(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject).map(t => t.name);
 }
 
 async function loadChain() {
@@ -2473,15 +2661,10 @@ async function loadChain() {
     const result = await apiCall('chainList');
     if (result.ok) {
       const list = (result.chains || []).filter(c => c && c.tasks);
-      const r = result.recurring || [];
-      if (!list.length && !r.length) {
-        chains = [{ name: 'Chain 1', tasks: DEFAULT_CHAIN.slice() }];
-        recurringList = [];
-      } else {
-        chains = list.length ? list.map(c => ({ name: c.name, tasks: c.tasks.slice() })) : [{ name: 'Chain 1', tasks: [] }];
-        recurringList = r.slice();
-      }
-      chainList = chains[0].tasks;
+      allRecurring = (result.recurring || []).slice();
+      allChains = list.length ? list.map(c => ({ name: c.name, project: c.project || DEFAULT_PROJECT, tasks: c.tasks.slice() }))
+        : (allRecurring.length ? [] : [{ name: 'Chain 1', project: DEFAULT_PROJECT, tasks: DEFAULT_CHAIN.slice() }]);
+      setEditorChains();
       reconcileChainWithTasks();
       chainLoaded = true;
       if (currentTask === "Task Chain") renderChainEditor();
@@ -2489,6 +2672,14 @@ async function loadChain() {
     }
   } catch (e) {
   }
+}
+
+function setEditorChains() {
+  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice() }));
+  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [] }];
+  recurringList = allRecurring.filter(t => projOfTask(t) === adminProject);
+  chainList = chains[0].tasks;
+  activeChain = 0;
 }
 
 function reconcileChainWithTasks() {
@@ -2683,7 +2874,7 @@ async function saveChain() {
     if (!chainOrderAll().length) { toast("Every chain is empty. Add tasks before saving.", true); btn.disabled = false; return; }
     const empty = chains.filter(c => !c.tasks.length);
     if (empty.length && chains.length > 1) { toast('"' + empty[0].name + '" has no tasks. Add some or delete it.', true); btn.disabled = false; return; }
-    const result = await apiCall('chainSave', { chains: chains, recurring: recurringList });
+    const result = await apiCall('chainSave', { project: adminProject, chains: chains, recurring: recurringList });
     if (!result.ok) {
       toast(result.error || "Could not save the chain", true);
       btn.disabled = false;
@@ -2799,6 +2990,8 @@ function applySearchItem(el) {
 
   currentPhase = phaseName || null;
   currentTask = null;
+  const anyTask = phaseName ? taskListFor(staffName).filter(t => getPhaseForTask(t) === phaseName)[0] : null;
+  if (anyTask) { profile = { name: staffName }; placeTask(anyTask); currentPhase = phaseName; showProjectTiles = false; }
 
   const target = '#/staff/' + encodeURIComponent(staffName);
   if (window.location.hash === target) {
@@ -2838,15 +3031,12 @@ function route() {
 
     if (segments[2] && staffTaskList().indexOf(segments[2]) !== -1) {
       currentTask = segments[2];
-      currentPhase = getPhaseForTask(currentTask);
+      showProjectTiles = false;
+      placeTask(currentTask);
       renderEntryScreen();
     } else {
       currentTask = null;
-      if (currentPhase && phasesForStaff().indexOf(currentPhase) === -1) currentPhase = null;
-      if (AUTO_SELECT_FIRST_PHASE && !currentPhase) {
-        const present = phasesForStaff();
-        if (present.length > 0) currentPhase = present[0];
-      }
+      if (!showProjectTiles) ensureNavState();
       renderEntryScreen();
     }
   } else {
@@ -2881,6 +3071,17 @@ async function renderEntryScreen() {
   if (user.level === 2 && !currentTask) backBtn.classList.add('hidden');
   else backBtn.classList.remove('hidden');
 
+  if (showProjectTiles && !currentTask) { currentProject = null; currentChain = null; currentPhase = null; showProjectTiles = false; }
+  renderProjectNav();
+  renderAdminProjectBar();
+  const layout = document.getElementById('entry-layout');
+  if (!currentProject && !currentTask) {
+    layout.classList.add('hidden');
+    document.getElementById('phase-bar').classList.add('hidden');
+    hideAllForms();
+    return;
+  }
+  layout.classList.remove('hidden');
   renderPhaseBar();
   renderTaskSidebar();
 
@@ -2923,8 +3124,9 @@ function renderPhaseBar() {
   if (!user || !profile) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   bar.classList.remove('hidden');
   const present = phasesForStaff();
+  if (currentProject === ASSIGNED_PROJECT) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   if (present.length === 0) {
-    bar.innerHTML = `<span class="sidebar-empty">No tasks assigned to this workspace yet.</span>`;
+    bar.innerHTML = `<span class="sidebar-empty">No tasks for this person in ${escapeHtml(projectName(currentProject))} yet.</span>`;
     return;
   }
   bar.innerHTML = present.map(p =>
@@ -3048,7 +3250,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'partial-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'partial-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -3099,6 +3301,11 @@ function renderFormInterface() {
   if (t.panel === "points") {
     document.getElementById('form-points').classList.remove('hidden');
     loadPoints();
+    return;
+  }
+  if (t.panel === "projects") {
+    document.getElementById('form-projects').classList.remove('hidden');
+    loadProjects().then(renderProjectsAdmin);
     return;
   }
   if (t.panel === "assign") {
@@ -4008,11 +4215,11 @@ async function loadPoints() {
 }
 
 function pointsPeople() {
-  return Object.keys(STAFF).filter(n => TASKS.some(t => t.active && t.owners.indexOf(n) !== -1));
+  return Object.keys(STAFF).filter(n => TASKS.some(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject && t.owners.indexOf(n) !== -1));
 }
 
 function pointsTasksFor(person) {
-  return TASKS.filter(t => t.active && t.owners.indexOf(person) !== -1);
+  return TASKS.filter(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject && t.owners.indexOf(person) !== -1);
 }
 
 function slaText(sla) {
@@ -4372,6 +4579,124 @@ async function markAssignedDone(id) {
     loadMyAssigned();
     loadPending();
   } catch (e) { toast("Network error", true); }
+}
+
+async function loadProjects() {
+  try {
+    const result = await apiCall('projectList');
+    if (result.ok) PROJECTS = (result.projects || []).map(p => ({ id: p.id, name: p.name, staff: (p.staff || []).slice(), active: p.active !== false, settings: p.settings || {} }));
+  } catch (e) {}
+  if (!PROJECTS.some(p => p.id === adminProject)) adminProject = DEFAULT_PROJECT;
+}
+
+const PROJECT_PANELS = ['tasks', 'chain', 'templates', 'points'];
+
+function renderAdminProjectBar() {
+  const bar = document.getElementById('admin-project-bar');
+  const t = currentTask ? taskByName(currentTask) : null;
+  if (!t || PROJECT_PANELS.indexOf(t.panel) === -1 || !PROJECTS.length) { bar.classList.add('hidden'); bar.innerHTML = ''; return; }
+  bar.classList.remove('hidden');
+  bar.innerHTML = `<label class="inline-label"><b>Project</b> <select onchange="setAdminProject(this.value)">${PROJECTS.map(p =>
+    `<option value="${escapeHtml(p.id)}"${p.id === adminProject ? ' selected' : ''}>${escapeHtml(p.name)}${p.active === false ? ' (off)' : ''}</option>`).join('')}</select></label>
+    <span class="report-meta">You are editing ${escapeHtml(projectName(adminProject))} only.</span>`;
+}
+
+function setAdminProject(pid) {
+  const t = currentTask ? taskByName(currentTask) : null;
+  if (t && t.panel === 'tasks' && builderDirty) { toast("Save or undo your task changes first.", true); renderAdminProjectBar(); return; }
+  adminProject = pid;
+  builderIndex = -1;
+  setEditorChains();
+  renderAdminProjectBar();
+  renderFormInterface();
+}
+
+function moveTaskProject(pid) {
+  if (builderIndex < 0) return;
+  builderTasks[builderIndex].project = pid;
+  markBuilderDirty();
+  toast('Moved to ' + projectName(pid) + '. Press Save All to keep it; it now shows under that project.');
+  builderIndex = -1;
+  renderTaskIndex();
+  renderBuilderForm();
+}
+
+let projectsDraft = [];
+
+function renderProjectsAdmin() {
+  projectsDraft = PROJECTS.map(p => ({ id: p.id, name: p.name, staff: p.staff.slice(), active: p.active }));
+  drawProjectsAdmin();
+}
+
+function drawProjectsAdmin() {
+  const staff = Object.keys(STAFF);
+  document.getElementById('projects-list').innerHTML = projectsDraft.map((p, i) => {
+    const nTasks = TASKS.filter(t => (t.project || DEFAULT_PROJECT) === p.id).length;
+    const nChains = allChains.filter(c => c.project === p.id).length;
+    return `<div class="schedule-box project-card${p.active ? '' : ' off'}">
+      <div class="report-bar" style="margin-bottom:8px;">
+        <input type="text" class="report-search" style="min-width:220px; font-weight:600;" value="${escapeHtml(p.name)}" placeholder="Project name" oninput="projectsDraft[${i}].name = this.value; markProjectsDirty()">
+        <label class="owner-pick${p.active ? ' on' : ''}"><input type="checkbox"${p.active ? ' checked' : ''} onchange="projectsDraft[${i}].active = this.checked; markProjectsDirty(); drawProjectsAdmin()"> Active</label>
+        <span class="report-meta">${nTasks} task${nTasks === 1 ? '' : 's'} · ${nChains} chain${nChains === 1 ? '' : 's'}</span>
+        <span class="nav-spacer"></span>
+        <button class="chain-btn" onclick="moveProjectRow(${i}, -1)" title="Move up">&#9650;</button>
+        <button class="chain-btn" onclick="moveProjectRow(${i}, 1)" title="Move down">&#9660;</button>
+        ${p.id !== DEFAULT_PROJECT && !nTasks ? `<button class="chain-btn" onclick="removeProjectRow(${i})" title="Remove">&times;</button>` : ''}
+      </div>
+      <div class="report-meta" style="margin-bottom:6px;">Who can see it</div>
+      <div class="owner-grid" style="margin-bottom:0;">${staff.map(n => `<label class="owner-pick${p.staff.indexOf(n) !== -1 ? ' on' : ''}"><input type="checkbox"${p.staff.indexOf(n) !== -1 ? ' checked' : ''} onchange="toggleProjectStaff(${i}, '${escapeHtml(n).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(n)}</label>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function markProjectsDirty() { document.getElementById('projects-dirty').innerText = 'Unsaved changes'; }
+
+function toggleProjectStaff(i, n, on) {
+  const st = projectsDraft[i].staff;
+  const at = st.indexOf(n);
+  if (on && at === -1) st.push(n);
+  if (!on && at !== -1) st.splice(at, 1);
+  markProjectsDirty();
+  drawProjectsAdmin();
+}
+
+function addProjectRow() {
+  projectsDraft.push({ id: '', name: 'New project', staff: [], active: true });
+  markProjectsDirty();
+  drawProjectsAdmin();
+}
+
+function moveProjectRow(i, d) {
+  const j = i + d;
+  if (j < 0 || j >= projectsDraft.length) return;
+  const x = projectsDraft.splice(i, 1)[0];
+  projectsDraft.splice(j, 0, x);
+  markProjectsDirty();
+  drawProjectsAdmin();
+}
+
+function removeProjectRow(i) {
+  projectsDraft.splice(i, 1);
+  markProjectsDirty();
+  drawProjectsAdmin();
+}
+
+async function saveProjects() {
+  const btn = document.getElementById('btn-save-projects');
+  btn.disabled = true;
+  try {
+    const result = await apiCall('projectSave', { projects: projectsDraft.map(p => ({ id: p.id, name: String(p.name || '').trim(), staff: p.staff, active: p.active })) });
+    if (!result.ok) toast(result.error || "Could not save projects", true);
+    else {
+      if (result.projects && result.projects.length) PROJECTS = result.projects.map(p => ({ id: p.id, name: p.name, staff: (p.staff || []).slice(), active: p.active !== false, settings: p.settings || {} }));
+      else await loadProjects();
+      document.getElementById('projects-dirty').innerText = '';
+      renderProjectsAdmin();
+      renderProjectNav();
+      toast("Projects saved.");
+    }
+  } catch (e) { toast("Network error", true); }
+  btn.disabled = false;
 }
 
 let workData = null;
