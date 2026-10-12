@@ -542,6 +542,9 @@ body.fs-mode header { z-index: 1; }
 .task-sidebar-item.active .sidebar-count.late { background: #b4231b; }
 .project-tile { position: relative; }
 .nowrap { white-space: nowrap; }
+.general-btn { font-weight: 700; margin-right: 10px; }
+.pt-own { color: var(--accent-dark); font-weight: 600; }
+.points-rule.on { border-color: var(--accent-color); background: var(--accent-softer); }
 .project-bubble { position: absolute; top: -8px; right: -8px; margin: 0; min-width: 22px; text-align: center; font-size: 0.75rem; padding: 2px 7px; }
 .phase-btn .sidebar-count, .chain-tab .sidebar-count { margin-left: 6px; vertical-align: 1px; }
 
@@ -911,7 +914,7 @@ Each project has its own chains, phases and tasks. Tick who can see each project
 
 <div id="form-points" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Pick a person, then set points for each of their tasks. <b>On</b> means finished within the task's Time allowed (for repeating tasks, by the due time). <b>Before</b> means finished at least the time you set earlier than that; <b>After</b> means late but within the time you set; <b>After that</b> is anything later and can be minus. Points go to whoever Final Saves, counted in that person's working hours.
+Start with <b>General</b>: those points apply to everyone who does the task. Pick a person only to give them different points. Tasks without a Time allowed give no points, and any points conditions set on a task's fields (Add / Edit Tasks) must pass or no points are given. <b>On</b> means finished within the task's Time allowed (for repeating tasks, by the due time). <b>Before</b> means finished at least the time you set earlier than that; <b>After</b> means late but within the time you set; <b>After that</b> is anything later and can be minus. Points go to whoever Final Saves, counted in that person's working hours.
 </p>
 <div class="report-bar" id="points-people"></div>
 <div class="report-meta" id="points-meta" style="margin-bottom:10px;"></div>
@@ -1202,7 +1205,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R10";
+const APP_VERSION = "R12";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1603,6 +1606,11 @@ function normaliseField(f) {
       on: true,
       mode: f.exit.mode === 'values' ? 'values' : 'filled',
       values: Array.isArray(f.exit.values) ? f.exit.values.map(String) : []
+    } : null,
+    pointsIf: (f.pointsIf && f.pointsIf.on) ? {
+      on: true,
+      mode: f.pointsIf.mode === 'values' ? 'values' : 'filled',
+      values: Array.isArray(f.pointsIf.values) ? f.pointsIf.values.map(String) : []
     } : null
   };
 }
@@ -1963,6 +1971,7 @@ function renderFieldEditorList(t) {
       </div>
       ${optionsUI}
       ${(f.key === 'ref' || f.key === 'case') ? '' : renderExitEditor(f)}
+      ${(f.key === 'ref' || f.key === 'case') ? '' : renderPointsRuleEditor(f)}
     </div>`;
   }).join('');
 }
@@ -2006,6 +2015,79 @@ function renderExitEditor(f) {
     </label>
     ${detail}
   </div>`;
+}
+
+function renderPointsRuleEditor(f) {
+  const pr = f.pointsIf || { on: false, mode: 'filled', values: [] };
+  const fid = f.id;
+  let detail = '';
+  if (pr.on) {
+    const choices = exitChoices(f);
+    let valuesUI = '';
+    if (pr.mode === 'values') {
+      valuesUI = choices
+        ? `<div class="owner-grid" style="margin:8px 0 0;">${choices.map(c => `
+            <label class="owner-pick${pr.values.indexOf(c) !== -1 ? ' on' : ''}">
+              <input type="checkbox"${pr.values.indexOf(c) !== -1 ? ' checked' : ''}
+                onchange="togglePointsValue('${fid}', '${escapeHtml(c).replace(/'/g, "\\'")}', this.checked)">
+              ${escapeHtml(c)}
+            </label>`).join('')}</div>`
+        : `<input type="text" value="${escapeHtml(pr.values.join(', '))}" placeholder="Values, comma separated"
+            style="margin:8px 0 0; padding:6px 8px; font-size:0.8rem;" onblur="setPointsValuesText('${fid}', this.value)">`;
+    }
+    detail = `<div style="margin-top:8px;">
+      <select style="margin:0; padding:6px 8px; font-size:0.8rem; width:auto;" onchange="setPointsMode('${fid}', this.value)">
+        <option value="filled"${pr.mode === 'filled' ? ' selected' : ''}>Only if this field is filled in</option>
+        <option value="values"${pr.mode === 'values' ? ' selected' : ''}>Only if the answer is one of…</option>
+      </select>
+      ${valuesUI}
+    </div>`;
+  }
+  return `<div class="exit-rule points-rule${pr.on ? ' on' : ''}">
+    <label class="field-req-pick">
+      <input type="checkbox"${pr.on ? ' checked' : ''} onchange="togglePointsRule('${fid}', this.checked)">
+      Points condition: give points only when this field passes
+    </label>
+    ${detail}
+  </div>`;
+}
+
+function togglePointsRule(fieldId, on) {
+  const f = builderField(fieldId);
+  if (!f) return;
+  f.pointsIf = on ? { on: true, mode: exitChoices(f) ? 'values' : 'filled', values: [] } : null;
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function setPointsMode(fieldId, mode) {
+  const f = builderField(fieldId);
+  if (!f || !f.pointsIf) return;
+  f.pointsIf.mode = mode === 'values' ? 'values' : 'filled';
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function togglePointsValue(fieldId, value, on) {
+  const f = builderField(fieldId);
+  if (!f || !f.pointsIf) return;
+  const i = f.pointsIf.values.indexOf(value);
+  if (on && i === -1) f.pointsIf.values.push(value);
+  if (!on && i !== -1) f.pointsIf.values.splice(i, 1);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function setPointsValuesText(fieldId, text) {
+  const f = builderField(fieldId);
+  if (!f || !f.pointsIf) return;
+  f.pointsIf.values = String(text || '').split(',').map(x => x.trim()).filter(Boolean);
+  markBuilderDirty();
+}
+
+function pointsRuleText(t) {
+  return (t.fields || []).filter(f => f.pointsIf && f.pointsIf.on).map(f =>
+    f.label + (f.pointsIf.mode === 'values' ? ' is ' + (f.pointsIf.values.join(' / ') || '(nothing picked)') : ' filled')).join(' and ');
 }
 
 function builderField(fieldId) {
@@ -2087,6 +2169,10 @@ function renameFieldOption(fieldId, optId, value) {
   if (f.exit && f.exit.values) {
     const at = f.exit.values.indexOf(opt.label);
     if (at !== -1) f.exit.values[at] = trimmed;
+  }
+  if (f.pointsIf && f.pointsIf.values) {
+    const at = f.pointsIf.values.indexOf(opt.label);
+    if (at !== -1) f.pointsIf.values[at] = trimmed;
   }
   opt.label = trimmed;
   markBuilderDirty();
@@ -3630,7 +3716,7 @@ async function loadRecent() {
       items.map(x => `<tr>
         <td class="nowrap">${escapeHtml(x.savedAt)}</td>${showTask ? `<td class="left">${escapeHtml(x.task)}</td>` : ''}
         <td>${escapeHtml(x.refNo)}</td><td>${escapeHtml(x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
-        <td>${escapeHtml(x.savedBy)}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
+        <td>${escapeHtml(x.savedBy)}${x.staff && x.staff !== x.savedBy ? `<br><small class="report-meta">for ${escapeHtml(x.staff)}</small>` : ''}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
       </tr>`).join('') || `<tr><td colspan="${showTask ? 7 : 6}" class="report-meta">No final saves found.</td></tr>`
     }</tbody>${result.more ? `<tfoot><tr><td colspan="${showTask ? 7 : 6}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
   } catch (e) {
@@ -4333,11 +4419,14 @@ async function loadPoints() {
   } catch (e) { toast("Network error", true); }
 }
 
+const GENERAL_POINTS = '*General*';
+
 function pointsPeople() {
-  return Object.keys(STAFF).filter(n => TASKS.some(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject && t.owners.indexOf(n) !== -1));
+  return [GENERAL_POINTS].concat(Object.keys(STAFF).filter(n => TASKS.some(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject && t.owners.indexOf(n) !== -1)));
 }
 
 function pointsTasksFor(person) {
+  if (person === GENERAL_POINTS) return TASKS.filter(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject);
   return TASKS.filter(t => t.active && (t.project || DEFAULT_PROJECT) === adminProject && t.owners.indexOf(person) !== -1);
 }
 
@@ -4362,18 +4451,30 @@ function ptVal(person, task, k) {
   return r && r[k] !== undefined && r[k] !== 0 ? r[k] : '';
 }
 
+function ptSet(person, task) {
+  const r = pointsRows[person + '|' + task];
+  return !!r && PT_KEYS.some(k => Number(r[k]) !== 0);
+}
+
 function ptInput(task, k, hint) {
+  if (pointsPerson !== GENERAL_POINTS && !ptSet(pointsPerson, task)) {
+    const g = ptVal(GENERAL_POINTS, task, k);
+    if (g !== '') hint = String(g);
+  }
   return `<input type="number" class="pt-in" placeholder="${hint}" value="${escapeHtml(String(ptVal(pointsPerson, task, k)))}" oninput="setPoint('${escapeHtml(task).replace(/'/g, "\\'")}', '${k}', this.value)">`;
 }
 
 function renderPoints() {
   const people = pointsPeople();
   document.getElementById('points-people').innerHTML = people.map(n =>
-    `<button class="phase-btn${n === pointsPerson ? ' active' : ''}" onclick="pickPointsPerson('${escapeHtml(n).replace(/'/g, "\\'")}')">${escapeHtml(n)}</button>`).join('') ||
+    `<button class="phase-btn${n === pointsPerson ? ' active' : ''}${n === GENERAL_POINTS ? ' general-btn' : ''}" onclick="pickPointsPerson('${escapeHtml(n).replace(/'/g, "\\'")}')">${n === GENERAL_POINTS ? 'General' : escapeHtml(n)}</button>`).join('') ||
     '<span class="report-meta">No staff have tasks yet.</span>';
-  document.getElementById('points-meta').innerText = pointsFrom
+  document.getElementById('points-meta').innerText = (pointsFrom
     ? 'Points count for work done since ' + pointsFrom + '.'
-    : 'Points start counting from the moment you first press Save Points.';
+    : 'Points start counting from the moment you first press Save Points.') +
+    (pointsPerson === GENERAL_POINTS
+      ? ' General points apply to everyone who does the task, unless that person has their own points.'
+      : ' Grey numbers come from General. Type a number to give this person their own points; clear the row to go back to General.');
   const table = document.getElementById('points-table');
   if (!pointsPerson) { table.innerHTML = ''; return; }
   const tasks = pointsTasksFor(pointsPerson);
@@ -4383,14 +4484,14 @@ function renderPoints() {
       const q = escapeHtml(t.name).replace(/'/g, "\\'");
       if (!basis) return `<tr><td class="left"><b>${escapeHtml(t.name)}</b></td><td colspan="8" class="left report-meta">Set Time allowed first (Add / Edit Tasks)</td></tr>`;
       return `<tr${pointsDirty[pointsPerson + '|' + t.name] ? ' class="row-new"' : ''}>
-        <td class="left"><b>${escapeHtml(t.name)}</b></td><td>${escapeHtml(basis)}</td>
+        <td class="left"><b>${escapeHtml(t.name)}</b>${pointsRuleText(t) ? `<br><small class="report-meta">Only if ${escapeHtml(pointsRuleText(t))}</small>` : ''}${pointsPerson !== GENERAL_POINTS ? (ptSet(pointsPerson, t.name) ? '<br><small class="pt-own">Own points</small>' : (PT_KEYS.some(k => ptVal(GENERAL_POINTS, t.name, k) !== '') ? '<br><small class="report-meta">Using General</small>' : '')) : ''}</td><td>${escapeHtml(basis)}</td>
         <td class="pt-cell">${ptInput(t.name, 'bd', 'd')}<small>d</small>${ptInput(t.name, 'bh', 'h')}<small>h</small></td>
         <td>${ptInput(t.name, 'bp', '0')}</td>
         <td>${ptInput(t.name, 'op', '0')}</td>
         <td class="pt-cell">${ptInput(t.name, 'ad', 'd')}<small>d</small>${ptInput(t.name, 'ah', 'h')}<small>h</small></td>
         <td>${ptInput(t.name, 'ap', '0')}</td>
         <td>${ptInput(t.name, 'lp', '0')}</td>
-        <td>${t.owners.length > 1 ? `<button class="btn btn-small" onclick="copyPointsToAll('${q}')" title="Copy this row to everyone who does this task">Copy to all</button>` : ''}</td>
+        <td class="nowrap">${pointsPerson === GENERAL_POINTS ? '' : `${ptSet(pointsPerson, t.name) ? `<button class="btn btn-small" onclick="clearPersonPoints('${q}')" title="Go back to General points">Use General</button> ` : ''}${t.owners.length > 1 ? `<button class="btn btn-small" onclick="copyPointsToAll('${q}')" title="Copy this row to everyone who does this task">Copy to all</button>` : ''}`}</td>
       </tr>`;
     }).join('') || '<tr><td class="report-meta">No tasks for this person.</td></tr>'}</tbody>`;
   const n = Object.keys(pointsDirty).length;
@@ -4405,6 +4506,15 @@ function setPoint(task, k, v) {
   pointsDirty[key] = true;
   const n = Object.keys(pointsDirty).length;
   document.getElementById('points-dirty').innerText = n + ' unsaved change' + (n === 1 ? '' : 's');
+}
+
+function clearPersonPoints(task) {
+  const key = pointsPerson + '|' + task;
+  const r = { person: pointsPerson, task: task };
+  PT_KEYS.forEach(k => { r[k] = 0; });
+  pointsRows[key] = r;
+  pointsDirty[key] = true;
+  renderPoints();
 }
 
 function copyPointsToAll(task) {
