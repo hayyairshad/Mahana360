@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mahana360</title>
+<title>Taskendo</title>
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
 :root {
---bg-color: #f3f7f7;
+--bg-color: #f4f6f0;
 --panel-color: #ffffff;
 --surface: #ffffff;
---surface-2: #f7fafa;
---border-color: #dde7e8;
---border-strong: #c7d6d8;
---accent-color: #2a9d8f;
---accent-hover: #238a7e;
---accent-dark: #1d7268;
---accent-soft: #e4f4f1;
---accent-softer: #f0f9f7;
---text-main: #1f2f35;
---text-dim: #64767d;
+--surface-2: #f8faf5;
+--border-color: #dfe6d7;
+--border-strong: #c7d3bb;
+--accent-color: #4a8b3b;
+--accent-hover: #3f7832;
+--accent-dark: #33622a;
+--accent-soft: #e5f0df;
+--accent-softer: #f2f7ee;
+--text-main: #26301f;
+--text-dim: #6b7562;
 --ok: #2e9b62;
 --ok-soft: #e5f5ec;
 --warn: #c7850f;
@@ -31,15 +31,15 @@ onerror="handleGsiLoadError()"></script>
 --info-soft: #e7f1fa;
 --corp: #4a6fdc;
 --corp-soft: #e9eefc;
---report-head: #e1f2ef;
---shadow-sm: 0 1px 2px rgba(20,50,55,0.06);
---shadow-md: 0 6px 20px rgba(20,50,55,0.08);
---shadow-lg: 0 14px 36px rgba(20,50,55,0.14);
+--report-head: #e4eedc;
+--shadow-sm: 0 1px 2px rgba(40,55,25,0.06);
+--shadow-md: 0 6px 20px rgba(40,55,25,0.08);
+--shadow-lg: 0 14px 36px rgba(40,55,25,0.14);
 }
 * { box-sizing: border-box; font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif; }
 body {
 background: var(--bg-color);
-background-image: linear-gradient(180deg, #eaf5f3 0px, var(--bg-color) 320px);
+background-image: linear-gradient(180deg, #e9f1e2 0px, var(--bg-color) 320px);
 color: var(--text-main);
 margin: 0;
 min-height: 100vh;
@@ -62,9 +62,9 @@ flex-wrap: wrap;
 gap: 10px;
 }
 .header-left { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-.logo-group { display: flex; align-items: center; gap: 10px; background: #1f6f66; padding: 5px 10px;
+.logo-group { display: flex; align-items: center; gap: 10px; background: #3c6e30; padding: 5px 10px;
 border-radius: 8px; cursor: pointer; transition: 0.2s ease; }
-.logo-group:hover { background: #185d55; }
+.logo-group:hover { background: #33602a; }
 .logo-group img { height: 28px; width: auto; }
 .site-title { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.3px; border-left: 1px solid var(--border-color);
 padding-left: 15px; color: var(--accent-dark); }
@@ -135,7 +135,7 @@ cursor: pointer; transition: 0.15s ease; border-left: 3px solid transparent;
 .notif-empty { padding: 22px 15px; color: var(--text-dim); font-size: 0.85rem; text-align: center; }
 
 .pending-strip {
-background: var(--accent-softer); border: 1px solid #bfe3dd;
+background: var(--accent-softer); border: 1px solid #c6dcb9;
 border-radius: 10px; padding: 12px 15px; margin-bottom: 20px;
 }
 .pending-strip-head { font-size: 0.8rem; font-weight: 600; margin-bottom: 9px; color: var(--accent-dark); }
@@ -225,7 +225,7 @@ display: flex; align-items: center; gap: 10px;
 .search-item:hover, .search-item.active { background: var(--accent-soft); }
 .search-kind {
 font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;
-color: var(--accent-dark); background: var(--accent-soft); border: 1px solid #c4e6e0;
+color: var(--accent-dark); background: var(--accent-soft); border: 1px solid #cbe0c0;
 padding: 2px 6px; border-radius: 4px; flex-shrink: 0;
 }
 .search-sub { color: var(--text-dim); font-size: 0.78rem; margin-left: auto; }
@@ -248,7 +248,7 @@ cursor: pointer; padding: 10px 12px; border-radius: 8px; font-size: 0.85rem;
 background: #ffffff; border: 1px solid var(--border-color);
 transition: 0.15s ease; position: relative; color: var(--text-main);
 }
-.task-sidebar-item:hover { background: var(--accent-softer); border-color: #bfe3dd; }
+.task-sidebar-item:hover { background: var(--accent-softer); border-color: #c6dcb9; }
 .task-sidebar-item.active { background: var(--accent-soft); border-color: var(--accent-color); color: var(--accent-dark); font-weight: 600; box-shadow: inset 3px 0 0 var(--accent-color); }
 .sidebar-count {
 display: inline-block; margin-left: 6px; background: var(--danger); color: #fff;
@@ -313,7 +313,7 @@ border-radius: 8px; padding: 9px 10px; margin-bottom: 7px;
 font-size: 0.84rem; display: flex; align-items: center; gap: 8px;
 cursor: grab; transition: 0.12s ease; box-shadow: var(--shadow-sm);
 }
-.chain-item:hover { border-color: #bfe3dd; background: var(--accent-softer); }
+.chain-item:hover { border-color: #c6dcb9; background: var(--accent-softer); }
 .chain-item.dragging { opacity: 0.4; }
 .chain-pos {
 min-width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
@@ -383,7 +383,7 @@ margin-bottom: 0; cursor: pointer; white-space: nowrap;
 }
 .field-req-pick input { width: auto; margin: 0; accent-color: var(--accent-color); }
 .field-new-box {
-background: var(--accent-softer); border: 1px dashed #bfe3dd;
+background: var(--accent-softer); border: 1px dashed #c6dcb9;
 border-radius: 10px; padding: 14px; margin-top: 6px;
 }
 
@@ -405,7 +405,7 @@ accent-color: var(--accent-color);
 display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 margin-top: 15px; padding: 12px 15px;
 background: var(--accent-soft);
-border: 1px solid #bfe3dd;
+border: 1px solid #c6dcb9;
 border-radius: 8px;
 }
 .bulk-count { font-size: 0.85rem; color: var(--accent-dark); font-weight: 600; }
@@ -422,6 +422,15 @@ padding-right: 70px; }
 .dyn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 20px; align-items: start; }
 .dyn-field { min-width: 0; }
 .dyn-wide { grid-column: 1 / -1; }
+.recent-toggle { background: none; border: none; padding: 6px 0; margin-bottom: 8px; cursor: pointer; font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.recent-toggle:hover { color: var(--accent-dark); }
+.recent-arrow { display: inline-block; transition: transform 0.15s; font-size: 0.9rem; }
+.recent-toggle.open .recent-arrow { transform: rotate(90deg); }
+.dyn-divider { grid-column: 1 / -1; border-top: 1px dashed var(--border-strong); margin: 2px 0 16px; position: relative; height: 0; }
+.dyn-divider span { position: absolute; top: -9px; left: 0; background: var(--panel-color); padding-right: 8px; font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+.chain-key { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 12px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--accent-softer); }
+.chain-key .chain-col-note { flex-basis: 100%; margin: 0; }
+.chain-key select, .chain-key input { margin: 0; padding: 6px 8px; font-size: 0.82rem; width: auto; }
 .time-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 gap: 15px; margin-bottom: 20px; }
 .time-inputs select { margin-bottom: 0; }
@@ -459,10 +468,10 @@ header { padding: 10px 15px; }
 .report-wrap { overflow: auto; max-height: 70vh; border: 1px solid var(--border-color); border-radius: 10px; background: #fff; }
 .report-table { border-collapse: collapse; font-size: 0.82rem; min-width: 100%; }
 .report-table th, .report-table td { border: 1px solid var(--border-color); padding: 6px 8px; text-align: center; white-space: nowrap; }
-.report-table thead th { position: sticky; top: 0; background: var(--report-head); color: var(--accent-dark); font-weight: 700; z-index: 2; box-shadow: inset 0 -2px 0 #bfe3dd; }
+.report-table thead th { position: sticky; top: 0; background: var(--report-head); color: var(--accent-dark); font-weight: 700; z-index: 2; box-shadow: inset 0 -2px 0 #c6dcb9; }
 .report-table th.rot { writing-mode: vertical-rl; transform: rotate(180deg); height: 120px; padding: 8px 4px; vertical-align: bottom; }
 .report-table td.left { text-align: left; }
-.report-table tbody tr:nth-child(even) td { background: #fafcfc; }
+.report-table tbody tr:nth-child(even) td { background: #fafbf7; }
 .report-table tbody tr:hover td { background: var(--accent-softer); }
 .report-table td.sym { font-size: 1.05rem; font-weight: 700; min-width: 26px; }
 .sym-done { color: var(--ok); }
@@ -498,9 +507,9 @@ body.fs-mode header { z-index: 1; }
 .inline-label input[type="number"] { width: 70px; }
 .filter-panel { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-2); }
 .report-table thead th.filterable { cursor: pointer; }
-.report-table thead th.filterable:hover { background: #cfeae5; }
+.report-table thead th.filterable:hover { background: #d5e7cb; }
 .report-table thead th.filtered { background: var(--accent-color); color: #fff; }
-.report-table tr.section-row td, .report-table tbody tr.section-row:nth-child(even) td { background: #eef4f5; color: var(--text-main); text-align: left; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px; position: sticky; left: 0; }
+.report-table tr.section-row td, .report-table tbody tr.section-row:nth-child(even) td { background: #eef3e8; color: var(--text-main); text-align: left; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px; position: sticky; left: 0; }
 .sym-out { color: var(--danger); }
 .out-tag { color: var(--danger); font-weight: 700; font-size: 0.75rem; }
 .col-pop { position: fixed; z-index: 3000; background: var(--surface); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; min-width: 180px; max-height: 320px; overflow: auto; box-shadow: var(--shadow-lg); }
@@ -510,7 +519,7 @@ body.fs-mode header { z-index: 1; }
 
 .case-chip.tag-sat { background: var(--ok-soft); border-color: var(--ok); color: #1f6b43; }
 .case-chip.tag-visit { background: var(--warn-soft); border-color: #ebc77c; }
-.notif-item.tag-sat { background: #f3fbf6; border-left-color: var(--ok); }
+.notif-item.tag-sat { background: #f3f8ef; border-left-color: var(--ok); }
 .notif-item.tag-visit { background: #fffaf0; border-left-color: var(--warn); }
 .case-chip.tag-corp { box-shadow: inset 4px 0 0 var(--corp); }
 .notif-item.tag-corp { box-shadow: inset 4px 0 0 var(--corp); }
@@ -549,7 +558,7 @@ body.fs-mode header { z-index: 1; }
 .phase-btn .sidebar-count, .chain-tab .sidebar-count { margin-left: 6px; vertical-align: 1px; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background: #c9d7d9; border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb { background: #cad5bf; border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
 ::-webkit-scrollbar-thumb:hover { background: #a9bfc2; background-clip: padding-box; border: 2px solid transparent; }
 ::-webkit-scrollbar-track { background: transparent; }
 
@@ -575,19 +584,32 @@ body.fs-mode header { z-index: 1; }
 .assign-card .report-bar { margin: 0; }
 .assign-card input.assign-note { margin: 0; flex: 1; min-width: 180px; padding: 8px 10px; font-size: 0.85rem; }
 .report-table tr.row-new td { background: var(--ok-soft) !important; }
-.notif-item.notif-done { background: #f3fbf6; border-left-color: var(--ok); }
+.notif-item.notif-done { background: #f3f8ef; border-left-color: var(--ok); }
 .notif-item.notif-assigned { border-left-color: var(--accent-color); }
 .task-sidebar-item.idle { opacity: 0.55; background: var(--surface-2); border-style: dashed; }
 .task-sidebar-item.idle:hover { opacity: 0.85; }
 .task-sidebar-item .idle-next { display: block; font-size: 0.7rem; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
 .project-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.project-nav:has(.ftabs) { display: block; margin-bottom: 0; }
+.ftabs { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 2px; border-bottom: 3px solid var(--accent-color); padding-left: 6px; }
+.ftab { position: relative; padding: 10px 22px 9px; border: 1px solid var(--border-strong); border-bottom: none; border-radius: 12px 12px 0 0;
+  background: linear-gradient(180deg, #f7f3e8, #ece6d6); color: #5d5a4c; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.7px; cursor: pointer; margin-bottom: 0; }
+.ftab:hover { background: linear-gradient(180deg, #fbf8ef, #f1ecde); color: var(--accent-dark); }
+.ftab.active { background: var(--accent-color); border-color: var(--accent-color); color: #fff; box-shadow: 0 -2px 6px rgba(40,55,25,0.12); }
+.ftab .sidebar-count { margin-left: 8px; }
+.ftab-right { margin-left: auto; }
+.ftabs-sub { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 10px 0; background: var(--accent-soft); border: 1px solid var(--border-color); border-top: none; border-bottom: 2px solid var(--accent-color); }
+.stab { padding: 8px 16px; border: 1px solid transparent; border-bottom: none; border-radius: 9px 9px 0 0; background: transparent; color: var(--accent-dark); font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.stab:hover { background: rgba(255,255,255,0.6); }
+.stab.active { background: #fff; border-color: var(--border-color); color: var(--text-main); }
+.project-nav:has(.ftabs) + #project-tiles + #phase-bar, .project-nav:has(.ftabs) ~ #phase-bar { background: #fff; border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 12px 12px; padding: 12px 12px; margin-bottom: 22px; }
 .project-nav .crumbs { font-size: 1rem; color: var(--accent-dark); }
 .project-nav .chain-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .nav-spacer { flex: 1; }
 .project-tile strong { font-size: 1.15rem; }
 .project-tile { padding: 34px 20px; }
 #project-tiles { margin-bottom: 10px; }
-.admin-project-bar { padding: 8px 12px; background: var(--accent-softer); border: 1px solid #bfe3dd; border-radius: 10px; }
+.admin-project-bar { padding: 8px 12px; background: var(--accent-softer); border: 1px solid #c6dcb9; border-radius: 10px; }
 .project-card.off { opacity: 0.6; }
 .my-assigned-btn .sidebar-count { margin-left: 4px; }
 .version-banner { flex-basis: 100%; border-radius: 8px; background: var(--warn-soft); color: #7a5208; border: 1px solid #ebc77c; padding: 9px 14px; font-size: 0.85rem; font-weight: 600; text-align: center; }
@@ -610,7 +632,7 @@ a.task-sidebar-item.active { color: var(--accent-dark); }
 <img src="mahana-logo.png" alt="Mahana">
 <img src="friends-logo.png" alt="Friends">
 </div>
-<span class="site-title">Mahana360</span>
+<span class="site-title">Taskendo</span>
 </div>
 <div class="header-right">
 <span id="active-user-display" class="user-meta hidden"></span>
@@ -715,7 +737,8 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 </div>
 
 <div id="recent-section" class="hidden" style="margin-top:30px;">
-<label style="margin-bottom:10px;">Recent Entries <span id="recent-who" class="report-meta" style="text-transform:none; letter-spacing:0;"></span></label>
+<button class="recent-toggle" id="recent-toggle" onclick="toggleRecent()"><span class="recent-arrow">&#9656;</span> Recent Entries <span id="recent-who" class="report-meta" style="text-transform:none; letter-spacing:0;"></span></button>
+<div id="recent-body" class="hidden">
 <div class="report-bar date-bar">
 <button class="phase-btn active" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
 <button class="phase-btn" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
@@ -726,6 +749,7 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <button class="btn btn-small" onclick="clearRecent()">Clear</button>
 </div>
 <div class="report-wrap"><table class="report-table" id="recent-table"></table></div>
+</div>
 </div>
 
 <!-- MESSAGE TEMPLATES EDITOR (Jawad only) -->
@@ -754,6 +778,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <input type="text" id="chain-name" class="report-search" onchange="renameChain(this.value)" title="Chain name">
 <button class="btn btn-small icon-cross hidden" id="btn-delete-chain" onclick="deleteChain()">Delete chain</button>
 </div>
+<div id="chain-key" class="chain-key"></div>
 <div class="chain-col-note">Finishing one makes the next pending, in this order.</div>
 <div id="chain-list"></div>
 <select id="chain-add" class="report-search" style="width:100%; margin-top:8px;" onchange="addToChain(this.value)"></select>
@@ -803,6 +828,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="report-simple">
 <div class="report-bar">
+<label class="inline-label">Chain <select id="report-chain" onchange="onReportChain()"></select></label>
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, case or name" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
 </div>
@@ -1073,7 +1099,8 @@ const FIELD_TYPES = [
   { id: 'select',   label: 'Dropdown' },
   { id: 'checkbox', label: 'Checkboxes' },
   { id: 'textarea', label: 'Long text' },
-  { id: 'yesno',    label: 'Yes / No' }
+  { id: 'yesno',    label: 'Yes / No' },
+  { id: 'divider',  label: 'Divider (start a new line)' }
 ];
 
 function builtinDefByKey(key) {
@@ -1205,7 +1232,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R12";
+const APP_VERSION = "R13";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1438,14 +1465,17 @@ function renderProjectNav() {
   }
   tiles.classList.add('hidden');
   nav.classList.remove('hidden');
-  const back = projs.length > 1 || currentProject === ASSIGNED_PROJECT ? `<button class="btn btn-small" onclick="goProjects()">&#8592; Projects</button>` : '';
-  const ch = projectChains(currentProject);
-  nav.innerHTML = `${back}<div class="crumbs"><b>${escapeHtml(projectName(currentProject))}</b></div>
-    <div class="chain-tabs">${ch.map(c => {
+  const projTabs = projs.map(p => {
+    const n = pendingCountForProject(p.id);
+    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count${n.late ? ' late' : ''}">${n.count}</span>` : ''}</button>`;
+  }).join('');
+  const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
+  const ch = currentProject === ASSIGNED_PROJECT ? [] : projectChains(currentProject);
+  nav.innerHTML = `<div class="ftabs">${projTabs}<div class="nav-spacer"></div>${assignedTab}</div>
+    ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
-      return `<button class="phase-btn chain-tab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
-    }).join('')}</div>
-    <div class="nav-spacer"></div>${currentProject === ASSIGNED_PROJECT ? '' : assignedBtn}`;
+      return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
+    }).join('')}</div>` : ''}`;
 }
 
 function pendBubble(list) {
@@ -1629,7 +1659,9 @@ function normaliseTask(t) {
       ? { days: Number(t.sla.days) || 0, hours: Number(t.sla.hours) || 0 } : null,
     schedule: t.schedule && t.schedule.on ? Object.assign({}, t.schedule, { days: (t.schedule.days || []).slice() }) : null,
     panel: t.panel || null,
-    project: String(t.project || DEFAULT_PROJECT)
+    project: String(t.project || DEFAULT_PROJECT),
+    alsoStart: Array.isArray(t.alsoStart) ? t.alsoStart.slice() : [],
+    oneTime: !!t.oneTime
   };
 }
 
@@ -1738,6 +1770,8 @@ function renderBuilderForm() {
     <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until its Final Save. Leave both blank for no limit.</div>
 
     ${renderScheduleEditor(t)}
+
+    ${renderAfterEditor(t)}
 
     <label>Who does this task</label>
     <div class="owner-grid">
@@ -1867,6 +1901,38 @@ function readClock(prefix) {
   return valOf(prefix + '_h') + ':' + valOf(prefix + '_m') + ' ' + valOf(prefix + '_ap');
 }
 
+function renderAfterEditor(t) {
+  const others = builderTasks.filter(x => x.name && x.name !== t.name && !x.panel && (x.project || DEFAULT_PROJECT) === (t.project || DEFAULT_PROJECT)).map(x => x.name);
+  const picked = t.alsoStart || [];
+  return `<label>When this task is finished</label>
+    <label class="field-req-pick" style="margin-bottom:8px;">
+      <input type="checkbox"${t.oneTime ? ' checked' : ''} onchange="setAfter('oneTime', this.checked)">
+      One-time task: it ends here, nothing starts after it
+    </label>
+    ${t.oneTime ? '' : `<div class="builder-hint" style="margin:0 0 6px;">Also start these tasks at the same time (on top of the next task in its chain). Each one then carries on by itself.</div>
+    <div class="owner-grid">${others.map(n => `
+      <label class="owner-pick${picked.indexOf(n) !== -1 ? ' on' : ''}">
+        <input type="checkbox"${picked.indexOf(n) !== -1 ? ' checked' : ''} onchange="toggleAlsoStart('${escapeHtml(n).replace(/'/g, "\\'")}', this.checked)">
+        ${escapeHtml(n)}
+      </label>`).join('') || '<span class="report-meta">No other tasks in this project.</span>'}</div>`}`;
+}
+
+function setAfter(prop, v) {
+  if (builderIndex < 0) return;
+  builderTasks[builderIndex][prop] = v;
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function toggleAlsoStart(name, on) {
+  if (builderIndex < 0) return;
+  const t = builderTasks[builderIndex];
+  t.alsoStart = (t.alsoStart || []).filter(x => x !== name);
+  if (on) t.alsoStart.push(name);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
 function renderScheduleEditor(t) {
   const sch = t.schedule || null;
   if (!sch) {
@@ -1952,6 +2018,17 @@ function renderFieldEditorList(t) {
       : `<input type="text" value="${escapeHtml(f.label)}" style="margin:0; padding:6px 8px; font-size:0.85rem; width:auto; min-width:120px;"
           onblur="renameField('${f.id}', this.value)">`;
 
+    if (f.type === 'divider') {
+      return `<div class="field-row divider-row">
+        <span class="field-name"><input type="text" value="${escapeHtml(f.label === 'Divider' ? '' : f.label)}" placeholder="Divider (optional heading)" style="margin:0; padding:6px 8px; font-size:0.85rem; width:auto; min-width:160px;" onblur="renameField('${f.id}', this.value || 'Divider')"></span>
+        <span class="search-kind">New line</span>
+        <span class="chain-btns">
+          <button class="chain-btn" onclick="moveBuilderField('${f.id}',-1)" title="Move up">&#9650;</button>
+          <button class="chain-btn" onclick="moveBuilderField('${f.id}',1)" title="Move down">&#9660;</button>
+          <button class="chain-btn" onclick="removeBuilderField('${f.id}')" title="Remove">&times;</button>
+        </span>
+      </div>`;
+    }
     const optionsUI = (f.type === 'select' || f.type === 'checkbox')
       ? renderOptionEditor(f) : '';
 
@@ -2154,7 +2231,7 @@ function renameField(fieldId, value) {
   const trimmed = value.trim();
   if (!trimmed || trimmed === f.label) return;
   f.label = trimmed;
-  if (!f.builtin) f.col = sanitizeColName(trimmed);
+  if (!f.builtin && f.type !== 'divider') f.col = sanitizeColName(trimmed);
   markBuilderDirty();
 }
 
@@ -2205,7 +2282,7 @@ function allKnownCustomFields() {
   const map = {};
   builderTasks.forEach(t => {
     (t.fields || []).forEach(f => {
-      if (!f.builtin && f.col && !map[f.col]) {
+      if (!f.builtin && f.col && f.type !== 'divider' && !map[f.col]) {
         map[f.col] = { col: f.col, label: f.label, type: f.type, options: f.options || [] };
       }
     });
@@ -2251,11 +2328,11 @@ function addCustomFieldToBuilderTask() {
   const typeEl = document.getElementById('new-field-type');
   const optionsEl = document.getElementById('new-field-options');
 
-  const label = labelEl.value.trim();
   const type = typeEl.value;
+  const label = labelEl.value.trim() || (type === 'divider' ? 'Divider' : '');
   if (!label) return toast('Name the field first.', true);
 
-  const col = sanitizeColName(label);
+  const col = type === 'divider' ? '_div_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5) : sanitizeColName(label);
   const t = builderTasks[builderIndex];
   if (t.fields.some(f => f.col === col)) {
     return toast('This task already has a field mapped to that name.', true);
@@ -2548,7 +2625,8 @@ let pendingKeysToFill = null;
 function keyLabel(p) {
   if (p.recurring) return 'Due ' + (p.due || '') + (p.next ? ' \u00b7 Next: ' + p.next : '');
   const parts = [];
-  if (p.refNo) parts.push("Ref " + p.refNo);
+  const ck = chainKeyForTask(p.taskName);
+  if (p.refNo) parts.push(ck && ck.key.type === 'consignment' ? p.refNo : (ck ? ck.key.label + ' ' : 'Ref ') + p.refNo);
   if (p.caseNo) parts.push("Case " + p.caseNo);
   if (p.customerName) parts.push(p.customerName);
   return parts.join(" \u00b7 ") || "No number";
@@ -2604,8 +2682,8 @@ function fillKeys(refNo, caseNo, customerName, customerMobile) {
   if (refEl) refEl.value = refNo;
   if (caseEl) caseEl.value = caseNo;
 
-  if (customerName) fillFieldByCol(t, 'CustomerName', customerName);
-  if (customerMobile) fillFieldByCol(t, 'CustomerMobile', customerMobile);
+  fillFieldByCol(t, 'CustomerName', customerName || '');
+  fillFieldByCol(t, 'CustomerMobile', customerMobile || '');
 
   if (refEl && refNo) refEl.focus();
   else if (caseEl && caseNo) caseEl.focus();
@@ -2617,6 +2695,39 @@ function fillKeys(refNo, caseNo, customerName, customerMobile) {
       fallback.focus();
     }
   }
+}
+
+let lookupSeq = 0;
+
+async function lookupCase(which) {
+  const t = taskByName(currentTask);
+  if (!t) return;
+  const refField = t.fields.filter(f => f.key === 'ref')[0];
+  const caseField = t.fields.filter(f => f.key === 'case')[0];
+  const refEl = refField ? document.getElementById('dyn_' + refField.id) : null;
+  const caseEl = caseField ? document.getElementById('dyn_' + caseField.id) : null;
+  const refNo = refEl ? refEl.value.trim() : '', caseNo = caseEl ? caseEl.value.trim() : '';
+  if (which === 'case' && (!caseNo || refNo)) return;
+  if (which === 'ref' && !refNo) return;
+  const local = pendingItems.filter(p => p.taskName === currentTask && ((which === 'ref' && p.refNo === refNo) || (which === 'case' && p.caseNo === caseNo)))[0];
+  if (local) {
+    if (refEl && !refEl.value) refEl.value = local.refNo || '';
+    if (caseEl && !caseEl.value) caseEl.value = local.caseNo || '';
+    if (local.customerName) fillFieldByCol(t, 'CustomerName', local.customerName);
+    if (local.customerMobile) fillFieldByCol(t, 'CustomerMobile', local.customerMobile);
+    return;
+  }
+  const seq = ++lookupSeq;
+  try {
+    const r = await apiCall('caseLookup', { task: currentTask, refNo: which === 'ref' ? refNo : '', caseNo: which === 'case' ? caseNo : '' });
+    if (seq !== lookupSeq || !r.ok) return;
+    if (!r.found) return;
+    if (refEl && !refEl.value && r.refNo) refEl.value = r.refNo;
+    if (caseEl && !caseEl.value && r.caseNo) caseEl.value = r.caseNo;
+    if (r.name) fillFieldByCol(t, 'CustomerName', r.name);
+    if (r.mobile) fillFieldByCol(t, 'CustomerMobile', r.mobile);
+    if (which === 'case' && r.refNo) toast('Case ' + caseNo + ' is Ref ' + r.refNo + (r.name ? ' · ' + r.name : ''));
+  } catch (e) {}
 }
 
 function fillFieldByCol(task, colName, value) {
@@ -2753,7 +2864,7 @@ async function saveTemplates() {
   btn.disabled = false;
 }
 
-const CHAIN_COLORS = ['#2a9d8f', '#e09f3e', '#7c6fd6', '#e0688a', '#3b8fd0', '#5fa84a', '#e07a3a'];
+const CHAIN_COLORS = ['#4a8b3b', '#e09f3e', '#7c6fd6', '#e0688a', '#3b8fd0', '#5fa84a', '#e07a3a'];
 let chains = [];
 let activeChain = 0;
 
@@ -2786,7 +2897,7 @@ async function loadChain() {
     if (result.ok) {
       const list = (result.chains || []).filter(c => c && c.tasks);
       allRecurring = (result.recurring || []).slice();
-      allChains = list.length ? list.map(c => ({ name: c.name, project: c.project || DEFAULT_PROJECT, tasks: c.tasks.slice() }))
+      allChains = list.length ? list.map(c => ({ name: c.name, project: c.project || DEFAULT_PROJECT, tasks: c.tasks.slice(), key: Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {}) }))
         : (allRecurring.length ? [] : [{ name: 'Chain 1', project: DEFAULT_PROJECT, tasks: DEFAULT_CHAIN.slice() }]);
       setEditorChains();
       reconcileChainWithTasks();
@@ -2799,8 +2910,8 @@ async function loadChain() {
 }
 
 function setEditorChains() {
-  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice() }));
-  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [] }];
+  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice(), key: Object.assign({}, c.key || { type: 'ref', label: 'Ref No', start: 1 }) }));
+  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [], key: { type: 'ref', label: 'Ref No', start: 1 } }];
   recurringList = allRecurring.filter(t => projOfTask(t) === adminProject);
   chainList = chains[0].tasks;
   activeChain = 0;
@@ -2830,6 +2941,7 @@ function renderChainEditor() {
   document.getElementById('chain-name').value = c.name;
   document.getElementById('chain-name').style.borderLeft = '4px solid ' + chainColor(activeChain);
   document.getElementById('btn-delete-chain').classList.toggle('hidden', chains.length < 2);
+  renderChainKey(c);
 
   const list = document.getElementById('chain-list');
   list.innerHTML = c.tasks.length ? c.tasks.map((t, i) => `
@@ -2870,10 +2982,66 @@ function renderChainEditor() {
 
 function selectChain(i) { activeChain = i; renderChainEditor(); }
 
+function renderChainKey(c) {
+  const k = c.key || { type: 'ref', label: 'Ref No', start: 1 };
+  const box = document.getElementById('chain-key');
+  if (!box) return;
+  box.innerHTML = `<label class="inline-label">This chain starts with
+      <select onchange="setChainKey('type', this.value)">
+        <option value="ref"${k.type === 'ref' ? ' selected' : ''}>Ref No (Google Form or typed in)</option>
+        <option value="consignment"${k.type === 'consignment' ? ' selected' : ''}>A name Jawad types in (e.g. Consignment Name)</option>
+        <option value="series"${k.type === 'series' ? ' selected' : ''}>Its own number series</option>
+      </select></label>
+    ${k.type === 'consignment' ? `<label class="inline-label">Call it <input type="text" value="${escapeHtml(k.label || 'Consignment Name')}" onchange="setChainKey('label', this.value)" style="width:170px;"></label>` : ''}
+    ${k.type === 'series' ? `<label class="inline-label">First number <input type="number" value="${escapeHtml(String(k.start || 1))}" onchange="setChainKey('start', this.value)" style="width:110px;"></label>` : ''}
+    <div class="chain-col-note">${k.type === 'ref' ? 'Cases are matched by Ref No / Case No inside this project.' :
+      k.type === 'consignment' ? 'Only Jawad can start this chain, by typing the ' + escapeHtml(k.label || 'Consignment Name') + ' on the first task. It is kept separate from every other chain.' :
+      'Only Jawad can start this chain. Leave the number empty on the first task and the next number is given automatically.'}</div>
+    ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}`;
+}
+
+function setChainKey(prop, v) {
+  const c = chains[activeChain];
+  c.key = Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {});
+  if (prop === 'type') {
+    c.key.type = v;
+    c.key.label = v === 'consignment' ? 'Consignment Name' : 'Ref No';
+  } else if (prop === 'start') c.key.start = Math.max(1, Number(v) || 1);
+  else c.key.label = String(v || '').trim() || 'Consignment Name';
+  renderChainEditor();
+}
+
+async function fixChainKeys() {
+  const c = chains[activeChain];
+  const btn = document.getElementById('btn-fix-keys');
+  if (btn && btn.dataset.confirm !== '1') {
+    btn.dataset.confirm = '1';
+    btn.innerText = 'Save the chain first, then press again';
+    setTimeout(() => { if (btn) { btn.dataset.confirm = ''; btn.innerText = 'Fix old entries saved as 9999'; } }, 5000);
+    return;
+  }
+  if (btn) btn.disabled = true;
+  try {
+    const result = await apiCall('openClose', { fixKeys: true, project: adminProject, chain: c.name, placeholder: '9999' });
+    if (!result.ok) { toast(result.error || 'Could not fix', true); if (btn) btn.disabled = false; return; }
+    toast('Fixed ' + result.finals + ' saved entries and ' + result.pending + ' pending.' + (result.notMatched ? ' ' + result.notMatched + ' pending could not be matched; fix them in Open Items.' : ''));
+    loadPending();
+  } catch (e) { toast('Network error', true); }
+  if (btn) btn.disabled = false;
+}
+
+function chainKeyForTask(name) {
+  for (let i = 0; i < allChains.length; i++) {
+    const c = allChains[i];
+    if (c.key && c.key.type !== 'ref' && c.tasks.indexOf(name) !== -1) return { chain: c.name, key: c.key, first: c.tasks[0] === name };
+  }
+  return null;
+}
+
 function addChain() {
   let n = chains.length + 1;
   while (chains.some(c => c.name === 'Chain ' + n)) n++;
-  chains.push({ name: 'Chain ' + n, tasks: [] });
+  chains.push({ name: 'Chain ' + n, tasks: [], key: { type: 'ref', label: 'Ref No', start: 1 } });
   activeChain = chains.length - 1;
   renderChainEditor();
 }
@@ -3456,7 +3624,7 @@ function renderFormInterface() {
   document.getElementById('partial-section').classList.remove('hidden');
   loadPartials();
   document.getElementById('recent-section').classList.remove('hidden');
-  loadRecent();
+  setRecentOpen(false);
 
   const tempBtn = document.getElementById('btn-temp-save-dynamic');
   if (tempBtn) tempBtn.style.display = t.temp ? 'inline-block' : 'none';
@@ -3473,6 +3641,17 @@ function renderDynamicForm(task) {
 
 function renderFieldHtml(f) {
   const baseId = 'dyn_' + f.id;
+  if (f.type === 'divider') return `<div class="dyn-divider">${f.label && f.label !== 'Divider' ? `<span>${escapeHtml(f.label)}</span>` : ''}</div>`;
+  if (f.key === 'ref' || f.key === 'case') {
+    const ck = f.key === 'ref' ? chainKeyForTask(currentTask) : null;
+    const label = ck ? ck.key.label : f.label;
+    const type = ck && ck.key.type === 'consignment' ? 'text' : 'number';
+    const ph = ck && ck.key.type === 'series' && ck.first ? ' placeholder="Given automatically"' : '';
+    return `<div class="dyn-field">
+      <label>${escapeHtml(label)}${f.required ? ' *' : ''}</label>
+      <input type="${type}" id="${baseId}"${type === 'number' ? ' inputmode="numeric"' : ''}${ph} onchange="lookupCase('${f.key}')">
+    </div>`;
+  }
   const reqMark = f.required ? ' *' : '';
   const wide = (f.type === 'time' || f.type === 'textarea' || f.type === 'checkbox') ? ' dyn-wide' : '';
   let inputHtml;
@@ -3597,8 +3776,10 @@ function validateDynamic(task, mode) {
 
   for (let i = 0; i < task.fields.length; i++) {
     const f = task.fields[i];
-    if (f.key === 'comment') continue;
+    if (f.key === 'comment' || f.type === 'divider') continue;
     if (!f.required) continue;
+    const ckr = f.key === 'ref' ? chainKeyForTask(task.name) : null;
+    if (ckr && ckr.key.type === 'series' && ckr.first) continue;
     if (f.type === 'checkbox') {
       if (!checkboxAnyChecked(f)) return f.label + " required";
     } else if (!getFieldValue(f)) {
@@ -3613,6 +3794,9 @@ function validateDynamic(task, mode) {
     const caseReq = caseField && caseField.required;
     const refVal = refField ? getFieldValue(refField) : '';
     const caseVal = caseField ? getFieldValue(caseField) : '';
+    const ck = chainKeyForTask(task.name);
+    if (ck && ck.key.type === 'series' && ck.first) return null;
+    if (ck && ck.key.type === 'consignment' && !refVal) return ck.key.label + " required";
     if (!refReq && !caseReq && !refVal && !caseVal) {
       return "Reference No OR Case No required";
     }
@@ -3622,6 +3806,8 @@ function validateDynamic(task, mode) {
 
 function savedMessage(result) {
   let msg = (result && result.nextTask) ? "Saved. " + result.nextTask + " is now pending." : "Saved to central records.";
+  const ck = chainKeyForTask(currentTask);
+  if (ck && ck.key.type === 'series' && ck.first && result && result.refNo) msg = "Started as No " + result.refNo + ". " + msg;
   if (result && result.chequeNote) msg += " " + result.chequeNote;
   return msg;
 }
@@ -3671,7 +3857,7 @@ async function saveDynamicEntry(type) {
       clearDynamicForm(task);
       toast(savedMessage(result));
       loadPending();
-      loadRecent();
+      if (recentOpen) loadRecent();
     }
     setPartialEditing(null);
     if (usedPartial) loadPartials();
@@ -3685,6 +3871,20 @@ async function saveDynamicEntry(type) {
 
 let recentScope = 'task';
 let recentSeq = 0;
+let recentOpen = false;
+
+function setRecentOpen(on) {
+  recentOpen = on;
+  document.getElementById('recent-body').classList.toggle('hidden', !on);
+  document.getElementById('recent-toggle').classList.toggle('open', on);
+  document.getElementById('recent-who').innerText = on ? '' : '· click to show';
+  if (!on) document.getElementById('recent-table').innerHTML = '';
+}
+
+function toggleRecent() {
+  setRecentOpen(!recentOpen);
+  if (recentOpen) loadRecent();
+}
 
 function setRecentScope(scope) {
   recentScope = scope;
@@ -3699,6 +3899,7 @@ function clearRecent() {
 async function loadRecent() {
   const table = document.getElementById('recent-table');
   if (!table || !profile || !currentTask) return;
+  if (!recentOpen) setRecentOpen(true);
   document.getElementById('recent-tab-task').classList.toggle('active', recentScope === 'task');
   document.getElementById('recent-tab-all').classList.toggle('active', recentScope === 'all');
   document.getElementById('recent-who').innerText = '· ' + profile.name + (recentScope === 'task' ? ' · ' + currentTask : ' · all tasks');
@@ -3980,7 +4181,9 @@ async function loadReport() {
   const meta = document.getElementById('report-meta');
   table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Building report...</td></tr>`;
   try {
-    const result = await apiCall('reportBuild');
+    fillReportChains();
+    const sel = (valOf('report-chain') || '').split('\u0001');
+    const result = await apiCall('reportBuild', { project: sel[0] || '', chain: sel[1] || '' });
     if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
     reportData = result;
     meta.innerText = (result.rows || []).length + ' cases since ' + formatDateDMY(result.reportFrom) + ' · built ' + (result.builtAt || '') + ' · also written to the Report tab';
@@ -4126,6 +4329,21 @@ function reportRowsFiltered() {
   });
 }
 
+function fillReportChains() {
+  const el = document.getElementById('report-chain');
+  if (!el) return;
+  const keep = el.value;
+  const opts = allChains.map(c => ({ v: c.project + '\u0001' + c.name, t: (PROJECTS.length > 1 ? projectName(c.project) + ' · ' : '') + c.name }));
+  el.innerHTML = opts.map(o => `<option value="${escapeHtml(o.v)}">${escapeHtml(o.t)}</option>`).join('');
+  if (opts.some(o => o.v === keep)) el.value = keep;
+}
+
+function onReportChain() {
+  reportData = null;
+  colFilters = {};
+  loadReport();
+}
+
 function renderSimpleReport() {
   const table = document.getElementById('report-table');
   if (!reportData) return;
@@ -4134,7 +4352,7 @@ function renderSimpleReport() {
   const width = 7 + tasks.length;
   const th = (key, label, cls) => `<th class="filterable${colFilters[key] ? ' filtered' : ''}${cls ? ' ' + cls : ''}" onclick="openColFilter('${escapeHtml(key).replace(/'/g, "\\'")}', this)">${escapeHtml(label)}</th>`;
 
-  const head = `<thead><tr><th>Ref No</th><th>Case No</th><th>Name</th><th>Days</th>${
+  const head = `<thead><tr><th>${escapeHtml(reportData.keyLabel || 'Ref No')}</th><th>Case No</th><th>Name</th><th>Days</th>${
     tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}</tr></thead>`;
 
   const rowHtml = r => `<tr data-tip="${escapeHtml(caseTip(r.formSB, r.days, r.inputs, r.corporate))}">
@@ -4146,7 +4364,8 @@ function renderSimpleReport() {
     </tr>`;
 
   let body = '';
-  [['Form', 'Google Form series'], ['Manual', 'Manual series (5xxx / 8xxx and others)']].forEach(sec => {
+  const sections = reportData.main === false ? [['Chain', reportData.chain || 'Cases']] : [['Form', 'Google Form series'], ['Manual', 'Manual series (5xxx / 8xxx and others)']];
+  sections.forEach(sec => {
     const part = rows.filter(r => r.series === sec[0]);
     if (!part.length) return;
     body += `<tr class="section-row"><td colspan="${width}">${sec[1]} · ${part.length}</td></tr>` + part.map(rowHtml).join('');
