@@ -298,7 +298,7 @@ color: var(--accent-dark); font-weight: 700; margin-bottom: 8px;
   text-overflow: ellipsis !important;
 }
 
-.chain-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.chain-cols { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 18px; }
 .chain-col {
 background: var(--surface-2); border: 1px solid var(--border-color);
 border-radius: 12px; padding: 14px; min-height: 140px;
@@ -428,6 +428,20 @@ padding-right: 70px; }
 .recent-toggle.open .recent-arrow { transform: rotate(90deg); }
 .dyn-divider { grid-column: 1 / -1; border-top: 1px dashed var(--border-strong); margin: 2px 0 16px; position: relative; height: 0; }
 .dyn-divider span { position: absolute; top: -9px; left: 0; background: var(--panel-color); padding-right: 8px; font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+.step-flow { position: relative; }
+.step-row { position: relative; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 6px 0 6px 44px; }
+.step-row:before { content: ""; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--border-color); }
+.step-row:first-child:before { top: 50%; } .step-row:last-child:before { bottom: 50%; }
+.step-num { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: var(--accent-dark); color: #fff; font-weight: 700; font-size: 0.8rem; display: grid; place-items: center; border: 3px solid var(--panel-color); z-index: 1; }
+.step-row.multi .step-num { top: 22px; transform: none; }
+.step-tasks { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; align-items: center; }
+.step-task { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border-strong); border-radius: 10px; padding: 7px 8px 7px 12px; font-weight: 600; font-size: 0.86rem; }
+.step-row.multi .step-task { background: var(--accent-soft); border-color: var(--accent-color); }
+.step-task.opt { opacity: 0.8; border-style: dashed; }
+.step-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--accent-dark); border: 2px solid var(--accent-dark); padding: 0; cursor: pointer; }
+.step-dot.off { background: #fff; border-color: #9fb197; }
+.step-add { margin: 0; padding: 6px 8px; font-size: 0.8rem; width: auto; border: 1px dashed var(--border-strong); border-radius: 9px; color: var(--accent-dark); background: transparent; }
+.step-rule { flex-basis: 100%; font-size: 0.75rem; color: var(--text-dim); padding-left: 2px; }
 .chain-key { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 12px; margin-bottom: 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--accent-softer); }
 .chain-key .chain-col-note { flex-basis: 100%; margin: 0; }
 .chain-key select, .chain-key input { margin: 0; padding: 6px 8px; font-size: 0.82rem; width: auto; }
@@ -545,10 +559,8 @@ body.fs-mode header { z-index: 1; }
 .case-chip.late { background: var(--danger-soft); border-color: #eea59f; color: #9e2f27; }
 .notif-item.late { background: #fff5f4; border-left-color: var(--danger); }
 .late-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; background: var(--danger); color: #fff; vertical-align: middle; }
-.sidebar-count { background: #e5484d; }
-.sidebar-count.late { background: #b4231b; box-shadow: 0 0 0 2px #fde2e1; }
-.task-sidebar-item.active .sidebar-count { background: #e5484d; }
-.task-sidebar-item.active .sidebar-count.late { background: #b4231b; }
+.sidebar-count, .sidebar-count.late, .task-sidebar-item.active .sidebar-count, .task-sidebar-item.active .sidebar-count.late { background: #d23f31; box-shadow: none; }
+.sidebar-count.late::after { content: "late"; display: inline-block; margin-left: 5px; padding: 0 4px; border-radius: 5px; background: #fff; color: #d23f31; font-size: 0.58rem; font-weight: 800; line-height: 1.35; vertical-align: 1px; }
 .project-tile { position: relative; }
 .nowrap { white-space: nowrap; }
 .general-btn { font-weight: 700; margin-right: 10px; }
@@ -742,8 +754,8 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div class="report-bar date-bar">
 <button class="phase-btn active" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
 <button class="phase-btn" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
-<label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()"></label>
-<label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()"></label>
+<label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
+<label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
 <input type="text" id="recent-q" class="report-search" placeholder="Search ref, case or name" onkeydown="if(event.key==='Enter')loadRecent()">
 <button class="btn btn-small btn-primary" onclick="loadRecent()">Apply</button>
 <button class="btn btn-small" onclick="clearRecent()">Clear</button>
@@ -798,14 +810,6 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="btn btn-primary" id="btn-save-chain" onclick="saveChain()">Save Chain</button>
 <button class="btn btn-small" onclick="resetChainToDefault()">Reset to default</button>
 </div>
-<div class="exit-section">
-<div class="report-bar">
-<label style="margin:0;">Cases out of the chain</label>
-<label class="field-req-pick"><input type="checkbox" id="exit-show-back" onchange="renderExits()"> Show cases already put back</label>
-<button class="btn btn-small" onclick="loadExits()">Refresh</button>
-</div>
-<div class="report-wrap"><table class="report-table" id="exit-table"></table></div>
-</div>
 </div>
 
 <!-- REPORTS (Jawad only) -->
@@ -815,6 +819,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-timing" onclick="showReportTab('timing')">Timing</button>
 <button class="phase-btn" id="rep-tab-employee" onclick="showReportTab('employee')">Employee Report</button>
 <button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
+<button class="phase-btn" id="rep-tab-exits" onclick="showReportTab('exits')">Out of the chain</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -863,6 +868,12 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="cheque-summary"></div>
 <div class="report-bar"><label class="field-req-pick"><input type="checkbox" id="cheque-show-received" onchange="renderChequeReport()"> Show received cheques</label></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
+</div>
+<div id="report-exits" class="hidden">
+<div class="report-bar">
+<label class="field-req-pick"><input type="checkbox" id="exit-show-back" onchange="renderExits()"> Show cases already put back</label>
+</div>
+<div class="report-wrap"><table class="report-table" id="exit-table"></table></div>
 </div>
 </div>
 
@@ -1232,7 +1243,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R13";
+const APP_VERSION = "R14";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1659,9 +1670,7 @@ function normaliseTask(t) {
       ? { days: Number(t.sla.days) || 0, hours: Number(t.sla.hours) || 0 } : null,
     schedule: t.schedule && t.schedule.on ? Object.assign({}, t.schedule, { days: (t.schedule.days || []).slice() }) : null,
     panel: t.panel || null,
-    project: String(t.project || DEFAULT_PROJECT),
-    alsoStart: Array.isArray(t.alsoStart) ? t.alsoStart.slice() : [],
-    oneTime: !!t.oneTime
+    project: String(t.project || DEFAULT_PROJECT)
   };
 }
 
@@ -1770,8 +1779,6 @@ function renderBuilderForm() {
     <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until its Final Save. Leave both blank for no limit.</div>
 
     ${renderScheduleEditor(t)}
-
-    ${renderAfterEditor(t)}
 
     <label>Who does this task</label>
     <div class="owner-grid">
@@ -1899,38 +1906,6 @@ function clockPicker(prefix, value, onchange) {
 
 function readClock(prefix) {
   return valOf(prefix + '_h') + ':' + valOf(prefix + '_m') + ' ' + valOf(prefix + '_ap');
-}
-
-function renderAfterEditor(t) {
-  const others = builderTasks.filter(x => x.name && x.name !== t.name && !x.panel && (x.project || DEFAULT_PROJECT) === (t.project || DEFAULT_PROJECT)).map(x => x.name);
-  const picked = t.alsoStart || [];
-  return `<label>When this task is finished</label>
-    <label class="field-req-pick" style="margin-bottom:8px;">
-      <input type="checkbox"${t.oneTime ? ' checked' : ''} onchange="setAfter('oneTime', this.checked)">
-      One-time task: it ends here, nothing starts after it
-    </label>
-    ${t.oneTime ? '' : `<div class="builder-hint" style="margin:0 0 6px;">Also start these tasks at the same time (on top of the next task in its chain). Each one then carries on by itself.</div>
-    <div class="owner-grid">${others.map(n => `
-      <label class="owner-pick${picked.indexOf(n) !== -1 ? ' on' : ''}">
-        <input type="checkbox"${picked.indexOf(n) !== -1 ? ' checked' : ''} onchange="toggleAlsoStart('${escapeHtml(n).replace(/'/g, "\\'")}', this.checked)">
-        ${escapeHtml(n)}
-      </label>`).join('') || '<span class="report-meta">No other tasks in this project.</span>'}</div>`}`;
-}
-
-function setAfter(prop, v) {
-  if (builderIndex < 0) return;
-  builderTasks[builderIndex][prop] = v;
-  markBuilderDirty();
-  renderBuilderForm();
-}
-
-function toggleAlsoStart(name, on) {
-  if (builderIndex < 0) return;
-  const t = builderTasks[builderIndex];
-  t.alsoStart = (t.alsoStart || []).filter(x => x !== name);
-  if (on) t.alsoStart.push(name);
-  markBuilderDirty();
-  renderBuilderForm();
 }
 
 function renderScheduleEditor(t) {
@@ -2645,8 +2620,8 @@ function renderPendingStrip() {
   section.classList.remove('hidden');
   strip.classList.remove('hidden');
   head.innerText = items.length === 1
-    ? '1 case waiting on this task'
-    : items.length + ' cases waiting on this task';
+    ? '1 case waiting on ' + currentTask
+    : items.length + ' cases waiting on ' + currentTask;
 
   list.innerHTML = items.map((p, i) => `
     <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
@@ -2897,7 +2872,7 @@ async function loadChain() {
     if (result.ok) {
       const list = (result.chains || []).filter(c => c && c.tasks);
       allRecurring = (result.recurring || []).slice();
-      allChains = list.length ? list.map(c => ({ name: c.name, project: c.project || DEFAULT_PROJECT, tasks: c.tasks.slice(), key: Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {}) }))
+      allChains = list.length ? list.map(c => ({ name: c.name, project: c.project || DEFAULT_PROJECT, tasks: c.tasks.slice(), steps: copySteps(c.steps, c.tasks), key: Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {}) }))
         : (allRecurring.length ? [] : [{ name: 'Chain 1', project: DEFAULT_PROJECT, tasks: DEFAULT_CHAIN.slice() }]);
       setEditorChains();
       reconcileChainWithTasks();
@@ -2909,9 +2884,22 @@ async function loadChain() {
   }
 }
 
+function copySteps(steps, tasks) {
+  if (Array.isArray(steps) && steps.length) return steps.map(st => st.map(x => ({ task: x.task, optional: !!x.optional })));
+  return (tasks || []).map(t => [{ task: t, optional: false }]);
+}
+
+function syncChainTasks(c) {
+  if (!c.steps) c.steps = copySteps(null, c.tasks);
+  c.steps = c.steps.map(st => st.filter(x => x && x.task)).filter(st => st.length);
+  c.steps.forEach(st => { if (st.length === 1) st[0].optional = false; });
+  c.tasks = [];
+  c.steps.forEach(st => st.forEach(x => { if (c.tasks.indexOf(x.task) === -1) c.tasks.push(x.task); }));
+}
+
 function setEditorChains() {
-  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice(), key: Object.assign({}, c.key || { type: 'ref', label: 'Ref No', start: 1 }) }));
-  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [], key: { type: 'ref', label: 'Ref No', start: 1 } }];
+  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice(), steps: copySteps(c.steps, c.tasks), key: Object.assign({}, c.key || { type: 'ref', label: 'Ref No', start: 1 }) }));
+  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [], steps: [], key: { type: 'ref', label: 'Ref No', start: 1 } }];
   recurringList = allRecurring.filter(t => projOfTask(t) === adminProject);
   chainList = chains[0].tasks;
   activeChain = 0;
@@ -2920,10 +2908,14 @@ function setEditorChains() {
 function reconcileChainWithTasks() {
   const known = chainableTasks();
   if (!known.length) return;
-  chains.forEach(c => { c.tasks = c.tasks.filter(t => known.indexOf(t) !== -1); });
+  chains.forEach(c => {
+    if (!c.steps) c.steps = copySteps(null, c.tasks);
+    c.steps = c.steps.map(st => st.filter(x => known.indexOf(x.task) !== -1));
+    syncChainTasks(c);
+  });
   const inChain = chainOrderAll();
   recurringList = recurringList.filter(t => known.indexOf(t) !== -1 && inChain.indexOf(t) === -1);
-  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [] }];
+  if (!chains.length) chains = [{ name: 'Chain 1', tasks: [], steps: [] }];
   if (activeChain >= chains.length) activeChain = 0;
   chainList = chains[0].tasks;
 }
@@ -2944,18 +2936,31 @@ function renderChainEditor() {
   renderChainKey(c);
 
   const list = document.getElementById('chain-list');
-  list.innerHTML = c.tasks.length ? c.tasks.map((t, i) => `
-    <div class="chain-item">
-      <span class="chain-pos" style="background:${chainColor(activeChain)}">${i + 1}</span>
-      <span class="chain-name">${escapeHtml(t)} ${chainsOfTask(t).length > 1 ? `<span class="search-kind">also in ${chainsOfTask(t).filter(x => x !== activeChain).map(x => escapeHtml(chains[x].name)).join(', ')}</span>` : ''}</span>
-      <span class="chain-btns">
-        <button class="chain-btn" onclick="moveChainItem(${i},-1)" title="Move up">&#9650;</button>
-        <button class="chain-btn" onclick="moveChainItem(${i},1)" title="Move down">&#9660;</button>
-        <button class="chain-btn" onclick="removeFromChain(${i})" title="Remove from this chain">&times;</button>
-      </span>
-    </div>`).join('') : `<div class="chain-empty">No tasks in this chain yet. Add one below.</div>`;
-
   const addable = chainableTasks().filter(t => c.tasks.indexOf(t) === -1);
+  const steps = c.steps || [];
+  list.innerHTML = steps.length ? `<div class="step-flow">${steps.map((st, si) => {
+    const multi = st.length > 1;
+    const need = st.filter(x => !x.optional).map(x => x.task);
+    return `<div class="step-row${multi ? ' multi' : ''}">
+      <span class="step-num">${si + 1}</span>
+      <div class="step-tasks">${st.map((x, ti) => `
+        <span class="step-task${x.optional ? ' opt' : ''}">
+          ${multi ? `<button class="step-dot${x.optional ? ' off' : ''}" onclick="toggleStepOptional(${si},${ti})" title="${x.optional ? 'Optional: click to make it required' : 'Required: click to make it optional'}"></button>` : ''}
+          <span>${escapeHtml(x.task)}</span>
+          ${chainsOfTask(x.task).length > 1 ? `<span class="search-kind">also in ${chainsOfTask(x.task).filter(k => k !== activeChain).map(k => escapeHtml(chains[k].name)).join(', ')}</span>` : ''}
+          ${multi ? `<button class="chain-btn" onclick="splitStepTask(${si},${ti})" title="Move to its own step below">&#8615;</button>` : ''}
+          <button class="chain-btn" onclick="removeFromChain(${si},${ti})" title="Remove from this chain">&times;</button>
+        </span>`).join('')}
+        ${addable.length ? `<select class="step-add" onchange="addToChain(this.value, ${si})"><option value="">+ add alongside</option>${addable.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('')}</select>` : ''}
+      </div>
+      <span class="chain-btns">
+        <button class="chain-btn" onclick="moveChainItem(${si},-1)" title="Move step up">&#9650;</button>
+        <button class="chain-btn" onclick="moveChainItem(${si},1)" title="Move step down">&#9660;</button>
+      </span>
+      ${multi && si + 1 < steps.length ? `<div class="step-rule">Step ${si + 2} starts when ${need.length === st.length ? (st.length === 2 ? 'both are' : 'all are') : escapeHtml(need.join(' and ')) + (need.length > 1 ? ' are' : ' is')} done</div>` : ''}
+    </div>`;
+  }).join('')}</div>` : `<div class="chain-empty">No tasks in this chain yet. Add one below.</div>`;
+
   document.getElementById('chain-add').innerHTML = `<option value="">Add a task to ${escapeHtml(c.name)}…</option>` +
     addable.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}${recurringList.indexOf(t) !== -1 ? ' (now recurring)' : ''}</option>`).join('');
 
@@ -3041,7 +3046,7 @@ function chainKeyForTask(name) {
 function addChain() {
   let n = chains.length + 1;
   while (chains.some(c => c.name === 'Chain ' + n)) n++;
-  chains.push({ name: 'Chain ' + n, tasks: [], key: { type: 'ref', label: 'Ref No', start: 1 } });
+  chains.push({ name: 'Chain ' + n, tasks: [], steps: [], key: { type: 'ref', label: 'Ref No', start: 1 } });
   activeChain = chains.length - 1;
   renderChainEditor();
 }
@@ -3065,26 +3070,53 @@ function deleteChain() {
   toast('"' + gone.name + '" removed. Press Save Chain to confirm.');
 }
 
-function addToChain(t) {
+function addToChain(t, stepIndex) {
   if (!t) return;
   const c = chains[activeChain];
-  if (c.tasks.indexOf(t) === -1) c.tasks.push(t);
+  syncChainTasks(c);
+  if (c.tasks.indexOf(t) !== -1) { toast('That task is already in this chain.', true); return renderChainEditor(); }
+  if (stepIndex === undefined || !c.steps[stepIndex]) c.steps.push([{ task: t, optional: false }]);
+  else c.steps[stepIndex].push({ task: t, optional: false });
   const r = recurringList.indexOf(t);
   if (r !== -1) recurringList.splice(r, 1);
+  syncChainTasks(c);
   renderChainEditor();
 }
 
-function removeFromChain(i) {
-  chains[activeChain].tasks.splice(i, 1);
+function removeFromChain(si, ti) {
+  const c = chains[activeChain];
+  if (!c.steps[si]) return;
+  c.steps[si].splice(ti, 1);
+  syncChainTasks(c);
   renderChainEditor();
 }
 
-function moveChainItem(index, delta) {
-  const arr = chains[activeChain].tasks;
-  const to = index + delta;
+function moveChainItem(si, delta) {
+  const arr = chains[activeChain].steps;
+  const to = si + delta;
   if (to < 0 || to >= arr.length) return;
-  const moved = arr.splice(index, 1)[0];
+  const moved = arr.splice(si, 1)[0];
   arr.splice(to, 0, moved);
+  syncChainTasks(chains[activeChain]);
+  renderChainEditor();
+}
+
+function toggleStepOptional(si, ti) {
+  const st = chains[activeChain].steps[si];
+  if (!st || st.length < 2 || !st[ti]) return;
+  st[ti].optional = !st[ti].optional;
+  if (st.every(x => x.optional)) { st[ti].optional = false; toast('At least one task on a step must be required.', true); }
+  renderChainEditor();
+}
+
+function splitStepTask(si, ti) {
+  const c = chains[activeChain];
+  const st = c.steps[si];
+  if (!st || st.length < 2) return;
+  const x = st.splice(ti, 1)[0];
+  x.optional = false;
+  c.steps.splice(si + 1, 0, [x]);
+  syncChainTasks(c);
   renderChainEditor();
 }
 
@@ -3103,7 +3135,7 @@ function removeRecurring(i) {
 function renderChainPreview() {
   const box = document.getElementById('chain-preview');
   let html = chains.map((c, i) => `<div style="margin-bottom:8px;"><b><span class="chain-dot" style="background:${chainColor(i)}"></span>${escapeHtml(c.name)}</b><br>${
-    c.tasks.length ? c.tasks.map(escapeHtml).join(' &rarr; ') : '<i>Empty</i>'}</div>`).join('');
+    (c.steps && c.steps.length) ? c.steps.map(st => st.map(x => escapeHtml(x.task) + (x.optional ? ' <i>(optional)</i>' : '')).join(' + ')).join(' &rarr; ') : '<i>Empty</i>'}</div>`).join('');
   if (recurringList.length) html += '<b>Recurring</b><br>' + recurringList.map(escapeHtml).join(', ');
   const loose = chainableTasks().filter(t => chainOrderAll().indexOf(t) === -1 && recurringList.indexOf(t) === -1);
   if (loose.length) html += '<div style="margin-top:8px;"><b>Not in any chain</b><br>' + loose.map(escapeHtml).join(', ') + '</div>';
@@ -3111,7 +3143,7 @@ function renderChainPreview() {
 }
 
 function resetChainToDefault() {
-  chains = [{ name: 'Chain 1', tasks: DEFAULT_CHAIN.slice() }];
+  chains = [{ name: 'Chain 1', tasks: DEFAULT_CHAIN.slice(), steps: copySteps(null, DEFAULT_CHAIN), key: { type: 'ref', label: 'Ref No', start: 1 } }];
   recurringList = [];
   activeChain = 0;
   renderChainEditor();
@@ -3567,7 +3599,6 @@ function renderFormInterface() {
     document.getElementById('form-chain').classList.remove('hidden');
     if (!chainLoaded) loadChain();
     else renderChainEditor();
-    loadExits();
     return;
   }
   if (t.panel === "tasks") {
@@ -3881,6 +3912,17 @@ function setRecentOpen(on) {
   if (!on) document.getElementById('recent-table').innerHTML = '';
 }
 
+let recentDateTimer = null;
+
+function recentDatesChanged() {
+  clearTimeout(recentDateTimer);
+  recentDateTimer = setTimeout(() => {
+    const f = valOf('recent-from'), t = valOf('recent-to');
+    const ok = v => !v || (/^\d{4}-\d{2}-\d{2}$/.test(v) && Number(v.slice(0, 4)) >= 2000);
+    if ((f || t) && ok(f) && ok(t)) loadRecent();
+  }, 700);
+}
+
 function toggleRecent() {
   setRecentOpen(!recentOpen);
   if (recentOpen) loadRecent();
@@ -3918,7 +3960,7 @@ async function loadRecent() {
         <td class="nowrap">${escapeHtml(x.savedAt)}</td>${showTask ? `<td class="left">${escapeHtml(x.task)}</td>` : ''}
         <td>${escapeHtml(x.refNo)}</td><td>${escapeHtml(x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
         <td>${escapeHtml(x.savedBy)}${x.staff && x.staff !== x.savedBy ? `<br><small class="report-meta">for ${escapeHtml(x.staff)}</small>` : ''}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
-      </tr>`).join('') || `<tr><td colspan="${showTask ? 7 : 6}" class="report-meta">No final saves found.</td></tr>`
+      </tr>`).join('') || `<tr><td colspan="${showTask ? 7 : 6}" class="report-meta">${from || to || q ? 'No final saves in these dates or for this search. Try other dates or press Clear.' : 'No final saves yet.'}</td></tr>`
     }</tbody>${result.more ? `<tfoot><tr><td colspan="${showTask ? 7 : 6}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
   } catch (e) {
     if (seq === recentSeq) table.innerHTML = '<tr><td class="report-meta">Network error</td></tr>';
@@ -4082,7 +4124,7 @@ let reportTab = 'simple';
 
 function showReportTab(tab) {
   reportTab = tab;
-  ['simple', 'timing', 'employee', 'cheque'].forEach(k => {
+  ['simple', 'timing', 'employee', 'cheque', 'exits'].forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
@@ -4090,6 +4132,8 @@ function showReportTab(tab) {
     if (reportData) renderSimpleReport(); else loadReport();
   } else if (tab === 'timing' || tab === 'employee') {
     if (timingData) { renderTiming(); renderEmployees(); } else loadTiming();
+  } else if (tab === 'exits') {
+    loadExits();
   } else {
     if (chequesLoaded) renderChequeReport(); else loadCheques(true);
   }
@@ -4098,6 +4142,7 @@ function showReportTab(tab) {
 function refreshReports() {
   if (reportTab === 'simple') loadReport();
   else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
+  else if (reportTab === 'exits') loadExits();
   else loadCheques(true);
 }
 
@@ -4237,6 +4282,7 @@ function clearReportFilters() {
 function onReportTo() {
   if (reportTab === 'simple') renderSimpleReport();
   else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
+  else if (reportTab === 'exits') renderExits();
   else renderChequeReport();
 }
 
