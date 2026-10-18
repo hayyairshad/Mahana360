@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taskendo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
@@ -422,6 +425,32 @@ padding-right: 70px; }
 .dyn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 20px; align-items: start; }
 .dyn-field { min-width: 0; }
 .dyn-wide { grid-column: 1 / -1; }
+.daily-overlay { position: fixed; inset: 0; background: rgba(28,38,32,0.45); z-index: 3000; display: flex; justify-content: center; align-items: flex-start; padding: 28px 16px; overflow: auto; }
+.daily-panel { background: var(--bg-color); border-radius: 16px; width: min(1100px, 100%); padding: 22px; box-shadow: var(--shadow-lg); }
+.daily-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+.daily-head h2 { margin: 0; }
+.daily-head input, .daily-head select { margin: 0; padding: 7px 10px; width: auto; }
+.daily-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.daily-card { background: #fff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px 18px 12px; }
+.daily-card-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 10px; }
+.daily-name { font-size: 1.15rem; font-weight: 800; color: var(--accent-dark); }
+.daily-date { font-size: 0.8rem; color: var(--text-dim); margin-top: 2px; }
+.daily-brand { font-size: 0.72rem; font-weight: 700; color: var(--accent-color); }
+.daily-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--border-color); align-items: flex-start; }
+.daily-kind { flex: none; font-size: 0.66rem; font-weight: 700; border-radius: 6px; padding: 3px 7px; margin-top: 2px; }
+.k-chain { background: var(--accent-soft); color: var(--accent-dark); }
+.k-recurring { background: #f7efdc; color: #7b5c19; }
+.k-assigned { background: #e7f1fa; color: #2f5f8a; }
+.daily-text { font-size: 0.88rem; line-height: 1.4; }
+.daily-count { background: #d23f31; color: #fff; border-radius: 9px; padding: 0 7px; font-size: 0.7rem; font-weight: 700; }
+.daily-due, .daily-proj { color: var(--text-dim); font-size: 0.76rem; margin-left: 4px; }
+.daily-late { color: #d23f31; font-weight: 700; font-size: 0.74rem; }
+.daily-cases { color: var(--text-dim); font-size: 0.76rem; margin-top: 3px; }
+.daily-empty { color: var(--text-dim); font-size: 0.85rem; padding: 10px 0; }
+.daily-actions { padding-top: 10px; text-align: right; }
+.daily-card.shooting .daily-actions { display: none; }
+.dup-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); }
+.dup-bar input { margin: 0; width: 260px; padding: 7px 10px; font-size: 0.85rem; }
 .recent-toggle { background: none; border: none; padding: 6px 0; margin-bottom: 8px; cursor: pointer; font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .recent-toggle:hover { color: var(--accent-dark); }
 .recent-arrow { display: inline-block; transition: transform 0.15s; font-size: 0.9rem; }
@@ -632,6 +661,74 @@ a.dashboard-item, a.task-sidebar-item {
 }
 a.task-sidebar-item.active { color: var(--accent-dark); }
 .phase-btn.active .chain-dot, .task-sidebar-item.active .chain-dot { box-shadow: 0 0 0 2px #fff; }
+
+:root {
+--pine: #24533a; --pine-2: #1c4430; --fern: #5e8c3a; --brass: #b98a2e; --brass-soft: #f7efdc; --brass-line: #e4d3a9;
+--bg-color: #eef2ea; --panel-color: #ffffff; --surface-2: #f6f8f3; --border-color: #dde4d6; --border-strong: #cfd8c8;
+--accent-color: #24533a; --accent-hover: #1c4430; --accent-dark: #1c4430; --accent-soft: #e6efe0; --accent-softer: #f3f7f0;
+--text-main: #1c2620; --text-dim: #5e6b60; --report-head: #e9f0e3; --red: #d23f31;
+}
+* { font-family: 'Manrope', 'Segoe UI', -apple-system, sans-serif; }
+body { background: var(--bg-color); background-image: none; }
+header { background: var(--pine); border-bottom: none; box-shadow: none; padding: 12px 24px; backdrop-filter: none; }
+.site-title { color: #fff; border-left-color: rgba(255,255,255,0.25); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.3px; }
+.logo-group { background: rgba(255,255,255,0.12); }
+.logo-group:hover { background: rgba(255,255,255,0.2); }
+.user-meta { color: rgba(255,255,255,0.85); }
+header .icon-action { background: transparent; border-color: rgba(255,255,255,0.28); color: #fff; border-radius: 10px; }
+header .icon-action:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.5); color: #fff; }
+.notif-dot { background: var(--red); }
+.main-content { padding-top: 22px; }
+label { text-transform: none; letter-spacing: 0; font-size: 0.8rem; color: var(--text-dim); font-weight: 600; }
+input, select, textarea { border-color: var(--border-strong); background: #fbfcfa; border-radius: 9px; }
+input:focus, select:focus, textarea:focus { border-color: var(--pine); box-shadow: 0 0 0 3px rgba(36,83,58,0.14); background: #fff; }
+.btn { border-radius: 9px; font-weight: 600; }
+.btn-primary { background: var(--pine); border-color: var(--pine); color: #fff; font-weight: 700; }
+.btn-primary:hover { background: var(--pine-2); border-color: var(--pine-2); }
+.glass-panel { border-color: var(--border-color); box-shadow: 0 1px 2px rgba(40,55,25,0.05); }
+.entry-panel { padding-top: 0; overflow: visible; }
+h2 { font-weight: 800; letter-spacing: -0.5px; }
+.project-nav:has(.ftabs) { margin: 0 -30px; }
+.ftabs { background: var(--pine); border-bottom: none; border-radius: 13px 13px 0 0; padding: 14px 30px 0; gap: 4px; }
+.ftab { background: rgba(255,255,255,0.12); border: none; color: #dfe9dc; text-transform: none; letter-spacing: 0; font-size: 0.95rem; font-weight: 700; padding: 12px 22px 13px; border-radius: 12px 12px 0 0; }
+.ftab:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.ftab.active { background: #fff; color: var(--pine); box-shadow: none; padding-top: 14px; }
+.ftabs-sub { background: #fff; border: none; border-bottom: 1px solid var(--border-color); padding: 0 30px; gap: 26px; }
+.stab { background: transparent; border: none; border-bottom: 3px solid transparent; border-radius: 0; padding: 15px 2px 12px; color: var(--text-dim); font-size: 0.92rem; font-weight: 600; }
+.stab:hover { background: transparent; color: var(--text-main); }
+.stab.active { background: transparent; border-color: var(--fern); color: var(--text-main); }
+.stab .chain-dot { display: none; }
+.project-nav:has(.ftabs) ~ #phase-bar, .project-nav:has(.ftabs) + #project-tiles + #phase-bar { background: #fff; border: none; border-bottom: 1px solid var(--border-color); border-radius: 0; margin: 0 -30px 22px; padding: 14px 30px 16px; }
+#phase-bar .phase-btn { background: #fff; border: 1.5px solid var(--brass-line); color: #7b5c19; border-radius: 9px; font-weight: 600; font-size: 0.86rem; padding: 8px 14px; }
+#phase-bar .phase-btn:hover { background: var(--brass-soft); }
+#phase-bar .phase-btn.active { background: var(--brass); border-color: var(--brass); color: #fff; }
+.entry-panel > .search-wrap { margin-top: 18px; }
+.phase-btn.active { background: var(--pine); border-color: var(--pine); }
+.task-sidebar-item { border-radius: 10px; font-weight: 600; padding: 12px 14px; }
+.task-sidebar-item:hover { background: var(--accent-softer); border-color: var(--border-strong); }
+.task-sidebar-item.active { background: #fff; border-color: var(--pine); color: var(--pine); box-shadow: inset 4px 0 0 var(--pine); }
+.task-sidebar-item.idle { background: var(--surface-2); color: #9aa39a; }
+.sidebar-count, .sidebar-count.late, .task-sidebar-item.active .sidebar-count, .task-sidebar-item.active .sidebar-count.late { background: var(--red); }
+#bold-task-header { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.6px; color: var(--text-main); }
+.dyn-divider { border-top: 1px solid var(--border-color); margin: 6px 0 16px; }
+.dyn-divider span { color: var(--pine); font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 0.82rem; top: -10px; }
+.owner-pick { border-radius: 8px; }
+.owner-pick.on { background: var(--accent-soft); border-color: var(--fern); color: var(--pine); }
+.case-chip { border-radius: 9px; background: #fbfcfa; }
+.pending-strip { border-radius: 12px; background: #fff; border-color: var(--border-color); }
+.recent-toggle { text-transform: none; letter-spacing: 0; font-size: 0.9rem; color: var(--text-dim); font-weight: 700; }
+.report-table thead th { color: var(--pine); box-shadow: inset 0 -2px 0 var(--border-strong); }
+.report-wrap { max-width: 100%; }
+.dashboard-item.project-tile { border-top: 4px solid var(--pine); }
+.admin-project-bar { background: var(--accent-softer); border-color: var(--border-color); }
+.status-pill.status-done { background: var(--accent-soft); color: var(--pine); }
+@media (max-width: 720px) {
+  .project-nav:has(.ftabs) { margin: 0 -20px; }
+  .ftabs { padding: 10px 14px 0; }
+  .ftab { padding: 9px 14px 10px; font-size: 0.85rem; }
+  .ftabs-sub { padding: 0 14px; gap: 16px; overflow-x: auto; flex-wrap: nowrap; }
+  .project-nav:has(.ftabs) ~ #phase-bar { margin: 0 -20px 18px; padding: 12px 14px; }
+}
 </style>
 </head>
 <body>
@@ -652,6 +749,9 @@ a.task-sidebar-item.active { color: var(--accent-dark); }
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
 </button>
+<button id="btn-daily" class="icon-action hidden" onclick="openDaily()" title="Daily task list" aria-label="Daily task list">
+<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h4M8 17h7"/></svg>
+</button>
 <button id="btn-fullscreen" class="icon-action" onclick="toggleAppFullscreen()" title="Full screen" aria-label="Full screen">
 <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
 </button>
@@ -663,6 +763,19 @@ a.task-sidebar-item.active { color: var(--accent-dark); }
 <div id="version-banner" class="version-banner hidden">The script is an older version than this website, so saving the chain is blocked. In Apps Script: Deploy, Manage deployments, edit, Version: New version, Deploy. Then refresh this page.<span id="version-detail"></span></div>
 </header>
 
+
+<div id="daily-overlay" class="daily-overlay hidden">
+<div class="daily-panel">
+<div class="daily-head">
+<h2>Daily task list</h2>
+<label class="inline-label">Day <input type="date" id="daily-date" onchange="loadDaily()"></label>
+<label class="inline-label">Person <select id="daily-person" onchange="loadDaily()"><option value="">Everyone</option></select></label>
+<div class="nav-spacer"></div>
+<button class="btn btn-small" onclick="closeDaily()">Close</button>
+</div>
+<div id="daily-body" class="daily-body"></div>
+</div>
+</div>
 
 <div class="main-content">
 
@@ -692,6 +805,10 @@ oninput="runSearch('staff')" onfocus="runSearch('staff')">
 <!-- 3. DATA ENTRY -->
 <div id="scr-entry" class="glass-panel entry-panel hidden">
 
+<div id="project-nav" class="project-nav hidden"></div>
+
+<div id="phase-bar" class="phase-bar hidden"></div>
+
 <div class="search-wrap">
 <span class="search-icon">&#128269;</span>
 <input type="text" id="search-workspace" autocomplete="off"
@@ -700,10 +817,7 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div id="search-workspace-results" class="search-results hidden"></div>
 </div>
 
-<div id="project-nav" class="project-nav hidden"></div>
 <div id="project-tiles" class="dashboard-grid hidden"></div>
-
-<div id="phase-bar" class="phase-bar hidden"></div>
 
 <div id="admin-project-bar" class="report-bar admin-project-bar hidden"></div>
 
@@ -752,11 +866,12 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <button class="recent-toggle" id="recent-toggle" onclick="toggleRecent()"><span class="recent-arrow">&#9656;</span> Recent Entries <span id="recent-who" class="report-meta" style="text-transform:none; letter-spacing:0;"></span></button>
 <div id="recent-body" class="hidden">
 <div class="report-bar date-bar">
-<button class="phase-btn active" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
+<button class="btn btn-small btn-primary" onclick="recentToday()">Today</button>
 <button class="phase-btn" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
+<button class="phase-btn" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
 <label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
 <label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
-<input type="text" id="recent-q" class="report-search" placeholder="Search ref, case or name" onkeydown="if(event.key==='Enter')loadRecent()">
+<input type="text" id="recent-q" class="report-search" placeholder="Search ref or name" onkeydown="if(event.key==='Enter')loadRecent()">
 <button class="btn btn-small btn-primary" onclick="loadRecent()">Apply</button>
 <button class="btn btn-small" onclick="clearRecent()">Clear</button>
 </div>
@@ -815,7 +930,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <!-- REPORTS (Jawad only) -->
 <div id="form-reports" class="hidden">
 <div class="report-bar">
-<button class="phase-btn active" id="rep-tab-simple" onclick="showReportTab('simple')">Simple Report</button>
+<button class="phase-btn active" id="rep-tab-simple" onclick="showReportTab('simple')">Presentation Report</button>
 <button class="phase-btn" id="rep-tab-timing" onclick="showReportTab('timing')">Timing</button>
 <button class="phase-btn" id="rep-tab-employee" onclick="showReportTab('employee')">Employee Report</button>
 <button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
@@ -834,7 +949,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="report-simple">
 <div class="report-bar">
 <label class="inline-label">Chain <select id="report-chain" onchange="onReportChain()"></select></label>
-<input type="text" id="report-search" class="report-search" placeholder="Search ref, case or name" oninput="renderSimpleReport()">
+<input type="text" id="report-search" class="report-search" placeholder="Search ref, name or mobile" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
 </div>
 <div id="report-filters" class="filter-panel hidden">
@@ -928,12 +1043,13 @@ Closes duplicate items and items already in Final, then creates the next step fo
 <div id="open-repair-result" class="report-meta" style="margin-top:10px;"></div>
 </div>
 <div class="schedule-box" style="margin-top:14px;">
-<label>Fix customer names</label>
+<label>Match Ref numbers to the Google Form</label>
 <div class="report-meta" style="margin-bottom:10px; line-height:1.6;">
-Makes every Save Contacts entry show the same customer staff saved in Final (fixes the one-off shift on refs 2073–2118), closes refs nobody used, and writes each Ref No into a "Mahana Ref No" column in the Google Form sheet. Safe to press more than once.
+Every form entry gets the Ref No of its row in the form (the same number HP Master shows). Cases the app numbered differently are moved to the right number everywhere: Pending, Final, Cheques, Out of the chain and the form's Mahana Ref No column. Numbers staff typed from HP Master are kept. Press Check first to see the list; nothing changes until you press Apply.
 </div>
-<button class="btn btn-primary btn-small" id="btn-fix-names" onclick="fixCustomerNames()">Fix customer names</button>
-<div id="fix-names-result" class="report-meta" style="margin-top:10px; line-height:1.6;"></div>
+<button class="btn btn-small" id="btn-renum-check" onclick="renumberRefs(false)">Check</button>
+<button class="btn btn-primary btn-small" id="btn-renum-apply" onclick="renumberRefs(true)">Apply</button>
+<div id="renum-result" class="report-meta" style="margin-top:10px; line-height:1.6;"></div>
 </div>
 </div>
 
@@ -1243,7 +1359,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R14";
+const APP_VERSION = "R15";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1327,7 +1443,6 @@ function taskListFor(staffName, all) {
 
 function recurringHidden(t) {
   if (!t || !t.schedule || !t.schedule.on) return false;
-  if (pendingItems.some(p => p.taskName === t.name)) return false;
   const now = new Date();
   try { return !schedOccurs(t.schedule, new Date(now.getFullYear(), now.getMonth(), now.getDate())); } catch (e) { return false; }
 }
@@ -1542,7 +1657,8 @@ async function completeLogin() {
       google.accounts.id.prompt();
       return;
     }
-    user = { name: result.name, email: result.email, level: result.level };
+    user = { name: result.name, email: result.email, level: result.level, dailyViewer: !!result.dailyViewer };
+    document.getElementById('btn-daily').classList.toggle('hidden', !user.dailyViewer);
     serverVersion = result.version || 'old';
     showVersionBanner();
 
@@ -1576,6 +1692,7 @@ function doLogout() {
   window.removeEventListener('hashchange', route);
   idToken = null;
   localStorage.removeItem('mahana_idToken');
+  document.getElementById('btn-daily').classList.add('hidden'); closeDaily();
   user = null; profile = null; currentTask = null; currentPhase = null;
   templates = {}; templatesLoaded = false;
   chainList = []; recurringList = []; chains = []; chainLoaded = false; allChains = []; allRecurring = []; PROJECTS = []; currentProject = null; currentChain = null;
@@ -1706,6 +1823,39 @@ function openBuilderTask(i) {
   renderBuilderForm();
 }
 
+function uniqueTaskName(base) {
+  let name = base, n = 2;
+  while (builderTasks.some(x => x.name === name)) { name = base.replace(/ \(Duplicate( \d+)?\)$/, '') + ' (Duplicate ' + n + ')'; n++; }
+  return name;
+}
+
+function duplicateBuilderTask(i) {
+  const src = builderTasks[i];
+  if (!src || src.panel) return;
+  const copy = JSON.parse(JSON.stringify(src));
+  copy.name = uniqueTaskName(src.name + ' (Duplicate)');
+  copy.project = adminProject;
+  (copy.fields || []).forEach(f => { if (!f.builtin) f.id = 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); });
+  builderTasks.splice(i + 1, 0, copy);
+  builderIndex = i + 1;
+  markBuilderDirty();
+  renderTaskIndex();
+  renderBuilderForm();
+  toast('Copied. Rename it if you like, then press Save All.');
+}
+
+function copyFromTask(name) {
+  const i = builderTasks.findIndex(x => x.name === name && !x.panel);
+  if (i === -1) return toast('No task with that name.', true);
+  const cur = builderTasks[builderIndex];
+  if (cur && !cur.name && !(cur.fields || []).length) {
+    builderTasks.splice(builderIndex, 1);
+    const j = builderTasks.findIndex(x => x.name === name && !x.panel);
+    return duplicateBuilderTask(j);
+  }
+  duplicateBuilderTask(i);
+}
+
 function startNewTask() {
   builderTasks.push({
     name: "", phase: "", temp: false, fields: [], owners: [], slots: [], active: true, project: adminProject
@@ -1742,7 +1892,13 @@ function renderBuilderForm() {
     .map(c => `<option value="${encodeURIComponent(JSON.stringify({ kind: 'custom', col: c.col, label: c.label, type: c.type, options: c.options }))}">${escapeHtml(c.label)} (existing custom field)</option>`)
     .join('');
 
+  const copyable = builderTasks.filter(x => x.name && !x.panel && x !== t).map(x => x.name).sort((a, b) => a.localeCompare(b));
   box.innerHTML = `
+    <div class="dup-bar">
+      ${t.name ? `<button class="btn btn-small" onclick="duplicateBuilderTask(${builderIndex})">Duplicate this task</button>` : ''}
+      <input type="text" id="dup-from" list="dup-list" placeholder="Copy from another task…" onchange="copyFromTask(this.value)">
+      <datalist id="dup-list">${copyable.map(n => `<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>
+    </div>
     <div class="builder-row">
       <div>
         <label>Task name</label>
@@ -1846,6 +2002,7 @@ function renderBuilderForm() {
       </div>
       <input type="text" id="new-field-options" placeholder="Options, comma separated (Dropdown / Checkboxes)" class="hidden">
       <button class="btn btn-small" onclick="addCustomFieldToBuilderTask()">+ Add field</button>
+      <button class="btn btn-small" onclick="addDividerToBuilderTask()" title="Everything after a divider starts on a new line">+ Divider</button>
     </div>
 
     <div style="border-top:1px solid var(--border-color); padding-top:16px; margin-top:20px;">
@@ -2332,6 +2489,18 @@ function addCustomFieldToBuilderTask() {
   optionsEl.value = '';
   markBuilderDirty();
   renderBuilderForm();
+}
+
+function addDividerToBuilderTask() {
+  if (builderIndex < 0) return;
+  builderTasks[builderIndex].fields.push({
+    id: 'f_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    key: null, label: 'Divider', type: 'divider', options: [], col: '_div_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+    required: false, builtin: false, locked: false
+  });
+  markBuilderDirty();
+  renderBuilderForm();
+  toast('Divider added at the bottom. Use the arrows to move it between fields.');
 }
 
 function removeBuilderField(fieldId) {
@@ -3900,7 +4069,14 @@ async function saveDynamicEntry(type) {
   }
 }
 
-let recentScope = 'task';
+let recentScope = 'all';
+
+function recentToday() {
+  const d = ymdLocal(new Date());
+  document.getElementById('recent-from').value = d;
+  document.getElementById('recent-to').value = d;
+  loadRecent();
+}
 let recentSeq = 0;
 let recentOpen = false;
 
@@ -4356,7 +4532,7 @@ function reportRowsFiltered() {
   const waitIdx = wait ? reportData.tasks.indexOf(wait) : -1;
 
   return rows.filter(r => {
-    if (q && ![r.refNo, r.caseNo, r.name].some(x => String(x || '').toLowerCase().includes(q))) return false;
+    if (q && ![r.refNo, r.caseNo, r.name, r.mobile].some(x => String(x || '').toLowerCase().includes(q))) return false;
     const d = Number(r.days);
     if (dmin !== '' && !(d >= Number(dmin))) return false;
     if (dmax !== '' && !(d <= Number(dmax))) return false;
@@ -4398,15 +4574,15 @@ function renderSimpleReport() {
   const width = 7 + tasks.length;
   const th = (key, label, cls) => `<th class="filterable${colFilters[key] ? ' filtered' : ''}${cls ? ' ' + cls : ''}" onclick="openColFilter('${escapeHtml(key).replace(/'/g, "\\'")}', this)">${escapeHtml(label)}</th>`;
 
-  const head = `<thead><tr><th>${escapeHtml(reportData.keyLabel || 'Ref No')}</th><th>Case No</th><th>Name</th><th>Days</th>${
-    tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}</tr></thead>`;
+  const head = `<thead><tr><th>${escapeHtml(reportData.keyLabel || 'Ref No')}</th><th class="name-col">Name</th><th>Days</th>${
+    tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}<th>Mobile No</th></tr></thead>`;
 
   const rowHtml = r => `<tr data-tip="${escapeHtml(caseTip(r.formSB, r.days, r.inputs, r.corporate))}">
-      <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td><td>${escapeHtml(r.caseNo)}</td>
-      <td class="left ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
+      <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td>
+      <td class="left name-col ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
       ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
       <td>${escapeHtml(r.branch || '')}</td><td>${escapeHtml(r.salesman || '')}</td>
-      <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td>
+      <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td><td class="nowrap">${escapeHtml(r.mobile || '')}</td>
     </tr>`;
 
   let body = '';
@@ -4484,6 +4660,87 @@ function toggleFullscreen(id) {
   closeColFilter();
 }
 
+let dailyData = null;
+
+function openDaily() {
+  document.getElementById('daily-overlay').classList.remove('hidden');
+  const d = document.getElementById('daily-date');
+  if (!d.value) d.value = ymdLocal(new Date());
+  loadDaily();
+}
+
+function closeDaily() {
+  document.getElementById('daily-overlay').classList.add('hidden');
+}
+
+async function loadDaily() {
+  const body = document.getElementById('daily-body');
+  body.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('dailyTasks', { date: valOf('daily-date'), person: valOf('daily-person') });
+    if (!r.ok) { body.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    dailyData = r;
+    const sel = document.getElementById('daily-person');
+    const keep = sel.value;
+    sel.innerHTML = '<option value="">Everyone</option>' + (r.staff || []).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+    sel.value = keep;
+    const dayText = new Date(r.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    body.innerHTML = (r.people || []).map((p, pi) => `
+      <div class="daily-card" id="daily-card-${pi}">
+        <div class="daily-card-head">
+          <div><div class="daily-name">${escapeHtml(p.name)}</div><div class="daily-date">Tasks for ${escapeHtml(dayText)}</div></div>
+          <span class="daily-brand">Taskendo</span>
+        </div>
+        ${p.items.length ? p.items.map(it => `
+          <div class="daily-item">
+            <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain task' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
+            <div class="daily-text">
+              <b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count} waiting</span>` : ''}${it.due ? ` <span class="daily-due">${it.kind === 'Recurring' ? 'by ' : 'due '}${escapeHtml(it.due)}</span>` : ''}${it.late ? ' <span class="daily-late">late</span>' : ''}
+              ${it.projectName && it.projectName !== 'Mahana' ? `<span class="daily-proj">${escapeHtml(it.projectName)}</span>` : ''}
+              ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
+            </div>
+          </div>`).join('') : '<div class="daily-empty">Nothing due on this day.</div>'}
+        <div class="daily-actions"><button class="btn btn-small btn-primary" onclick="dailyPicture(${pi})">Make picture</button></div>
+      </div>`).join('') || '<div class="report-meta">Nobody has tasks on this day.</div>';
+  } catch (e) { body.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function loadScriptOnce(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector('script[data-src="' + src + '"]')) return res();
+    const el = document.createElement('script');
+    el.src = src; el.dataset.src = src; el.onload = res; el.onerror = rej;
+    document.head.appendChild(el);
+  });
+}
+
+async function dailyPicture(i) {
+  const card = document.getElementById('daily-card-' + i);
+  if (!card) return;
+  try {
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    card.classList.add('shooting');
+    const canvas = await window.html2canvas(card, { backgroundColor: '#ffffff', scale: 2 });
+    card.classList.remove('shooting');
+    const p = dailyData.people[i];
+    const fname = 'Tasks ' + p.name + ' ' + dailyData.date + '.png';
+    canvas.toBlob(async blob => {
+      let copied = false;
+      try {
+        if (navigator.clipboard && window.ClipboardItem) { await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); copied = true; }
+      } catch (e) {}
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fname;
+      a.click();
+      toast(copied ? 'Picture saved and copied. Paste it in WhatsApp.' : 'Picture saved. Send it in WhatsApp.');
+    }, 'image/png');
+  } catch (e) {
+    card.classList.remove('shooting');
+    toast('Could not make the picture. Take a screenshot instead.', true);
+  }
+}
+
 function toggleAppFullscreen() {
   const on = !document.body.classList.contains('app-full');
   document.body.classList.toggle('app-full', on);
@@ -4500,6 +4757,7 @@ document.addEventListener('fullscreenchange', function () {
 document.addEventListener('keydown', function (e) {
   if (e.key !== 'Escape') return;
   closeColFilter();
+  closeDaily();
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
 });
@@ -5314,21 +5572,29 @@ async function closeOpenSelected() {
   btn.disabled = false;
 }
 
-async function fixCustomerNames() {
+async function renumberRefs(apply) {
   if (serverVersion !== APP_VERSION) return toast("The script is an older version. Deploy it as a New version, then refresh.", true);
-  const btn = document.getElementById('btn-fix-names');
-  const out = document.getElementById('fix-names-result');
+  const btn = document.getElementById(apply ? 'btn-renum-apply' : 'btn-renum-check');
+  const out = document.getElementById('renum-result');
+  if (apply && btn.dataset.confirm !== '1') {
+    btn.dataset.confirm = '1';
+    btn.innerText = 'Press again to apply';
+    setTimeout(() => { btn.dataset.confirm = ''; btn.innerText = 'Apply'; }, 5000);
+    return;
+  }
   btn.disabled = true;
   out.innerText = 'Working...';
   try {
-    const r = await apiCall('openClose', { fixNames: true });
-    if (!r.ok) { out.innerText = ''; toast(r.error || "Could not fix", true); }
-    else {
-      const f = r.formRefs || {};
-      out.innerHTML = `Save Contacts entries corrected: <b>${r.fixed}</b> · unused refs closed: <b>${r.phantom}</b> · Ref Nos written into the form sheet: <b>${f.written || 0}</b>` +
-        (f.error ? '<br><span style="color:var(--danger)">Form sheet: ' + escapeHtml(f.error) + '</span>' : '') +
-        ((r.changes || []).length ? '<br>' + r.changes.map(escapeHtml).join('<br>') : '');
-      toast("Done.");
+    const r = await apiCall('renumber', { apply: !!apply });
+    if (!r.ok) { out.innerHTML = '<span style="color:var(--danger)">' + escapeHtml(r.error || 'Could not do it') + '</span>'; }
+    else if (r.preview) {
+      out.innerHTML = `<b>${r.changes.length}</b> cases get a new Ref No · <b>${r.formFixes}</b> form rows get their Ref filled or corrected · ${r.keptTyped} typed entries already use the HP Master number and stay as they are` +
+        (r.conflicts.length ? '<br><span style="color:var(--danger)">Problems: ' + r.conflicts.map(escapeHtml).join('; ') + '</span>' : '') +
+        (r.changes.length ? `<div class="report-wrap" style="margin-top:10px; max-height:300px;"><table class="report-table"><thead><tr><th>Now</th><th>Becomes</th><th>Customer</th></tr></thead><tbody>${r.changes.map(c => `<tr><td>${escapeHtml(c.from)}</td><td><b>${escapeHtml(c.to)}</b></td><td class="left">${escapeHtml(c.name)}</td></tr>`).join('')}</tbody></table></div>` : '');
+    } else {
+      const c = r.counts || {};
+      out.innerHTML = `Done. <b>${r.changed}</b> cases renumbered (Pending rows ${c.pending || 0}, Final rows ${c.final || 0}, cheques ${c.cheques || 0}). The form's Mahana Ref No column now matches every row. A list is saved in the "Ref Renumber Log" tab.`;
+      toast("Ref numbers now match the form.");
       loadOpen();
       loadPending();
     }
