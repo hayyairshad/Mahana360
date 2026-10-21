@@ -425,12 +425,29 @@ padding-right: 70px; }
 .dyn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 20px; align-items: start; }
 .dyn-field { min-width: 0; }
 .dyn-wide { grid-column: 1 / -1; }
+
+.recur-ico { color: var(--brass); font-weight: 800; margin-right: 6px; }
+.sticky-actions { position: sticky; top: 66px; z-index: 60; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(40,55,25,0.06); display: flex; gap: 10px; align-items: center; }
+.open-tree { display: flex; flex-direction: column; gap: 8px; }
+.open-node { border: 1px solid var(--border-color); border-radius: 10px; background: #fff; }
+.open-node > summary { cursor: pointer; padding: 10px 14px; list-style: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.open-node > summary::before { content: "\25B8"; color: var(--text-dim); transition: transform 0.15s; }
+.open-node[open] > summary::before { transform: rotate(90deg); }
+.open-node-body { padding: 0 12px 12px 22px; display: flex; flex-direction: column; gap: 8px; }
 .daily-overlay { position: fixed; inset: 0; background: rgba(28,38,32,0.45); z-index: 3000; display: flex; justify-content: center; align-items: flex-start; padding: 28px 16px; overflow: auto; }
 .daily-panel { background: var(--bg-color); border-radius: 16px; width: min(1100px, 100%); padding: 22px; box-shadow: var(--shadow-lg); }
 .daily-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
 .daily-head h2 { margin: 0; }
 .daily-head input, .daily-head select { margin: 0; padding: 7px 10px; width: auto; }
-.daily-body { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.daily-body { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.daily-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.daily-col { border-radius: 10px; padding: 8px 10px; background: var(--surface-2); }
+.daily-col-head { font-weight: 800; font-size: 0.85rem; padding: 4px 2px 6px; display: flex; justify-content: space-between; }
+.daily-col-head span { background: #fff; border-radius: 8px; padding: 0 7px; font-size: 0.75rem; }
+.c-over { background: #fdecea; } .c-over .daily-col-head { color: #b4231b; }
+.c-today { background: var(--accent-soft); } .c-today .daily-col-head { color: var(--pine); }
+.c-soon { background: var(--brass-soft); } .c-soon .daily-col-head { color: #7b5c19; }
+@media (max-width: 760px) { .daily-cols { grid-template-columns: 1fr; } }
 .daily-card { background: #fff; border: 1px solid var(--border-color); border-radius: 14px; padding: 18px 18px 12px; }
 .daily-card-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 10px; }
 .daily-name { font-size: 1.15rem; font-weight: 800; color: var(--accent-dark); }
@@ -729,6 +746,15 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
   .ftabs-sub { padding: 0 14px; gap: 16px; overflow-x: auto; flex-wrap: nowrap; }
   .project-nav:has(.ftabs) ~ #phase-bar { margin: 0 -20px 18px; padding: 12px 14px; }
 }
+
+.summary-grid.emp-grid { grid-template-columns: repeat(auto-fill, minmax(min(480px, 100%), 1fr)); }
+.summary-grid.emp-grid .summary-card { min-width: 0; }
+.report-table.emp-table { width: 100%; min-width: 0; table-layout: fixed; }
+.report-table.emp-table th, .report-table.emp-table td { white-space: normal; word-break: break-word; }
+.report-table.emp-table th:nth-child(1) { width: 40%; } .report-table.emp-table th:nth-child(2) { width: 22%; } .report-table.emp-table th:nth-child(3) { width: 14%; }
+.emp-items:not(.all) .emp-more { display: none; }
+.report-table thead th.rot { height: 215px; }
+.report-table td.name-col, .report-table th.name-col { white-space: normal; min-width: 140px; max-width: 220px; }
 </style>
 </head>
 <body>
@@ -769,7 +795,8 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 <div class="daily-head">
 <h2>Daily task list</h2>
 <label class="inline-label">Day <input type="date" id="daily-date" onchange="loadDaily()"></label>
-<label class="inline-label">Person <select id="daily-person" onchange="loadDaily()"><option value="">Everyone</option></select></label>
+<label class="inline-label">Person <select id="daily-person" onchange="loadDaily()"><option value="">Pick a person</option></select></label>
+<button class="btn btn-small" onclick="loadDaily(true)">Show everyone</button>
 <div class="nav-spacer"></div>
 <button class="btn btn-small" onclick="closeDaily()">Close</button>
 </div>
@@ -977,7 +1004,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="report-wrap"><table class="report-table" id="timing-table"></table></div>
 </div>
 <div id="report-employee" class="hidden">
-<div class="summary-grid" id="employee-cards"></div>
+<div class="summary-grid emp-grid" id="employee-cards"></div>
 </div>
 <div id="report-cheque" class="hidden">
 <div id="cheque-summary"></div>
@@ -1029,7 +1056,7 @@ Every pending item across all tasks. Use it to clear old backlog. Closing an ite
 <button class="btn btn-small" onclick="selectAllOpen(false)">Clear</button>
 <button class="btn btn-small icon-cross" id="btn-open-close" onclick="closeOpenSelected()">Close selected</button>
 </div>
-<div class="report-wrap" style="margin-top:12px;"><table class="report-table" id="open-table"></table></div>
+<div id="open-table" class="open-tree" style="margin-top:12px;"></div>
 <div class="schedule-box" style="margin-top:18px;">
 <label>Fix stuck cases</label>
 <div class="report-meta" style="margin-bottom:10px; line-height:1.6;">
@@ -1128,14 +1155,14 @@ Set each staff member's own hours and working days. Teal days are working days; 
 Pick a task on the left to edit it, or add a new one. Changes are saved
 together when you press Save All.
 </p>
-<div class="builder-cols">
-<div class="task-index" id="task-index"></div>
-<div class="builder-form" id="builder-form"></div>
-</div>
-<div class="builder-actions" style="margin-top:18px;">
+<div class="builder-actions sticky-actions">
 <button class="btn btn-primary" id="btn-save-tasks" onclick="saveTasks()">Save All</button>
 <button class="btn btn-small" onclick="startNewTask()">+ New task</button>
 <span id="tasks-dirty" style="color:var(--warn); font-size:0.78rem;"></span>
+</div>
+<div class="builder-cols">
+<div class="task-index" id="task-index"></div>
+<div class="builder-form" id="builder-form"></div>
 </div>
 </div>
 
@@ -1359,7 +1386,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R15";
+const APP_VERSION = "R16";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1584,7 +1611,7 @@ function renderProjectNav() {
       return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
         <strong>${escapeHtml(p.name)}</strong>
         <small>${p.id === ADMIN_PROJECT ? 'Settings and reports' : projectChains(p.id).length + ' chain' + (projectChains(p.id).length === 1 ? '' : 's')}</small>
-        ${n ? `<span class="sidebar-count project-bubble${n.late ? ' late' : ''}">${n.count}</span>` : ''}
+        ${n ? `<span class="sidebar-count project-bubble">${n.count}</span>` : ''}
       </a>`;
     }).join('') || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
     return;
@@ -1593,7 +1620,7 @@ function renderProjectNav() {
   nav.classList.remove('hidden');
   const projTabs = projs.map(p => {
     const n = pendingCountForProject(p.id);
-    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count${n.late ? ' late' : ''}">${n.count}</span>` : ''}</button>`;
+    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
   }).join('');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const ch = currentProject === ASSIGNED_PROJECT ? [] : projectChains(currentProject);
@@ -1606,7 +1633,7 @@ function renderProjectNav() {
 
 function pendBubble(list) {
   const uniq = Array.from(new Set(list));
-  return uniq.length ? `<span class="sidebar-count${uniq.some(x => x.late) ? ' late' : ''}">${uniq.length}</span>` : '';
+  return uniq.length ? `<span class="sidebar-count">${uniq.length}</span>` : '';
 }
 
 function pendingCountForProject(pid) {
@@ -1787,7 +1814,8 @@ function normaliseTask(t) {
       ? { days: Number(t.sla.days) || 0, hours: Number(t.sla.hours) || 0 } : null,
     schedule: t.schedule && t.schedule.on ? Object.assign({}, t.schedule, { days: (t.schedule.days || []).slice() }) : null,
     panel: t.panel || null,
-    project: String(t.project || DEFAULT_PROJECT)
+    project: String(t.project || DEFAULT_PROJECT),
+    noPoints: Array.isArray(t.noPoints) ? t.noPoints.slice() : []
   };
 }
 
@@ -1945,6 +1973,14 @@ function renderBuilderForm() {
           ${escapeHtml(n)}
         </label>`).join('')}
     </div>
+    ${t.owners.length ? `<label>Who gets points for this task</label>
+    <div class="owner-grid">${t.owners.map(n => `
+        <label class="owner-pick${(t.noPoints || []).indexOf(n) === -1 ? ' on' : ''}">
+          <input type="checkbox"${(t.noPoints || []).indexOf(n) === -1 ? ' checked' : ''}
+            onchange="togglePointsOwner('${escapeHtml(n).replace(/'/g, "\\'")}', this.checked)">
+          ${escapeHtml(n)}
+        </label>`).join('')}</div>
+    <div class="builder-hint">Untick someone to let them do the task without earning points for it.</div>` : ''}
 
     <label>Message boxes</label>
     <input type="text" value="${escapeHtml(t.slots.join(', '))}"
@@ -2040,14 +2076,14 @@ function scheduleSummary(sch) {
   let s = sch.freq === 'daily' ? (every === 1 ? 'Daily' : 'Every ' + every + ' days')
     : sch.freq === 'monthly' ? (every === 1 ? 'Monthly' : 'Every ' + every + ' months') + ' on day ' + Number(String(sch.start || '').slice(8, 10))
     : (every === 1 ? 'Weekly' : 'Every ' + every + ' weeks') + ' on ' + (sch.days || []).map(d => DAY_NAMES[d].charAt(0) + DAY_NAMES[d].slice(1).toLowerCase()).join(', ');
-  s += ' by ' + (sch.time || '5:00 PM');
+  s += ' by ' + (sch.time || '5:00 AM');
   if (sch.end === 'until' && sch.until) s += ', until ' + formatDateDMY(sch.until);
   if (sch.end === 'count') s += ', ' + (sch.count || 0) + ' times';
   return s;
 }
 
 function clockParts(v) {
-  const m = String(v || '5:00 PM').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i) || [0, '5', '00', 'PM'];
+  const m = String(v || '5:00 AM').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i) || [0, '5', '00', 'AM'];
   return { h: String(Number(m[1])), m: m[2], ap: m[3].toUpperCase() };
 }
 
@@ -2115,7 +2151,7 @@ function setSla(part, value) {
 function toggleSchedule(on) {
   if (builderIndex < 0) return;
   const t = builderTasks[builderIndex];
-  t.schedule = on ? { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 PM', start: todayYmd(), end: 'never', until: '', count: 5 } : null;
+  t.schedule = on ? { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 AM', start: todayYmd(), end: 'never', until: '', count: 5 } : null;
   markBuilderDirty();
   renderBuilderForm();
 }
@@ -2574,6 +2610,15 @@ function toggleOwner(name, on) {
   const i = owners.indexOf(name);
   if (on && i === -1) owners.push(name);
   if (!on && i !== -1) owners.splice(i, 1);
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function togglePointsOwner(name, on) {
+  if (builderIndex < 0) return;
+  const t = builderTasks[builderIndex];
+  t.noPoints = (t.noPoints || []).filter(x => x !== name);
+  if (!on) t.noPoints.push(name);
   markBuilderDirty();
   renderBuilderForm();
 }
@@ -3171,7 +3216,15 @@ function renderChainKey(c) {
     <div class="chain-col-note">${k.type === 'ref' ? 'Cases are matched by Ref No / Case No inside this project.' :
       k.type === 'consignment' ? 'Only Jawad can start this chain, by typing the ' + escapeHtml(k.label || 'Consignment Name') + ' on the first task. It is kept separate from every other chain.' :
       'Only Jawad can start this chain. Leave the number empty on the first task and the next number is given automatically.'}</div>
-    ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}`;
+    ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}
+    <label class="inline-label" style="flex-basis:100%;">Hover box shows <input type="text" list="hover-cols" value="${escapeHtml((k.hover || []).join(', '))}" placeholder="Leave blank for the normal Salesman & Branch box. Or type field names, comma separated" onchange="setChainKey('hover', this.value)" style="flex:1; width:auto; min-width:280px;"></label>
+    <datalist id="hover-cols">${hoverColumnChoices().map(c => `<option value="${escapeHtml(c)}"></option>`).join('')}</datalist>`;
+}
+
+function hoverColumnChoices() {
+  const out = ['RefNo', 'CaseNo', 'Comment', 'Remarks', 'ApprovalStatus', 'CustomerName', 'CustomerMobile'];
+  TASKS.forEach(t => (t.fields || []).forEach(f => { if (f.col && f.type !== 'divider' && out.indexOf(f.col) === -1) out.push(f.col); }));
+  return out;
 }
 
 function setChainKey(prop, v) {
@@ -3181,6 +3234,7 @@ function setChainKey(prop, v) {
     c.key.type = v;
     c.key.label = v === 'consignment' ? 'Consignment Name' : 'Ref No';
   } else if (prop === 'start') c.key.start = Math.max(1, Number(v) || 1);
+  else if (prop === 'hover') c.key.hover = String(v || '').split(',').map(x => x.trim()).filter(Boolean);
   else c.key.label = String(v || '').trim() || 'Consignment Name';
   renderChainEditor();
 }
@@ -3617,7 +3671,7 @@ function renderPhaseBar() {
   if (!user || !profile) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   bar.classList.remove('hidden');
   const present = phasesForStaff();
-  if (currentProject === ASSIGNED_PROJECT) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
+  if (currentProject === ASSIGNED_PROJECT || (currentProject === ADMIN_PROJECT && present.length <= 1)) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   if (present.length === 0) {
     bar.innerHTML = `<span class="sidebar-empty">No tasks for this person in ${escapeHtml(projectName(currentProject))} yet.</span>`;
     return;
@@ -3664,8 +3718,18 @@ function renderTaskSidebar() {
     const idle = !n && tk && tk.schedule && tk.schedule.on;
     const nextTxt = idle ? nextDueText(tk.schedule) : '';
     sb.insertAdjacentHTML('beforeend', `
-      <a class="task-sidebar-item${active ? ' active' : ''}${idle ? ' idle' : ''}" href="${href}"${idle ? ` data-tip="Not due today${nextTxt ? '. Next: ' + escapeHtml(nextTxt) : ''}"` : ''}>${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span>${idle ? `<small class="idle-next">${nextTxt ? 'Next: ' + escapeHtml(nextTxt) : 'No more dates'}</small>` : ''}</a>`);
+      <a class="task-sidebar-item${active ? ' active' : ''}${idle ? ' idle' : ''}" href="${href}" data-tip="${escapeHtml(taskTileTip(tk, idle, nextTxt))}">${tk && tk.schedule && tk.schedule.on ? '<span class="recur-ico" aria-label="Recurring">&#8635;</span>' : ''}${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span>${idle ? `<small class="idle-next">${nextTxt ? 'Next: ' + escapeHtml(nextTxt) : 'No more dates'}</small>` : ''}</a>`);
   });
+}
+
+function taskTileTip(tk, idle, nextTxt) {
+  if (!tk) return '';
+  const parts = [];
+  if (tk.schedule && tk.schedule.on) parts.push('Recurring: ' + scheduleSummary(tk.schedule));
+  if (idle) parts.push('Not due today' + (nextTxt ? '. Next: ' + nextTxt : ''));
+  if (tk.owners && tk.owners.length) parts.push('Done by: ' + tk.owners.join(', '));
+  if (tk.sla) parts.push('Time allowed: ' + slaText(tk.sla));
+  return parts.join('\n');
 }
 
 function ymdLocal(d) {
@@ -3722,6 +3786,9 @@ function caseCellClass(r) {
 }
 
 function pendingTip(p) {
+  if (p.hover && p.hover.length) {
+    return p.hover.map(h => h[0] + ': ' + (h[1] || '-')).concat(['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
+  }
   return caseTip(p.formSB, p.caseDays, p.inputs, p.corporate);
 }
 
@@ -4131,13 +4198,13 @@ async function loadRecent() {
     if (!result.ok) { table.innerHTML = `<tr><td class="report-meta">${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
     const items = result.items || [];
     const showTask = recentScope === 'all';
-    table.innerHTML = `<thead><tr><th>Saved</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Case No</th><th>Name</th><th>Saved by</th><th>Comment</th></tr></thead><tbody>${
+    table.innerHTML = `<thead><tr><th>Saved</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Name</th><th>Saved by</th><th>Comment</th></tr></thead><tbody>${
       items.map(x => `<tr>
         <td class="nowrap">${escapeHtml(x.savedAt)}</td>${showTask ? `<td class="left">${escapeHtml(x.task)}</td>` : ''}
-        <td>${escapeHtml(x.refNo)}</td><td>${escapeHtml(x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
+        <td>${escapeHtml(x.refNo || x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
         <td>${escapeHtml(x.savedBy)}${x.staff && x.staff !== x.savedBy ? `<br><small class="report-meta">for ${escapeHtml(x.staff)}</small>` : ''}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
-      </tr>`).join('') || `<tr><td colspan="${showTask ? 7 : 6}" class="report-meta">${from || to || q ? 'No final saves in these dates or for this search. Try other dates or press Clear.' : 'No final saves yet.'}</td></tr>`
-    }</tbody>${result.more ? `<tfoot><tr><td colspan="${showTask ? 7 : 6}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
+      </tr>`).join('') || `<tr><td colspan="${showTask ? 6 : 5}" class="report-meta">${from || to || q ? 'No final saves in these dates or for this search. Try other dates or press Clear.' : 'No final saves yet.'}</td></tr>`
+    }</tbody>${result.more ? `<tfoot><tr><td colspan="${showTask ? 6 : 5}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
   } catch (e) {
     if (seq === recentSeq) table.innerHTML = '<tr><td class="report-meta">Network error</td></tr>';
   }
@@ -4376,6 +4443,13 @@ function renderTiming() {
   }</tbody>`;
 }
 
+let empOpen = {};
+
+function toggleEmpItems(name) {
+  empOpen[name] = !empOpen[name];
+  renderEmployees();
+}
+
 function renderEmployees() {
   if (!timingData) return;
   const people = (timingData.people || []).slice().sort((a, b) => ((b.points || 0) - (a.points || 0)) || ((b.late + b.openLate) - (a.late + a.openLate)));
@@ -4385,15 +4459,16 @@ function renderEmployees() {
         <h4>${escapeHtml(P.name)}</h4>
         ${P.scoredCount ? `<div style="text-align:right;"><div class="pts-total${P.points < 0 ? ' neg' : ''}">${P.points > 0 ? '+' : ''}${P.points}</div><div class="report-meta">points · ${P.scoredCount} scored</div></div>` : ''}
       </div>
-      <div class="summary-line"><b style="color:var(--ok)">${P.onTime}</b> on time · <b style="color:var(--danger)">${P.late}</b> done late · <b style="color:var(--danger)">${P.openLate}</b> open and late</div>
+      <div class="summary-line"><b style="color:var(--ok)">${P.onTime}</b> on time · <b style="color:var(--danger)">${P.late}</b> done late · <b style="color:var(--danger)">${P.openLate}</b> open and late${P.leave ? ` · <b style="color:var(--danger)">${P.leave}</b> recurring left undone (L)` : ''}</div>
       ${(P.byTask || []).length ? `<table class="report-table" style="margin-bottom:12px;"><thead><tr><th>Task</th><th>Done</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>Points</th></tr></thead><tbody>${
         P.byTask.map(B => `<tr><td class="left">${escapeHtml(B.task)}</td><td>${B.count}</td>
           <td class="band-before">${B.before || ''}</td><td class="band-on">${B.on || ''}</td><td class="band-after">${B.after || ''}</td><td class="band-late">${B.late || ''}</td>
           <td><b class="${B.points < 0 ? 'band-late' : 'band-on'}">${B.points > 0 ? '+' : ''}${B.points}</b></td></tr>`).join('')}</tbody></table>` : ''}
-      ${P.items.length ? `<table class="report-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th></th></tr></thead><tbody>${
-        P.items.map(it => `<tr class="overdue"><td class="left">${escapeHtml(it.task)}</td>
+      ${P.items.length ? `<div class="emp-items${empOpen[P.name] ? ' all' : ''}"><table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th>Status</th></tr></thead><tbody>${
+        P.items.map((it, k) => `<tr class="overdue${k >= 12 ? ' emp-more' : ''}"><td class="left">${escapeHtml(it.task)}</td>
           <td style="color:var(--danger); font-weight:700;">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
-          <td>${escapeHtml(it.lateBy)}</td><td>${it.open ? 'still open' : 'done ' + escapeHtml(it.done)}</td></tr>`).join('')}</tbody></table>` : ''}
+          <td>${escapeHtml(it.leave ? 'L' : it.lateBy)}</td><td class="left">${it.leave ? 'Left undone' : it.open ? 'still open' : 'done ' + escapeHtml(it.done)}</td></tr>`).join('')}</tbody></table>
+          ${P.items.length > 12 ? `<button class="btn btn-small" style="margin-top:8px;" onclick="toggleEmpItems('${escapeHtml(P.name).replace(/'/g, "\\'")}')">${empOpen[P.name] ? 'Show fewer' : 'Show all ' + P.items.length}</button>` : ''}</div>` : ''}
     </div>`).join('') : '<div class="report-meta">Nothing timed yet.</div>';
 }
 
@@ -4666,41 +4741,63 @@ function openDaily() {
   document.getElementById('daily-overlay').classList.remove('hidden');
   const d = document.getElementById('daily-date');
   if (!d.value) d.value = ymdLocal(new Date());
-  loadDaily();
+  if (!dailyData) {
+    document.getElementById('daily-body').innerHTML = '<div class="report-meta">Pick a person, or press Show everyone.</div>';
+    loadDailyStaff();
+  }
 }
 
 function closeDaily() {
   document.getElementById('daily-overlay').classList.add('hidden');
 }
 
-async function loadDaily() {
+function loadDailyStaff() {
+  const sel = document.getElementById('daily-person');
+  if (sel.options.length > 1) return;
+  sel.innerHTML = '<option value="">Pick a person</option>' + Object.keys(STAFF).sort().map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+}
+
+function dailyItemHtml(it) {
+  return `<div class="daily-item">
+    <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
+    <div class="daily-text"><b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
+      ${it.due ? `<div class="daily-due">${escapeHtml(it.due)}</div>` : ''}
+      ${it.projectName && it.projectName !== 'Mahana' ? `<div class="daily-proj">${escapeHtml(it.projectName)}</div>` : ''}
+      ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
+    </div></div>`;
+}
+
+async function loadDaily(everyone) {
   const body = document.getElementById('daily-body');
+  const sel = document.getElementById('daily-person');
+  if (everyone) sel.value = '';
+  const person = sel.value;
+  if (!person && !everyone) { body.innerHTML = '<div class="report-meta">Pick a person, or press Show everyone.</div>'; return; }
   body.innerHTML = '<div class="report-meta">Loading...</div>';
   try {
-    const r = await apiCall('dailyTasks', { date: valOf('daily-date'), person: valOf('daily-person') });
+    const r = await apiCall('dailyTasks', { date: valOf('daily-date'), person: person });
     if (!r.ok) { body.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     dailyData = r;
-    const sel = document.getElementById('daily-person');
     const keep = sel.value;
-    sel.innerHTML = '<option value="">Everyone</option>' + (r.staff || []).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+    sel.innerHTML = '<option value="">Pick a person</option>' + (r.staff || []).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
     sel.value = keep;
     const dayText = new Date(r.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const col = (title, cls, list) => `<div class="daily-col ${cls}"><div class="daily-col-head">${title} <span>${list.length}</span></div>${list.length ? list.map(dailyItemHtml).join('') : '<div class="daily-empty">Nothing</div>'}</div>`;
     body.innerHTML = (r.people || []).map((p, pi) => `
       <div class="daily-card" id="daily-card-${pi}">
         <div class="daily-card-head">
-          <div><div class="daily-name">${escapeHtml(p.name)}</div><div class="daily-date">Tasks for ${escapeHtml(dayText)}</div></div>
+          <div><div class="daily-name">${escapeHtml(p.name)}</div><div class="daily-date">${escapeHtml(dayText)}</div></div>
           <span class="daily-brand">Taskendo</span>
         </div>
-        ${p.items.length ? p.items.map(it => `
-          <div class="daily-item">
-            <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain task' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
-            <div class="daily-text">
-              <b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count} waiting</span>` : ''}${it.due ? ` <span class="daily-due">${it.kind === 'Recurring' ? 'by ' : 'due '}${escapeHtml(it.due)}</span>` : ''}${it.late ? ' <span class="daily-late">late</span>' : ''}
-              ${it.projectName && it.projectName !== 'Mahana' ? `<span class="daily-proj">${escapeHtml(it.projectName)}</span>` : ''}
-              ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
-            </div>
-          </div>`).join('') : '<div class="daily-empty">Nothing due on this day.</div>'}
-        <div class="daily-actions"><button class="btn btn-small btn-primary" onclick="dailyPicture(${pi})">Make picture</button></div>
+        <div class="daily-cols">
+          ${col('Overdue', 'c-over', p.overdue)}
+          ${col('Today', 'c-today', p.today)}
+          ${col('Next 2 days', 'c-soon', p.soon)}
+        </div>
+        <div class="daily-actions">
+          <button class="btn btn-small btn-primary" onclick="dailyPicture(${pi}, 'copy')">Copy picture</button>
+          <button class="btn btn-small" onclick="dailyPicture(${pi}, 'save')">Save picture</button>
+        </div>
       </div>`).join('') || '<div class="report-meta">Nobody has tasks on this day.</div>';
   } catch (e) { body.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
@@ -4714,7 +4811,7 @@ function loadScriptOnce(src) {
   });
 }
 
-async function dailyPicture(i) {
+async function dailyPicture(i, mode) {
   const card = document.getElementById('daily-card-' + i);
   if (!card) return;
   try {
@@ -4723,18 +4820,20 @@ async function dailyPicture(i) {
     const canvas = await window.html2canvas(card, { backgroundColor: '#ffffff', scale: 2 });
     card.classList.remove('shooting');
     const p = dailyData.people[i];
-    const fname = 'Tasks ' + p.name + ' ' + dailyData.date + '.png';
-    canvas.toBlob(async blob => {
-      let copied = false;
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    if (mode === 'copy') {
       try {
-        if (navigator.clipboard && window.ClipboardItem) { await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); copied = true; }
-      } catch (e) {}
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = fname;
-      a.click();
-      toast(copied ? 'Picture saved and copied. Paste it in WhatsApp.' : 'Picture saved. Send it in WhatsApp.');
-    }, 'image/png');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        return toast('Picture copied. Paste it in WhatsApp.');
+      } catch (e) {
+        toast('This browser cannot copy pictures, so it was saved instead.', true);
+      }
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Tasks ' + p.name + ' ' + dailyData.date + '.png';
+    a.click();
+    if (mode !== 'copy') toast('Picture saved.');
   } catch (e) {
     card.classList.remove('shooting');
     toast('Could not make the picture. Take a screenshot instead.', true);
@@ -4960,7 +5059,7 @@ function slaText(sla) {
 }
 
 function pointsBasis(t) {
-  if (t.schedule && t.schedule.on) return 'Due ' + (t.schedule.time || '5:00 PM');
+  if (t.schedule && t.schedule.on) return 'Due ' + (t.schedule.time || '5:00 AM');
   return slaText(t.sla);
 }
 
@@ -5077,7 +5176,7 @@ let assignTab = 'open';
 function newAssignDraft() {
   return {
     id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '5:00 PM', repeat: false,
-    schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 PM', start: todayYmd(), end: 'never', until: '', count: 5 },
+    schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 AM', start: todayYmd(), end: 'never', until: '', count: 5 },
     pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
   };
 }
@@ -5326,7 +5425,7 @@ async function loadMyAssigned() {
     list.innerHTML = open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
         <h3>${escapeHtml(x.title)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
-        <div class="report-meta">Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
+        <div class="report-meta">${x.by ? 'Assigned by <b>' + escapeHtml(x.by) + '</b> to <b>' + escapeHtml((x.people || []).join(', ')) + '</b> · ' : ''}${x.repeat ? '&#8635; ' + escapeHtml(scheduleSummary(x.repeat)) + ' · ' : ''}Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
         ${canDo ? `<div class="report-bar">
           <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for Jawad (optional)">
@@ -5501,10 +5600,10 @@ let openItems = [];
 let openSel = {};
 
 async function loadOpen() {
-  document.getElementById('open-table').innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  document.getElementById('open-table').innerHTML = '<div class="report-meta">Loading...</div>';
   try {
     const result = await apiCall('openList');
-    if (!result.ok) { document.getElementById('open-table').innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
+    if (!result.ok) { document.getElementById('open-table').innerHTML = `<div class="report-meta">${escapeHtml(result.error || 'Could not load')}</div>`; return; }
     openItems = result.items || [];
     openSel = {};
     const cur = valOf('open-task');
@@ -5527,15 +5626,49 @@ function openShown() {
     (!q || [x.refNo, x.caseNo, x.name].join(' ').toLowerCase().indexOf(q) !== -1));
 }
 
+let openTreeOpen = {};
+
+function openChainOf(task) {
+  const c = allChains.filter(c => c.project === projOfTask(task) && c.tasks.indexOf(task) !== -1)[0];
+  if (c) return c.name;
+  return allRecurring.indexOf(task) !== -1 ? 'Recurring' : 'Not in a chain';
+}
+
+function toggleOpenNode(key, el) {
+  openTreeOpen[key] = el.open;
+}
+
 function renderOpen() {
   const rows = openShown();
-  document.getElementById('open-table').innerHTML = `<thead><tr><th></th><th>Task</th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>From</th><th>Days</th><th>Note</th></tr></thead><tbody>${
-    rows.map(x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}" data-tip="${escapeHtml(caseTip(x.formSB, x.caseDays, x.inputs, x.corporate))}">
+  const tree = {};
+  rows.forEach(x => {
+    const p = projectName(projOfTask(x.task)), c = openChainOf(x.task);
+    tree[p] = tree[p] || {};
+    tree[p][c] = tree[p][c] || {};
+    (tree[p][c][x.task] = tree[p][c][x.task] || []).push(x);
+  });
+  const flags = list => {
+    const d = list.filter(x => x.duplicate).length, f = list.filter(x => x.finalised).length;
+    return (d ? ` <span class="status-pill status-late">${d} duplicate</span>` : '') + (f ? ` <span class="status-pill status-done">${f} already in Final</span>` : '');
+  };
+  const rowHtml = x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}" data-tip="${escapeHtml(caseTip(x.formSB, x.caseDays, x.inputs, x.corporate))}">
       <td><input type="checkbox" ${openSel[x.id] ? 'checked' : ''} onchange="toggleOpenSel('${escapeHtml(x.id)}', this.checked)"></td>
-      <td class="left">${escapeHtml(x.task)}</td><td class="${caseCellClass(x)}">${escapeHtml(chequeKey(x))}</td><td class="left ${caseCellClass(x)}">${escapeHtml(x.name || '')}</td>
+      <td class="${caseCellClass(x)}">${escapeHtml(chequeKey(x))}</td><td class="left ${caseCellClass(x)}">${escapeHtml(x.name || '')}</td>
       <td>${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.createdBy)}</td><td>${x.days === null ? '' : x.days}</td>
       <td>${x.duplicate ? '<span class="status-pill status-late">Duplicate</span>' : x.finalised ? '<span class="status-pill status-done">Already in Final</span>' : ''}</td>
-    </tr>`).join('') || `<tr><td colspan="8" class="report-meta">Nothing to show.</td></tr>`}</tbody>`;
+    </tr>`;
+  const det = (key, label, count, inner, extra) => `<details class="open-node" ${openTreeOpen[key] ? 'open' : ''} ontoggle="toggleOpenNode('${escapeHtml(key).replace(/'/g, "\\'")}', this)"><summary><b>${escapeHtml(label)}</b> <span class="sidebar-count">${count}</span>${extra || ''}</summary><div class="open-node-body">${inner}</div></details>`;
+  const html = Object.keys(tree).sort().map(p => {
+    const chains = tree[p];
+    const pAll = [].concat(...Object.values(chains).map(t => [].concat(...Object.values(t))));
+    return det('p|' + p, p, pAll.length, Object.keys(chains).map(c => {
+      const tasks = chains[c];
+      const cAll = [].concat(...Object.values(tasks));
+      return det('c|' + p + '|' + c, c, cAll.length, Object.keys(tasks).map(t => det('t|' + p + '|' + c + '|' + t, t, tasks[t].length,
+        `<div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th></th><th>Ref / Case</th><th>Name</th><th>Arrived</th><th>From</th><th>Days</th><th>Note</th></tr></thead><tbody>${tasks[t].map(rowHtml).join('')}</tbody></table></div>`, flags(tasks[t]))).join(''), flags(cAll));
+    }).join(''), flags(pAll));
+  }).join('');
+  document.getElementById('open-table').innerHTML = html || '<div class="report-meta">Nothing to show.</div>';
   updateOpenCount();
 }
 
