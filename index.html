@@ -755,6 +755,60 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 .emp-items:not(.all) .emp-more { display: none; }
 .report-table thead th.rot { height: 215px; }
 .report-table td.name-col, .report-table th.name-col { white-space: normal; min-width: 140px; max-width: 220px; }
+.imp-star { color: var(--brass); font-size: 0.95em; }
+.task-sidebar-item.imp { border-left: 3px solid var(--brass); }
+.star-btn { border: none; background: transparent; color: var(--text-dim); font-size: 1rem; line-height: 1; padding: 0 4px 0 0; cursor: pointer; }
+.star-btn.on, .star-btn:hover { color: var(--brass); }
+.case-chip.imp { border-color: var(--brass); background: var(--brass-soft); }
+.for-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; background: var(--info-soft); color: #2f5f8a; vertical-align: middle; }
+.imp-badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; background: var(--brass-soft); color: #7b5c19; vertical-align: middle; }
+.chip-info { display: block; font-size: 0.72rem; color: var(--pine); font-weight: 600; margin-top: 2px; }
+.case-info { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; background: var(--brass-soft); border: 1px solid var(--brass-line); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.85rem; }
+.case-info-head { font-weight: 800; color: var(--pine); flex-basis: 100%; }
+.case-info-item b { color: #7b5c19; font-weight: 700; }
+.assign-next { margin-top: 6px; padding: 10px 12px; border: 1px dashed var(--border-strong); border-radius: 10px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.assign-next select { margin: 0; width: auto; }
+.bar-sep { width: 1px; align-self: stretch; background: var(--border-color); margin: 0 4px; }
+.show-next-pick { margin-top: 8px; }
+.jump-rule { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 10px; margin-top: 8px; background: var(--surface-2); font-size: 0.85rem; }
+.jump-rule select, .jump-rule input { margin: 0; padding: 6px 8px; font-size: 0.82rem; width: auto; max-width: 100%; }
+.jump-rule span { color: var(--text-dim); font-weight: 600; }
+.tick-yes { color: var(--ok); font-weight: 800; font-size: 1.05rem; }
+a.daily-item.daily-link { color: inherit; text-decoration: none; cursor: pointer; border-radius: 8px; }
+a.daily-item.daily-link:hover { background: rgba(255,255,255,0.7); }
+a.daily-item.daily-link:hover b { text-decoration: underline; }
+.emp-grid-wrap { margin-bottom: 18px; }
+.emp-row { cursor: pointer; }
+.emp-row:hover td { background: var(--accent-softer); }
+.emp-tiles { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.emp-tile { background: #fff; border: 1px solid var(--border-color); border-top: 4px solid var(--pine); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-sm); min-width: 0; }
+.emp-tile-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.emp-name { font-size: 1.35rem; font-weight: 800; color: var(--pine); }
+.emp-points { font-size: 2.2rem; font-weight: 800; color: var(--pine); line-height: 1; text-align: right; }
+.emp-points.neg { color: #d23f31; }
+.emp-points small { display: block; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); margin-top: 4px; }
+.emp-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.emp-stat { border-radius: 10px; padding: 12px; background: var(--surface-2); border: 1px solid var(--border-color); }
+.emp-stat b { display: block; font-size: 1.6rem; line-height: 1.1; }
+.emp-stat span { font-size: 0.76rem; color: var(--text-dim); font-weight: 600; }
+.emp-stat.ok b { color: var(--pine); }
+.emp-stat.bad b { color: #d23f31; }
+.emp-list-title { font-weight: 800; color: var(--pine); margin: 6px 0 6px; font-size: 0.9rem; }
+@media (max-width: 720px) { .emp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .emp-points { font-size: 1.7rem; } }
+.shot-wrap { position: fixed; left: -10000px; top: 0; background: #fff; padding: 16px; width: max-content; }
+.shot-head { font-size: 15px; color: var(--pine); margin-bottom: 10px; }
+.shot-wrap .report-table thead th { position: static; }
+#btn-refresh.spinning svg { animation: spin 0.9s linear infinite; }
+.case-chip { max-width: 100%; white-space: normal; }
+@media (max-width: 720px) {
+  .emp-tile .report-table, .summary-card .report-table { display: block; overflow-x: auto; max-width: 100%; }
+  .chain-cols { grid-template-columns: minmax(0, 1fr); }
+  .chain-key .inline-label { flex-wrap: wrap; max-width: 100%; }
+  .chain-key select, .chain-key input, #chain-add, #recurring-add, .step-add { max-width: 100%; min-width: 0 !important; }
+  .chain-col .case-chip { white-space: normal; }
+  .summary-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -774,6 +828,9 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 <button id="btn-notifications" class="icon-action hidden" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
+</button>
+<button id="btn-refresh" class="icon-action hidden" onclick="refreshAll()" title="Refresh: show the latest data" aria-label="Refresh">
+<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
 </button>
 <button id="btn-daily" class="icon-action hidden" onclick="openDaily()" title="Daily task list" aria-label="Daily task list">
 <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h4M8 17h7"/></svg>
@@ -860,10 +917,12 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 
 <!-- DYNAMIC ENTRY FORM: built at runtime from the task's own field list -->
 <div id="form-dynamic" class="hidden">
+<div id="case-info" class="case-info hidden"></div>
 <div id="dyn-fields" class="dyn-grid"></div>
-<div style="display:flex; align-items:center; gap:12px; margin-top:10px;">
+<div id="assign-next-box" class="assign-next hidden"></div>
+<div style="display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;">
 <button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
-<button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Final Save</button>
+<button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Close Task</button>
 <button class="btn" id="btn-partial-save-dynamic" onclick="savePartial()">Partial Save</button>
 <span id="partial-editing" class="partial-editing hidden"></span>
 </div>
@@ -894,8 +953,11 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div id="recent-body" class="hidden">
 <div class="report-bar date-bar">
 <button class="btn btn-small btn-primary" onclick="recentToday()">Today</button>
-<button class="phase-btn" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
 <button class="phase-btn" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
+<button class="phase-btn" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
+<span class="bar-sep"></span>
+<button class="phase-btn" id="recent-who-all" onclick="setRecentWho('all')">Everyone</button>
+<button class="phase-btn" id="recent-who-me" onclick="setRecentWho('me')">Only me</button>
 <label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
 <label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
 <input type="text" id="recent-q" class="report-search" placeholder="Search ref or name" onkeydown="if(event.key==='Enter')loadRecent()">
@@ -921,8 +983,12 @@ message boxes for a task from Add / Edit Tasks.
 
 <!-- TASK CHAIN EDITOR (Jawad only) -->
 <div id="form-chain" class="hidden">
+<div class="builder-actions sticky-actions">
+<button class="btn btn-primary" id="btn-save-chain-top" onclick="saveChain()">Save Chain</button>
+<span class="report-meta">Changes here are kept only after you press Save Chain.</span>
+</div>
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Each chain is its own order of tasks. A case enters a chain when that chain's first task is Final Saved
+Each chain is its own order of tasks. A case enters a chain when that chain's first task is closed
 (Chain 1 also gets new Google Form cases). A task can sit in several chains; finishing it moves the case on in each of them.
 </p>
 <div class="report-bar" id="chain-tabs"></div>
@@ -936,6 +1002,10 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="chain-col-note">Finishing one makes the next pending, in this order.</div>
 <div id="chain-list"></div>
 <select id="chain-add" class="report-search" style="width:100%; margin-top:8px;" onchange="addToChain(this.value)"></select>
+<div class="chain-col-head" style="margin-top:18px;">Skip ahead rules</div>
+<div class="chain-col-note">After a task is closed, if its answer matches, the case goes straight to a later task and skips the ones in between. Example: after Save Contacts, if Inputs is Satisfied, go to Adv &amp; Chq.</div>
+<div id="jump-list"></div>
+<button class="btn btn-small" style="margin-top:8px;" onclick="addJumpRule()">+ Add rule</button>
 </div>
 <div class="chain-col">
 <div class="chain-col-head">Recurring</div>
@@ -970,14 +1040,17 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">From <input type="date" id="report-from" onkeydown="if(event.key==='Enter')applyReportDates()"></label>
 <label class="inline-label">To <input type="date" id="report-to" onkeydown="if(event.key==='Enter')applyReportDates()"></label>
 <button class="btn btn-small btn-primary" onclick="applyReportDates()">Apply</button>
-<button class="btn btn-small" onclick="clearReportTo()">Up to today</button>
-<span class="report-meta">Pick both dates, then press Apply. From is saved for everyone; To is just for this view.</span>
+<button class="btn btn-small" onclick="setReportRange('today')">Today</button>
+<button class="btn btn-small" onclick="setReportRange('month')">This month</button>
+<span class="report-meta">Starts on the 1st of this month up to today. Change the dates and press Apply.</span>
 </div>
 <div id="report-simple">
 <div class="report-bar">
 <label class="inline-label">Chain <select id="report-chain" onchange="onReportChain()"></select></label>
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, name or mobile" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
+<button class="btn btn-small" onclick="copyReportPicture()" title="Copy the table as a picture for WhatsApp">Copy picture</button>
+<button class="btn btn-small" onclick="copyReportText()" title="Copy a short list for WhatsApp">Copy text</button>
 </div>
 <div id="report-filters" class="filter-panel hidden">
 <label class="inline-label">Days from <input type="number" id="rf-dmin" min="0" oninput="renderSimpleReport()"></label>
@@ -994,6 +1067,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="report-timing" class="hidden">
 <div class="report-bar">
+<select id="tm-person" class="report-search" onchange="renderTiming()"></select>
 <select id="tm-task" class="report-search" onchange="renderTiming()"></select>
 <select id="tm-state" class="report-search" onchange="renderTiming()">
 <option value="">All</option><option value="late">Late only</option><option value="open">Still open</option><option value="ontime">On time</option>
@@ -1004,11 +1078,33 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="report-wrap"><table class="report-table" id="timing-table"></table></div>
 </div>
 <div id="report-employee" class="hidden">
-<div class="summary-grid emp-grid" id="employee-cards"></div>
+<div class="report-bar">
+<label class="inline-label">Person <select id="emp-person" onchange="renderEmployees()"></select></label>
+<label class="inline-label">Show <select id="emp-band" onchange="renderEmployees()">
+<option value="">Late and left undone</option>
+<option value="before">Before</option>
+<option value="on">On</option>
+<option value="after">After</option>
+<option value="late">After that</option>
+<option value="scored">Everything scored</option>
+<option value="leave">Left undone (L)</option>
+</select></label>
+<span class="report-meta">Click a name in the table to see only that person.</span>
+</div>
+<div class="report-wrap emp-grid-wrap"><table class="report-table" id="employee-grid"></table></div>
+<div class="emp-tiles" id="employee-cards"></div>
 </div>
 <div id="report-cheque" class="hidden">
+<div class="report-bar">
+<label class="inline-label">Claimed by <select id="cq-user" onchange="renderChequeReport()"></select></label>
+<label class="inline-label">Branch <select id="cq-branch" onchange="renderChequeReport()"></select></label>
+<label class="inline-label">On delivery <select id="cq-del" onchange="renderChequeReport()"><option value="">All</option><option value="yes">Yes</option><option value="no">No</option></select></label>
+<label class="inline-label">Due from <input type="date" id="cq-due-from" onchange="renderChequeReport()"></label>
+<label class="inline-label">to <input type="date" id="cq-due-to" onchange="renderChequeReport()"></label>
+<label class="field-req-pick"><input type="checkbox" id="cheque-show-received" onchange="renderChequeReport()"> Show received cheques</label>
+<button class="btn btn-small" onclick="clearChequeFilters()">Clear</button>
+</div>
 <div id="cheque-summary"></div>
-<div class="report-bar"><label class="field-req-pick"><input type="checkbox" id="cheque-show-received" onchange="renderChequeReport()"> Show received cheques</label></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
 </div>
 <div id="report-exits" class="hidden">
@@ -1060,7 +1156,7 @@ Every pending item across all tasks. Use it to clear old backlog. Closing an ite
 <div class="schedule-box" style="margin-top:18px;">
 <label>Fix stuck cases</label>
 <div class="report-meta" style="margin-bottom:10px; line-height:1.6;">
-Closes duplicate items and items already in Final, then creates the next step for every case Final Saved since this date whose next step never appeared. Rebuild and save the chain first.
+Closes duplicate items and items already in Final, then creates the next step for every case closed since this date whose next step never appeared. Rebuild and save the chain first.
 </div>
 <div class="report-bar" style="margin:0;">
 <label class="inline-label">Since <input type="date" id="open-since" value="2026-10-03"></label>
@@ -1094,7 +1190,7 @@ Each project has its own chains, phases and tasks. Tick who can see each project
 
 <div id="form-points" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Start with <b>General</b>: those points apply to everyone who does the task. Pick a person only to give them different points. Tasks without a Time allowed give no points, and any points conditions set on a task's fields (Add / Edit Tasks) must pass or no points are given. <b>On</b> means finished within the task's Time allowed (for repeating tasks, by the due time). <b>Before</b> means finished at least the time you set earlier than that; <b>After</b> means late but within the time you set; <b>After that</b> is anything later and can be minus. Points go to whoever Final Saves, counted in that person's working hours.
+Start with <b>General</b>: those points apply to everyone who does the task. Pick a person only to give them different points. Tasks without a Time allowed give no points, and any points conditions set on a task's fields (Add / Edit Tasks) must pass or no points are given. <b>On</b> means finished within the task's Time allowed (for repeating tasks, by the due time). <b>Before</b> means finished at least the time you set earlier than that; <b>After</b> means late but within the time you set; <b>After that</b> is anything later and can be minus. Points go to whoever closes the task, counted in that person's working hours.
 </p>
 <div class="report-bar" id="points-people"></div>
 <div class="report-meta" id="points-meta" style="margin-bottom:10px;"></div>
@@ -1183,7 +1279,7 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 
 <div id="bulk-bar" class="bulk-bar hidden">
 <span class="bulk-count" id="bulk-count">0 selected</span>
-<button class="btn btn-primary btn-small" id="btn-bulk-finalize" onclick="finalizeSelected()">Finalize Selected</button>
+<button class="btn btn-primary btn-small" id="btn-bulk-finalize" onclick="finalizeSelected()">Close selected</button>
 <button class="btn btn-small" onclick="clearSelection()">Clear</button>
 <span class="bulk-note">Rows with no Ref No and no Case No will be skipped.</span>
 </div>
@@ -1220,7 +1316,7 @@ const GOOGLE_CLIENT_ID = "766825494798-2vq54u2u9kmfegir98uig2ubr9gr6hj4.apps.goo
 const AUTO_SELECT_FIRST_PHASE = false;
 const BELL_REFRESH_HOURS = [11, 14, 17, 19];
 
-const STAFF = {
+const STAFF_ROLES = {
   "Jawad":   { role: "Director" },
   "Uzair":   { role: "Manager HP" },
   "Ahmed":   { role: "Head of Recovery" },
@@ -1231,6 +1327,18 @@ const STAFF = {
   "Nabiha":  { role: "Operations" },
   "Sumaira": { role: "Recovery Officer" }
 };
+let STAFF = Object.assign({}, STAFF_ROLES);
+
+function applyUsers(list) {
+  if (!Array.isArray(list) || !list.length) return;
+  const next = {};
+  list.forEach(u => {
+    const n = String(u.name || '').trim();
+    if (!n) return;
+    next[n] = { role: (STAFF_ROLES[n] && STAFF_ROLES[n].role) || (u.level === 0 ? 'Director' : u.level === 1 ? 'Manager' : 'Staff'), level: u.level };
+  });
+  if (Object.keys(next).length) STAFF = next;
+}
 
 const BUILTIN_FIELD_DEFS = [
   { key: 'ref',            label: 'Reference Number', type: 'number',   col: 'RefNo',           locked: true },
@@ -1386,7 +1494,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R16";
+const APP_VERSION = "R17";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1435,6 +1543,7 @@ let adminProject = DEFAULT_PROJECT;
 let allChains = [];
 let allRecurring = [];
 
+const PANEL_PREFIX = "__panel_";
 const MY_ASSIGNED = "My Assigned";
 const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassigned", description: "Tasks Assigned to You",
   temp: false, fields: [], owners: [], slots: [], active: true };
@@ -1465,7 +1574,18 @@ function taskListFor(staffName, all) {
   }
   let list = TASKS.filter(t => t.active && t.owners.indexOf(staffName) !== -1);
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
-  return list.map(t => t.name).concat([MY_ASSIGNED]);
+  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(extraPanelsFor(staffName));
+}
+
+function extraPanelsFor(staffName) {
+  if (!user || user.level === 0 || staffName !== user.name) return [];
+  const out = ['Reports'];
+  if (user.level === 1) out.push('Assign');
+  return out;
+}
+
+function isPanelProject(pid) {
+  return pid === ASSIGNED_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
 }
 
 function recurringHidden(t) {
@@ -1486,7 +1606,7 @@ function getPhaseForTask(taskName) {
 function projOfTask(name) {
   const t = taskByName(name);
   if (!t) return DEFAULT_PROJECT;
-  if (t.admin) return ADMIN_PROJECT;
+  if (t.admin) return isAdminPanel() ? ADMIN_PROJECT : PANEL_PREFIX + t.panel;
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
   return t.project || DEFAULT_PROJECT;
 }
@@ -1494,6 +1614,7 @@ function projOfTask(name) {
 function projectName(pid) {
   if (pid === ADMIN_PROJECT) return 'Admin';
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
+  if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
   const p = PROJECTS.filter(x => x.id === pid)[0];
   return p ? p.name : pid;
 }
@@ -1513,7 +1634,7 @@ function projectTasks(pid) {
 }
 
 function projectChains(pid) {
-  if (pid === ADMIN_PROJECT || pid === ASSIGNED_PROJECT) return [];
+  if (pid === ADMIN_PROJECT || isPanelProject(pid)) return [];
   const mine = projectTasks(pid);
   const out = allChains.filter(c => c.project === pid).map((c, i) => ({ id: c.name, name: c.name, color: chainColor(i), tasks: c.tasks.filter(t => mine.indexOf(t) !== -1) }))
     .filter(c => c.tasks.length);
@@ -1527,7 +1648,7 @@ function projectChains(pid) {
 
 function currentChainTasks() {
   if (!currentProject) return [];
-  if (currentProject === ADMIN_PROJECT || currentProject === ASSIGNED_PROJECT) return projectTasks(currentProject);
+  if (currentProject === ADMIN_PROJECT || isPanelProject(currentProject)) return projectTasks(currentProject);
   const c = projectChains(currentProject).filter(x => x.id === currentChain)[0];
   return c ? c.tasks : [];
 }
@@ -1545,7 +1666,7 @@ function phasesForStaff() {
 
 function ensureNavState() {
   const projs = visibleProjects();
-  if (currentProject && currentProject !== ASSIGNED_PROJECT && !projs.some(p => p.id === currentProject)) currentProject = null;
+  if (currentProject && !isPanelProject(currentProject) && !projs.some(p => p.id === currentProject)) currentProject = null;
   if (!currentProject && projs.length === 1) currentProject = projs[0].id;
   if (!currentProject) { currentChain = null; return; }
   const ch = projectChains(currentProject);
@@ -1596,6 +1717,21 @@ function openMyAssigned() {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_ASSIGNED);
 }
 
+function openPanelTask(name) {
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(name);
+}
+
+function extraTabsHtml(asButtons) {
+  const extras = profile ? extraPanelsFor(profile.name) : [];
+  return extras.map(n => {
+    const pid = projOfTask(n);
+    const on = currentProject === pid;
+    return asButtons
+      ? `<button class="btn btn-small my-assigned-btn${on ? ' btn-primary' : ''}" onclick="openPanelTask('${escapeHtml(n)}')">${escapeHtml(n)}</button>`
+      : `<button class="ftab ftab-right${on ? ' active' : ''}" onclick="openPanelTask('${escapeHtml(n)}')">${escapeHtml(n)}</button>`;
+  }).join('');
+}
+
 function renderProjectNav() {
   const nav = document.getElementById('project-nav');
   const tiles = document.getElementById('project-tiles');
@@ -1604,7 +1740,7 @@ function renderProjectNav() {
   const assignedBtn = `<button class="btn btn-small my-assigned-btn${currentProject === ASSIGNED_PROJECT ? ' btn-primary' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? ' <span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   if (!currentProject) {
     nav.classList.remove('hidden');
-    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${assignedBtn}`;
+    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${extraTabsHtml(true)}${assignedBtn}`;
     tiles.classList.remove('hidden');
     tiles.innerHTML = projs.map(p => {
       const n = pendingCountForProject(p.id);
@@ -1623,8 +1759,8 @@ function renderProjectNav() {
     return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
   }).join('');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
-  const ch = currentProject === ASSIGNED_PROJECT ? [] : projectChains(currentProject);
-  nav.innerHTML = `<div class="ftabs">${projTabs}<div class="nav-spacer"></div>${assignedTab}</div>
+  const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
+  nav.innerHTML = `<div class="ftabs">${projTabs}<div class="nav-spacer"></div>${extraTabsHtml(false)}${assignedTab}</div>
     ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
@@ -1676,7 +1812,8 @@ async function completeLogin() {
   const statusEl = document.getElementById('login-status');
   statusEl.innerText = "Verifying...";
   try {
-    const result = await apiCall('whoami');
+    const both = await Promise.all([apiCall('whoami'), loadTasks()]);
+    const result = both[0];
     if (!result.ok) {
       statusEl.innerText = result.error || "Authorization Failed";
       idToken = null;
@@ -1685,23 +1822,23 @@ async function completeLogin() {
       return;
     }
     user = { name: result.name, email: result.email, level: result.level, dailyViewer: !!result.dailyViewer };
+    applyUsers(result.users);
     document.getElementById('btn-daily').classList.toggle('hidden', !user.dailyViewer);
     serverVersion = result.version || 'old';
     showVersionBanner();
-
-    statusEl.innerText = "Loading tasks...";
-    await loadTasks();
+    readPendingCache();
 
     statusEl.innerText = "";
     document.getElementById('scr-login').classList.add('hidden');
     document.getElementById('btn-logout').classList.remove('hidden');
+    document.getElementById('btn-refresh').classList.remove('hidden');
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('active-user-display').classList.remove('hidden');
     document.getElementById('active-user-display').innerText = user.name;
 
     loadTemplates();
-    await Promise.all([loadChain(), loadProjects()]);
     loadPending();
+    await Promise.all([loadChain(), loadProjects()]);
     startBellTimer();
 
     window.addEventListener('hashchange', route);
@@ -1719,6 +1856,7 @@ function doLogout() {
   window.removeEventListener('hashchange', route);
   idToken = null;
   localStorage.removeItem('mahana_idToken');
+  try { localStorage.removeItem(PENDING_CACHE_KEY); } catch (e) {}
   document.getElementById('btn-daily').classList.add('hidden'); closeDaily();
   user = null; profile = null; currentTask = null; currentPhase = null;
   templates = {}; templatesLoaded = false;
@@ -1796,7 +1934,8 @@ function normaliseField(f) {
       on: true,
       mode: f.pointsIf.mode === 'values' ? 'values' : 'filled',
       values: Array.isArray(f.pointsIf.values) ? f.pointsIf.values.map(String) : []
-    } : null
+    } : null,
+    showNext: !!f.showNext
   };
 }
 
@@ -1815,7 +1954,9 @@ function normaliseTask(t) {
     schedule: t.schedule && t.schedule.on ? Object.assign({}, t.schedule, { days: (t.schedule.days || []).slice() }) : null,
     panel: t.panel || null,
     project: String(t.project || DEFAULT_PROJECT),
-    noPoints: Array.isArray(t.noPoints) ? t.noPoints.slice() : []
+    noPoints: Array.isArray(t.noPoints) ? t.noPoints.slice() : [],
+    important: !!t.important,
+    clockFrom: t.clockFrom && t.clockFrom.date ? { date: String(t.clockFrom.date), time: String(t.clockFrom.time || '') } : null
   };
 }
 
@@ -1839,7 +1980,7 @@ function renderTaskIndex() {
       if (t.phase !== p || !inProj(t)) return;
       const label = t.name || 'Untitled task';
       html += `<div class="task-index-item${i === builderIndex ? ' active' : ''}${t.active ? '' : ' off'}"
-        onclick="openBuilderTask(${i})">${escapeHtml(label)}</div>`;
+        onclick="openBuilderTask(${i})">${t.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(label)}</div>`;
     });
   });
   box.innerHTML = html || '<div class="chain-empty">No tasks yet.</div>';
@@ -1960,7 +2101,11 @@ function renderBuilderForm() {
       <label class="inline-label"><input type="number" min="0" value="${t.sla ? t.sla.days : ''}" placeholder="0" onchange="setSla('days', this.value)"> working days</label>
       <label class="inline-label"><input type="number" min="0" max="23" value="${t.sla ? t.sla.hours : ''}" placeholder="0" onchange="setSla('hours', this.value)"> hours</label>
     </div>
-    <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until its Final Save. Leave both blank for no limit.</div>
+    <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until the task is closed. Leave both blank for no limit.</div>
+
+    <label>Start the clock from</label>
+    ${renderClockFromEditor(t)}
+    <div class="builder-hint">Normally the clock starts when the case arrives. Pick a date from an earlier task (for example the visit date and time set in Visit Time Tieup) to start counting from that moment instead. Points and lateness use it.</div>
 
     ${renderScheduleEditor(t)}
 
@@ -2000,6 +2145,10 @@ function renderBuilderForm() {
         <input type="checkbox"${t.active ? ' checked' : ''} onchange="updateBuilder('active', this.checked)">
         Active
       </label>
+      <label class="owner-pick${t.important ? ' on' : ''}">
+        <input type="checkbox"${t.important ? ' checked' : ''} onchange="updateBuilder('important', this.checked)">
+        &#9733; Important task
+      </label>
     </div>
     <div class="builder-hint">
       Switching a task off hides it everywhere. Past entries stay in the sheet.
@@ -2010,7 +2159,7 @@ function renderBuilderForm() {
       <div id="field-list">${renderFieldEditorList(t)}</div>
       <div class="builder-hint">
         Reference Number and Case Number can be added or removed, but never
-        renamed. Final Save needs a value in at least one of whichever
+        renamed. Close Task needs a value in at least one of whichever
         numbers you include here.
       </div>
     </div>
@@ -2055,6 +2204,37 @@ function renderBuilderForm() {
   toggleNewFieldOptions();
 }
 
+function dateFieldChoices(type) {
+  const out = [];
+  const seen = {};
+  builderTasks.forEach(t => (t.fields || []).forEach(f => {
+    if (!f.col || seen[f.col]) return;
+    if (type === 'date' ? (f.type === 'date') : (f.type === 'time')) { seen[f.col] = true; out.push({ col: f.col, label: f.label + ' (' + (t.name || 'task') + ')' }); }
+  }));
+  return out;
+}
+
+function renderClockFromEditor(t) {
+  const cf = t.clockFrom || { date: '', time: '' };
+  const dates = dateFieldChoices('date'), times = dateFieldChoices('time');
+  return `<div class="report-bar" style="margin-bottom:6px;">
+    <select onchange="setClockFrom('date', this.value)"><option value="">When the case arrives</option>${dates.map(d => `<option value="${escapeHtml(d.col)}"${d.col === cf.date ? ' selected' : ''}>${escapeHtml(d.label)}</option>`).join('')}</select>
+    ${cf.date ? `<select onchange="setClockFrom('time', this.value)"><option value="">No time (start of that day)</option>${times.map(d => `<option value="${escapeHtml(d.col)}"${d.col === cf.time ? ' selected' : ''}>${escapeHtml(d.label)}</option>`).join('')}</select>` : ''}
+  </div>`;
+}
+
+function setClockFrom(part, v) {
+  if (builderIndex < 0) return;
+  const t = builderTasks[builderIndex];
+  const cf = Object.assign({ date: '', time: '' }, t.clockFrom || {});
+  cf[part] = v;
+  if (part === 'date' && !v) cf.time = '';
+  if (part === 'date' && v && !cf.time && v === 'ScheduledDate') cf.time = 'ScheduledTime';
+  t.clockFrom = cf.date ? cf : null;
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
 function toggleNewFieldOptions() {
   const typeEl = document.getElementById('new-field-type');
   const optEl = document.getElementById('new-field-options');
@@ -2076,14 +2256,21 @@ function scheduleSummary(sch) {
   let s = sch.freq === 'daily' ? (every === 1 ? 'Daily' : 'Every ' + every + ' days')
     : sch.freq === 'monthly' ? (every === 1 ? 'Monthly' : 'Every ' + every + ' months') + ' on day ' + Number(String(sch.start || '').slice(8, 10))
     : (every === 1 ? 'Weekly' : 'Every ' + every + ' weeks') + ' on ' + (sch.days || []).map(d => DAY_NAMES[d].charAt(0) + DAY_NAMES[d].slice(1).toLowerCase()).join(', ');
-  s += ' by ' + (sch.time || '5:00 AM');
+  s += ' by ' + clockText(sch.time || RECUR_DEFAULT_TIME);
   if (sch.end === 'until' && sch.until) s += ', until ' + formatDateDMY(sch.until);
   if (sch.end === 'count') s += ', ' + (sch.count || 0) + ' times';
   return s;
 }
 
+const RECUR_DEFAULT_TIME = '12:15 AM';
+
+function clockText(v) {
+  const m = String(v || '').match(/^12:(\d{2})\s*AM$/i);
+  return m ? v + ' (midnight, end of the day)' : v;
+}
+
 function clockParts(v) {
-  const m = String(v || '5:00 AM').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i) || [0, '5', '00', 'AM'];
+  const m = String(v || RECUR_DEFAULT_TIME).match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i) || [0, '12', '15', 'AM'];
   return { h: String(Number(m[1])), m: m[2], ap: m[3].toUpperCase() };
 }
 
@@ -2135,7 +2322,7 @@ function renderScheduleEditor(t) {
         ${sch.end === 'until' ? `<input type="date" class="report-search" value="${escapeHtml(sch.until || '')}" onchange="setSchedule('until', this.value)">` : ''}
         ${sch.end === 'count' ? `<label class="inline-label"><input type="number" min="1" value="${sch.count || 5}" onchange="setSchedule('count', this.value)"> times</label>` : ''}
       </div>
-      <div class="builder-hint" style="margin:0;">${escapeHtml(scheduleSummary(sch))}. On each day it shows up as a pending item for the owners; their Final Save closes it. Not closed by the due time counts as late.</div>
+      <div class="builder-hint" style="margin:0;">${escapeHtml(scheduleSummary(sch))}. On each day it shows up as a pending item for the owners; closing the task clears it. Not closed by the due time counts as late.</div>
     </div>`;
 }
 
@@ -2151,7 +2338,7 @@ function setSla(part, value) {
 function toggleSchedule(on) {
   if (builderIndex < 0) return;
   const t = builderTasks[builderIndex];
-  t.schedule = on ? { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 AM', start: todayYmd(), end: 'never', until: '', count: 5 } : null;
+  t.schedule = on ? { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: RECUR_DEFAULT_TIME, start: todayYmd(), end: 'never', until: '', count: 5 } : null;
   markBuilderDirty();
   renderBuilderForm();
 }
@@ -2215,6 +2402,7 @@ function renderFieldEditorList(t) {
         </span>
       </div>
       ${optionsUI}
+      ${(f.key === 'ref' || f.key === 'case') ? '' : `<label class="field-req-pick show-next-pick"><input type="checkbox"${f.showNext ? ' checked' : ''} onchange="toggleShowNext('${f.id}', this.checked)"> Show this answer on the next tasks</label>`}
       ${(f.key === 'ref' || f.key === 'case') ? '' : renderExitEditor(f)}
       ${(f.key === 'ref' || f.key === 'case') ? '' : renderPointsRuleEditor(f)}
     </div>`;
@@ -2256,7 +2444,7 @@ function renderExitEditor(f) {
   return `<div class="exit-rule${ex.on ? ' on' : ''}">
     <label class="field-req-pick">
       <input type="checkbox"${ex.on ? ' checked' : ''} onchange="toggleExit('${fid}', this.checked)">
-      Take the case out of the chain on Final Save
+      Take the case out of the chain when this task is closed
     </label>
     ${detail}
   </div>`;
@@ -2295,6 +2483,13 @@ function renderPointsRuleEditor(f) {
     </label>
     ${detail}
   </div>`;
+}
+
+function toggleShowNext(fieldId, on) {
+  const f = builderField(fieldId);
+  if (!f) return;
+  f.showNext = !!on;
+  markBuilderDirty();
 }
 
 function togglePointsRule(fieldId, on) {
@@ -2593,8 +2788,8 @@ function updateBuilder(field, value) {
   }
 
   markBuilderDirty();
-  if (field === 'name' || field === 'phase' || field === 'active') renderTaskIndex();
-  if (field === 'temp') renderBuilderForm();
+  if (field === 'name' || field === 'phase' || field === 'active' || field === 'important') renderTaskIndex();
+  if (field === 'temp' || field === 'important') renderBuilderForm();
 }
 
 function updateBuilderSlots(value) {
@@ -2671,6 +2866,25 @@ async function saveTasks() {
   btn.disabled = false;
 }
 
+const PENDING_CACHE_KEY = 'taskendo_pending_cache';
+
+function readPendingCache() {
+  try {
+    const c = JSON.parse(localStorage.getItem(PENDING_CACHE_KEY) || 'null');
+    if (!c || c.email !== user.email || Date.now() - (c.at || 0) > 12 * 3600000) return;
+    pendingItems = c.items || [];
+    assignedMine = c.mine || [];
+    assignedDone = c.done || [];
+    updateBell();
+  } catch (e) {}
+}
+
+function writePendingCache() {
+  try {
+    localStorage.setItem(PENDING_CACHE_KEY, JSON.stringify({ email: user.email, at: Date.now(), items: pendingItems, mine: assignedMine, done: assignedDone }));
+  } catch (e) {}
+}
+
 async function loadPending() {
   if (!user) return;
   try {
@@ -2679,6 +2893,7 @@ async function loadPending() {
       pendingItems = result.items || [];
       assignedMine = (result.assigned && result.assigned.mine) || [];
       assignedDone = (result.assigned && result.assigned.doneUnseen) || [];
+      writePendingCache();
       updateBell();
       if (currentTask) renderPendingStrip();
       if (profile && !document.getElementById('scr-entry').classList.contains('hidden')) { renderProjectNav(); if (currentProject) renderPhaseBar(); }
@@ -2687,6 +2902,27 @@ async function loadPending() {
   } catch (e) {
 
   }
+}
+
+let refreshing = false;
+
+async function refreshAll() {
+  if (!user || refreshing) return;
+  if (builderDirty && currentTask === 'Add / Edit Tasks') return toast('Press Save All first, or your task changes would be lost.', true);
+  refreshing = true;
+  const btn = document.getElementById('btn-refresh');
+  btn.classList.add('spinning');
+  try {
+    reportData = null; timingData = null; chequesLoaded = false; templatesLoaded = false; chainLoaded = false;
+    builderTasks = [];
+    await Promise.all([loadTasks(), loadChain(), loadProjects(), loadTemplates()]);
+    await loadPending();
+    if (window.location.hash.indexOf('#/select') === 0) renderSelectionScreen();
+    else if (profile) route();
+    toast('Up to date.');
+  } catch (e) { toast('Could not refresh. Check the internet and try again.', true); }
+  btn.classList.remove('spinning');
+  refreshing = false;
 }
 
 function visibleTaskNames() {
@@ -2705,7 +2941,8 @@ let assignedDone = [];
 
 function pendingForTask(taskName) {
   if (taskName === MY_ASSIGNED) return (profile && user && profile.name === user.name) ? assignedMine : [];
-  return pendingItems.filter(p => p.taskName === taskName);
+  const adminView = isAdminPanel();
+  return pendingItems.filter(p => p.taskName === taskName && (adminView || !p.assignedTo || !profile || p.assignedTo === profile.name));
 }
 
 function updateBell() {
@@ -2754,7 +2991,7 @@ function renderNotifPanel() {
       <div class="notif-item${caseTagClass(p)}" data-tip="${escapeHtml(pendingTip(p))}" data-task="${escapeHtml(p.taskName)}"
            data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}"
            data-name="${escapeHtml(p.customerName || '')}" data-mobile="${escapeHtml(p.customerMobile || '')}">
-        <div class="notif-task">${escapeHtml(p.taskName)}${corpBadge(p)}${p.late ? '<span class="late-badge">Late</span>' : ''}</div>
+        <div class="notif-task">${p.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(p.taskName)}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late</span>' : ''}</div>
         <div class="notif-meta">${escapeHtml(keyLabel(p))} &middot; ${escapeHtml(p.createdAt || '')}</div>
       </div>`).join('');
     if (pendingItems.length > shown.length) {
@@ -2837,10 +3074,28 @@ function renderPendingStrip() {
     ? '1 case waiting on ' + currentTask
     : items.length + ' cases waiting on ' + currentTask;
 
+  const canStar = user && user.level <= 1;
   list.innerHTML = items.map((p, i) => `
-    <span class="case-chip${caseTagClass(p)}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
-      ${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
+    <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
+      ${canStar && !p.recurring ? `<button class="star-btn${p.important ? ' on' : ''}" onclick="event.stopPropagation(); toggleImportant('${escapeHtml(p.pendingId || '')}')" title="${p.important ? 'Important. Click to unmark' : 'Mark as important'}">${p.important ? '&#9733;' : '&#9734;'}</button>` : (p.important ? '<span class="imp-star">&#9733;</span>' : '')}
+      ${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
+}
+
+async function toggleImportant(id) {
+  const p = pendingItems.filter(x => x.pendingId === id)[0];
+  if (!p) return;
+  const on = !p.important;
+  p.important = on;
+  renderPendingStrip();
+  try {
+    const r = await apiCall('pendingFlag', { pendingId: id, on: on });
+    if (!r.ok) { p.important = !on; renderPendingStrip(); return toast(r.error || 'Could not change it', true); }
+    pendingItems.sort((a, b) => (b.important - a.important) || ((b.arrivedMs || 0) - (a.arrivedMs || 0)));
+    renderPendingStrip();
+    writePendingCache();
+    toast(on ? 'Marked important. It shows first for everyone.' : 'No longer important.');
+  } catch (e) { p.important = !on; renderPendingStrip(); toast('Network error', true); }
 }
 
 function fillKeysFromPendingId(id, i) {
@@ -2848,6 +3103,23 @@ function fillKeysFromPendingId(id, i) {
   const p = (id && items.filter(x => x.pendingId === id)[0]) || (!id ? items[i] : null);
   if (!p) { toast("That case was just updated. The list has been refreshed.", true); renderPendingStrip(); return; }
   fillKeys(p.refNo, p.caseNo, p.customerName, p.customerMobile);
+  showCaseInfo(p);
+}
+
+function showCaseInfo(p) {
+  const box = document.getElementById('case-info');
+  if (!box) return;
+  const rows = [];
+  if (p) {
+    if (p.important) rows.push(['', '&#9733; Marked important']);
+    if (p.assignedTo) rows.push(['For', escapeHtml(p.assignedTo)]);
+    (p.info || []).forEach(x => rows.push([escapeHtml(x[0]), escapeHtml(x[1])]));
+    (p.hover || []).forEach(x => { if (x[1]) rows.push([escapeHtml(x[0]), escapeHtml(x[1])]); });
+    if (p.inputs) rows.push(['Inputs', escapeHtml(p.inputs)]);
+  }
+  if (!rows.length) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="case-info-head">${escapeHtml(keyLabel(p))}</div>` + rows.map(r => `<span class="case-info-item">${r[0] ? '<b>' + r[0] + ':</b> ' : ''}${r[1]}</span>`).join('');
+  box.classList.remove('hidden');
 }
 
 function fillKeysFromPending(i) {
@@ -2899,6 +3171,7 @@ async function lookupCase(which) {
   if (which === 'case' && (!caseNo || refNo)) return;
   if (which === 'ref' && !refNo) return;
   const local = pendingItems.filter(p => p.taskName === currentTask && ((which === 'ref' && p.refNo === refNo) || (which === 'case' && p.caseNo === caseNo)))[0];
+  showCaseInfo(local || null);
   if (local) {
     if (refEl && !refEl.value) refEl.value = local.refNo || '';
     if (caseEl && !caseEl.value) caseEl.value = local.caseNo || '';
@@ -3112,7 +3385,7 @@ function syncChainTasks(c) {
 }
 
 function setEditorChains() {
-  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice(), steps: copySteps(c.steps, c.tasks), key: Object.assign({}, c.key || { type: 'ref', label: 'Ref No', start: 1 }) }));
+  chains = allChains.filter(c => c.project === adminProject).map(c => ({ name: c.name, tasks: c.tasks.slice(), steps: copySteps(c.steps, c.tasks), key: JSON.parse(JSON.stringify(c.key || { type: 'ref', label: 'Ref No', start: 1 })) }));
   if (!chains.length) chains = [{ name: 'Chain 1', tasks: [], steps: [], key: { type: 'ref', label: 'Ref No', start: 1 } }];
   recurringList = allRecurring.filter(t => projOfTask(t) === adminProject);
   chainList = chains[0].tasks;
@@ -3196,7 +3469,73 @@ function renderChainEditor() {
     ? loose.map(t => `<span class="case-chip">${escapeHtml(t)}</span>`).join(' ')
     : `<span class="report-meta">Every task is in a chain or in Recurring.</span>`;
 
+  renderJumpRules(c);
   renderChainPreview();
+}
+
+function jumpFieldChoices(task) {
+  const out = ['Inputs', 'CorporatePartner'];
+  const t = taskByName(task);
+  (t ? t.fields : []).forEach(f => { if (f.col && f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && out.indexOf(f.col) === -1) out.push(f.col); });
+  return out;
+}
+
+function jumpValueChoices(task, field) {
+  const t = taskByName(task);
+  const f = t ? (t.fields || []).filter(x => x.col === field)[0] : null;
+  if (f) { const c = exitChoices(f); if (c) return c; }
+  if (field === 'Inputs') return uniqueSorted(pendingItems.map(p => String(p.inputs || '').trim()).filter(Boolean));
+  return [];
+}
+
+function renderJumpRules(c) {
+  const box = document.getElementById('jump-list');
+  if (!box) return;
+  const jumps = (c.key && c.key.jumps) || [];
+  const tasks = c.tasks || [];
+  const opt = (list, cur, first) => (first ? `<option value="">${first}</option>` : '') + list.map(x => `<option value="${escapeHtml(x)}"${x === cur ? ' selected' : ''}>${escapeHtml(x)}</option>`).join('');
+  box.innerHTML = jumps.length ? jumps.map((j, i) => {
+    const later = tasks.slice(tasks.indexOf(j.after) + 1);
+    const vals = jumpValueChoices(j.after, j.field);
+    return `<div class="jump-rule">
+      <span>After</span><select onchange="setJump(${i}, 'after', this.value)">${opt(tasks, j.after, 'Pick a task')}</select>
+      <span>if</span><input type="text" list="jf-${i}" value="${escapeHtml(j.field || '')}" placeholder="Field" onchange="setJump(${i}, 'field', this.value)" style="width:150px;">
+      <datalist id="jf-${i}">${jumpFieldChoices(j.after).map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>
+      <select onchange="setJump(${i}, 'mode', this.value)"><option value="values"${j.mode !== 'filled' ? ' selected' : ''}>is one of</option><option value="filled"${j.mode === 'filled' ? ' selected' : ''}>is filled in</option></select>
+      ${j.mode !== 'filled' ? `<input type="text" list="jv-${i}" value="${escapeHtml((j.values || []).join(', '))}" placeholder="Values, comma separated" onchange="setJump(${i}, 'values', this.value)" style="width:200px;"><datalist id="jv-${i}">${vals.map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>` : ''}
+      <span>go to</span><select onchange="setJump(${i}, 'to', this.value)">${opt(later, j.to, 'Pick a later task')}</select>
+      <button class="chain-btn" onclick="removeJump(${i})" title="Remove rule">&times;</button>
+    </div>`;
+  }).join('') : '<div class="chain-empty">No skip rules. Every case goes step by step.</div>';
+}
+
+function chainJumps() {
+  const c = chains[activeChain];
+  c.key = Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {});
+  c.key.jumps = (c.key.jumps || []).map(j => Object.assign({}, j, { values: (j.values || []).slice() }));
+  return c.key.jumps;
+}
+
+function addJumpRule() {
+  const c = chains[activeChain];
+  if (!c.tasks.length) return toast('Add tasks to this chain first.', true);
+  chainJumps().push({ after: c.tasks[0], field: 'Inputs', mode: 'values', values: [], to: '' });
+  renderChainEditor();
+}
+
+function setJump(i, prop, v) {
+  const list = chainJumps();
+  const j = list[i];
+  if (!j) return;
+  if (prop === 'values') j.values = String(v || '').split(',').map(x => x.trim()).filter(Boolean);
+  else j[prop] = v;
+  if (prop === 'after') { const t = chains[activeChain].tasks; if (t.indexOf(j.to) <= t.indexOf(v)) j.to = ''; }
+  renderChainEditor();
+}
+
+function removeJump(i) {
+  chainJumps().splice(i, 1);
+  renderChainEditor();
 }
 
 function selectChain(i) { activeChain = i; renderChainEditor(); }
@@ -3358,7 +3697,8 @@ function removeRecurring(i) {
 function renderChainPreview() {
   const box = document.getElementById('chain-preview');
   let html = chains.map((c, i) => `<div style="margin-bottom:8px;"><b><span class="chain-dot" style="background:${chainColor(i)}"></span>${escapeHtml(c.name)}</b><br>${
-    (c.steps && c.steps.length) ? c.steps.map(st => st.map(x => escapeHtml(x.task) + (x.optional ? ' <i>(optional)</i>' : '')).join(' + ')).join(' &rarr; ') : '<i>Empty</i>'}</div>`).join('');
+    (c.steps && c.steps.length) ? c.steps.map(st => st.map(x => escapeHtml(x.task) + (x.optional ? ' <i>(optional)</i>' : '')).join(' + ')).join(' &rarr; ') : '<i>Empty</i>'}${
+    ((c.key && c.key.jumps) || []).filter(j => j.after && j.to).map(j => `<br><small class="report-meta">Skip: after ${escapeHtml(j.after)}, if ${escapeHtml(j.field)} ${j.mode === 'filled' ? 'is filled in' : 'is ' + escapeHtml((j.values || []).join(' / ') || '(nothing picked)')}, go to ${escapeHtml(j.to)}</small>`).join('')}</div>`).join('');
   if (recurringList.length) html += '<b>Recurring</b><br>' + recurringList.map(escapeHtml).join(', ');
   const loose = chainableTasks().filter(t => chainOrderAll().indexOf(t) === -1 && recurringList.indexOf(t) === -1);
   if (loose.length) html += '<div style="margin-top:8px;"><b>Not in any chain</b><br>' + loose.map(escapeHtml).join(', ') + '</div>';
@@ -3414,27 +3754,28 @@ async function putBackExit(id) {
 }
 
 async function saveChain() {
-  const btn = document.getElementById('btn-save-chain');
-  btn.disabled = true;
+  const btns = [document.getElementById('btn-save-chain'), document.getElementById('btn-save-chain-top')].filter(Boolean);
+  const bad = chains.map(c => ((c.key && c.key.jumps) || []).filter(j => !j.after || !j.to || !String(j.field || '').trim() || (j.mode !== 'filled' && !(j.values || []).length)).length).reduce((a, b) => a + b, 0);
+  if (bad) return toast('A skip rule is not finished. Pick the task, field, values and where to go, or remove it.', true);
+  if (serverVersion !== APP_VERSION) return toast("The script is an older version. Deploy it as a New version, then refresh.", true);
+  if (!chainOrderAll().length) return toast("Every chain is empty. Add tasks before saving.", true);
+  const empty = chains.filter(c => !c.tasks.length);
+  if (empty.length && chains.length > 1) return toast('"' + empty[0].name + '" has no tasks. Add some or delete it.', true);
+  btns.forEach(b => { b.disabled = true; });
   try {
-    if (serverVersion !== APP_VERSION) { toast("The script is an older version. Deploy it as a New version, then refresh.", true); btn.disabled = false; return; }
-    if (!chainOrderAll().length) { toast("Every chain is empty. Add tasks before saving.", true); btn.disabled = false; return; }
-    const empty = chains.filter(c => !c.tasks.length);
-    if (empty.length && chains.length > 1) { toast('"' + empty[0].name + '" has no tasks. Add some or delete it.', true); btn.disabled = false; return; }
     const result = await apiCall('chainSave', { project: adminProject, chains: chains, recurring: recurringList });
     if (!result.ok) {
       toast(result.error || "Could not save the chain", true);
-      btn.disabled = false;
-      return;
+    } else {
+      toast("Saved " + chains.length + (chains.length === 1 ? " chain." : " chains."));
+      chainLoaded = false;
+      await loadChain();
+      renderTaskSidebar();
     }
-    toast("Saved " + chains.length + (chains.length === 1 ? " chain." : " chains."));
-    chainLoaded = false;
-    await loadChain();
-    renderTaskSidebar();
   } catch (e) {
     toast("Network error", true);
   }
-  btn.disabled = false;
+  btns.forEach(b => { b.disabled = false; });
 }
 
 const SEARCH_LIMIT = 12;
@@ -3659,7 +4000,9 @@ async function renderEntryScreen() {
   renderPendingStrip();
 
   if (pendingKeysToFill) {
-    fillKeys(pendingKeysToFill.refNo, pendingKeysToFill.caseNo, pendingKeysToFill.customerName, pendingKeysToFill.customerMobile);
+    const k = pendingKeysToFill;
+    fillKeys(k.refNo, k.caseNo, k.customerName, k.customerMobile);
+    showCaseInfo(pendingItems.filter(x => x.taskName === currentTask && ((k.refNo && x.refNo === k.refNo) || (k.caseNo && x.caseNo === k.caseNo)))[0] || null);
     pendingKeysToFill = null;
   }
 
@@ -3671,7 +4014,7 @@ function renderPhaseBar() {
   if (!user || !profile) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   bar.classList.remove('hidden');
   const present = phasesForStaff();
-  if (currentProject === ASSIGNED_PROJECT || (currentProject === ADMIN_PROJECT && present.length <= 1)) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
+  if (isPanelProject(currentProject) || (currentProject === ADMIN_PROJECT && present.length <= 1)) { bar.classList.add('hidden'); bar.innerHTML = ""; return; }
   if (present.length === 0) {
     bar.innerHTML = `<span class="sidebar-empty">No tasks for this person in ${escapeHtml(projectName(currentProject))} yet.</span>`;
     return;
@@ -3718,7 +4061,7 @@ function renderTaskSidebar() {
     const idle = !n && tk && tk.schedule && tk.schedule.on;
     const nextTxt = idle ? nextDueText(tk.schedule) : '';
     sb.insertAdjacentHTML('beforeend', `
-      <a class="task-sidebar-item${active ? ' active' : ''}${idle ? ' idle' : ''}" href="${href}" data-tip="${escapeHtml(taskTileTip(tk, idle, nextTxt))}">${tk && tk.schedule && tk.schedule.on ? '<span class="recur-ico" aria-label="Recurring">&#8635;</span>' : ''}${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span>${idle ? `<small class="idle-next">${nextTxt ? 'Next: ' + escapeHtml(nextTxt) : 'No more dates'}</small>` : ''}</a>`);
+      <a class="task-sidebar-item${active ? ' active' : ''}${idle ? ' idle' : ''}${tk && tk.important ? ' imp' : ''}" href="${href}" data-tip="${escapeHtml(taskTileTip(tk, idle, nextTxt))}">${tk && tk.important ? '<span class="imp-star" aria-label="Important">&#9733;</span>' : ''}${tk && tk.schedule && tk.schedule.on ? '<span class="recur-ico" aria-label="Recurring">&#8635;</span>' : ''}${escapeHtml(t)}${badge}<span class="chain-dots">${chainDots(t)}</span>${idle ? `<small class="idle-next">${nextTxt ? 'Next: ' + escapeHtml(nextTxt) : 'No more dates'}</small>` : ''}</a>`);
   });
 }
 
@@ -3729,6 +4072,7 @@ function taskTileTip(tk, idle, nextTxt) {
   if (idle) parts.push('Not due today' + (nextTxt ? '. Next: ' + nextTxt : ''));
   if (tk.owners && tk.owners.length) parts.push('Done by: ' + tk.owners.join(', '));
   if (tk.sla) parts.push('Time allowed: ' + slaText(tk.sla));
+  if (tk.important) parts.unshift('Important task');
   return parts.join('\n');
 }
 
@@ -3786,10 +4130,22 @@ function caseCellClass(r) {
 }
 
 function pendingTip(p) {
+  const extra = [];
+  if (p.important) extra.push('Marked important');
+  if (p.assignedTo) extra.push('For ' + p.assignedTo);
+  (p.info || []).forEach(x => extra.push(x[0] + ': ' + x[1]));
   if (p.hover && p.hover.length) {
-    return p.hover.map(h => h[0] + ': ' + (h[1] || '-')).concat(['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
+    return extra.concat(p.hover.map(h => h[0] + ': ' + (h[1] || '-')), ['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
   }
-  return caseTip(p.formSB, p.caseDays, p.inputs, p.corporate);
+  if (projOfTask(p.taskName) !== DEFAULT_PROJECT) {
+    return extra.concat(['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
+  }
+  return extra.concat([caseTip(p.formSB, p.caseDays, p.inputs, p.corporate)]).join('\n');
+}
+
+function infoLine(p) {
+  const bits = (p.info || []).map(x => x[0] + ': ' + x[1]);
+  return bits.length ? `<span class="chip-info">${escapeHtml(bits.join(' · '))}</span>` : '';
 }
 
 function caseTagClass(p) {
@@ -3887,6 +4243,8 @@ function renderFormInterface() {
 
   document.getElementById('form-dynamic').classList.remove('hidden');
   renderDynamicForm(t);
+  showCaseInfo(null);
+  renderAssignNext();
   setPartialEditing(null);
   document.getElementById('partial-section').classList.remove('hidden');
   loadPartials();
@@ -4071,8 +4429,37 @@ function validateDynamic(task, mode) {
   return null;
 }
 
+function nextTasksOf(task) {
+  const out = [];
+  const pid = projOfTask(task);
+  allChains.filter(c => c.project === pid).forEach(c => {
+    const steps = (c.steps && c.steps.length) ? c.steps : (c.tasks || []).map(t => [{ task: t, optional: false }]);
+    for (let si = 0; si < steps.length; si++) {
+      const me = steps[si].filter(x => x.task === task)[0];
+      if (!me) continue;
+      if (me.optional || si + 1 >= steps.length) return;
+      steps[si + 1].forEach(x => { if (out.indexOf(x.task) === -1) out.push(x.task); });
+      return;
+    }
+  });
+  return out;
+}
+
+function renderAssignNext() {
+  const box = document.getElementById('assign-next-box');
+  if (!box) return;
+  const nexts = currentTask ? nextTasksOf(currentTask) : [];
+  const owners = [];
+  nexts.forEach(n => { const t = taskByName(n); (t ? t.owners : []).forEach(o => { if (owners.indexOf(o) === -1) owners.push(o); }); });
+  if (!nexts.length || owners.length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  box.innerHTML = `<label class="inline-label">Next task (${escapeHtml(nexts.join(', '))}) goes to
+    <select id="assign-next"><option value="">Whoever does it first</option>${owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select></label>
+    <span class="report-meta">Pick a person and only they will see it.</span>`;
+  box.classList.remove('hidden');
+}
+
 function savedMessage(result) {
-  let msg = (result && result.nextTask) ? "Saved. " + result.nextTask + " is now pending." : "Saved to central records.";
+  let msg = (result && result.nextTask) ? "Task closed. " + result.nextTask + " is now pending." : "Task closed.";
   const ck = chainKeyForTask(currentTask);
   if (ck && ck.key.type === 'series' && ck.first && result && result.refNo) msg = "Started as No " + result.refNo + ". " + msg;
   if (result && result.chequeNote) msg += " " + result.chequeNote;
@@ -4100,7 +4487,7 @@ async function saveDynamicEntry(type) {
   const payload = Object.assign(
     { targetStaffName: profile.name, taskName: currentTask },
     values,
-    { extra: extra, partialId: currentPartialId || "" }
+    { extra: extra, partialId: currentPartialId || "", assignNext: type === 'Final' ? valOf('assign-next') : '' }
   );
   const usedPartial = !!currentPartialId;
 
@@ -4122,6 +4509,9 @@ async function saveDynamicEntry(type) {
       const result = await apiCall('finalAdd', payload);
       if (!result.ok) return toast(result.error || "Could not save entry", true);
       clearDynamicForm(task);
+      showCaseInfo(null);
+      const an = document.getElementById('assign-next');
+      if (an) an.value = '';
       toast(savedMessage(result));
       loadPending();
       if (recentOpen) loadRecent();
@@ -4136,7 +4526,13 @@ async function saveDynamicEntry(type) {
   }
 }
 
-let recentScope = 'all';
+let recentScope = 'task';
+let recentWho = 'all';
+
+function setRecentWho(w) {
+  recentWho = w;
+  loadRecent();
+}
 
 function recentToday() {
   const d = ymdLocal(new Date());
@@ -4187,24 +4583,31 @@ async function loadRecent() {
   if (!recentOpen) setRecentOpen(true);
   document.getElementById('recent-tab-task').classList.toggle('active', recentScope === 'task');
   document.getElementById('recent-tab-all').classList.toggle('active', recentScope === 'all');
-  document.getElementById('recent-who').innerText = '· ' + profile.name + (recentScope === 'task' ? ' · ' + currentTask : ' · all tasks');
+  document.getElementById('recent-who-all').classList.toggle('active', recentWho === 'all');
+  document.getElementById('recent-who-me').classList.toggle('active', recentWho === 'me');
+  document.getElementById('recent-who-me').innerText = 'Only ' + profile.name;
+  document.getElementById('recent-who').innerText = '· ' + (recentWho === 'all' ? 'everyone' : profile.name) + (recentScope === 'task' ? ' · ' + currentTask : ' · all tasks');
   const from = valOf('recent-from'), to = valOf('recent-to'), q = String(valOf('recent-q') || '').trim();
   if (from && to && to < from) return toast('To date is before From date', true);
   const seq = ++recentSeq;
   table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
   try {
-    const result = await apiCall('finalList', { staffName: profile.name, task: recentScope === 'task' ? currentTask : '', from: from, to: to, q: q });
+    const result = await apiCall('finalList', { staffName: recentWho === 'all' ? '' : profile.name, task: recentScope === 'task' ? currentTask : '', from: from, to: to, q: q });
     if (seq !== recentSeq) return;
     if (!result.ok) { table.innerHTML = `<tr><td class="report-meta">${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
     const items = result.items || [];
     const showTask = recentScope === 'all';
-    table.innerHTML = `<thead><tr><th>Saved</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Name</th><th>Saved by</th><th>Comment</th></tr></thead><tbody>${
+    const tk = taskByName(currentTask);
+    const cols = !showTask && tk ? (tk.fields || []).filter(f => f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && f.key !== 'comment' && f.key !== 'remarks' && f.col !== 'CustomerName') : [];
+    const span = 5 + (showTask ? 1 : 0) + cols.length;
+    table.innerHTML = `<thead><tr><th>Closed</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Name</th>${cols.map(f => `<th>${escapeHtml(f.label)}</th>`).join('')}<th>By</th><th>Comment</th></tr></thead><tbody>${
       items.map(x => `<tr>
         <td class="nowrap">${escapeHtml(x.savedAt)}</td>${showTask ? `<td class="left">${escapeHtml(x.task)}</td>` : ''}
         <td>${escapeHtml(x.refNo || x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
+        ${cols.map(f => `<td class="left">${escapeHtml((x.vals || {})[f.col] || '')}</td>`).join('')}
         <td>${escapeHtml(x.savedBy)}${x.staff && x.staff !== x.savedBy ? `<br><small class="report-meta">for ${escapeHtml(x.staff)}</small>` : ''}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
-      </tr>`).join('') || `<tr><td colspan="${showTask ? 6 : 5}" class="report-meta">${from || to || q ? 'No final saves in these dates or for this search. Try other dates or press Clear.' : 'No final saves yet.'}</td></tr>`
-    }</tbody>${result.more ? `<tfoot><tr><td colspan="${showTask ? 6 : 5}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
+      </tr>`).join('') || `<tr><td colspan="${span}" class="report-meta">${from || to || q ? 'Nothing closed in these dates or for this search. Try other dates or press Clear.' : 'Nothing closed yet.'}</td></tr>`
+    }</tbody>${result.more ? `<tfoot><tr><td colspan="${span}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
   } catch (e) {
     if (seq === recentSeq) table.innerHTML = '<tr><td class="report-meta">Network error</td></tr>';
   }
@@ -4347,7 +4750,7 @@ function loadPartialIntoForm(i) {
   setPartialEditing(p);
   renderPartials();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  toast("Loaded. Fill in the rest, then Temp or Final Save.");
+  toast("Loaded. Fill in the rest, then Temp Save or Close Task.");
 }
 
 async function removePartial(i) {
@@ -4365,7 +4768,16 @@ async function removePartial(i) {
 
 let reportTab = 'simple';
 
+function staffReportsOnly() {
+  return !isAdminPanel();
+}
+
 function showReportTab(tab) {
+  const limited = staffReportsOnly();
+  if (limited && (tab === 'timing' || tab === 'exits')) tab = 'simple';
+  ensureReportDates();
+  document.getElementById('rep-tab-timing').classList.toggle('hidden', limited);
+  document.getElementById('rep-tab-exits').classList.toggle('hidden', limited);
   reportTab = tab;
   ['simple', 'timing', 'employee', 'cheque', 'exits'].forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
@@ -4396,12 +4808,14 @@ async function loadTiming() {
   document.getElementById('timing-table').innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Working it out...</td></tr>`;
   try {
     const to = reportToApplied;
-    const result = await apiCall('timingReport', { to: to });
+    const result = await apiCall('timingReport', { from: reportFromSaved, to: to });
     if (!result.ok) return toast(result.error || "Could not load timing", true);
     timingData = result;
-    setReportFromBox(result.reportFrom);
     meta.innerText = (result.items || []).length + ' timed items · ' + formatDateDMY(result.reportFrom) + (to ? ' to ' + formatDateDMY(to) : ' to today') + ' · built ' + (result.builtAt || '');
     fillSelect('tm-task', uniqueSorted((result.items || []).map(i => i.task)), 'All tasks');
+    const ppl = uniqueSorted((result.staff || []).concat((result.people || []).map(p => p.name)));
+    fillSelect('tm-person', ppl, 'Everyone');
+    fillSelect('emp-person', uniqueSorted((result.people || []).map(p => p.name)), 'Everyone');
     renderTiming();
     renderEmployees();
   } catch (e) { toast("Network error", true); }
@@ -4415,7 +4829,7 @@ function timingStatus(it) {
 function renderTiming() {
   if (!timingData) return;
   const items = timingData.items || [];
-  const task = valOf('tm-task'), state = valOf('tm-state');
+  const task = valOf('tm-task'), state = valOf('tm-state'), person = valOf('tm-person');
   const q = (valOf('tm-search') || '').toLowerCase();
 
   document.getElementById('timing-summary').innerHTML = (timingData.tasks || []).length
@@ -4424,6 +4838,7 @@ function renderTiming() {
     : '<div class="report-meta">No task has a time limit or schedule yet. Set "Time allowed" or a repeat in Add / Edit Tasks.</div>';
 
   const rows = items.filter(it => {
+    if (person && !(it.by === person || (it.lateOwners || []).indexOf(person) !== -1 || (it.open && (it.owners || []).indexOf(person) !== -1) || (it.assigned && String(it.name || '').split(', ').indexOf(person) !== -1))) return false;
     if (task && it.task !== task) return false;
     if (state === 'late' && !it.late) return false;
     if (state === 'open' && !it.open) return false;
@@ -4436,7 +4851,7 @@ function renderTiming() {
       <td class="left">${escapeHtml(it.task)}</td>
       <td class="${caseCellClass(it)}">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
       <td class="left ${caseCellClass(it)}">${escapeHtml(it.name || '')}</td>
-      <td>${escapeHtml(it.arrived)}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
+      <td>${escapeHtml(it.arrived)}${it.clockFrom ? '<br><small class="report-meta">from visit time</small>' : ''}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
       <td>${escapeHtml(it.done || '')}${it.by ? ' <small class="report-meta">' + escapeHtml(it.by) + '</small>' : ''}</td><td>${timingStatus(it)}</td>
       <td>${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : ''}</td>
     </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-dim)">Nothing to show.</td></tr>`
@@ -4450,26 +4865,70 @@ function toggleEmpItems(name) {
   renderEmployees();
 }
 
+function pickEmpPerson(name) {
+  const el = document.getElementById('emp-person');
+  if (!el) return;
+  el.value = el.value === name ? '' : name;
+  renderEmployees();
+}
+
+function empBandCount(P, band) {
+  return (P.byTask || []).reduce((n, B) => n + (B[band] || 0), 0);
+}
+
+function empItemsFor(P, band) {
+  if (band === 'leave') return { kind: 'late', list: P.items.filter(it => it.leave) };
+  if (band === 'scored') return { kind: 'scored', list: (P.scored || []).slice() };
+  if (band) return { kind: 'scored', list: (P.scored || []).filter(x => x.band === band) };
+  return { kind: 'late', list: P.items.slice() };
+}
+
 function renderEmployees() {
   if (!timingData) return;
   const people = (timingData.people || []).slice().sort((a, b) => ((b.points || 0) - (a.points || 0)) || ((b.late + b.openLate) - (a.late + a.openLate)));
-  document.getElementById('employee-cards').innerHTML = people.length ? people.map(P => `
-    <div class="summary-card">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
-        <h4>${escapeHtml(P.name)}</h4>
-        ${P.scoredCount ? `<div style="text-align:right;"><div class="pts-total${P.points < 0 ? ' neg' : ''}">${P.points > 0 ? '+' : ''}${P.points}</div><div class="report-meta">points · ${P.scoredCount} scored</div></div>` : ''}
+  const person = valOf('emp-person'), band = valOf('emp-band');
+  const sum = k => people.reduce((n, P) => n + (Number(P[k]) || 0), 0);
+  const bsum = b => people.reduce((n, P) => n + empBandCount(P, b), 0);
+  const cell = (v, cls) => `<td class="${cls || ''}">${v ? v : ''}</td>`;
+  document.getElementById('employee-grid').innerHTML = people.length ? `<thead><tr><th class="left">Person</th><th>Points</th><th>Scored</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>On time</th><th>Done late</th><th>Open and late</th><th>Left undone (L)</th></tr></thead><tbody>${
+    people.map(P => `<tr class="emp-row${person === P.name ? ' row-selected' : ''}" onclick="pickEmpPerson('${escapeHtml(P.name).replace(/'/g, "\\'")}')">
+      <td class="left"><b>${escapeHtml(P.name)}</b></td>
+      <td><b class="${(P.points || 0) < 0 ? 'band-late' : 'band-on'}">${P.scoredCount ? (P.points > 0 ? '+' : '') + P.points : ''}</b></td>
+      ${cell(P.scoredCount)}${cell(empBandCount(P, 'before'), 'band-before')}${cell(empBandCount(P, 'on'), 'band-on')}${cell(empBandCount(P, 'after'), 'band-after')}${cell(empBandCount(P, 'late'), 'band-late')}
+      ${cell(P.onTime)}${cell(P.late, 'band-late')}${cell(P.openLate, 'band-late')}${cell(P.leave || 0, 'band-late')}
+    </tr>`).join('')}</tbody><tfoot><tr class="section-row"><td class="left">Everyone</td><td>${sum('points') > 0 ? '+' : ''}${sum('points')}</td><td>${sum('scoredCount')}</td><td>${bsum('before')}</td><td>${bsum('on')}</td><td>${bsum('after')}</td><td>${bsum('late')}</td><td>${sum('onTime')}</td><td>${sum('late')}</td><td>${sum('openLate')}</td><td>${sum('leave')}</td></tr></tfoot>` : '<tr><td class="report-meta">Nothing timed yet.</td></tr>';
+  const shown = people.filter(P => !person || P.name === person);
+  const BANDS = { before: 'Before', on: 'On', after: 'After', late: 'After that', scored: 'Scored', leave: 'Left undone' };
+  document.getElementById('employee-cards').innerHTML = shown.map(P => {
+    const its = empItemsFor(P, band);
+    const listHtml = !its.list.length ? `<div class="report-meta" style="margin-top:6px;">${band ? 'Nothing in ' + escapeHtml(BANDS[band] || band) + ' for these dates.' : 'Nothing late. Well done.'}</div>` :
+      its.kind === 'scored'
+        ? `<table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Closed</th><th>Band</th><th>Points</th></tr></thead><tbody>${
+            its.list.map((x, k) => `<tr class="${k >= 12 ? 'emp-more' : ''}"><td class="left">${escapeHtml(x.task)}</td><td>${x.recurring ? escapeHtml(formatDateDMY(x.occurrence)) : escapeHtml(chequeKey(x))}</td><td>${escapeHtml(x.done || '')}</td><td class="band-${x.band}">${escapeHtml(BAND_NAME[x.band] || x.band)}</td><td><b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b></td></tr>`).join('')}</tbody></table>`
+        : `<table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th>Status</th></tr></thead><tbody>${
+            its.list.map((it, k) => `<tr class="overdue${k >= 12 ? ' emp-more' : ''}"><td class="left">${escapeHtml(it.task)}</td>
+              <td style="color:var(--danger); font-weight:700;">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
+              <td>${escapeHtml(it.leave ? 'L' : it.lateBy)}</td><td class="left">${it.leave ? 'Left undone' : it.open ? 'still open' : 'done ' + escapeHtml(it.done)}</td></tr>`).join('')}</tbody></table>`;
+    return `<div class="emp-tile">
+      <div class="emp-tile-head">
+        <div><div class="emp-name">${escapeHtml(P.name)}</div><div class="report-meta">${P.scoredCount ? P.scoredCount + ' scored' : 'No points yet'}</div></div>
+        <div class="emp-points${(P.points || 0) < 0 ? ' neg' : ''}">${P.scoredCount ? (P.points > 0 ? '+' : '') + P.points : '–'}<small>points</small></div>
       </div>
-      <div class="summary-line"><b style="color:var(--ok)">${P.onTime}</b> on time · <b style="color:var(--danger)">${P.late}</b> done late · <b style="color:var(--danger)">${P.openLate}</b> open and late${P.leave ? ` · <b style="color:var(--danger)">${P.leave}</b> recurring left undone (L)` : ''}</div>
+      <div class="emp-stats">
+        <div class="emp-stat ok"><b>${P.onTime}</b><span>On time</span></div>
+        <div class="emp-stat bad"><b>${P.late}</b><span>Done late</span></div>
+        <div class="emp-stat bad"><b>${P.openLate}</b><span>Open and late</span></div>
+        <div class="emp-stat bad"><b>${P.leave || 0}</b><span>Left undone (L)</span></div>
+      </div>
       ${(P.byTask || []).length ? `<table class="report-table" style="margin-bottom:12px;"><thead><tr><th>Task</th><th>Done</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>Points</th></tr></thead><tbody>${
         P.byTask.map(B => `<tr><td class="left">${escapeHtml(B.task)}</td><td>${B.count}</td>
           <td class="band-before">${B.before || ''}</td><td class="band-on">${B.on || ''}</td><td class="band-after">${B.after || ''}</td><td class="band-late">${B.late || ''}</td>
           <td><b class="${B.points < 0 ? 'band-late' : 'band-on'}">${B.points > 0 ? '+' : ''}${B.points}</b></td></tr>`).join('')}</tbody></table>` : ''}
-      ${P.items.length ? `<div class="emp-items${empOpen[P.name] ? ' all' : ''}"><table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th>Status</th></tr></thead><tbody>${
-        P.items.map((it, k) => `<tr class="overdue${k >= 12 ? ' emp-more' : ''}"><td class="left">${escapeHtml(it.task)}</td>
-          <td style="color:var(--danger); font-weight:700;">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
-          <td>${escapeHtml(it.leave ? 'L' : it.lateBy)}</td><td class="left">${it.leave ? 'Left undone' : it.open ? 'still open' : 'done ' + escapeHtml(it.done)}</td></tr>`).join('')}</tbody></table>
-          ${P.items.length > 12 ? `<button class="btn btn-small" style="margin-top:8px;" onclick="toggleEmpItems('${escapeHtml(P.name).replace(/'/g, "\\'")}')">${empOpen[P.name] ? 'Show fewer' : 'Show all ' + P.items.length}</button>` : ''}</div>` : ''}
-    </div>`).join('') : '<div class="report-meta">Nothing timed yet.</div>';
+      <div class="emp-list-title">${band ? escapeHtml(BANDS[band] || band) : 'Late and left undone'} <span class="sidebar-count">${its.list.length}</span></div>
+      <div class="emp-items${empOpen[P.name] ? ' all' : ''}">${listHtml}
+        ${its.list.length > 12 ? `<button class="btn btn-small" style="margin-top:8px;" onclick="toggleEmpItems('${escapeHtml(P.name).replace(/'/g, "\\'")}')">${empOpen[P.name] ? 'Show fewer' : 'Show all ' + its.list.length}</button>` : ''}</div>
+    </div>`;
+  }).join('') || '';
 }
 
 async function loadReport() {
@@ -4478,12 +4937,12 @@ async function loadReport() {
   table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Building report...</td></tr>`;
   try {
     fillReportChains();
+    ensureReportDates();
     const sel = (valOf('report-chain') || '').split('\u0001');
-    const result = await apiCall('reportBuild', { project: sel[0] || '', chain: sel[1] || '' });
+    const result = await apiCall('reportBuild', { project: sel[0] || '', chain: sel[1] || '', from: reportFromSaved });
     if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
     reportData = result;
-    meta.innerText = (result.rows || []).length + ' cases since ' + formatDateDMY(result.reportFrom) + ' · built ' + (result.builtAt || '') + ' · also written to the Report tab';
-    setReportFromBox(result.reportFrom);
+    meta.innerText = (result.rows || []).length + ' cases started ' + formatDateDMY(result.reportFrom) + (reportToApplied ? ' to ' + formatDateDMY(reportToApplied) : ' to today') + ' · built ' + (result.builtAt || '');
     fillReportFilterOptions();
     renderSimpleReport();
   } catch (e) {
@@ -4530,31 +4989,35 @@ function clearReportFilters() {
   renderSimpleReport();
 }
 
-function onReportTo() {
-  if (reportTab === 'simple') renderSimpleReport();
-  else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
-  else if (reportTab === 'exits') renderExits();
-  else renderChequeReport();
-}
 
-function clearReportTo() {
-  document.getElementById('report-to').value = '';
-  reportToApplied = '';
-  onReportTo();
-}
 
 let reportFromSaved = '';
 let reportToApplied = '';
 
-function setReportFromBox(v) {
-  if (!v) return;
-  reportFromSaved = v;
-  const el = document.getElementById('report-from');
-  if (el && document.activeElement !== el) el.value = v;
-}
 
 function goodDay(v) {
   return /^\d{4}-\d{2}-\d{2}$/.test(v) && Number(v.slice(0, 4)) >= 2000 && Number(v.slice(0, 4)) <= 2100;
+}
+
+function firstOfMonthYmd() {
+  const d = new Date();
+  return ymdLocal(new Date(d.getFullYear(), d.getMonth(), 1));
+}
+
+function ensureReportDates() {
+  if (reportFromSaved) return;
+  reportFromSaved = firstOfMonthYmd();
+  reportToApplied = ymdLocal(new Date());
+  const f = document.getElementById('report-from'), t = document.getElementById('report-to');
+  if (f) f.value = reportFromSaved;
+  if (t) t.value = reportToApplied;
+}
+
+function setReportRange(kind) {
+  const today = ymdLocal(new Date());
+  document.getElementById('report-from').value = kind === 'today' ? today : firstOfMonthYmd();
+  document.getElementById('report-to').value = today;
+  applyReportDates();
 }
 
 async function applyReportDates() {
@@ -4562,9 +5025,10 @@ async function applyReportDates() {
   if (from && !goodDay(from)) return toast('From date is not complete', true);
   if (to && !goodDay(to)) return toast('To date is not complete', true);
   if (from && to && to < from) return toast('To date is before From date', true);
+  reportFromSaved = from || firstOfMonthYmd();
   reportToApplied = to;
-  if (from && from !== reportFromSaved) return saveReportFrom(from);
-  onReportTo();
+  reportData = null; timingData = null;
+  refreshReports();
 }
 
 function inReportRange(day) {
@@ -4573,18 +5037,6 @@ function inReportRange(day) {
   if (from && day < from) return false;
   if (to && day > to) return false;
   return true;
-}
-
-async function saveReportFrom(value) {
-  if (!value) return;
-  try {
-    const result = await apiCall('settingSave', { key: 'ReportFrom', value: value });
-    if (!result.ok) return toast(result.error || "Could not save", true);
-    toast("Report now starts from " + formatDateDMY(value) + ".");
-    reportFromSaved = value;
-    reportData = null; timingData = null;
-    refreshReports();
-  } catch (e) { toast("Network error", true); }
 }
 
 function reportColValue(r, key) {
@@ -4652,7 +5104,7 @@ function renderSimpleReport() {
   const head = `<thead><tr><th>${escapeHtml(reportData.keyLabel || 'Ref No')}</th><th class="name-col">Name</th><th>Days</th>${
     tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}<th>Mobile No</th></tr></thead>`;
 
-  const rowHtml = r => `<tr data-tip="${escapeHtml(caseTip(r.formSB, r.days, r.inputs, r.corporate))}">
+  const rowHtml = r => `<tr data-tip="${escapeHtml(reportRowTip(r))}">
       <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td>
       <td class="left name-col ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
       ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
@@ -4672,6 +5124,61 @@ function renderSimpleReport() {
   const filtered = rows.length !== (reportData.rows || []).length;
   document.getElementById('report-filter-btn').classList.toggle('btn-primary', filtered);
   table.innerHTML = head + '<tbody>' + body + '</tbody>';
+}
+
+function reportRowTip(r) {
+  if (r.hover && r.hover.length) return r.hover.map(h => h[0] + ': ' + (h[1] || '-')).concat(['Days: ' + (r.days === '' ? '-' : r.days)]).join('\n');
+  if (reportData && reportData.project && reportData.project !== DEFAULT_PROJECT) return 'Days: ' + (r.days === '' ? '-' : r.days);
+  return caseTip(r.formSB, r.days, r.inputs, r.corporate);
+}
+
+function reportTitle() {
+  const sel = document.getElementById('report-chain');
+  const name = sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : 'Report';
+  return name + ' · ' + formatDateDMY(reportFromSaved) + ' to ' + (reportToApplied ? formatDateDMY(reportToApplied) : 'today');
+}
+
+function copyReportText() {
+  if (!reportData) return toast('Wait for the report to load.', true);
+  const rows = reportRowsFiltered();
+  const tasks = reportData.tasks || [];
+  const lines = ['*Taskendo · ' + reportTitle() + '*', rows.length + ' case' + (rows.length === 1 ? '' : 's'), ''];
+  rows.forEach(r => {
+    const waiting = tasks.filter((t, i) => r.cells[i] === '?');
+    const done = r.cells.filter(c => c === '●' || c === '≡').length;
+    lines.push([r.refNo, r.name, r.days !== '' ? r.days + 'd' : '', r.out ? 'Out of chain' : (waiting.length ? 'Waiting: ' + waiting.join(', ') : done + '/' + tasks.length + ' done')].filter(Boolean).join(' · '));
+  });
+  const text = lines.join('\n');
+  navigator.clipboard.writeText(text).then(() => toast('Copied ' + rows.length + ' cases. Paste it in WhatsApp.')).catch(() => toast('Could not copy.', true));
+}
+
+async function copyReportPicture() {
+  const table = document.getElementById('report-table');
+  if (!reportData || !table) return toast('Wait for the report to load.', true);
+  const wrap = document.createElement('div');
+  wrap.className = 'shot-wrap';
+  wrap.innerHTML = `<div class="shot-head"><b>Taskendo</b> · ${escapeHtml(reportTitle())}</div>`;
+  const clone = table.cloneNode(true);
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+  try {
+    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    const canvas = await window.html2canvas(wrap, { backgroundColor: '#ffffff', scale: 1.5 });
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      toast('Picture copied. Paste it in WhatsApp.');
+    } catch (e) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Report ' + ymdLocal(new Date()) + '.png';
+      a.click();
+      toast('This browser cannot copy pictures, so it was saved instead.');
+    }
+  } catch (e) {
+    toast('Could not make the picture. Use Copy text instead.', true);
+  }
+  wrap.remove();
 }
 
 function openColFilter(key, th) {
@@ -4757,14 +5264,20 @@ function loadDailyStaff() {
   sel.innerHTML = '<option value="">Pick a person</option>' + Object.keys(STAFF).sort().map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
 }
 
-function dailyItemHtml(it) {
-  return `<div class="daily-item">
+function dailyLink(it, person) {
+  const who = (user && (user.level === 0 || (user.level === 1 && person !== 'Jawad') || user.name === person)) ? person : (user ? user.name : person);
+  const page = it.kind === 'Assigned' ? MY_ASSIGNED : it.task;
+  return location.pathname + '#/staff/' + encodeURIComponent(who) + '/' + encodeURIComponent(page);
+}
+
+function dailyItemHtml(it, person) {
+  return `<a class="daily-item daily-link" href="${escapeHtml(dailyLink(it, person))}" target="_blank" rel="noopener" title="Open in a new tab">
     <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
     <div class="daily-text"><b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
       ${it.due ? `<div class="daily-due">${escapeHtml(it.due)}</div>` : ''}
       ${it.projectName && it.projectName !== 'Mahana' ? `<div class="daily-proj">${escapeHtml(it.projectName)}</div>` : ''}
       ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
-    </div></div>`;
+    </div></a>`;
 }
 
 async function loadDaily(everyone) {
@@ -4782,7 +5295,7 @@ async function loadDaily(everyone) {
     sel.innerHTML = '<option value="">Pick a person</option>' + (r.staff || []).map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
     sel.value = keep;
     const dayText = new Date(r.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    const col = (title, cls, list) => `<div class="daily-col ${cls}"><div class="daily-col-head">${title} <span>${list.length}</span></div>${list.length ? list.map(dailyItemHtml).join('') : '<div class="daily-empty">Nothing</div>'}</div>`;
+    const col = (title, cls, list, person) => `<div class="daily-col ${cls}"><div class="daily-col-head">${title} <span>${list.length}</span></div>${list.length ? list.map(it => dailyItemHtml(it, person)).join('') : '<div class="daily-empty">Nothing</div>'}</div>`;
     body.innerHTML = (r.people || []).map((p, pi) => `
       <div class="daily-card" id="daily-card-${pi}">
         <div class="daily-card-head">
@@ -4790,9 +5303,9 @@ async function loadDaily(everyone) {
           <span class="daily-brand">Taskendo</span>
         </div>
         <div class="daily-cols">
-          ${col('Overdue', 'c-over', p.overdue)}
-          ${col('Today', 'c-today', p.today)}
-          ${col('Next 2 days', 'c-soon', p.soon)}
+          ${col('Overdue', 'c-over', p.overdue, p.name)}
+          ${col('Today', 'c-today', p.today, p.name)}
+          ${col('Next 2 days', 'c-soon', p.soon, p.name)}
         </div>
         <div class="daily-actions">
           <button class="btn btn-small btn-primary" onclick="dailyPicture(${pi}, 'copy')">Copy picture</button>
@@ -4906,15 +5419,38 @@ function chequeGroupTable(title, field) {
     </tbody></table></div>`;
 }
 
+function clearChequeFilters() {
+  ['cq-user', 'cq-branch', 'cq-del', 'cq-due-from', 'cq-due-to'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  renderChequeReport();
+}
+
+function chequeFiltered() {
+  const u = valOf('cq-user'), b = valOf('cq-branch'), del = valOf('cq-del'), df = valOf('cq-due-from'), dt = valOf('cq-due-to');
+  return chequeItems.filter(c => {
+    if (!inReportRange(c.claimedDay)) return false;
+    if (u && c.claimedBy !== u) return false;
+    if (b && (c.branch || '(not set)') !== b) return false;
+    if (del === 'yes' && !c.onDelivery) return false;
+    if (del === 'no' && c.onDelivery) return false;
+    if ((df || dt) && !c.dueDay) return false;
+    if (df && c.dueDay < df) return false;
+    if (dt && c.dueDay > dt) return false;
+    return true;
+  });
+}
+
 function renderChequeReport() {
   const sum = document.getElementById('cheque-summary');
   const table = document.getElementById('cheque-report-table');
   const meta = document.getElementById('report-meta');
-  const inRange = chequeItems.filter(c => inReportRange(c.claimedDay));
+  fillSelect('cq-user', uniqueSorted(chequeItems.map(c => c.claimedBy || '')), 'Everyone');
+  fillSelect('cq-branch', uniqueSorted(chequeItems.map(c => c.branch || '(not set)')), 'All');
+  const inRange = chequeFiltered();
   const total = inRange.length;
   const received = inRange.filter(c => c.status === 'Received').length;
   const open = total - received;
   const overdue = inRange.filter(c => c.overdue).length;
+  const onDel = inRange.filter(c => c.onDelivery).length;
   meta.innerText = total + ' cheques claimed ' + (reportFromSaved ? 'from ' + formatDateDMY(reportFromSaved) : '') + (reportToApplied ? ' to ' + formatDateDMY(reportToApplied) : ' to today') + ' · red after ' + chequeOverdueDays + ' days';
 
   const bySalesman = {};
@@ -4923,21 +5459,27 @@ function renderChequeReport() {
     bySalesman[k] = (bySalesman[k] || 0) + 1;
   });
   const withText = Object.keys(bySalesman).map(k => bySalesman[k] + ' with ' + k).join(', ');
+  const keep = chequeItems;
+  chequeItems = inRange;
+  const groups = chequeGroupTable('By Salesman', 'salesman') + chequeGroupTable('By Branch', 'branch');
+  chequeItems = keep;
 
   sum.innerHTML = `<div class="summary-line"><b>${total}</b> claimed, <b>${received}</b> received, <b>${open}</b> outstanding${
-    overdue ? `, <b style="color:var(--danger)">${overdue} overdue</b>` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
-    <div class="summary-grid">${chequeGroupTable('By Salesman', 'salesman')}${chequeGroupTable('By Branch', 'branch')}</div>`;
+    overdue ? `, <b style="color:var(--danger)">${overdue} overdue</b>` : ''}${onDel ? `, <b>${onDel}</b> on delivery` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
+    <div class="summary-grid">${groups}</div>`;
 
   const showReceived = document.getElementById('cheque-show-received').checked;
   const rows = inRange.filter(c => showReceived || c.status !== 'Received')
     .sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
-  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>By</th><th>Due date</th><th>On delivery</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
     rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''} data-tip="${escapeHtml('Salesman & Branch: ' + ([c.salesman, c.branch].filter(Boolean).join(' · ') || 'Not set in Adv & Chq') + '\nDays: ' + c.days)}">
       <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
       <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
-      <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+      <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.claimedBy || '')}</td><td class="nowrap">${escapeHtml(c.due || '')}</td>
+      <td>${c.onDelivery ? '<span class="tick-yes" title="Cheque on delivery">&#10003;</span>' : ''}</td>
+      <td>${escapeHtml(c.dateReceived || '')}</td>
       <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
-    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--text-dim)">' + (chequeItems.length ? 'Every cheque has been received.' : 'No cheques yet. They appear when Adv &amp; Chq is Final Saved.') + '</td></tr>'
+    </tr>`).join('') || '<tr><td colspan="12" style="color:var(--text-dim)">' + (chequeItems.length ? 'Nothing matches these filters.' : 'No cheques yet. They appear when Adv &amp; Chq is closed.') + '</td></tr>'
   }</tbody>`;
 }
 
@@ -4970,7 +5512,8 @@ function renderChequeAdmin() {
     return [c.refNo, c.caseNo, c.customerName, c.salesman, c.branch].some(x => String(x || '').toLowerCase().includes(q));
   }).sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
 
-  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th><th></th></tr></thead><tbody>${
+  const dueCells = c => `<td class="nowrap">${escapeHtml(c.due || '')}</td><td>${c.onDelivery ? '<span class="tick-yes" title="Cheque on delivery">&#10003;</span>' : ''}</td>`;
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>Due date</th><th>On delivery</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th><th></th></tr></thead><tbody>${
     rows.map(c => {
       const id = escapeHtml(c.id);
       if (c.id === chequeEditId) {
@@ -4978,7 +5521,7 @@ function renderChequeAdmin() {
           <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
           <td>${chequeSelect('ce-branch', 'Branch', c.branch)}</td>
           <td>${chequeSelect('ce-salesman', 'Salesman', c.salesman)}</td>
-          <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+          <td>${escapeHtml(c.dateClaimed)}</td>${dueCells(c)}<td>${escapeHtml(c.dateReceived || '')}</td>
           <td>${c.days}</td><td>${chequeStatusPill(c)}</td>
           <td><input type="text" id="ce-notes" value="${escapeHtml(c.notes)}"></td>
           <td style="white-space:nowrap;">
@@ -4989,7 +5532,7 @@ function renderChequeAdmin() {
       return `<tr${c.overdue ? ' class="overdue"' : ''}>
         <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
         <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
-        <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.dateReceived || '')}</td>
+        <td>${escapeHtml(c.dateClaimed)}</td>${dueCells(c)}<td>${escapeHtml(c.dateReceived || '')}</td>
         <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
         <td style="white-space:nowrap;">
           ${c.status === 'Received'
@@ -4997,7 +5540,7 @@ function renderChequeAdmin() {
             : `<button class="btn btn-small btn-primary" onclick="setChequeStatus('${id}','Received')">Mark received</button>`}
           <button class="btn btn-small" onclick="editCheque('${id}')">Edit</button>
         </td></tr>`;
-    }).join('') || `<tr><td colspan="10" style="color:var(--text-dim)">Nothing here.</td></tr>`
+    }).join('') || `<tr><td colspan="12" style="color:var(--text-dim)">Nothing here.</td></tr>`
   }</tbody>`;
 }
 
@@ -5011,7 +5554,7 @@ async function updateCheque(id, changes, okMsg) {
     const result = await apiCall('chequeUpdate', { id: id, changes: changes });
     if (!result.ok) return toast(result.error || "Could not update cheque", true);
     const i = chequeItems.findIndex(c => c.id === id);
-    if (i !== -1) chequeItems[i] = result.item;
+    if (i !== -1) chequeItems[i] = Object.assign({}, chequeItems[i], result.item);
     chequeEditId = null;
     renderChequeAdmin();
     if (currentTask === 'Reports') renderChequeReport();
@@ -5059,7 +5602,7 @@ function slaText(sla) {
 }
 
 function pointsBasis(t) {
-  if (t.schedule && t.schedule.on) return 'Due ' + (t.schedule.time || '5:00 AM');
+  if (t.schedule && t.schedule.on) return 'Due ' + clockText(t.schedule.time || RECUR_DEFAULT_TIME);
   return slaText(t.sla);
 }
 
@@ -5176,7 +5719,7 @@ let assignTab = 'open';
 function newAssignDraft() {
   return {
     id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '5:00 PM', repeat: false,
-    schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: '5:00 AM', start: todayYmd(), end: 'never', until: '', count: 5 },
+    schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: RECUR_DEFAULT_TIME, start: todayYmd(), end: 'never', until: '', count: 5 }, important: false,
     pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
   };
 }
@@ -5205,7 +5748,7 @@ function renderAssignForm() {
   if (!assignDraft) assignDraft = newAssignDraft();
   const d = assignDraft, sch = d.schedule;
   const freq = sch.freq || 'weekly';
-  const staff = Object.keys(STAFF);
+  const staff = Object.keys(STAFF).filter(n => !(user && user.level === 1 && n === 'Jawad'));
   const pv = k => d.points[k] ? d.points[k] : '';
   document.getElementById('assign-form').innerHTML = `
     <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
@@ -5248,8 +5791,8 @@ function renderAssignForm() {
       <label class="inline-label">Due <input type="date" value="${escapeHtml(d.dueDate)}" onchange="asSet('dueDate', this.value)"></label>
       <label class="inline-label">by ${clockPicker('as_due', d.dueTime, "asSet('dueTime', readClock('as_due'))")}</label>
     </div>`}
-    <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label></div>
-    ${d.pointsOn ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
+    <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.important ? ' on' : ''}"><input type="checkbox"${d.important ? ' checked' : ''} onchange="assignDraft.important = this.checked; renderAssignForm()"> &#9733; Important</label>${user && user.level === 0 ? `<label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label>` : ''}</div>
+    ${d.pointsOn && user && user.level === 0 ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
       <span class="pt-cell"><b>Before</b> at least <input type="number" class="pt-in" value="${pv('bd')}" placeholder="d" oninput="asPointSet('bd', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('bh')}" placeholder="h" oninput="asPointSet('bh', this.value)"><small>h early</small> = <input type="number" class="pt-in" value="${pv('bp')}" placeholder="0" oninput="asPointSet('bp', this.value)"></span>
       <span class="pt-cell"><b>On</b> time = <input type="number" class="pt-in" value="${pv('op')}" placeholder="0" oninput="asPointSet('op', this.value)"></span>
       <span class="pt-cell"><b>After</b> up to <input type="number" class="pt-in" value="${pv('ad')}" placeholder="d" oninput="asPointSet('ad', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('ah')}" placeholder="h" oninput="asPointSet('ah', this.value)"><small>h late</small> = <input type="number" class="pt-in" value="${pv('ap')}" placeholder="0" oninput="asPointSet('ap', this.value)"></span>
@@ -5283,7 +5826,8 @@ async function saveAssign() {
     id: d.id, title: d.title.trim(), notes: d.notes, people: d.people, mode: d.people.length > 1 ? d.mode : 'each',
     dueMs: d.repeat ? 0 : localMs(d.dueDate, d.dueTime),
     schedule: d.repeat ? Object.assign({}, d.schedule, { on: true }) : null,
-    points: d.pointsOn ? d.points : null
+    points: d.pointsOn && user.level === 0 ? d.points : null,
+    important: !!d.important
   };
   if (!d.repeat && !payload.dueMs) return toast("Pick a due date and time.", true);
   const btn = document.getElementById('btn-assign-save');
@@ -5339,22 +5883,28 @@ function renderAssignList() {
   document.getElementById('as-tab-done').innerText = 'Done (' + counts.done + ')';
   document.getElementById('assign-table').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Due</th><th>Status</th><th>Done by</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>${
     items.map(x => `<tr class="${x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
-      <td class="left"><b>${escapeHtml(x.title)}</b></td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
+      <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b>${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
       <td>${escapeHtml(x.due)}</td><td>${assignStatusPill(x)}</td><td>${escapeHtml(x.doneBy || '')}</td><td>${escapeHtml(x.doneAt || '')}</td>
       <td class="left">${escapeHtml(x.note || '')}</td>
-      <td class="nowrap">${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button></td>
+      <td class="nowrap">${assignMineById(x.assignId) ? `${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button>` : ''}</td>
     </tr>`).join('') || '<tr><td colspan="8" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
   const defs = assignData.assignments.filter(a => a.schedule && a.schedule.on);
   document.getElementById('assign-defs').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Repeat</th><th>Status</th><th></th></tr></thead><tbody>${
     defs.map(a => `<tr><td class="left"><b>${escapeHtml(a.title)}</b></td><td class="left">${escapeHtml(a.people.join(', '))}${a.mode === 'shared' && a.people.length > 1 ? ' <small class="report-meta">(shared)</small>' : ''}</td>
       <td class="left">${escapeHtml(scheduleSummary(a.schedule))}</td>
       <td>${a.status === 'Active' ? '<span class="status-pill status-done">Active</span>' : '<span class="status-pill status-open">Stopped</span>'}</td>
-      <td>${a.status === 'Active' ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(a.id)}')">Edit</button> <button class="btn btn-small icon-cross" id="stop-${escapeHtml(a.id)}" onclick="stopAssign('${escapeHtml(a.id)}')">Stop</button> ` : ''}<button class="btn btn-small icon-cross" id="del-def-${escapeHtml(a.id)}" onclick="deleteAssign('${escapeHtml(a.id)}', '')">Delete all</button></td>
+      <td>${assignMineById(a.id) ? `${a.status === 'Active' ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(a.id)}')">Edit</button> <button class="btn btn-small icon-cross" id="stop-${escapeHtml(a.id)}" onclick="stopAssign('${escapeHtml(a.id)}')">Stop</button> ` : ''}<button class="btn btn-small icon-cross" id="del-def-${escapeHtml(a.id)}" onclick="deleteAssign('${escapeHtml(a.id)}', '')">Delete all</button>` : ''}</td>
     </tr>`).join('') || '<tr><td colspan="5" class="report-meta">No repeating assignments.</td></tr>'}</tbody>`;
 }
 
 function assignDefById(id) {
   return assignData.assignments.filter(a => a.id === id && a.status === 'Active')[0] || null;
+}
+
+function assignMineById(id) {
+  if (user && user.level === 0) return true;
+  const a = assignData.assignments.filter(x => x.id === id)[0];
+  return !!(a && a.mine);
 }
 
 function editAssign(id) {
@@ -5371,6 +5921,7 @@ function editAssign(id) {
     d.dueTime = h + ':' + mm + ' ' + ap;
   }
   if (a.points) { d.pointsOn = true; d.points = Object.assign(d.points, a.points); }
+  d.important = !!a.important;
   assignDraft = d;
   renderAssignForm();
   document.getElementById('assign-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -5424,11 +5975,11 @@ async function loadMyAssigned() {
     const done = items.filter(x => x.status === 'Done');
     list.innerHTML = open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
-        <h3>${escapeHtml(x.title)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
+        <h3>${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
         <div class="report-meta">${x.by ? 'Assigned by <b>' + escapeHtml(x.by) + '</b> to <b>' + escapeHtml((x.people || []).join(', ')) + '</b> · ' : ''}${x.repeat ? '&#8635; ' + escapeHtml(scheduleSummary(x.repeat)) + ' · ' : ''}Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
         ${canDo ? `<div class="report-bar">
-          <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for Jawad (optional)">
+          <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for ${escapeHtml(x.by || 'Jawad')} (optional)">
           <button class="btn btn-primary btn-small" onclick="markAssignedDone('${escapeHtml(x.id)}')">Done</button>
         </div>` : ''}
       </div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned right now.</div>';
@@ -5651,7 +6202,7 @@ function renderOpen() {
     const d = list.filter(x => x.duplicate).length, f = list.filter(x => x.finalised).length;
     return (d ? ` <span class="status-pill status-late">${d} duplicate</span>` : '') + (f ? ` <span class="status-pill status-done">${f} already in Final</span>` : '');
   };
-  const rowHtml = x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}" data-tip="${escapeHtml(caseTip(x.formSB, x.caseDays, x.inputs, x.corporate))}">
+  const rowHtml = x => `<tr class="${x.duplicate || x.finalised ? 'overdue' : ''}" data-tip="${escapeHtml(pendingTip({ taskName: x.task, hover: x.hover, caseDays: x.caseDays, formSB: x.formSB, inputs: x.inputs, corporate: x.corporate }))}">
       <td><input type="checkbox" ${openSel[x.id] ? 'checked' : ''} onchange="toggleOpenSel('${escapeHtml(x.id)}', this.checked)"></td>
       <td class="${caseCellClass(x)}">${escapeHtml(chequeKey(x))}</td><td class="left ${caseCellClass(x)}">${escapeHtml(x.name || '')}</td>
       <td>${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.createdBy)}</td><td>${x.days === null ? '' : x.days}</td>
@@ -5954,7 +6505,7 @@ function renderTable(list) {
       <td><input type="text" class="row-ref" data-id="${id}" value="${escapeHtml(rowValue(item, 'refNo'))}" oninput="noteRowEdit('${id}','refNo',this.value)" style="margin:0; padding:6px 8px; width:90px; font-size:0.8rem;"></td>
       <td><input type="text" class="row-case" data-id="${id}" value="${escapeHtml(rowValue(item, 'caseNo'))}" oninput="noteRowEdit('${id}','caseNo',this.value)" style="margin:0; padding:6px 8px; width:90px; font-size:0.8rem;"></td>
       <td style="text-align:right; white-space:nowrap;">
-        <button class="btn icon-btn icon-tick" onclick="finalizeEntryWithInputs('${id}')" title="Finalize">&#10003;</button>
+        <button class="btn icon-btn icon-tick" onclick="finalizeEntryWithInputs('${id}')" title="Close task">&#10003;</button>
         <button class="btn icon-btn icon-cross" onclick="removeEntry('${id}')" title="Delete">&#10005;</button>
       </td>
     </tr>`);
@@ -6048,7 +6599,7 @@ async function finalizeSelected() {
     });
     renderTable();
 
-    let note = `${done.length} saved to Final.`;
+    let note = `${done.length} task${done.length === 1 ? '' : 's'} closed.`;
     if (skipped.length > 0) note += ` ${skipped.length} skipped.`;
     if (result.failed && result.failed.length > 0) note += ` ${result.failed.length} could not be saved.`;
     if (result.chequeNote) note += ' ' + result.chequeNote;
@@ -6058,7 +6609,7 @@ async function finalizeSelected() {
     toast("Network error", true);
   } finally {
     btn.disabled = false;
-    btn.innerText = "Finalize Selected";
+    btn.innerText = "Close selected";
   }
 }
 
@@ -6081,12 +6632,12 @@ async function finalizeEntryWithInputs(tempId) {
   const caseNo = caseInput ? caseInput.value.trim() : "";
 
   if (!refNo && !caseNo) {
-    toast("Fill in Reference No OR Case No before finalizing.", true);
+    toast("Fill in Reference No OR Case No before closing the task.", true);
     return;
   }
 
   try {
-    const result = await apiCall('tempFinalize', { tempId, refNo, caseNo });
+    const result = await apiCall('tempFinalize', { tempId, refNo, caseNo, assignNext: valOf('assign-next') });
     if (!result.ok) return toast(result.error || "Could not finalize", true);
     removeLocalTempEntry(tempId);
     toast(savedMessage(result));
