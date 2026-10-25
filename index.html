@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Taskendo</title>
+<title>Taskando</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -759,7 +759,19 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 .task-sidebar-item.imp { border-left: 3px solid var(--brass); }
 .star-btn { border: none; background: transparent; color: var(--text-dim); font-size: 1rem; line-height: 1; padding: 0 4px 0 0; cursor: pointer; }
 .star-btn.on, .star-btn:hover { color: var(--brass); }
-.case-chip.imp { border-color: var(--brass); background: var(--brass-soft); }
+.case-chip.imp { border: 2px solid #d23f31; background: #fff4e5; box-shadow: 0 0 0 3px rgba(210,63,49,0.12); font-weight: 600; }
+.imp-tag { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 8px; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; background: #d23f31; color: #fff; vertical-align: middle; }
+.task-sidebar-item.imp { background: #fff4e5; border-color: #e7b07a; }
+.task-sidebar-item.imp .imp-star { color: #d23f31; font-size: 1.05em; margin-right: 4px; }
+.notif-item.imp { background: #fff4e5; border-left: 4px solid #d23f31; }
+a.daily-item.imp { background: rgba(255,244,229,0.9); border-left: 3px solid #d23f31; padding-left: 6px; }
+.quick-tile { border-top: 4px solid var(--brass) !important; }
+.pic-overlay { position: fixed; inset: 0; background: rgba(20,30,20,0.55); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.pic-panel { background: #fff; border-radius: 14px; padding: 14px; max-width: 100%; max-height: 100%; overflow: auto; }
+.pic-head { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.pic-head .btn { margin-left: auto; }
+.pic-panel img { display: block; max-width: 100%; height: auto; border: 1px solid var(--border-color); }
+.dyn-assign select { border-color: var(--brass); }
 .for-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; background: var(--info-soft); color: #2f5f8a; vertical-align: middle; }
 .imp-badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 8px; font-size: 0.68rem; font-weight: 700; background: var(--brass-soft); color: #7b5c19; vertical-align: middle; }
 .chip-info { display: block; font-size: 0.72rem; color: var(--pine); font-weight: 600; margin-top: 2px; }
@@ -821,13 +833,16 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 <img src="mahana-logo.png" alt="Mahana">
 <img src="friends-logo.png" alt="Friends">
 </div>
-<span class="site-title">Taskendo</span>
+<span class="site-title">Taskando</span>
 </div>
 <div class="header-right">
 <span id="active-user-display" class="user-meta hidden"></span>
 <button id="btn-notifications" class="icon-action hidden" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
+</button>
+<button id="btn-assign-new" class="icon-action hidden" onclick="openAssignNew()" title="Assign a new task" aria-label="Assign a new task">
+<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
 </button>
 <button id="btn-refresh" class="icon-action hidden" onclick="refreshAll()" title="Refresh: show the latest data" aria-label="Refresh">
 <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
@@ -919,7 +934,6 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div id="form-dynamic" class="hidden">
 <div id="case-info" class="case-info hidden"></div>
 <div id="dyn-fields" class="dyn-grid"></div>
-<div id="assign-next-box" class="assign-next hidden"></div>
 <div style="display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;">
 <button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
 <button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Close Task</button>
@@ -1040,6 +1054,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">From <input type="date" id="report-from" onkeydown="if(event.key==='Enter')applyReportDates()"></label>
 <label class="inline-label">To <input type="date" id="report-to" onkeydown="if(event.key==='Enter')applyReportDates()"></label>
 <button class="btn btn-small btn-primary" onclick="applyReportDates()">Apply</button>
+<label class="inline-label hidden" id="report-project-wrap">Project <select id="report-project" onchange="timingData = null; loadTiming()"></select></label>
 <button class="btn btn-small" onclick="setReportRange('today')">Today</button>
 <button class="btn btn-small" onclick="setReportRange('month')">This month</button>
 <span class="report-meta">Starts on the 1st of this month up to today. Change the dates and press Apply.</span>
@@ -1089,6 +1104,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <option value="scored">Everything scored</option>
 <option value="leave">Left undone (L)</option>
 </select></label>
+<button class="btn btn-small" onclick="copyEmployeePicture()">Copy picture</button>
 <span class="report-meta">Click a name in the table to see only that person.</span>
 </div>
 <div class="report-wrap emp-grid-wrap"><table class="report-table" id="employee-grid"></table></div>
@@ -1101,8 +1117,10 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">On delivery <select id="cq-del" onchange="renderChequeReport()"><option value="">All</option><option value="yes">Yes</option><option value="no">No</option></select></label>
 <label class="inline-label">Due from <input type="date" id="cq-due-from" onchange="renderChequeReport()"></label>
 <label class="inline-label">to <input type="date" id="cq-due-to" onchange="renderChequeReport()"></label>
+<label class="inline-label">Salesman <select id="cq-sales" onchange="renderChequeReport()"></select></label>
 <label class="field-req-pick"><input type="checkbox" id="cheque-show-received" onchange="renderChequeReport()"> Show received cheques</label>
 <button class="btn btn-small" onclick="clearChequeFilters()">Clear</button>
+<button class="btn btn-small" onclick="copyChequePicture()">Copy picture</button>
 </div>
 <div id="cheque-summary"></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
@@ -1350,7 +1368,8 @@ const BUILTIN_FIELD_DEFS = [
     options: ['1','2','3','4','5','6','7','8','9','10'] },
   { key: 'approvalStatus', label: 'Decision',         type: 'select',   col: 'ApprovalStatus',   locked: false,
     options: ['Approved','Rejected'] },
-  { key: 'remarks',        label: 'Remarks',          type: 'textarea', col: 'Remarks',          locked: false }
+  { key: 'remarks',        label: 'Remarks',          type: 'textarea', col: 'Remarks',          locked: false },
+  { key: 'assignNext',     label: 'Assign next task to', type: 'assignee', col: 'AssignedTo',    locked: false }
 ];
 
 const FIELD_TYPES = [
@@ -1373,6 +1392,7 @@ function builtinDefByKey(key) {
 }
 
 function fieldTypeLabel(type) {
+  if (type === 'assignee') return 'Pick who does the next task';
   for (let i = 0; i < FIELD_TYPES.length; i++) {
     if (FIELD_TYPES[i].id === type) return FIELD_TYPES[i].label;
   }
@@ -1494,7 +1514,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R17";
+const APP_VERSION = "R18";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1717,6 +1737,15 @@ function openMyAssigned() {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_ASSIGNED);
 }
 
+function openAssignNew() {
+  if (!user || user.level > 1) return;
+  assignDraft = null;
+  const target = '#/staff/' + encodeURIComponent(user.name) + '/Assign';
+  if (window.location.hash === target) { renderAssignForm(); document.getElementById('as-title') && document.getElementById('as-title').focus(); return; }
+  window.location.hash = target;
+  setTimeout(() => { const el = document.getElementById('as-title'); if (el) el.focus(); }, 700);
+}
+
 function openPanelTask(name) {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(name);
 }
@@ -1728,7 +1757,7 @@ function extraTabsHtml(asButtons) {
     const on = currentProject === pid;
     return asButtons
       ? `<button class="btn btn-small my-assigned-btn${on ? ' btn-primary' : ''}" onclick="openPanelTask('${escapeHtml(n)}')">${escapeHtml(n)}</button>`
-      : `<button class="ftab ftab-right${on ? ' active' : ''}" onclick="openPanelTask('${escapeHtml(n)}')">${escapeHtml(n)}</button>`;
+      : `<button class="ftab${on ? ' active' : ''}" onclick="openPanelTask('${escapeHtml(n)}')">${escapeHtml(n)}</button>`;
   }).join('');
 }
 
@@ -1740,8 +1769,12 @@ function renderProjectNav() {
   const assignedBtn = `<button class="btn btn-small my-assigned-btn${currentProject === ASSIGNED_PROJECT ? ' btn-primary' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? ' <span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   if (!currentProject) {
     nav.classList.remove('hidden');
-    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${extraTabsHtml(true)}${assignedBtn}`;
+    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${assignedBtn}`;
     tiles.classList.remove('hidden');
+    const extraTiles = (profile ? extraPanelsFor(profile.name) : []).map(n => `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="openPanelTask('${escapeHtml(n)}')">
+        <strong>${escapeHtml(n)}</strong>
+        <small>${n === 'Reports' ? 'Presentation, employee and cheque reports' : 'Give someone a task'}</small>
+      </a>`).join('');
     tiles.innerHTML = projs.map(p => {
       const n = pendingCountForProject(p.id);
       return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
@@ -1749,7 +1782,7 @@ function renderProjectNav() {
         <small>${p.id === ADMIN_PROJECT ? 'Settings and reports' : projectChains(p.id).length + ' chain' + (projectChains(p.id).length === 1 ? '' : 's')}</small>
         ${n ? `<span class="sidebar-count project-bubble">${n.count}</span>` : ''}
       </a>`;
-    }).join('') || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
+    }).join('') + extraTiles || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
     return;
   }
   tiles.classList.add('hidden');
@@ -1760,7 +1793,7 @@ function renderProjectNav() {
   }).join('');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
-  nav.innerHTML = `<div class="ftabs">${projTabs}<div class="nav-spacer"></div>${extraTabsHtml(false)}${assignedTab}</div>
+  nav.innerHTML = `<div class="ftabs">${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${assignedTab}</div>
     ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
@@ -1832,6 +1865,7 @@ async function completeLogin() {
     document.getElementById('scr-login').classList.add('hidden');
     document.getElementById('btn-logout').classList.remove('hidden');
     document.getElementById('btn-refresh').classList.remove('hidden');
+    document.getElementById('btn-assign-new').classList.toggle('hidden', user.level > 1);
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('active-user-display').classList.remove('hidden');
     document.getElementById('active-user-display').innerText = user.name;
@@ -2402,9 +2436,10 @@ function renderFieldEditorList(t) {
         </span>
       </div>
       ${optionsUI}
-      ${(f.key === 'ref' || f.key === 'case') ? '' : `<label class="field-req-pick show-next-pick"><input type="checkbox"${f.showNext ? ' checked' : ''} onchange="toggleShowNext('${f.id}', this.checked)"> Show this answer on the next tasks</label>`}
-      ${(f.key === 'ref' || f.key === 'case') ? '' : renderExitEditor(f)}
-      ${(f.key === 'ref' || f.key === 'case') ? '' : renderPointsRuleEditor(f)}
+      ${f.key === 'assignNext' ? `<div class="builder-hint" style="margin:6px 0 0;">Shows the people who do the next task in the chain. The one picked is the only one who gets that task and its points.</div>` : ''}
+      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : `<label class="field-req-pick show-next-pick"><input type="checkbox"${f.showNext ? ' checked' : ''} onchange="toggleShowNext('${f.id}', this.checked)"> Show this answer on the next tasks</label>`}
+      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : renderExitEditor(f)}
+      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : renderPointsRuleEditor(f)}
     </div>`;
   }).join('');
 }
@@ -2988,7 +3023,7 @@ function renderNotifPanel() {
     html += `<div class="notif-empty">Nothing waiting on you.</div>`;
   } else {
     html += shown.map(p => `
-      <div class="notif-item${caseTagClass(p)}" data-tip="${escapeHtml(pendingTip(p))}" data-task="${escapeHtml(p.taskName)}"
+      <div class="notif-item${caseTagClass(p)}${p.important ? ' imp' : ''}" data-tip="${escapeHtml(pendingTip(p))}" data-task="${escapeHtml(p.taskName)}"
            data-ref="${escapeHtml(p.refNo || '')}" data-case="${escapeHtml(p.caseNo || '')}"
            data-name="${escapeHtml(p.customerName || '')}" data-mobile="${escapeHtml(p.customerMobile || '')}">
         <div class="notif-task">${p.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(p.taskName)}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late</span>' : ''}</div>
@@ -3078,7 +3113,7 @@ function renderPendingStrip() {
   list.innerHTML = items.map((p, i) => `
     <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
       ${canStar && !p.recurring ? `<button class="star-btn${p.important ? ' on' : ''}" onclick="event.stopPropagation(); toggleImportant('${escapeHtml(p.pendingId || '')}')" title="${p.important ? 'Important. Click to unmark' : 'Mark as important'}">${p.important ? '&#9733;' : '&#9734;'}</button>` : (p.important ? '<span class="imp-star">&#9733;</span>' : '')}
-      ${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
+      ${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
 
@@ -3940,6 +3975,13 @@ function renderSelectionScreen() {
   document.getElementById('nav-back').classList.add('hidden');
   const grid = document.getElementById('staff-grid');
   grid.innerHTML = "";
+  if (user.level === 1) {
+    ['Assign', 'Reports'].forEach(n => grid.insertAdjacentHTML('beforeend', `
+      <a class="dashboard-item quick-tile" href="#/staff/${encodeURIComponent(user.name)}/${encodeURIComponent(n)}">
+        <strong>${n === 'Assign' ? '+ Assign a task' : 'Reports'}</strong>
+        <small>${n === 'Assign' ? 'Give someone a task' : 'Presentation, employee and cheque'}</small>
+      </a>`));
+  }
   Object.keys(STAFF).forEach(name => {
     if (!canAccessStaffFrontend(name)) return;
     const href = '#/staff/' + encodeURIComponent(name);
@@ -4244,7 +4286,6 @@ function renderFormInterface() {
   document.getElementById('form-dynamic').classList.remove('hidden');
   renderDynamicForm(t);
   showCaseInfo(null);
-  renderAssignNext();
   setPartialEditing(null);
   document.getElementById('partial-section').classList.remove('hidden');
   loadPartials();
@@ -4275,6 +4316,15 @@ function renderFieldHtml(f) {
     return `<div class="dyn-field">
       <label>${escapeHtml(label)}${f.required ? ' *' : ''}</label>
       <input type="${type}" id="${baseId}"${type === 'number' ? ' inputmode="numeric"' : ''}${ph} onchange="lookupCase('${f.key}')">
+    </div>`;
+  }
+  if (f.key === 'assignNext') {
+    const nexts = nextTasksOf(currentTask);
+    const owners = nextOwnersOf(currentTask);
+    return `<div class="dyn-field dyn-assign">
+      <label>${escapeHtml(nexts.length ? 'Who does ' + nexts.join(', ') : f.label)}${f.required ? ' *' : ''}</label>
+      <select id="${baseId}"><option value="">${owners.length ? 'Pick a person' : 'No next task in the chain'}</option>${owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select>
+      <small class="report-meta">Only this person gets the next task, and its points.</small>
     </div>`;
   }
   const reqMark = f.required ? ' *' : '';
@@ -4364,6 +4414,7 @@ function collectDynamicEntry(task) {
     if (f.type === 'date' && v) v = formatDateDMY(v);
 
     if (f.builtin && f.key) {
+      if (f.key === 'assignNext') { values.assignNext = v; if (v) extra.AssignedTo = v; return; }
       if (f.key === 'ref') values.refNo = v;
       else if (f.key === 'case') values.caseNo = v;
       else values[f.key] = v;
@@ -4445,17 +4496,10 @@ function nextTasksOf(task) {
   return out;
 }
 
-function renderAssignNext() {
-  const box = document.getElementById('assign-next-box');
-  if (!box) return;
-  const nexts = currentTask ? nextTasksOf(currentTask) : [];
+function nextOwnersOf(task) {
   const owners = [];
-  nexts.forEach(n => { const t = taskByName(n); (t ? t.owners : []).forEach(o => { if (owners.indexOf(o) === -1) owners.push(o); }); });
-  if (!nexts.length || owners.length < 2) { box.classList.add('hidden'); box.innerHTML = ''; return; }
-  box.innerHTML = `<label class="inline-label">Next task (${escapeHtml(nexts.join(', '))}) goes to
-    <select id="assign-next"><option value="">Whoever does it first</option>${owners.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('')}</select></label>
-    <span class="report-meta">Pick a person and only they will see it.</span>`;
-  box.classList.remove('hidden');
+  nextTasksOf(task).forEach(n => { const t = taskByName(n); (t ? t.owners : []).forEach(o => { if (owners.indexOf(o) === -1) owners.push(o); }); });
+  return owners;
 }
 
 function savedMessage(result) {
@@ -4487,7 +4531,7 @@ async function saveDynamicEntry(type) {
   const payload = Object.assign(
     { targetStaffName: profile.name, taskName: currentTask },
     values,
-    { extra: extra, partialId: currentPartialId || "", assignNext: type === 'Final' ? valOf('assign-next') : '' }
+    { extra: extra, partialId: currentPartialId || "", assignNext: values.assignNext || '' }
   );
   const usedPartial = !!currentPartialId;
 
@@ -4510,8 +4554,6 @@ async function saveDynamicEntry(type) {
       if (!result.ok) return toast(result.error || "Could not save entry", true);
       clearDynamicForm(task);
       showCaseInfo(null);
-      const an = document.getElementById('assign-next');
-      if (an) an.value = '';
       toast(savedMessage(result));
       loadPending();
       if (recentOpen) loadRecent();
@@ -4768,6 +4810,13 @@ async function removePartial(i) {
 
 let reportTab = 'simple';
 
+function fillReportProjects() {
+  const el = document.getElementById('report-project');
+  if (!el || el.options.length) return;
+  el.innerHTML = PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('') + '<option value="">All projects</option>';
+  el.value = PROJECTS.length ? PROJECTS[0].id : '';
+}
+
 function staffReportsOnly() {
   return !isAdminPanel();
 }
@@ -4776,6 +4825,9 @@ function showReportTab(tab) {
   const limited = staffReportsOnly();
   if (limited && (tab === 'timing' || tab === 'exits')) tab = 'simple';
   ensureReportDates();
+  preloadPictureTool();
+  fillReportProjects();
+  document.getElementById('report-project-wrap').classList.toggle('hidden', !(tab === 'timing' || tab === 'employee') || PROJECTS.length < 2);
   document.getElementById('rep-tab-timing').classList.toggle('hidden', limited);
   document.getElementById('rep-tab-exits').classList.toggle('hidden', limited);
   reportTab = tab;
@@ -4808,14 +4860,17 @@ async function loadTiming() {
   document.getElementById('timing-table').innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Working it out...</td></tr>`;
   try {
     const to = reportToApplied;
-    const result = await apiCall('timingReport', { from: reportFromSaved, to: to });
+    const result = await apiCall('timingReport', { from: reportFromSaved, to: to, project: valOf('report-project') });
     if (!result.ok) return toast(result.error || "Could not load timing", true);
     timingData = result;
     meta.innerText = (result.items || []).length + ' timed items · ' + formatDateDMY(result.reportFrom) + (to ? ' to ' + formatDateDMY(to) : ' to today') + ' · built ' + (result.builtAt || '');
     fillSelect('tm-task', uniqueSorted((result.items || []).map(i => i.task)), 'All tasks');
     const ppl = uniqueSorted((result.staff || []).concat((result.people || []).map(p => p.name)));
     fillSelect('tm-person', ppl, 'Everyone');
-    fillSelect('emp-person', uniqueSorted((result.people || []).map(p => p.name)), 'Everyone');
+    const empSel = document.getElementById('emp-person');
+    const firstLoad = empSel && !empSel.dataset.done;
+    fillSelect('emp-person', uniqueSorted((result.people || []).map(p => p.name).concat(staffReportsOnly() && user ? [user.name] : [])), 'Everyone');
+    if (firstLoad) { empSel.dataset.done = '1'; if (staffReportsOnly() && user) empSel.value = user.name; }
     renderTiming();
     renderEmployees();
   } catch (e) { toast("Network error", true); }
@@ -5142,7 +5197,7 @@ function copyReportText() {
   if (!reportData) return toast('Wait for the report to load.', true);
   const rows = reportRowsFiltered();
   const tasks = reportData.tasks || [];
-  const lines = ['*Taskendo · ' + reportTitle() + '*', rows.length + ' case' + (rows.length === 1 ? '' : 's'), ''];
+  const lines = ['*Taskando · ' + reportTitle() + '*', rows.length + ' case' + (rows.length === 1 ? '' : 's'), ''];
   rows.forEach(r => {
     const waiting = tasks.filter((t, i) => r.cells[i] === '?');
     const done = r.cells.filter(c => c === '●' || c === '≡').length;
@@ -5152,33 +5207,74 @@ function copyReportText() {
   navigator.clipboard.writeText(text).then(() => toast('Copied ' + rows.length + ' cases. Paste it in WhatsApp.')).catch(() => toast('Could not copy.', true));
 }
 
-async function copyReportPicture() {
-  const table = document.getElementById('report-table');
-  if (!reportData || !table) return toast('Wait for the report to load.', true);
+const H2C_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+
+function preloadPictureTool() {
+  loadScriptOnce(H2C_URL).catch(() => {});
+}
+
+async function nodesToBlob(nodes, title) {
   const wrap = document.createElement('div');
   wrap.className = 'shot-wrap';
-  wrap.innerHTML = `<div class="shot-head"><b>Taskendo</b> · ${escapeHtml(reportTitle())}</div>`;
-  const clone = table.cloneNode(true);
-  wrap.appendChild(clone);
+  wrap.innerHTML = `<div class="shot-head"><b>Taskando</b> · ${escapeHtml(title)}</div>`;
+  nodes.forEach(n => { if (n) wrap.appendChild(n.cloneNode(true)); });
   document.body.appendChild(wrap);
   try {
-    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScriptOnce(H2C_URL);
     const canvas = await window.html2canvas(wrap, { backgroundColor: '#ffffff', scale: 1.5 });
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    try {
-      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      toast('Picture copied. Paste it in WhatsApp.');
-    } catch (e) {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Report ' + ymdLocal(new Date()) + '.png';
-      a.click();
-      toast('This browser cannot copy pictures, so it was saved instead.');
-    }
-  } catch (e) {
-    toast('Could not make the picture. Use Copy text instead.', true);
+    return await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('no picture')), 'image/png'));
+  } finally {
+    wrap.remove();
   }
-  wrap.remove();
+}
+
+function showPicture(blob) {
+  const url = URL.createObjectURL(blob);
+  let box = document.getElementById('pic-overlay');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'pic-overlay';
+    box.className = 'pic-overlay';
+    box.onclick = e => { if (e.target === box) box.remove(); };
+    document.body.appendChild(box);
+  }
+  box.innerHTML = `<div class="pic-panel"><div class="pic-head"><b>Copy this picture</b><span class="report-meta">Right-click it and pick Copy image. On a phone, press and hold it, then Copy.</span><button class="btn btn-small" onclick="document.getElementById('pic-overlay').remove()">Close</button></div><img src="${url}" alt="Report picture"></div>`;
+}
+
+function copyPicture(makeBlob, okText) {
+  const blobPromise = makeBlob();
+  blobPromise.catch(() => {});
+  let tried = false;
+  try {
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      tried = true;
+      navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })])
+        .then(() => toast(okText || 'Picture copied. Paste it in WhatsApp.'))
+        .catch(() => blobPromise.then(showPicture).catch(() => toast('Could not make the picture. Use Copy text instead.', true)));
+    }
+  } catch (e) { tried = false; }
+  if (!tried) blobPromise.then(showPicture).catch(() => toast('Could not make the picture. Use Copy text instead.', true));
+  toast('Making the picture...');
+}
+
+function copyReportPicture() {
+  const table = document.getElementById('report-table');
+  if (!reportData || !table) return toast('Wait for the report to load.', true);
+  copyPicture(() => nodesToBlob([table], reportTitle()));
+}
+
+function copyChequePicture() {
+  if (!chequesLoaded) return toast('Wait for the cheques to load.', true);
+  const title = 'Cheque report · ' + formatDateDMY(reportFromSaved) + ' to ' + (reportToApplied ? formatDateDMY(reportToApplied) : 'today');
+  copyPicture(() => nodesToBlob([document.getElementById('cheque-summary'), document.getElementById('cheque-report-table')], title));
+}
+
+function copyEmployeePicture() {
+  if (!timingData) return toast('Wait for the report to load.', true);
+  const title = 'Employee report · ' + formatDateDMY(reportFromSaved) + ' to ' + (reportToApplied ? formatDateDMY(reportToApplied) : 'today');
+  const nodes = [document.getElementById('employee-grid')];
+  if (valOf('emp-person')) nodes.push(document.getElementById('employee-cards'));
+  copyPicture(() => nodesToBlob(nodes, title));
 }
 
 function openColFilter(key, th) {
@@ -5271,9 +5367,9 @@ function dailyLink(it, person) {
 }
 
 function dailyItemHtml(it, person) {
-  return `<a class="daily-item daily-link" href="${escapeHtml(dailyLink(it, person))}" target="_blank" rel="noopener" title="Open in a new tab">
+  return `<a class="daily-item daily-link${it.important ? ' imp' : ''}" href="${escapeHtml(dailyLink(it, person))}" target="_blank" rel="noopener" title="Open in a new tab">
     <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
-    <div class="daily-text"><b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
+    <div class="daily-text">${it.important ? '<span class="imp-tag">&#9733; Important</span> ' : ''}<b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
       ${it.due ? `<div class="daily-due">${escapeHtml(it.due)}</div>` : ''}
       ${it.projectName && it.projectName !== 'Mahana' ? `<div class="daily-proj">${escapeHtml(it.projectName)}</div>` : ''}
       ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
@@ -5300,7 +5396,7 @@ async function loadDaily(everyone) {
       <div class="daily-card" id="daily-card-${pi}">
         <div class="daily-card-head">
           <div><div class="daily-name">${escapeHtml(p.name)}</div><div class="daily-date">${escapeHtml(dayText)}</div></div>
-          <span class="daily-brand">Taskendo</span>
+          <span class="daily-brand">Taskando</span>
         </div>
         <div class="daily-cols">
           ${col('Overdue', 'c-over', p.overdue, p.name)}
@@ -5324,33 +5420,29 @@ function loadScriptOnce(src) {
   });
 }
 
-async function dailyPicture(i, mode) {
+function dailyBlob(card) {
+  return (async () => {
+    await loadScriptOnce(H2C_URL);
+    card.classList.add('shooting');
+    try {
+      const canvas = await window.html2canvas(card, { backgroundColor: '#ffffff', scale: 2 });
+      return await new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error('no picture')), 'image/png'));
+    } finally { card.classList.remove('shooting'); }
+  })();
+}
+
+function dailyPicture(i, mode) {
   const card = document.getElementById('daily-card-' + i);
   if (!card) return;
-  try {
-    await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-    card.classList.add('shooting');
-    const canvas = await window.html2canvas(card, { backgroundColor: '#ffffff', scale: 2 });
-    card.classList.remove('shooting');
+  if (mode === 'copy') return copyPicture(() => dailyBlob(card));
+  dailyBlob(card).then(blob => {
     const p = dailyData.people[i];
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    if (mode === 'copy') {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-        return toast('Picture copied. Paste it in WhatsApp.');
-      } catch (e) {
-        toast('This browser cannot copy pictures, so it was saved instead.', true);
-      }
-    }
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'Tasks ' + p.name + ' ' + dailyData.date + '.png';
     a.click();
-    if (mode !== 'copy') toast('Picture saved.');
-  } catch (e) {
-    card.classList.remove('shooting');
-    toast('Could not make the picture. Take a screenshot instead.', true);
-  }
+    toast('Picture saved.');
+  }).catch(() => toast('Could not make the picture. Take a screenshot instead.', true));
 }
 
 function toggleAppFullscreen() {
@@ -5420,16 +5512,17 @@ function chequeGroupTable(title, field) {
 }
 
 function clearChequeFilters() {
-  ['cq-user', 'cq-branch', 'cq-del', 'cq-due-from', 'cq-due-to'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['cq-user', 'cq-branch', 'cq-sales', 'cq-del', 'cq-due-from', 'cq-due-to'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   renderChequeReport();
 }
 
 function chequeFiltered() {
-  const u = valOf('cq-user'), b = valOf('cq-branch'), del = valOf('cq-del'), df = valOf('cq-due-from'), dt = valOf('cq-due-to');
+  const u = valOf('cq-user'), b = valOf('cq-branch'), sm = valOf('cq-sales'), del = valOf('cq-del'), df = valOf('cq-due-from'), dt = valOf('cq-due-to');
   return chequeItems.filter(c => {
     if (!inReportRange(c.claimedDay)) return false;
     if (u && c.claimedBy !== u) return false;
     if (b && (c.branch || '(not set)') !== b) return false;
+    if (sm && (c.salesman || '(not set)') !== sm) return false;
     if (del === 'yes' && !c.onDelivery) return false;
     if (del === 'no' && c.onDelivery) return false;
     if ((df || dt) && !c.dueDay) return false;
@@ -5445,6 +5538,7 @@ function renderChequeReport() {
   const meta = document.getElementById('report-meta');
   fillSelect('cq-user', uniqueSorted(chequeItems.map(c => c.claimedBy || '')), 'Everyone');
   fillSelect('cq-branch', uniqueSorted(chequeItems.map(c => c.branch || '(not set)')), 'All');
+  fillSelect('cq-sales', uniqueSorted(chequeItems.map(c => c.salesman || '(not set)')), 'All');
   const inRange = chequeFiltered();
   const total = inRange.length;
   const received = inRange.filter(c => c.status === 'Received').length;
@@ -5470,13 +5564,13 @@ function renderChequeReport() {
 
   const showReceived = document.getElementById('cheque-show-received').checked;
   const rows = inRange.filter(c => showReceived || c.status !== 'Received')
-    .sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
-  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>By</th><th>Due date</th><th>On delivery</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
+    .sort((a, b) => ((b.onDelivery ? 1 : 0) - (a.onDelivery ? 1 : 0)) || (b.overdue - a.overdue) || (b.days - a.days));
+  table.innerHTML = `<thead><tr><th>On delivery</th><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>By</th><th>Due date</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
     rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''} data-tip="${escapeHtml('Salesman & Branch: ' + ([c.salesman, c.branch].filter(Boolean).join(' · ') || 'Not set in Adv & Chq') + '\nDays: ' + c.days)}">
+      <td>${c.onDelivery ? '<span class="tick-yes" title="Cheque on delivery">&#10003;</span>' : ''}</td>
       <td>${escapeHtml(chequeKey(c))}</td><td class="left">${escapeHtml(c.customerName)}</td>
       <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
       <td>${escapeHtml(c.dateClaimed)}</td><td>${escapeHtml(c.claimedBy || '')}</td><td class="nowrap">${escapeHtml(c.due || '')}</td>
-      <td>${c.onDelivery ? '<span class="tick-yes" title="Cheque on delivery">&#10003;</span>' : ''}</td>
       <td>${escapeHtml(c.dateReceived || '')}</td>
       <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
     </tr>`).join('') || '<tr><td colspan="12" style="color:var(--text-dim)">' + (chequeItems.length ? 'Nothing matches these filters.' : 'No cheques yet. They appear when Adv &amp; Chq is closed.') + '</td></tr>'
@@ -6637,7 +6731,7 @@ async function finalizeEntryWithInputs(tempId) {
   }
 
   try {
-    const result = await apiCall('tempFinalize', { tempId, refNo, caseNo, assignNext: valOf('assign-next') });
+    const result = await apiCall('tempFinalize', { tempId, refNo, caseNo });
     if (!result.ok) return toast(result.error || "Could not finalize", true);
     removeLocalTempEntry(tempId);
     toast(savedMessage(result));
