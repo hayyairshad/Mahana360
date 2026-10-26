@@ -810,6 +810,45 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .shot-wrap { position: fixed; left: -10000px; top: 0; background: #fff; padding: 16px; width: max-content; }
 .shot-head { font-size: 15px; color: var(--pine); margin-bottom: 10px; }
 .shot-wrap .report-table thead th { position: static; }
+#bold-task-header.desc-head { font-size: 1.05rem; font-weight: 600; color: var(--text-dim); letter-spacing: 0; }
+.field-opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.opt-chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border-color); background: #fff; color: var(--text-dim); border-radius: 14px; padding: 3px 10px; font-size: 0.74rem; font-weight: 600; cursor: pointer; }
+.opt-chip:hover { border-color: var(--fern); color: var(--pine); }
+.opt-chip.on { background: var(--accent-soft); border-color: var(--fern); color: var(--pine); }
+.opt-ico { font-size: 0.85rem; line-height: 1; }
+.exit-rule { margin-top: 6px !important; }
+.opt-detail { margin-top: 6px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: 8px; background: var(--accent-softer); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.no-pts { color: var(--text-dim); font-size: 0.7rem; font-style: italic; }
+.case-info-actions { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+.grace-form { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.grace-form select, .grace-form input { margin: 0; padding: 5px 8px; font-size: 0.8rem; width: auto; }
+.grace-form input { min-width: 220px; }
+.fix-row td { background: var(--brass-soft); text-align: left !important; }
+.fix-row input { margin: 0 6px; padding: 5px 8px; font-size: 0.8rem; width: auto; }
+.fix-row input[type="text"] { min-width: 240px; }
+.report-wait { padding: 28px 16px !important; color: var(--text-dim); text-align: center !important; font-size: 0.95rem; }
+.tcell { font-size: 0.72rem; font-weight: 700; color: var(--pine); white-space: nowrap; }
+.tcell.tlate { color: #d23f31; }
+.tcell.topen { font-style: italic; opacity: 0.8; }
+.hover-pick { flex-basis: 100%; }
+.plus-menu { position: fixed; z-index: 2500; background: #fff; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 6px; display: flex; flex-direction: column; min-width: 220px; }
+.plus-menu button { border: none; background: transparent; text-align: left; padding: 10px 12px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer; }
+.plus-menu button:hover { background: var(--accent-soft); color: var(--pine); }
+.addcase-panel { width: 520px; max-width: 100%; }
+.addcase-panel select, .addcase-panel input { width: 100%; }
+.trail-head { margin-bottom: 12px; }
+.trail-title { font-size: 1.3rem; font-weight: 800; color: var(--pine); }
+.trail-list { border-left: 3px solid var(--border-strong); margin-left: 8px; padding-left: 14px; }
+.trail-ev { display: flex; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.86rem; }
+.trail-when { flex: none; width: 140px; color: var(--text-dim); font-size: 0.78rem; }
+.trail-detail { color: var(--text-dim); font-size: 0.76rem; margin-top: 2px; word-break: break-word; }
+.trail-ev.k-close .trail-what b { color: var(--pine); }
+.trail-ev.k-out .trail-what b { color: #d23f31; }
+.k-partial { background: #f1e8fb; color: #6b3fa0; }
+.daily-helper { margin-top: 10px; border-radius: 10px; background: #f3f4f1; padding: 8px 10px; }
+.daily-helper .daily-col-head { color: var(--text-dim); }
+.daily-helper-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 0 14px; }
+@media (max-width: 720px) { .trail-ev { flex-direction: column; gap: 2px; } .trail-when { width: auto; } .grace-form input, .fix-row input[type="text"] { min-width: 0; width: 100%; } }
 #btn-refresh.spinning svg { animation: spin 0.9s linear infinite; }
 .case-chip { max-width: 100%; white-space: normal; }
 @media (max-width: 720px) {
@@ -841,7 +880,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
 </button>
-<button id="btn-assign-new" class="icon-action hidden" onclick="openAssignNew()" title="Assign a new task" aria-label="Assign a new task">
+<button id="btn-assign-new" class="icon-action hidden" onclick="togglePlusMenu(event)" title="Assign a task or add a case" aria-label="Add">
 <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
 </button>
 <button id="btn-refresh" class="icon-action hidden" onclick="refreshAll()" title="Refresh: show the latest data" aria-label="Refresh">
@@ -1046,6 +1085,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-employee" onclick="showReportTab('employee')">Employee Report</button>
 <button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
 <button class="phase-btn" id="rep-tab-exits" onclick="showReportTab('exits')">Out of the chain</button>
+<button class="phase-btn" id="rep-tab-trail" onclick="showReportTab('trail')">Case trail</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -1064,6 +1104,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">Chain <select id="report-chain" onchange="onReportChain()"></select></label>
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, name or mobile" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
+<label class="inline-label">View <select id="report-view" onchange="renderSimpleReport()"><option value="">Symbols</option><option value="time">Time taken / allowed</option></select></label>
 <button class="btn btn-small" onclick="copyReportPicture()" title="Copy the table as a picture for WhatsApp">Copy picture</button>
 <button class="btn btn-small" onclick="copyReportText()" title="Copy a short list for WhatsApp">Copy text</button>
 </div>
@@ -1089,7 +1130,6 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </select>
 <input type="text" id="tm-search" class="report-search" placeholder="Search ref, case or name" oninput="renderTiming()">
 </div>
-<div class="summary-grid" id="timing-summary"></div>
 <div class="report-wrap"><table class="report-table" id="timing-table"></table></div>
 </div>
 <div id="report-employee" class="hidden">
@@ -1124,6 +1164,14 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="cheque-summary"></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
+</div>
+<div id="report-trail" class="hidden">
+<div class="report-bar">
+<input type="text" id="trail-q" class="report-search" placeholder="Ref No, Case No or Consignment Name" onkeydown="if(event.key==='Enter')loadTrail()">
+<button class="btn btn-small btn-primary" onclick="loadTrail()">Show trail</button>
+<button class="btn btn-small" onclick="copyTrailPicture()">Copy picture</button>
+</div>
+<div id="trail-body" class="report-meta">Type a number or a consignment name to see everything that happened to it, step by step.</div>
 </div>
 <div id="report-exits" class="hidden">
 <div class="report-bar">
@@ -1238,6 +1286,19 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="myassigned-list"></div>
 <label style="margin-top:20px;">Done in the last 7 days</label>
 <div id="myassigned-done"></div>
+<label style="margin-top:20px;">My time requests</label>
+<div class="report-wrap"><table class="report-table" id="my-timereq"></table></div>
+</div>
+
+<div id="form-approvals" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Staff ask here for more time on a case, or to fix a finish time they saved late. Approving changes their timing and points. Rejecting changes nothing.
+</p>
+<div class="report-bar">
+<select id="tr-filter" class="report-search" onchange="renderApprovals()"><option value="Waiting">Waiting</option><option value="">All</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select>
+<button class="btn btn-small" onclick="loadApprovals()">Refresh</button>
+</div>
+<div class="report-wrap"><table class="report-table" id="approvals-table"></table></div>
 </div>
 
 <!-- WORKING HOURS (Jawad only) -->
@@ -1261,6 +1322,7 @@ Set each staff member's own hours and working days. Teal days are working days; 
 </div>
 
 <div id="col-filter-pop" class="col-pop hidden"></div>
+
 <div id="hover-tip" class="hover-tip hidden"></div>
 
 <!-- TASK BUILDER (Jawad only) -->
@@ -1283,7 +1345,7 @@ together when you press Save All.
 <!-- DATA TABLE -->
 <div id="data-section-container" class="data-section">
 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-<label style="margin-bottom:0;">Recent Temporary Entries</label>
+<label style="margin-bottom:0;">Old temp saves to finish</label>
 <div style="display:flex; gap:8px; align-items:center;">
 <div style="position:relative;">
 <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--text-dim);
@@ -1326,6 +1388,26 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 
 </div>
 
+<div id="plus-menu" class="plus-menu hidden">
+<button onclick="closePlusMenu(); openAssignNew()">Assign a task to someone</button>
+<button onclick="closePlusMenu(); openAddCase()">Add a case to a task</button>
+</div>
+<div id="addcase-overlay" class="pic-overlay hidden" onclick="if(event.target===this)closeAddCase()">
+<div class="pic-panel addcase-panel">
+<div class="pic-head"><b>Add a case to a task</b><button class="btn btn-small" onclick="closeAddCase()">Close</button></div>
+<label>Task</label>
+<select id="ac-task" onchange="fillAddCaseOwners()"></select>
+<div class="builder-row">
+<div><label>Ref No</label><input type="text" id="ac-ref" placeholder="Ref No"></div>
+<div><label>Case No</label><input type="text" id="ac-case" placeholder="Case No"></div>
+</div>
+<label>Customer name (optional)</label>
+<input type="text" id="ac-name" placeholder="Filled in by itself if the case is known">
+<label>For</label>
+<select id="ac-for"></select>
+<div class="builder-actions" style="margin-top:12px;"><button class="btn btn-primary" id="btn-addcase" onclick="saveAddCase()">Add case</button></div>
+</div>
+</div>
 <div id="toast"></div>
 
 <script>const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxn-JCO5-neqyNDZgj-jFeTQFDSd2JdD_ls-qoqrIcP4Ni0_t-B02inJTEtoTndGjUCEA/exec";
@@ -1435,6 +1517,8 @@ const ADMIN_TASKS = [
   { name: "Points", phase: "Admin", panel: "points",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Projects", phase: "Admin", panel: "projects", description: "Projects",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Time Requests", phase: "Admin", panel: "approvals", description: "Time Requests",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1514,7 +1598,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R18";
+const APP_VERSION = "R19";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1598,9 +1682,12 @@ function taskListFor(staffName, all) {
 }
 
 function extraPanelsFor(staffName) {
-  if (!user || user.level === 0 || staffName !== user.name) return [];
+  if (!user) return [];
+  if (user.level === 0 && staffName === user.name) return [];
+  if (staffName !== user.name && !canAccessStaffFrontend(staffName)) return [];
   const out = ['Reports'];
-  if (user.level === 1) out.push('Assign');
+  const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
+  if (lv === 1) out.push('Assign');
   return out;
 }
 
@@ -1969,7 +2056,9 @@ function normaliseField(f) {
       mode: f.pointsIf.mode === 'values' ? 'values' : 'filled',
       values: Array.isArray(f.pointsIf.values) ? f.pointsIf.values.map(String) : []
     } : null,
-    showNext: !!f.showNext
+    showNext: !!f.showNext,
+    startsNext: !!f.startsNext,
+    startsNextTime: String(f.startsNextTime || '')
   };
 }
 
@@ -2137,9 +2226,8 @@ function renderBuilderForm() {
     </div>
     <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until the task is closed. Leave both blank for no limit.</div>
 
-    <label>Start the clock from</label>
-    ${renderClockFromEditor(t)}
-    <div class="builder-hint">Normally the clock starts when the case arrives. Pick a date from an earlier task (for example the visit date and time set in Visit Time Tieup) to start counting from that moment instead. Points and lateness use it.</div>
+    ${t.clockFrom ? `<div class="builder-hint">Old setting: this task's time starts from ${escapeHtml(t.clockFrom.date)} of an earlier task. <button class="btn btn-small" onclick="setClockFrom('date', '')">Remove</button> Use "Next task starts from this" on the date field of the earlier task instead.</div>` : ''}
+    <div class="builder-hint">Time is counted from when a case arrives. To count from a date set on this task (for example the visit time), use the &#9201; option on that date field below. It applies to the next task.</div>
 
     ${renderScheduleEditor(t)}
 
@@ -2171,10 +2259,6 @@ function renderBuilderForm() {
     </div>
 
     <div class="owner-grid">
-      <label class="owner-pick${t.temp ? ' on' : ''}">
-        <input type="checkbox"${t.temp ? ' checked' : ''} onchange="updateBuilder('temp', this.checked)">
-        Temp Save (adds the draft grid)
-      </label>
       <label class="owner-pick${t.active ? ' on' : ''}">
         <input type="checkbox"${t.active ? ' checked' : ''} onchange="updateBuilder('active', this.checked)">
         Active
@@ -2236,25 +2320,6 @@ function renderBuilderForm() {
     </div>`;
 
   toggleNewFieldOptions();
-}
-
-function dateFieldChoices(type) {
-  const out = [];
-  const seen = {};
-  builderTasks.forEach(t => (t.fields || []).forEach(f => {
-    if (!f.col || seen[f.col]) return;
-    if (type === 'date' ? (f.type === 'date') : (f.type === 'time')) { seen[f.col] = true; out.push({ col: f.col, label: f.label + ' (' + (t.name || 'task') + ')' }); }
-  }));
-  return out;
-}
-
-function renderClockFromEditor(t) {
-  const cf = t.clockFrom || { date: '', time: '' };
-  const dates = dateFieldChoices('date'), times = dateFieldChoices('time');
-  return `<div class="report-bar" style="margin-bottom:6px;">
-    <select onchange="setClockFrom('date', this.value)"><option value="">When the case arrives</option>${dates.map(d => `<option value="${escapeHtml(d.col)}"${d.col === cf.date ? ' selected' : ''}>${escapeHtml(d.label)}</option>`).join('')}</select>
-    ${cf.date ? `<select onchange="setClockFrom('time', this.value)"><option value="">No time (start of that day)</option>${times.map(d => `<option value="${escapeHtml(d.col)}"${d.col === cf.time ? ' selected' : ''}>${escapeHtml(d.label)}</option>`).join('')}</select>` : ''}
-  </div>`;
 }
 
 function setClockFrom(part, v) {
@@ -2437,9 +2502,7 @@ function renderFieldEditorList(t) {
       </div>
       ${optionsUI}
       ${f.key === 'assignNext' ? `<div class="builder-hint" style="margin:6px 0 0;">Shows the people who do the next task in the chain. The one picked is the only one who gets that task and its points.</div>` : ''}
-      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : `<label class="field-req-pick show-next-pick"><input type="checkbox"${f.showNext ? ' checked' : ''} onchange="toggleShowNext('${f.id}', this.checked)"> Show this answer on the next tasks</label>`}
-      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : renderExitEditor(f)}
-      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : renderPointsRuleEditor(f)}
+      ${(f.key === 'ref' || f.key === 'case' || f.key === 'assignNext') ? '' : renderFieldOptions(f)}
     </div>`;
   }).join('');
 }
@@ -2520,11 +2583,49 @@ function renderPointsRuleEditor(f) {
   </div>`;
 }
 
+function renderFieldOptions(f) {
+  const ex = !!(f.exit && f.exit.on), pr = !!(f.pointsIf && f.pointsIf.on);
+  const chip = (on, onclick, icon, label, tip) => `<button type="button" class="opt-chip${on ? ' on' : ''}" onclick="${onclick}" title="${escapeHtml(tip)}"><span class="opt-ico">${icon}</span>${label}</button>`;
+  return `<div class="field-opts">
+    ${chip(f.showNext, `toggleShowNext('${f.id}', ${!f.showNext})`, '&#128065;', 'Show on next', 'Show this answer on the next tasks of the case')}
+    ${chip(ex, `toggleExit('${f.id}', ${!ex})`, '&#9939;', 'Chain break', 'Take the case out of the chain when this task is closed with this answer')}
+    ${chip(pr, `togglePointsRule('${f.id}', ${!pr})`, '&#9733;', 'Points rule', 'Give points only when this answer passes')}
+    ${f.type === 'date' ? chip(f.startsNext, `toggleStartsNext('${f.id}')`, '&#9201;', 'Next task starts from this', 'The next task in the chain counts its time from this date (and the time field on this task)') : ''}
+  </div>
+  ${ex ? renderExitEditor(f) : ''}
+  ${pr ? renderPointsRuleEditor(f) : ''}
+  ${f.startsNext ? renderStartsNextEditor(f) : ''}`;
+}
+
+function renderStartsNextEditor(f) {
+  const t = builderTasks[builderIndex];
+  const times = (t.fields || []).filter(x => x.type === 'time' && x.col);
+  return `<div class="opt-detail"><span class="report-meta">The next task's time starts from this date</span>
+    ${times.length ? `<select style="margin:0 0 0 8px; padding:5px 8px; font-size:0.8rem; width:auto;" onchange="setStartsNextTime('${f.id}', this.value)"><option value="">and ${escapeHtml(times[0].label)}</option>${times.slice(1).map(x => `<option value="${escapeHtml(x.col)}"${f.startsNextTime === x.col ? ' selected' : ''}>and ${escapeHtml(x.label)}</option>`).join('')}</select>` : '<span class="report-meta"> (start of that day; add a Time field to use a time too)</span>'}
+  </div>`;
+}
+
+function toggleStartsNext(fieldId) {
+  const f = builderField(fieldId);
+  if (!f) return;
+  f.startsNext = !f.startsNext;
+  markBuilderDirty();
+  renderBuilderForm();
+}
+
+function setStartsNextTime(fieldId, col) {
+  const f = builderField(fieldId);
+  if (!f) return;
+  f.startsNextTime = col || '';
+  markBuilderDirty();
+}
+
 function toggleShowNext(fieldId, on) {
   const f = builderField(fieldId);
   if (!f) return;
   f.showNext = !!on;
   markBuilderDirty();
+  renderBuilderForm();
 }
 
 function togglePointsRule(fieldId, on) {
@@ -2928,6 +3029,7 @@ async function loadPending() {
       pendingItems = result.items || [];
       assignedMine = (result.assigned && result.assigned.mine) || [];
       assignedDone = (result.assigned && result.assigned.doneUnseen) || [];
+      timeReqWaiting = Number(result.requests) || 0;
       writePendingCache();
       updateBell();
       if (currentTask) renderPendingStrip();
@@ -2972,6 +3074,7 @@ function visibleTaskNames() {
 }
 
 let assignedMine = [];
+let timeReqWaiting = 0;
 let assignedDone = [];
 
 function pendingForTask(taskName) {
@@ -2982,7 +3085,7 @@ function pendingForTask(taskName) {
 
 function updateBell() {
   const badge = document.getElementById('notif-count');
-  const n = pendingItems.length + assignedMine.length + assignedDone.length;
+  const n = pendingItems.length + assignedMine.length + assignedDone.length + timeReqWaiting;
   if (n === 0) badge.classList.add('hidden');
   else {
     badge.classList.remove('hidden');
@@ -3008,6 +3111,7 @@ function renderNotifPanel() {
     <span style="cursor:pointer" onclick="loadPending()">Refresh</span>
   </div>`;
 
+  if (timeReqWaiting) html += `<div class="notif-item notif-assigned" data-goto="approvals"><div class="notif-task">&#9201; ${timeReqWaiting} time request${timeReqWaiting === 1 ? '' : 's'} waiting</div><div class="notif-meta">Staff asked for more time or to fix a finish time. Tap to approve.</div></div>`;
   html += assignedDone.map(a => `
       <div class="notif-item notif-done" data-goto="assign">
         <div class="notif-task">&#10003; Done: ${escapeHtml(a.title)}${a.late ? '<span class="late-badge">Late</span>' : ''}</div>
@@ -3040,7 +3144,8 @@ document.addEventListener('click', function (e) {
   const item = e.target.closest ? e.target.closest('.notif-item') : null;
   if (item && item.getAttribute('data-goto')) {
     document.getElementById('notif-panel').classList.add('hidden');
-    const page = item.getAttribute('data-goto') === 'assign' ? 'Assign' : MY_ASSIGNED;
+    const g = item.getAttribute('data-goto');
+    const page = g === 'assign' ? 'Assign' : g === 'approvals' ? 'Time Requests' : MY_ASSIGNED;
     window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/' + encodeURIComponent(page);
     return;
   }
@@ -3109,10 +3214,8 @@ function renderPendingStrip() {
     ? '1 case waiting on ' + currentTask
     : items.length + ' cases waiting on ' + currentTask;
 
-  const canStar = user && user.level <= 1;
   list.innerHTML = items.map((p, i) => `
     <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
-      ${canStar && !p.recurring ? `<button class="star-btn${p.important ? ' on' : ''}" onclick="event.stopPropagation(); toggleImportant('${escapeHtml(p.pendingId || '')}')" title="${p.important ? 'Important. Click to unmark' : 'Mark as important'}">${p.important ? '&#9733;' : '&#9734;'}</button>` : (p.important ? '<span class="imp-star">&#9733;</span>' : '')}
       ${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
@@ -3128,6 +3231,7 @@ async function toggleImportant(id) {
     if (!r.ok) { p.important = !on; renderPendingStrip(); return toast(r.error || 'Could not change it', true); }
     pendingItems.sort((a, b) => (b.important - a.important) || ((b.arrivedMs || 0) - (a.arrivedMs || 0)));
     renderPendingStrip();
+    if (caseInfoItem && caseInfoItem.pendingId === id) showCaseInfo(p);
     writePendingCache();
     toast(on ? 'Marked important. It shows first for everyone.' : 'No longer important.');
   } catch (e) { p.important = !on; renderPendingStrip(); toast('Network error', true); }
@@ -3141,9 +3245,12 @@ function fillKeysFromPendingId(id, i) {
   showCaseInfo(p);
 }
 
+let caseInfoItem = null;
+
 function showCaseInfo(p) {
   const box = document.getElementById('case-info');
   if (!box) return;
+  caseInfoItem = p || null;
   const rows = [];
   if (p) {
     if (p.important) rows.push(['', '&#9733; Marked important']);
@@ -3152,9 +3259,38 @@ function showCaseInfo(p) {
     (p.hover || []).forEach(x => { if (x[1]) rows.push([escapeHtml(x[0]), escapeHtml(x[1])]); });
     if (p.inputs) rows.push(['Inputs', escapeHtml(p.inputs)]);
   }
-  if (!rows.length) { box.classList.add('hidden'); box.innerHTML = ''; return; }
-  box.innerHTML = `<div class="case-info-head">${escapeHtml(keyLabel(p))}</div>` + rows.map(r => `<span class="case-info-item">${r[0] ? '<b>' + r[0] + ':</b> ' : ''}${r[1]}</span>`).join('');
+  if (!p) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+  const canStar = user && user.level <= 1 && !p.recurring;
+  box.innerHTML = `<div class="case-info-head">${escapeHtml(keyLabel(p))}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}</div>` + rows.map(r => `<span class="case-info-item">${r[0] ? '<b>' + r[0] + ':</b> ' : ''}${r[1]}</span>`).join('') +
+    `<div class="case-info-actions">
+      ${canStar ? `<button class="btn btn-small" onclick="toggleImportant('${escapeHtml(p.pendingId || '')}')">${p.important ? '&#9733; Remove important' : '&#9734; Mark important'}</button>` : ''}
+      <button class="btn btn-small" onclick="openGraceForm()">Ask for more time</button>
+      <span id="grace-form" class="grace-form hidden">
+        <select id="grace-hours">${['1', '2', '3', '4', '6', 'd1', 'd2', 'd3', 'd5'].map(h => `<option value="${h}">${h[0] === 'd' ? h.slice(1) + ' working day' + (h === 'd1' ? '' : 's') : h + ' hour' + (h === '1' ? '' : 's')}</option>`).join('')}</select>
+        <input type="text" id="grace-reason" placeholder="Why do you need more time?">
+        <button class="btn btn-small btn-primary" onclick="sendGrace()">Send to Jawad</button>
+      </span>
+    </div>`;
   box.classList.remove('hidden');
+}
+
+function openGraceForm() {
+  const f = document.getElementById('grace-form');
+  if (f) { f.classList.toggle('hidden'); const r = document.getElementById('grace-reason'); if (r && !f.classList.contains('hidden')) r.focus(); }
+}
+
+async function sendGrace() {
+  const p = caseInfoItem;
+  if (!p) return;
+  const reason = valOf('grace-reason');
+  if (!reason) return toast('Write why you need more time.', true);
+  try {
+    const g = valOf('grace-hours');
+    const r = await apiCall('timeReqAdd', { type: 'grace', pendingId: p.pendingId, hours: g[0] === 'd' ? 0 : Number(g), days: g[0] === 'd' ? Number(g.slice(1)) : 0, reason: reason });
+    if (!r.ok) return toast(r.error || 'Could not send', true);
+    toast('Sent. Jawad will approve or reject it.');
+    document.getElementById('grace-form').classList.add('hidden');
+  } catch (e) { toast('Network error', true); }
 }
 
 function fillKeysFromPending(i) {
@@ -3591,14 +3727,25 @@ function renderChainKey(c) {
       k.type === 'consignment' ? 'Only Jawad can start this chain, by typing the ' + escapeHtml(k.label || 'Consignment Name') + ' on the first task. It is kept separate from every other chain.' :
       'Only Jawad can start this chain. Leave the number empty on the first task and the next number is given automatically.'}</div>
     ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}
-    <label class="inline-label" style="flex-basis:100%;">Hover box shows <input type="text" list="hover-cols" value="${escapeHtml((k.hover || []).join(', '))}" placeholder="Leave blank for the normal Salesman & Branch box. Or type field names, comma separated" onchange="setChainKey('hover', this.value)" style="flex:1; width:auto; min-width:280px;"></label>
-    <datalist id="hover-cols">${hoverColumnChoices().map(c => `<option value="${escapeHtml(c)}"></option>`).join('')}</datalist>`;
+    <div class="hover-pick"><div class="chain-col-note" style="margin:0 0 6px;">Hover box shows <span class="report-meta">(tick as many as you like; none ticked shows the normal Salesman &amp; Branch box)</span></div>
+    <div class="owner-grid" style="margin:0;">${hoverColumnChoices(c).map(col => { const on = (k.hover || []).indexOf(col) !== -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(col)}</label>`; }).join('')}</div></div>`;
 }
 
-function hoverColumnChoices() {
-  const out = ['RefNo', 'CaseNo', 'Comment', 'Remarks', 'ApprovalStatus', 'CustomerName', 'CustomerMobile'];
-  TASKS.forEach(t => (t.fields || []).forEach(f => { if (f.col && f.type !== 'divider' && out.indexOf(f.col) === -1) out.push(f.col); }));
+function hoverColumnChoices(c) {
+  const out = ['CustomerName', 'CustomerMobile', 'Comment', 'Remarks'];
+  const inChain = c && c.tasks && c.tasks.length ? c.tasks : TASKS.map(t => t.name);
+  TASKS.filter(t => inChain.indexOf(t.name) !== -1).forEach(t => (t.fields || []).forEach(f => { if (f.col && f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && out.indexOf(f.col) === -1) out.push(f.col); }));
+  ((c && c.key && c.key.hover) || []).forEach(h => { if (out.indexOf(h) === -1) out.push(h); });
   return out;
+}
+
+function toggleHoverCol(col, on) {
+  const c = chains[activeChain];
+  c.key = Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {});
+  const list = (c.key.hover || []).filter(x => x !== col);
+  if (on) list.push(col);
+  c.key.hover = list;
+  renderChainEditor();
 }
 
 function setChainKey(prop, v) {
@@ -4038,6 +4185,7 @@ async function renderEntryScreen() {
   tile.classList.add('hidden');
   const currentT = taskByName(currentTask);
   header.innerText = (currentT && currentT.description) ? currentT.description : currentTask;
+  header.classList.toggle('desc-head', !!(currentT && currentT.description));
   renderFormInterface();
   renderPendingStrip();
 
@@ -4208,7 +4356,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'partial-section', 'recent-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'partial-section', 'recent-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -4221,7 +4369,7 @@ function renderFormInterface() {
   renderTemplateTile();
 
   const dataSection = document.getElementById('data-section-container');
-  if (dataSection) dataSection.style.display = t.temp ? 'block' : 'none';
+  if (dataSection) dataSection.style.display = 'none';
 
   if (t.panel === "templates") {
     document.getElementById('form-templates').classList.remove('hidden');
@@ -4276,6 +4424,11 @@ function renderFormInterface() {
     loadMyAssigned();
     return;
   }
+  if (t.panel === "approvals") {
+    document.getElementById('form-approvals').classList.remove('hidden');
+    loadApprovals();
+    return;
+  }
   if (t.panel === "cheques") {
     document.getElementById('form-cheques').classList.remove('hidden');
     renderChequeAdmin();
@@ -4293,7 +4446,7 @@ function renderFormInterface() {
   setRecentOpen(false);
 
   const tempBtn = document.getElementById('btn-temp-save-dynamic');
-  if (tempBtn) tempBtn.style.display = t.temp ? 'inline-block' : 'none';
+  if (tempBtn) tempBtn.style.display = 'none';
 }
 
 function renderDynamicForm(task) {
@@ -4638,17 +4791,20 @@ async function loadRecent() {
     if (seq !== recentSeq) return;
     if (!result.ok) { table.innerHTML = `<tr><td class="report-meta">${escapeHtml(result.error || 'Could not load')}</td></tr>`; return; }
     const items = result.items || [];
+    recentItems = items;
     const showTask = recentScope === 'all';
     const tk = taskByName(currentTask);
     const cols = !showTask && tk ? (tk.fields || []).filter(f => f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && f.key !== 'comment' && f.key !== 'remarks' && f.col !== 'CustomerName') : [];
-    const span = 5 + (showTask ? 1 : 0) + cols.length;
-    table.innerHTML = `<thead><tr><th>Closed</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Name</th>${cols.map(f => `<th>${escapeHtml(f.label)}</th>`).join('')}<th>By</th><th>Comment</th></tr></thead><tbody>${
-      items.map(x => `<tr>
+    const span = 6 + (showTask ? 1 : 0) + cols.length;
+    const mine = x => user && (user.level === 0 || x.savedBy === user.name || x.staff === user.name);
+    table.innerHTML = `<thead><tr><th>Closed</th>${showTask ? '<th>Task</th>' : ''}<th>Ref No</th><th>Name</th>${cols.map(f => `<th>${escapeHtml(f.label)}</th>`).join('')}<th>By</th><th>Comment</th><th></th></tr></thead><tbody>${
+      items.map((x, xi) => `<tr>
         <td class="nowrap">${escapeHtml(x.savedAt)}</td>${showTask ? `<td class="left">${escapeHtml(x.task)}</td>` : ''}
         <td>${escapeHtml(x.refNo || x.caseNo)}</td><td class="left">${escapeHtml(x.name)}</td>
         ${cols.map(f => `<td class="left">${escapeHtml((x.vals || {})[f.col] || '')}</td>`).join('')}
         <td>${escapeHtml(x.savedBy)}${x.staff && x.staff !== x.savedBy ? `<br><small class="report-meta">for ${escapeHtml(x.staff)}</small>` : ''}</td><td class="left">${escapeHtml([x.comment, x.remarks].filter(Boolean).join(' · '))}</td>
-      </tr>`).join('') || `<tr><td colspan="${span}" class="report-meta">${from || to || q ? 'Nothing closed in these dates or for this search. Try other dates or press Clear.' : 'Nothing closed yet.'}</td></tr>`
+        <td class="nowrap">${mine(x) ? `<button class="btn btn-small" onclick="openFixTime(${xi})" title="Saved it late? Ask Jawad to fix the finish time">Fix time</button>` : ''}</td>
+      </tr>${mine(x) ? `<tr id="fix-row-${xi}" class="fix-row hidden"><td colspan="${span}"><span class="report-meta">Real finish time</span> <input type="datetime-local"> <input type="text" placeholder="Why was it saved late?"> <button class="btn btn-small btn-primary" onclick="sendFixTime(${xi})">Send to Jawad</button></td></tr>` : ''}`).join('') || `<tr><td colspan="${span}" class="report-meta">${from || to || q ? 'Nothing closed in these dates or for this search. Try other dates or press Clear.' : 'Nothing closed yet.'}</td></tr>`
     }</tbody>${result.more ? `<tfoot><tr><td colspan="${span}" class="report-meta">Showing the latest ${items.length}. Use From / To or search to find older ones.</td></tr></tfoot>` : ''}`;
   } catch (e) {
     if (seq === recentSeq) table.innerHTML = '<tr><td class="report-meta">Network error</td></tr>';
@@ -4831,10 +4987,12 @@ function showReportTab(tab) {
   document.getElementById('rep-tab-timing').classList.toggle('hidden', limited);
   document.getElementById('rep-tab-exits').classList.toggle('hidden', limited);
   reportTab = tab;
-  ['simple', 'timing', 'employee', 'cheque', 'exits'].forEach(k => {
+  ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail'].forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
+  if (tab === 'trail') { document.getElementById('report-meta').innerText = ''; return; }
+  if (tab !== 'exits' && !reportsApplied) { showReportWait(tab); return; }
   if (tab === 'simple') {
     if (reportData) renderSimpleReport(); else loadReport();
   } else if (tab === 'timing' || tab === 'employee') {
@@ -4846,7 +5004,20 @@ function showReportTab(tab) {
   }
 }
 
+let reportsApplied = false;
+
+function showReportWait(tab) {
+  const msg = '<tr><td class="report-wait">Pick the dates and filters above, then press <b>Apply</b> to build this report.</td></tr>';
+  document.getElementById('report-meta').innerText = '';
+  if (tab === 'simple') { fillReportChains(); document.getElementById('report-table').innerHTML = msg; }
+  if (tab === 'timing') document.getElementById('timing-table').innerHTML = msg;
+  if (tab === 'employee') { document.getElementById('employee-grid').innerHTML = msg; document.getElementById('employee-cards').innerHTML = ''; }
+  if (tab === 'cheque') { document.getElementById('cheque-summary').innerHTML = ''; document.getElementById('cheque-report-table').innerHTML = msg; }
+}
+
 function refreshReports() {
+  if (reportTab === 'trail') return loadTrail();
+  if (!reportsApplied && reportTab !== 'exits') return applyReportDates();
   if (reportTab === 'simple') loadReport();
   else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
   else if (reportTab === 'exits') loadExits();
@@ -4869,8 +5040,9 @@ async function loadTiming() {
     fillSelect('tm-person', ppl, 'Everyone');
     const empSel = document.getElementById('emp-person');
     const firstLoad = empSel && !empSel.dataset.done;
-    fillSelect('emp-person', uniqueSorted((result.people || []).map(p => p.name).concat(staffReportsOnly() && user ? [user.name] : [])), 'Everyone');
-    if (firstLoad) { empSel.dataset.done = '1'; if (staffReportsOnly() && user) empSel.value = user.name; }
+    const me = staffReportsOnly() && profile ? profile.name : '';
+    fillSelect('emp-person', uniqueSorted((result.people || []).map(p => p.name).concat(me ? [me] : [])), 'Everyone');
+    if (firstLoad || (me && empSel.dataset.for !== me)) { empSel.dataset.done = '1'; empSel.dataset.for = me; empSel.value = me; }
     renderTiming();
     renderEmployees();
   } catch (e) { toast("Network error", true); }
@@ -4887,10 +5059,6 @@ function renderTiming() {
   const task = valOf('tm-task'), state = valOf('tm-state'), person = valOf('tm-person');
   const q = (valOf('tm-search') || '').toLowerCase();
 
-  document.getElementById('timing-summary').innerHTML = (timingData.tasks || []).length
-    ? (timingData.tasks || []).map(T => `<div class="summary-card"><h4>${escapeHtml(T.task)}</h4>
-        <div class="summary-line" style="margin:0;"><b>${T.onTime}</b> on time · <b style="color:var(--danger)">${T.late}</b> late${T.avgLate ? ' (avg ' + escapeHtml(T.avgLate) + ')' : ''} · <b>${T.open}</b> open${T.openLate ? ', <b style="color:var(--danger)">' + T.openLate + ' already late</b>' : ''}</div></div>`).join('')
-    : '<div class="report-meta">No task has a time limit or schedule yet. Set "Time allowed" or a repeat in Add / Edit Tasks.</div>';
 
   const rows = items.filter(it => {
     if (person && !(it.by === person || (it.lateOwners || []).indexOf(person) !== -1 || (it.open && (it.owners || []).indexOf(person) !== -1) || (it.assigned && String(it.name || '').split(', ').indexOf(person) !== -1))) return false;
@@ -4908,7 +5076,7 @@ function renderTiming() {
       <td class="left ${caseCellClass(it)}">${escapeHtml(it.name || '')}</td>
       <td>${escapeHtml(it.arrived)}${it.clockFrom ? '<br><small class="report-meta">from visit time</small>' : ''}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
       <td>${escapeHtml(it.done || '')}${it.by ? ' <small class="report-meta">' + escapeHtml(it.by) + '</small>' : ''}</td><td>${timingStatus(it)}</td>
-      <td>${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : ''}</td>
+      <td>${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : (it.noPts ? `<small class="no-pts">${escapeHtml(it.noPts)}</small>` : '')}${it.grace ? `<br><small class="report-meta">+${escapeHtml(it.grace)} approved</small>` : ''}${it.timeFixed ? `<br><small class="report-meta">time fixed</small>` : ''}</td>
     </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-dim)">Nothing to show.</td></tr>`
   }</tbody>`;
 }
@@ -5082,7 +5250,9 @@ async function applyReportDates() {
   if (from && to && to < from) return toast('To date is before From date', true);
   reportFromSaved = from || firstOfMonthYmd();
   reportToApplied = to;
-  reportData = null; timingData = null;
+  reportData = null; timingData = null; chequesLoaded = false;
+  reportsApplied = true;
+  if (reportTab === 'trail') return loadTrail();
   refreshReports();
 }
 
@@ -5145,7 +5315,7 @@ function fillReportChains() {
 function onReportChain() {
   reportData = null;
   colFilters = {};
-  loadReport();
+  if (reportsApplied) loadReport(); else showReportWait('simple');
 }
 
 function renderSimpleReport() {
@@ -5159,10 +5329,11 @@ function renderSimpleReport() {
   const head = `<thead><tr><th>${escapeHtml(reportData.keyLabel || 'Ref No')}</th><th class="name-col">Name</th><th>Days</th>${
     tasks.map(t => th('t:' + t, t, 'rot')).join('')}${th('branch', 'Branch')}${th('salesman', 'Salesman')}${th('status', 'Status')}<th>Mobile No</th></tr></thead>`;
 
+  const timeView = valOf('report-view') === 'time';
   const rowHtml = r => `<tr data-tip="${escapeHtml(reportRowTip(r))}">
       <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td>
       <td class="left name-col ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
-      ${r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
+      ${timeView ? r.cells.map((c, i) => { const x = (r.times || [])[i]; return x ? `<td class="tcell${x.late ? ' tlate' : ''}${x.open ? ' topen' : ''}" title="${escapeHtml((x.open ? 'Still open: ' : 'Took ') + x.t + ' of ' + x.a + ' allowed')}">${escapeHtml(x.t)}/${escapeHtml(x.a)}</td>` : `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`; }).join('') : r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
       <td>${escapeHtml(r.branch || '')}</td><td>${escapeHtml(r.salesman || '')}</td>
       <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td><td class="nowrap">${escapeHtml(r.mobile || '')}</td>
     </tr>`;
@@ -5368,10 +5539,10 @@ function dailyLink(it, person) {
 
 function dailyItemHtml(it, person) {
   return `<a class="daily-item daily-link${it.important ? ' imp' : ''}" href="${escapeHtml(dailyLink(it, person))}" target="_blank" rel="noopener" title="Open in a new tab">
-    <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Chain' ? 'Chain' : it.kind === 'Recurring' ? 'Recurring' : 'Assigned')}</span>
+    <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Partial' ? 'Part done' : it.kind)}</span>
     <div class="daily-text">${it.important ? '<span class="imp-tag">&#9733; Important</span> ' : ''}<b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
       ${it.due ? `<div class="daily-due">${escapeHtml(it.due)}</div>` : ''}
-      ${it.projectName && it.projectName !== 'Mahana' ? `<div class="daily-proj">${escapeHtml(it.projectName)}</div>` : ''}
+      ${it.phase || (it.projectName && it.projectName !== 'Mahana') ? `<div class="daily-proj">${escapeHtml([it.projectName && it.projectName !== 'Mahana' ? it.projectName : '', it.phase ? 'Phase: ' + it.phase : ''].filter(Boolean).join(' · '))}</div>` : ''}
       ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
     </div></a>`;
 }
@@ -5403,6 +5574,7 @@ async function loadDaily(everyone) {
           ${col('Today', 'c-today', p.today, p.name)}
           ${col('Next 2 days', 'c-soon', p.soon, p.name)}
         </div>
+        ${(p.helper || []).length ? `<div class="daily-helper"><div class="daily-col-head">Also helps with (no points) <span>${p.helper.length}</span></div><div class="daily-helper-list">${p.helper.map(it => dailyItemHtml(it, p.name)).join('')}</div></div>` : ''}
         <div class="daily-actions">
           <button class="btn btn-small btn-primary" onclick="dailyPicture(${pi}, 'copy')">Copy picture</button>
           <button class="btn btn-small" onclick="dailyPicture(${pi}, 'save')">Save picture</button>
@@ -6058,6 +6230,7 @@ async function deleteAssign(id, itemId) {
 }
 
 async function loadMyAssigned() {
+  loadMyTimeReqs();
   const list = document.getElementById('myassigned-list');
   list.innerHTML = '<div class="report-meta">Loading...</div>';
   try {
@@ -6535,7 +6708,7 @@ function saveChequeEdit(id) {
 
 async function loadTemp() {
   const t = taskByName(currentTask);
-  if (!t || !t.temp) return;
+  if (!t || t.panel) return;
 
   selectedIds = {};
   rowEdits = {};
@@ -6549,6 +6722,8 @@ async function loadTemp() {
       return;
     }
     tempEntries = result.items || [];
+    const sec = document.getElementById('data-section-container');
+    if (sec) sec.style.display = tempEntries.length ? 'block' : 'none';
     renderTable();
   } catch (e) {
     body.innerHTML = `<tr><td colspan="7">Network error</td></tr>`;
@@ -6800,6 +6975,173 @@ function handleEnterKey(e) {
 }
 
 document.addEventListener('keydown', handleEnterKey);
+
+let approvalItems = [];
+
+async function loadApprovals() {
+  const table = document.getElementById('approvals-table');
+  table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  try {
+    const r = await apiCall('timeReqList');
+    if (!r.ok) { table.innerHTML = `<tr><td>${escapeHtml(r.error || 'Could not load')}</td></tr>`; return; }
+    approvalItems = r.items || [];
+    renderApprovals();
+  } catch (e) { table.innerHTML = '<tr><td>Network error</td></tr>'; }
+}
+
+function timeReqWhat(x) {
+  if (x.type === 'done') return 'Finish time: ' + escapeHtml(x.oldDone || '?') + ' → <b>' + escapeHtml(x.newDone) + '</b>';
+  return x.days ? '<b>+' + x.days + ' working day' + (x.days === 1 ? '' : 's') + '</b> more time' : '<b>+' + escapeHtml(String(x.hours)) + ' hour' + (x.hours === 1 ? '' : 's') + '</b> more time';
+}
+
+function timeReqStatus(x) {
+  if (x.status === 'Approved') return '<span class="status-pill status-done">Approved</span>';
+  if (x.status === 'Rejected') return '<span class="status-pill status-late">Rejected</span>';
+  return '<span class="status-pill status-open">Waiting</span>';
+}
+
+function renderApprovals() {
+  const f = valOf('tr-filter');
+  const rows = approvalItems.filter(x => !f || x.status === f);
+  document.getElementById('approvals-table').innerHTML = `<thead><tr><th>Asked</th><th>Who</th><th>Task</th><th>Ref / Case</th><th>Asking for</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${
+    rows.map(x => `<tr>
+      <td class="nowrap">${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.person)}</td><td class="left">${escapeHtml(x.task)}</td>
+      <td>${escapeHtml(chequeKey(x))}</td><td class="left">${timeReqWhat(x)}</td><td class="left">${escapeHtml(x.reason)}</td>
+      <td>${timeReqStatus(x)}${x.decidedBy ? `<br><small class="report-meta">${escapeHtml(x.decidedBy)} · ${escapeHtml(x.decidedAt)}</small>` : ''}</td>
+      <td class="nowrap">${x.status === 'Waiting' ? `<button class="btn btn-small btn-primary" onclick="decideTimeReq('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small icon-cross" onclick="decideTimeReq('${escapeHtml(x.id)}', false)">Reject</button>` : ''}</td>
+    </tr>`).join('') || '<tr><td colspan="8" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
+}
+
+async function decideTimeReq(id, approve) {
+  try {
+    const r = await apiCall('timeReqDecide', { id: id, approve: approve });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast(approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
+    loadApprovals();
+    loadPending();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function loadMyTimeReqs() {
+  const table = document.getElementById('my-timereq');
+  if (!table) return;
+  try {
+    const r = await apiCall('timeReqList');
+    const items = (r.items || []).filter(x => x.person === profile.name).slice(0, 30);
+    table.innerHTML = items.length ? `<thead><tr><th>Asked</th><th>Task</th><th>Ref / Case</th><th>Asking for</th><th>Status</th></tr></thead><tbody>${
+      items.map(x => `<tr><td class="nowrap">${escapeHtml(x.createdAt)}</td><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(chequeKey(x))}</td><td class="left">${timeReqWhat(x)}</td><td>${timeReqStatus(x)}</td></tr>`).join('')}</tbody>` : '<tr><td class="report-meta">No requests yet.</td></tr>';
+  } catch (e) {}
+}
+
+let recentItems = [];
+
+function openFixTime(i) {
+  const x = recentItems[i];
+  if (!x) return;
+  const row = document.getElementById('fix-row-' + i);
+  if (!row) return;
+  if (!row.classList.contains('hidden')) { row.classList.add('hidden'); return; }
+  const d = new Date(x.ms || Date.now());
+  const local = ymdLocal(d) + 'T' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  row.querySelector('input[type="datetime-local"]').value = local;
+  row.classList.remove('hidden');
+}
+
+async function sendFixTime(i) {
+  const x = recentItems[i];
+  const row = document.getElementById('fix-row-' + i);
+  if (!x || !row) return;
+  const v = row.querySelector('input[type="datetime-local"]').value;
+  const reason = row.querySelector('input[type="text"]').value.trim();
+  if (!v) return toast('Pick the real date and time.', true);
+  if (!reason) return toast('Write why the time is wrong.', true);
+  const m = v.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  const ms = m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]), Number(m[5])).getTime() : 0;
+  try {
+    const r = await apiCall('timeReqAdd', { type: 'done', task: x.task, refNo: x.refNo, caseNo: x.caseNo, savedMs: x.ms, doneMs: ms, reason: reason });
+    if (!r.ok) return toast(r.error || 'Could not send', true);
+    row.classList.add('hidden');
+    toast('Sent. Jawad will approve or reject it.');
+  } catch (e) { toast('Network error', true); }
+}
+
+let trailData = null;
+
+async function loadTrail() {
+  const q = valOf('trail-q');
+  const box = document.getElementById('trail-body');
+  if (!q) { box.innerHTML = '<div class="report-meta">Type a Ref No, Case No or Consignment Name first.</div>'; return; }
+  box.innerHTML = '<div class="report-meta">Looking it up...</div>';
+  try {
+    const r = await apiCall('caseTrail', { q: q });
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    trailData = r;
+    if (!r.found) { box.innerHTML = '<div class="report-meta">Nothing found for ' + escapeHtml(q) + '.</div>'; return; }
+    const head = [r.name, r.mobile, r.inputs, [r.salesman, r.branch].filter(Boolean).join(' · ')].filter(Boolean);
+    box.innerHTML = `<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
+      <label>Steps</label>
+      <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Arrived</th><th>Closed</th><th>By</th><th>Took</th><th>Allowed</th><th>Status</th><th>Points</th></tr></thead><tbody>${
+        r.steps.map(x => `<tr${x.late ? ' class="overdue"' : ''}><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(x.arrived)}</td><td>${escapeHtml(x.closed)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.took)}</td><td>${escapeHtml(x.allowed)}</td>
+          <td>${x.status === 'Pending' ? (x.late ? '<span class="status-pill status-late">Waiting · late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-open">Waiting</span>') : x.status === 'Done' ? (x.late ? '<span class="status-pill status-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-done">On time</span>') : escapeHtml(x.status)}</td>
+          <td>${x.band ? `<b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="report-meta">No steps yet.</td></tr>'}</tbody></table></div>
+      <label style="margin-top:16px;">Everything that happened</label>
+      <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}</span></div>`).join('')}</div>`;
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function copyTrailPicture() {
+  if (!trailData || !trailData.found) return toast('Show a trail first.', true);
+  copyPicture(() => nodesToBlob([document.getElementById('trail-body')], 'Case trail · ' + trailData.q));
+}
+
+function togglePlusMenu(e) {
+  if (e) e.stopPropagation();
+  const m = document.getElementById('plus-menu');
+  const b = document.getElementById('btn-assign-new').getBoundingClientRect();
+  m.style.top = (b.bottom + 6) + 'px';
+  m.style.left = Math.max(8, Math.min(b.left, window.innerWidth - 240)) + 'px';
+  m.classList.toggle('hidden');
+}
+
+function closePlusMenu() { document.getElementById('plus-menu').classList.add('hidden'); }
+
+document.addEventListener('click', function (e) {
+  const m = document.getElementById('plus-menu');
+  if (m && !m.classList.contains('hidden') && !(e.target.closest && e.target.closest('#plus-menu'))) m.classList.add('hidden');
+});
+
+function openAddCase() {
+  const sel = document.getElementById('ac-task');
+  const list = TASKS.filter(t => t.active && !(t.schedule && t.schedule.on));
+  const byProj = {};
+  list.forEach(t => { const p = projectName(t.project || DEFAULT_PROJECT); (byProj[p] = byProj[p] || []).push(t); });
+  sel.innerHTML = '<option value="">Pick a task</option>' + Object.keys(byProj).map(p => `<optgroup label="${escapeHtml(p)}">${byProj[p].map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}</optgroup>`).join('');
+  if (currentTask && list.some(t => t.name === currentTask)) sel.value = currentTask;
+  ['ac-ref', 'ac-case', 'ac-name'].forEach(id => { document.getElementById(id).value = ''; });
+  fillAddCaseOwners();
+  document.getElementById('addcase-overlay').classList.remove('hidden');
+}
+
+function closeAddCase() { document.getElementById('addcase-overlay').classList.add('hidden'); }
+
+function fillAddCaseOwners() {
+  const t = taskByName(valOf('ac-task'));
+  document.getElementById('ac-for').innerHTML = '<option value="">Anyone who does this task</option>' + (t ? t.owners : []).map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join('');
+}
+
+async function saveAddCase() {
+  const task = valOf('ac-task');
+  if (!task) return toast('Pick a task.', true);
+  if (!valOf('ac-ref') && !valOf('ac-case')) return toast('Type a Ref No or Case No.', true);
+  const btn = document.getElementById('btn-addcase');
+  btn.disabled = true;
+  try {
+    const r = await apiCall('pendingAdd', { task: task, refNo: valOf('ac-ref'), caseNo: valOf('ac-case'), customerName: valOf('ac-name'), assignedTo: valOf('ac-for') });
+    if (!r.ok) toast(r.error || 'Could not add it', true);
+    else { toast('Added to ' + task + (r.name ? ' · ' + r.name : '') + '.'); closeAddCase(); loadPending(); }
+  } catch (e) { toast('Network error', true); }
+  btn.disabled = false;
+}
 
 function hideAll() {
   document.querySelectorAll('.glass-panel').forEach(p => p.classList.add('hidden'));
