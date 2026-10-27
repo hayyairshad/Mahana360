@@ -4,9 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Taskando</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f6b6b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Taskando">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Pinyon+Script&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
@@ -849,6 +855,13 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .daily-helper .daily-col-head { color: var(--text-dim); }
 .daily-helper-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 0 14px; }
 @media (max-width: 720px) { .trail-ev { flex-direction: column; gap: 2px; } .trail-when { width: auto; } .grace-form input, .fix-row input[type="text"] { min-width: 0; width: 100%; } }
+.push-bar { position: sticky; top: 0; z-index: 900; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 18px; background: #e5f0df; border-bottom: 1px solid var(--fern); color: var(--pine); font-size: 0.9rem; font-weight: 600; }
+.push-bar span { flex: 1 1 260px; }
+.push-bar .btn { margin: 0; }
+.push-bar.push-denied, .push-bar.push-error { background: #fff4e5; border-color: #e7b07a; color: #7b5c19; }
+.push-bar .push-later { background: transparent; }
+.push-warn { background: #fdecea; border: 1px solid #f3b4ae; color: #8a1c14; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-weight: 600; }
+.push-types .owner-pick { align-items: flex-start; }
 #btn-refresh.spinning svg { animation: spin 0.9s linear infinite; }
 .case-chip { max-width: 100%; white-space: normal; }
 @media (max-width: 720px) {
@@ -858,6 +871,28 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
   .chain-key select, .chain-key input, #chain-add, #recurring-add, .step-add { max-width: 100%; min-width: 0 !important; }
   .chain-col .case-chip { white-space: normal; }
   .summary-grid { grid-template-columns: minmax(0, 1fr); }
+}
+#scr-login.login-card { margin-top: 6vh; width: 100%; max-width: 440px; padding: 34px 30px 30px; border-radius: 20px; color: #fff;
+background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-shadow: 0 18px 44px rgba(8,60,66,0.35); }
+.login-brand { display: flex; align-items: center; gap: 16px; }
+.login-brand .tk-logo { width: 84px; height: 84px; flex: 0 0 auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
+.login-name { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.05; }
+.login-tag, .login-motto { font-family: 'Pinyon Script', 'Lucida Calligraphy', cursive !important; color: #f0a93a; }
+.login-tag { font-size: 1.45rem; line-height: 1.1; margin-top: 2px; }
+.login-quote { font-size: 1.3rem; line-height: 1.5; font-weight: 600; margin: 34px 0 0; }
+.login-quote span { color: #3fd9c2; }
+.login-motto { font-size: 1.75rem; line-height: 1.25; margin: 26px 0 0; }
+.login-sign { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.18); }
+#login-status { text-align: center; color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-top: 14px; min-height: 1em; }
+.site-title { display: inline-flex; align-items: center; gap: 8px; }
+.site-mark { display: inline-flex; }
+.site-mark .tk-logo { width: 30px; height: 30px; display: block; }
+@media (max-width: 520px) {
+  #scr-login.login-card { margin-top: 2vh; padding: 26px 20px 24px; }
+  .login-brand .tk-logo { width: 68px; height: 68px; }
+  .login-name { font-size: 1.8rem; }
+  .login-quote { font-size: 1.15rem; }
+  .login-motto { font-size: 1.5rem; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -869,7 +904,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
 </button>
 <div class="logo-group" onclick="goHome()" title="Home">
-<img src="mahana-logo.png" alt="Mahana">
+<span class="site-mark"><svg class="tk-logo" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="tkg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3fd3bd"/><stop offset="1" stop-color="#11867f"/></linearGradient></defs><path d="M60 8 Q64 8 67.5 10 L101 29.5 Q108 33.5 108 41.5 L108 78.5 Q108 86.5 101 90.5 L67.5 110 Q60 114 52.5 110 L19 90.5 Q12 86.5 12 78.5 L12 41.5 Q12 33.5 19 29.5 L52.5 10 Q56 8 60 8 Z" fill="url(#tkg2)"/><path d="M36 40 H84 V52 H66 V88 H54 V52 H36 Z" fill="#fff"/><circle cx="96" cy="26" r="17" fill="#22c55e" stroke="#fff" stroke-width="4"/><path d="M88 26 L94 32 L104 20" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 <img src="friends-logo.png" alt="Friends">
 </div>
 <span class="site-title">Taskando</span>
@@ -901,6 +936,8 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 </header>
 
 
+<div id="push-bar" class="push-bar hidden"></div>
+
 <div id="daily-overlay" class="daily-overlay hidden">
 <div class="daily-panel">
 <div class="daily-head">
@@ -918,13 +955,20 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 <div class="main-content">
 
 <!-- 1. LOGIN -->
-<div id="scr-login" class="glass-panel">
-<h2>Sign In</h2>
-<p style="color:var(--text-dim); font-size:0.85rem; margin-top:-15px; margin-bottom:25px;">
-Sign in with your authorized Google account.
-</p>
+<div id="scr-login" class="login-card">
+<div class="login-brand">
+<svg class="tk-logo" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="tkg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3fd3bd"/><stop offset="1" stop-color="#11867f"/></linearGradient></defs><path d="M60 8 Q64 8 67.5 10 L101 29.5 Q108 33.5 108 41.5 L108 78.5 Q108 86.5 101 90.5 L67.5 110 Q60 114 52.5 110 L19 90.5 Q12 86.5 12 78.5 L12 41.5 Q12 33.5 19 29.5 L52.5 10 Q56 8 60 8 Z" fill="url(#tkg)"/><path d="M36 40 H84 V52 H66 V88 H54 V52 H36 Z" fill="#fff"/><circle cx="96" cy="26" r="17" fill="#22c55e" stroke="#fff" stroke-width="4"/><path d="M88 26 L94 32 L104 20" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div>
+<div class="login-name">Taskando</div>
+<div class="login-tag">Task smart. Close fast.</div>
+</div>
+</div>
+<p class="login-quote">"Your group chat is not a task manager.<br><span>It's Taskando."</span></p>
+<p class="login-motto">Taskando: Where excuses come to die.</p>
+<div class="login-sign">
 <div id="g_id_signin" style="display:flex; justify-content:center;"></div>
-<div id="login-status" style="text-align:center; color:var(--text-dim); font-size:0.8rem; margin-top:16px;"></div>
+<div id="login-status"></div>
+</div>
 </div>
 
 <!-- 2. STAFF SELECT -->
@@ -1290,6 +1334,13 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-wrap"><table class="report-table" id="my-timereq"></table></div>
 </div>
 
+<div id="form-push" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Staff get these on their phone like any other notification. Each person turns them on once from the green bar at the top of Taskando. Notifications wait until that person's working hours (from Working Hours).
+</p>
+<div id="push-admin"></div>
+</div>
+
 <div id="form-approvals" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
 Staff ask here for more time on a case, or to fix a finish time they saved late. Approving changes their timing and points. Rejecting changes nothing.
@@ -1519,6 +1570,8 @@ const ADMIN_TASKS = [
   { name: "Projects", phase: "Admin", panel: "projects", description: "Projects",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Time Requests", phase: "Admin", panel: "approvals", description: "Time Requests",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Notifications", phase: "Admin", panel: "push", description: "Phone notifications",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1598,7 +1651,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R19";
+const APP_VERSION = "R20";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1961,6 +2014,7 @@ async function completeLogin() {
     loadPending();
     await Promise.all([loadChain(), loadProjects()]);
     startBellTimer();
+    setTimeout(() => initPush(false), 1500);
 
     window.addEventListener('hashchange', route);
 
@@ -1975,6 +2029,11 @@ async function completeLogin() {
 
 function doLogout() {
   window.removeEventListener('hashchange', route);
+  try {
+    const pt = localStorage.getItem(PUSH_TOKEN_KEY);
+    if (pt && idToken && navigator.sendBeacon) navigator.sendBeacon(APPS_SCRIPT_URL, JSON.stringify({ action: 'pushUnregister', idToken: idToken, version: APP_VERSION, token: pt }));
+    localStorage.removeItem(PUSH_TOKEN_KEY);
+  } catch (e) {}
   idToken = null;
   localStorage.removeItem('mahana_idToken');
   try { localStorage.removeItem(PENDING_CACHE_KEY); } catch (e) {}
@@ -4356,7 +4415,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'partial-section', 'recent-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'partial-section', 'recent-section']
     .forEach(id => document.getElementById(id).classList.add('hidden'));
 }
 
@@ -4422,6 +4481,11 @@ function renderFormInterface() {
   if (t.panel === "myassigned") {
     document.getElementById('form-myassigned').classList.remove('hidden');
     loadMyAssigned();
+    return;
+  }
+  if (t.panel === "push") {
+    document.getElementById('form-push').classList.remove('hidden');
+    loadPushAdmin();
     return;
   }
   if (t.panel === "approvals") {
@@ -7139,6 +7203,182 @@ async function saveAddCase() {
     const r = await apiCall('pendingAdd', { task: task, refNo: valOf('ac-ref'), caseNo: valOf('ac-case'), customerName: valOf('ac-name'), assignedTo: valOf('ac-for') });
     if (!r.ok) toast(r.error || 'Could not add it', true);
     else { toast('Added to ' + task + (r.name ? ' · ' + r.name : '') + '.'); closeAddCase(); loadPending(); }
+  } catch (e) { toast('Network error', true); }
+  btn.disabled = false;
+}
+
+const FIREBASE_WEB = {
+  apiKey: "AIzaSyD_y2p3AgkqLSodoe7crIJu8q79eKQnVtc",
+  authDomain: "taskando-ae850.firebaseapp.com",
+  projectId: "taskando-ae850",
+  storageBucket: "taskando-ae850.firebasestorage.app",
+  messagingSenderId: "503577778203",
+  appId: "1:503577778203:web:b98f7dba77f7e8421480be"
+};
+const FIREBASE_VAPID = "BKW0Tf5i5hfXmKDIDhvD76I7I3h6wPjstAchZmSMYwUmpAFqMQtcXn7kgWnmGOnXts3qjG_N-zWmFJl_-1oIc6A";
+const FIREBASE_JS = 'https://www.gstatic.com/firebasejs/10.12.2/';
+const PUSH_TOKEN_KEY = 'taskando_push_token';
+const PUSH_LATER_KEY = 'taskando_push_later';
+let pushMessaging = null;
+let installPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; renderInstallButton(); });
+
+function isIOS() { return /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream; }
+function isStandalone() { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
+function pushPlatform() {
+  const ua = navigator.userAgent;
+  const dev = /Android/.test(ua) ? 'Android' : isIOS() ? 'iPhone' : /Windows/.test(ua) ? 'Windows' : /Mac/.test(ua) ? 'Mac' : 'Other';
+  return dev + (isStandalone() ? ' app' : ' browser');
+}
+
+function pushSupported() {
+  return 'serviceWorker' in navigator && 'Notification' in window && 'PushManager' in window;
+}
+
+function showPushBar(state, extra) {
+  const bar = document.getElementById('push-bar');
+  if (!bar) return;
+  let html = '';
+  if (state === 'ask') html = `<span>&#128276; Get Taskando notifications on this ${/Android|iPhone/.test(pushPlatform()) ? 'phone' : 'computer'} when work comes to you.</span><button class="btn btn-small btn-primary" onclick="initPush(true)">Turn on</button><button class="btn btn-small push-later" onclick="pushLater()">Later</button>`;
+  else if (state === 'ios') html = `<span>&#128276; On iPhone: tap <b>Share</b> &#8679; then <b>Add to Home Screen</b>, open Taskando from the new icon, then turn on notifications.</span><button class="btn btn-small push-later" onclick="pushLater()">OK</button>`;
+  else if (state === 'denied') html = `<span>&#128277; Notifications are blocked for Taskando. Tap the &#128274; next to the web address, open <b>Permissions</b> or <b>Site settings</b>, set <b>Notifications</b> to <b>Allow</b>, then reload.</span><button class="btn btn-small push-later" onclick="pushLater()">Later</button>`;
+  else if (state === 'working') html = `<span>Turning on notifications...</span>`;
+  else if (state === 'done') html = `<span>&#9989; Notifications are on for this ${/Android|iPhone/.test(pushPlatform()) ? 'phone' : 'computer'}.</span><button class="btn btn-small" onclick="sendPushTest()">Send me a test</button><span id="install-slot"></span><button class="btn btn-small push-later" onclick="hidePushBar()">Close</button>`;
+  else if (state === 'error') html = `<span>&#9888;&#65039; Could not turn on notifications: ${escapeHtml(extra || 'unknown problem')}</span><button class="btn btn-small" onclick="initPush(true)">Try again</button><button class="btn btn-small push-later" onclick="pushLater()">Later</button>`;
+  bar.innerHTML = html;
+  bar.className = 'push-bar push-' + state;
+  bar.classList.toggle('hidden', !html);
+  renderInstallButton();
+}
+
+function hidePushBar() { const bar = document.getElementById('push-bar'); if (bar) bar.classList.add('hidden'); }
+
+function pushLater() {
+  try { localStorage.setItem(PUSH_LATER_KEY, String(Date.now())); } catch (e) {}
+  hidePushBar();
+}
+
+function renderInstallButton() {
+  const slot = document.getElementById('install-slot');
+  if (!slot) return;
+  slot.innerHTML = installPrompt && !isStandalone() ? '<button class="btn btn-small btn-primary" onclick="installApp()">Add Taskando to Home screen</button>' : '';
+}
+
+async function installApp() {
+  if (!installPrompt) return toast('Use Chrome menu ⋮ → Add to Home screen.', true);
+  installPrompt.prompt();
+  try { await installPrompt.userChoice; } catch (e) {}
+  installPrompt = null;
+  renderInstallButton();
+}
+
+async function initPush(interactive) {
+  if (!user) return;
+  if (!pushSupported()) {
+    if (isIOS() && !isStandalone()) { if (interactive || !pushSnoozed()) showPushBar('ios'); }
+    return;
+  }
+  if (Notification.permission === 'denied') { if (interactive || !pushSnoozed()) showPushBar('denied'); return; }
+  if (Notification.permission !== 'granted') {
+    if (!interactive) { if (!pushSnoozed()) showPushBar('ask'); return; }
+    showPushBar('working');
+    let p = 'default';
+    try { p = await Notification.requestPermission(); } catch (e) {}
+    if (p !== 'granted') return showPushBar(p === 'denied' ? 'denied' : 'ask');
+  }
+  try {
+    if (interactive) showPushBar('working');
+    await loadScriptOnce(FIREBASE_JS + 'firebase-app-compat.js');
+    await loadScriptOnce(FIREBASE_JS + 'firebase-messaging-compat.js');
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_WEB);
+    const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js', { scope: './' });
+    await navigator.serviceWorker.ready;
+    pushMessaging = firebase.messaging();
+    const token = await pushMessaging.getToken({ vapidKey: FIREBASE_VAPID, serviceWorkerRegistration: reg });
+    if (!token) throw new Error('No device code from Firebase');
+    const old = localStorage.getItem(PUSH_TOKEN_KEY);
+    const r = await apiCall('pushRegister', { token: token, platform: pushPlatform() });
+    if (!r.ok) throw new Error(r.error || 'Could not save this phone');
+    try { localStorage.setItem(PUSH_TOKEN_KEY, token); } catch (e) {}
+    if (old && old !== token) apiCall('pushUnregister', { token: old }).catch(() => {});
+    pushMessaging.onMessage(payload => {
+      const d = (payload && payload.data) || {};
+      reg.showNotification(d.title || 'Taskando', { body: d.body || '', icon: 'icon-192.png', badge: 'badge-72.png', tag: d.tag || undefined, data: { link: d.link || '' } });
+      loadPending();
+    });
+    if (interactive) showPushBar('done'); else hidePushBar();
+  } catch (e) {
+    if (interactive) showPushBar('error', String(e && e.message || e));
+  }
+}
+
+function pushSnoozed() {
+  try { const t = Number(localStorage.getItem(PUSH_LATER_KEY) || 0); return t && Date.now() - t < 2 * 86400000; } catch (e) { return false; }
+}
+
+async function sendPushTest(person) {
+  try {
+    const r = await apiCall('pushTest', person ? { person: person } : {});
+    if (!r.ok) return toast(r.error || 'Could not send', true);
+    toast('Test sent to ' + r.devices + ' device' + (r.devices === 1 ? '' : 's') + '. It should arrive in a few seconds.');
+  } catch (e) { toast('Network error', true); }
+}
+
+const PUSH_TYPE_NAMES = {
+  newcase: ['New case on their task', 'Ref 2219 · Arsalan Shah is waiting'],
+  late: ['A case became late', 'Late on Visit to Customer'],
+  assign: ['A task was assigned to them', 'New task from Jawad'],
+  assigndone: ['Their assigned task was finished', 'Waqas finished a task'],
+  recurring: ['A recurring task is due today', 'Today: File Tele'],
+  timereq: ['Someone asks for more time (Jawad)', 'Junaid asks for 1 more day'],
+  timedecide: ['Their time request was decided', 'Approved: more time'],
+  morning: ['Morning summary', 'Good morning: 6 waiting, 2 late']
+};
+let pushAdmin = null;
+
+async function loadPushAdmin() {
+  const box = document.getElementById('push-admin');
+  box.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('pushSettingsGet');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    pushAdmin = r;
+    renderPushAdmin();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderPushAdmin() {
+  const r = pushAdmin;
+  const box = document.getElementById('push-admin');
+  const staff = Object.keys(STAFF).sort();
+  const onBy = {};
+  (r.people || []).forEach(p => { onBy[p.person] = p; });
+  box.innerHTML = `${r.keySet ? '' : '<div class="push-warn">The Firebase key is missing in Apps Script (Script Properties → FIREBASE_KEY). Nothing can be sent until it is added.</div>'}
+    <label>Which notifications are sent</label>
+    <div class="owner-grid push-types">${(r.types || []).map(t => { const on = r.off.indexOf(t) === -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="togglePushType('${t}', this.checked)"> <span><b>${escapeHtml(PUSH_TYPE_NAMES[t][0])}</b><br><small class="report-meta">${escapeHtml(PUSH_TYPE_NAMES[t][1])}</small></span></label>`; }).join('')}</div>
+    <div class="report-bar"><label class="inline-label">Morning summary at ${clockPicker('push_morning', r.morning, "pushAdmin.morning = readClock('push_morning')")}</label>
+    <button class="btn btn-primary btn-small" id="btn-push-save" onclick="savePushAdmin()">Save</button></div>
+    <label style="margin-top:18px;">Who has turned them on</label>
+    <div class="report-wrap"><table class="report-table"><thead><tr><th class="left">Person</th><th>Status</th><th>Devices</th><th>Last opened</th><th></th></tr></thead><tbody>${
+      staff.map(n => { const p = onBy[n]; return `<tr><td class="left"><b>${escapeHtml(n)}</b></td><td>${p ? '<span class="status-pill status-done">On</span>' : '<span class="status-pill status-late">Not yet</span>'}</td><td class="left">${p ? escapeHtml(p.devices + ' · ' + p.platforms.join(', ')) : ''}</td><td>${p ? escapeHtml(p.lastSeenText) : ''}</td><td>${p ? `<button class="btn btn-small" onclick="sendPushTest('${escapeHtml(n).replace(/'/g, "\\'")}')">Send test</button>` : ''}</td></tr>`; }).join('')}</tbody></table></div>
+    <label style="margin-top:18px;">Last notifications</label>
+    <div class="report-wrap"><table class="report-table"><thead><tr><th>When</th><th>To</th><th class="left">Notification</th><th>Status</th></tr></thead><tbody>${
+      (r.recent || []).map(x => `<tr><td class="nowrap">${escapeHtml(x.when)}</td><td>${escapeHtml(x.person)}</td><td class="left"><b>${escapeHtml(x.title)}</b><br><small class="report-meta">${escapeHtml(x.body)}</small></td><td>${x.status === 'Sent' ? '<span class="status-pill status-done">Sent</span>' : x.status === 'Waiting' ? '<span class="status-pill status-open">Waiting for work hours</span>' : `<span class="status-pill status-late">${escapeHtml(x.status)}</span>`}${x.note ? `<br><small class="report-meta">${escapeHtml(x.note)}</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Nothing sent yet.</td></tr>'}</tbody></table></div>`;
+}
+
+function togglePushType(t, on) {
+  pushAdmin.off = pushAdmin.off.filter(x => x !== t);
+  if (!on) pushAdmin.off.push(t);
+  renderPushAdmin();
+}
+
+async function savePushAdmin() {
+  const btn = document.getElementById('btn-push-save');
+  btn.disabled = true;
+  try {
+    const r = await apiCall('pushSettingsSave', { off: pushAdmin.off, morning: pushAdmin.morning });
+    if (!r.ok) toast(r.error || 'Could not save', true); else toast('Notification settings saved.');
   } catch (e) { toast('Network error', true); }
   btn.disabled = false;
 }
