@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Lora:ital,wght@1,600&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
@@ -858,6 +858,9 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .push-bar { position: sticky; top: 0; z-index: 900; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 18px; background: #e5f0df; border-bottom: 1px solid var(--fern); color: var(--pine); font-size: 0.9rem; font-weight: 600; }
 .push-bar span { flex: 1 1 260px; }
 .push-bar .btn { margin: 0; }
+.notif-push { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--border-color); background: var(--surface-2); font-size: 0.82rem; position: sticky; bottom: 0; }
+.notif-push .btn { margin: 0; }
+@media (max-width: 600px) { .notif-panel { position: fixed; top: 112px; left: 8px; right: 8px; width: auto; max-width: none; max-height: calc(100vh - 130px); } }
 .push-bar.push-denied, .push-bar.push-error { background: #fff4e5; border-color: #e7b07a; color: #7b5c19; }
 .push-bar .push-later { background: transparent; }
 .push-warn { background: #fdecea; border: 1px solid #f3b4ae; color: #8a1c14; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-weight: 600; }
@@ -877,11 +880,11 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .login-brand { display: flex; align-items: center; gap: 16px; }
 .login-brand .tk-logo { width: 84px; height: 84px; flex: 0 0 auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25)); }
 .login-name { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.05; }
-.login-tag, .login-motto { font-family: 'Pinyon Script', 'Lucida Calligraphy', cursive !important; color: #f0a93a; }
-.login-tag { font-size: 1.45rem; line-height: 1.1; margin-top: 2px; }
+.login-tag, .login-motto { font-family: 'Lora', Georgia, serif !important; font-style: italic; font-weight: 600; color: #f5b04a; }
+.login-tag { font-size: 1.05rem; line-height: 1.3; margin-top: 4px; }
 .login-quote { font-size: 1.3rem; line-height: 1.5; font-weight: 600; margin: 34px 0 0; }
 .login-quote span { color: #3fd9c2; }
-.login-motto { font-size: 1.75rem; line-height: 1.25; margin: 26px 0 0; }
+.login-motto { font-size: 1.25rem; line-height: 1.4; margin: 26px 0 0; }
 .login-sign { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.18); }
 #login-status { text-align: center; color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-top: 14px; min-height: 1em; }
 .site-title { display: inline-flex; align-items: center; gap: 8px; }
@@ -892,7 +895,7 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
   .login-brand .tk-logo { width: 68px; height: 68px; }
   .login-name { font-size: 1.8rem; }
   .login-quote { font-size: 1.15rem; }
-  .login-motto { font-size: 1.5rem; }
+  .login-motto { font-size: 1.12rem; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -1651,7 +1654,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R20";
+const APP_VERSION = "R21";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3196,7 +3199,15 @@ function renderNotifPanel() {
       html += `<div class="notif-empty">+ ${pendingItems.length - shown.length} more</div>`;
     }
   }
+  const pushOn = pushSupported() && Notification.permission === 'granted' && !!localStorage.getItem(PUSH_TOKEN_KEY);
+  html += `<div class="notif-push"><span>&#128241; Phone notifications: <b>${pushOn ? 'On' : 'Off'}</b></span>${pushOn ? '<button class="btn btn-small" onclick="sendPushTest()">Send me a test</button>' : '<button class="btn btn-small btn-primary" onclick="pushFromPanel()">Turn on</button>'}</div>`;
   panel.innerHTML = html;
+}
+
+function pushFromPanel() {
+  document.getElementById('notif-panel').classList.add('hidden');
+  try { localStorage.removeItem(PUSH_LATER_KEY); } catch (e) {}
+  initPush(true);
 }
 
 document.addEventListener('click', function (e) {
@@ -7307,7 +7318,7 @@ async function initPush(interactive) {
       reg.showNotification(d.title || 'Taskando', { body: d.body || '', icon: 'icon-192.png', badge: 'badge-72.png', tag: d.tag || undefined, data: { link: d.link || '' } });
       loadPending();
     });
-    if (interactive) showPushBar('done'); else hidePushBar();
+    if (interactive || !old) showPushBar('done'); else hidePushBar();
   } catch (e) {
     if (interactive) showPushBar('error', String(e && e.message || e));
   }
@@ -7326,14 +7337,14 @@ async function sendPushTest(person) {
 }
 
 const PUSH_TYPE_NAMES = {
-  newcase: ['New case on their task', 'Ref 2219 · Arsalan Shah is waiting'],
-  late: ['A case became late', 'Late on Visit to Customer'],
+  newcase: ['New case on their task (sent together)', '8 tasks waiting for you · 6 new, 2 late'],
+  late: ['A case became late (sent together)', 'Counted in the same 8-task notification'],
   assign: ['A task was assigned to them', 'New task from Jawad'],
   assigndone: ['Their assigned task was finished', 'Waqas finished a task'],
   recurring: ['A recurring task is due today', 'Today: File Tele'],
   timereq: ['Someone asks for more time (Jawad)', 'Junaid asks for 1 more day'],
   timedecide: ['Their time request was decided', 'Approved: more time'],
-  morning: ['Morning summary', 'Good morning: 6 waiting, 2 late']
+  morning: ['Morning summary', 'Your tasks today: 6 waiting, 2 late']
 };
 let pushAdmin = null;
 
@@ -7358,13 +7369,14 @@ function renderPushAdmin() {
     <label>Which notifications are sent</label>
     <div class="owner-grid push-types">${(r.types || []).map(t => { const on = r.off.indexOf(t) === -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="togglePushType('${t}', this.checked)"> <span><b>${escapeHtml(PUSH_TYPE_NAMES[t][0])}</b><br><small class="report-meta">${escapeHtml(PUSH_TYPE_NAMES[t][1])}</small></span></label>`; }).join('')}</div>
     <div class="report-bar"><label class="inline-label">Morning summary at ${clockPicker('push_morning', r.morning, "pushAdmin.morning = readClock('push_morning')")}</label>
+    <label class="inline-label">Send new and late cases together once there are <input type="number" id="push_batch" min="1" max="50" value="${Number(r.batch) || 8}" style="width:70px;margin:0" oninput="pushAdmin.batch = this.value"></label>
     <button class="btn btn-primary btn-small" id="btn-push-save" onclick="savePushAdmin()">Save</button></div>
     <label style="margin-top:18px;">Who has turned them on</label>
     <div class="report-wrap"><table class="report-table"><thead><tr><th class="left">Person</th><th>Status</th><th>Devices</th><th>Last opened</th><th></th></tr></thead><tbody>${
       staff.map(n => { const p = onBy[n]; return `<tr><td class="left"><b>${escapeHtml(n)}</b></td><td>${p ? '<span class="status-pill status-done">On</span>' : '<span class="status-pill status-late">Not yet</span>'}</td><td class="left">${p ? escapeHtml(p.devices + ' · ' + p.platforms.join(', ')) : ''}</td><td>${p ? escapeHtml(p.lastSeenText) : ''}</td><td>${p ? `<button class="btn btn-small" onclick="sendPushTest('${escapeHtml(n).replace(/'/g, "\\'")}')">Send test</button>` : ''}</td></tr>`; }).join('')}</tbody></table></div>
     <label style="margin-top:18px;">Last notifications</label>
     <div class="report-wrap"><table class="report-table"><thead><tr><th>When</th><th>To</th><th class="left">Notification</th><th>Status</th></tr></thead><tbody>${
-      (r.recent || []).map(x => `<tr><td class="nowrap">${escapeHtml(x.when)}</td><td>${escapeHtml(x.person)}</td><td class="left"><b>${escapeHtml(x.title)}</b><br><small class="report-meta">${escapeHtml(x.body)}</small></td><td>${x.status === 'Sent' ? '<span class="status-pill status-done">Sent</span>' : x.status === 'Waiting' ? '<span class="status-pill status-open">Waiting for work hours</span>' : `<span class="status-pill status-late">${escapeHtml(x.status)}</span>`}${x.note ? `<br><small class="report-meta">${escapeHtml(x.note)}</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Nothing sent yet.</td></tr>'}</tbody></table></div>`;
+      (r.recent || []).map(x => `<tr><td class="nowrap">${escapeHtml(x.when)}</td><td>${escapeHtml(x.person)}</td><td class="left"><b>${escapeHtml(x.title)}</b><br><small class="report-meta">${escapeHtml(x.body)}</small></td><td>${x.status === 'Sent' ? '<span class="status-pill status-done">Sent</span>' : x.status === 'Waiting' ? (x.type === 'newcase' || x.type === 'late' ? '<span class="status-pill status-open">Held until ' + (Number(pushAdmin.batch) || 8) + ' build up</span>' : '<span class="status-pill status-open">Waiting for work hours</span>') : `<span class="status-pill status-late">${escapeHtml(x.status)}</span>`}${x.note ? `<br><small class="report-meta">${escapeHtml(x.note)}</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Nothing sent yet.</td></tr>'}</tbody></table></div>`;
 }
 
 function togglePushType(t, on) {
@@ -7377,7 +7389,7 @@ async function savePushAdmin() {
   const btn = document.getElementById('btn-push-save');
   btn.disabled = true;
   try {
-    const r = await apiCall('pushSettingsSave', { off: pushAdmin.off, morning: pushAdmin.morning });
+    const r = await apiCall('pushSettingsSave', { off: pushAdmin.off, morning: pushAdmin.morning, batch: pushAdmin.batch });
     if (!r.ok) toast(r.error || 'Could not save', true); else toast('Notification settings saved.');
   } catch (e) { toast('Network error', true); }
   btn.disabled = false;
