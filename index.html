@@ -897,6 +897,99 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
   .login-quote { font-size: 1.15rem; }
   .login-motto { font-size: 1.12rem; }
 }
+.us-panel { width: min(1000px, 100%); }
+.us-input { flex: 1 1 260px; min-width: 0; }
+.us-list { display: grid; gap: 8px; }
+.us-item { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer; }
+.us-item:hover { border-color: var(--fern); box-shadow: var(--shadow-sm); }
+.us-key { font-weight: 800; font-size: 1.05rem; color: var(--pine); }
+.us-name { font-weight: 600; }
+.us-sub { color: var(--text-dim); font-size: 0.8rem; flex-basis: 100%; }
+.us-chip { display: inline-block; background: var(--info-soft); color: var(--info); border-radius: 999px; padding: 2px 9px; font-size: 0.74rem; font-weight: 700; margin: 2px 4px 2px 0; }
+.trail-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.trail-nav .nav-spacer { flex: 1; }
+.trail-chains { display: grid; gap: 10px; margin-bottom: 14px; }
+.trail-chain { background: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; }
+.trail-chain-name { font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; }
+.trail-steps { display: flex; flex-wrap: wrap; gap: 6px; }
+.trail-step { border: 1px solid var(--border-color); border-radius: 10px; padding: 5px 9px; font-size: 0.78rem; background: var(--surface-2); min-width: 92px; }
+.trail-step b { font-size: 1rem; margin-right: 4px; }
+.trail-step.late { border-color: #f1b8b3; background: var(--danger-soft); }
+.trail-step small { display: block; color: var(--text-dim); }
+.trail-cheque { background: var(--warn-soft); border: 1px solid #ecd29b; border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 0.86rem; }
+.box-tag { display: inline-block; background: #fff; border: 1px dashed var(--warn); border-radius: 6px; padding: 1px 7px; font-weight: 700; }
+.collab-badge { position: fixed; right: 14px; bottom: 12px; z-index: 50; display: flex; align-items: center; gap: 8px; background: #24533a; border: 1px solid #24533a; border-radius: 999px; padding: 5px 12px 5px 14px; box-shadow: var(--shadow-md); font-size: 0.72rem; color: rgba(255,255,255,0.88); font-weight: 600; pointer-events: none; }
+.collab-badge img { height: 22px; width: auto; }
+@media (max-width: 720px) { .collab-badge { position: static; margin: 18px auto 14px; width: max-content; } }
+.emp-compare { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0 12px; }
+.emp-compare > div { background: var(--surface-2); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px; text-align: center; }
+.emp-compare b { display: block; font-size: 1.2rem; }
+.emp-compare span { font-size: 0.7rem; color: var(--text-dim); }
+@media (max-width: 520px) { .emp-compare { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.prio-badge { display: inline-block; font-size: 0.66rem; font-weight: 800; border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.4px; }
+.prio-urgent { background: #d23f31; color: #fff; }
+.prio-high { background: #fdeceb; color: #b3261e; border: 1px solid #f1b8b3; }
+.prio-low { background: #eef2f3; color: #6b7a80; }
+.rem-editor { margin-bottom: 14px; }
+.rem-section { margin-bottom: 14px; }
+.rem-sec-head { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim); margin: 6px 0 8px; }
+.rem-item { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; margin-bottom: 6px; }
+.rem-item.late { border-left: 4px solid var(--danger); }
+.rem-item.done .rem-title { text-decoration: line-through; color: var(--text-dim); }
+.rem-item.as { background: var(--info-soft); }
+.rem-check { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-strong); background: #fff; color: var(--ok); font-weight: 900; cursor: pointer; padding: 0; line-height: 20px; text-align: center; }
+.rem-check.as { border: none; background: transparent; color: var(--info); cursor: default; }
+.rem-check:hover { border-color: var(--ok); }
+.rem-main { flex: 1 1 200px; min-width: 0; cursor: pointer; }
+.rem-title { font-weight: 700; }
+.rem-meta { color: var(--text-dim); font-size: 0.78rem; margin-top: 2px; }
+.rem-group { background: var(--accent-soft); color: var(--accent-dark); border-radius: 6px; padding: 0 6px; font-weight: 700; }
+.rem-tag { color: var(--info); font-weight: 600; }
+.rem-more { flex-basis: 100%; padding-left: 34px; }
+.rem-comments { border-left: 3px solid var(--border-color); padding-left: 10px; margin: 8px 0; }
+.rem-comment { font-size: 0.84rem; padding: 3px 0; }
+.rem-comment.is-done { color: var(--ok); font-weight: 600; }
+.rem-cal { background: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; margin-bottom: 14px; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.cal-dn { font-size: 0.7rem; font-weight: 700; color: var(--text-dim); text-align: center; }
+.cal-cell { min-height: 72px; border: 1px solid var(--border-color); border-radius: 8px; padding: 3px; cursor: pointer; overflow: hidden; background: var(--surface-2); }
+.cal-cell.empty { background: transparent; border: none; cursor: default; }
+.cal-cell.today { border-color: var(--accent-color); border-width: 2px; }
+.cal-cell.picked { background: var(--accent-soft); }
+.cal-n { font-size: 0.72rem; font-weight: 800; display: block; }
+.cal-dot { display: block; font-size: 0.64rem; background: var(--accent-soft); color: var(--accent-dark); border-radius: 4px; padding: 0 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-dot.late { background: var(--danger-soft); color: var(--danger); }
+.cal-dot.dn { opacity: 0.5; text-decoration: line-through; }
+.cal-dot.as { background: var(--info-soft); color: var(--info); }
+.cal-more { font-size: 0.6rem; color: var(--text-dim); }
+@media (max-width: 520px) { .cal-cell { min-height: 46px; } .cal-dot { font-size: 0; height: 5px; padding: 0; } .rem-more { padding-left: 0; } }
+.pin-overlay { position: fixed; inset: 0; z-index: 5000; background: linear-gradient(160deg, #0f7a73 0%, #0a4a55 100%); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.pin-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 28px 24px; width: min(340px, 100%); text-align: center; color: #fff; }
+.pin-card p { margin: 12px 0; }
+.pin-input { text-align: center; font-size: 2rem; letter-spacing: 12px; background: #fff; border-radius: 12px; }
+.pin-msg { min-height: 1.2em; color: #ffd38a; margin-bottom: 10px; font-weight: 600; }
+.pin-forgot { display: block; margin: 14px auto 0; background: transparent; color: #fff; border-color: rgba(255,255,255,0.4); }
+.dash-mode header, .dash-mode .main-content, .dash-mode .push-bar, .dash-mode .collab-badge { display: none !important; }
+.dash-screen { min-height: 100vh; padding: 18px 22px; background: linear-gradient(160deg, #0f7a73 0%, #0a4a55 100%); color: #fff; }
+.dash-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.dash-at { opacity: 0.8; font-size: 0.85rem; }
+.dash-msg { background: rgba(255,255,255,0.1); border-radius: 18px; padding: 30px; text-align: center; font-size: 1.15rem; line-height: 1.6; max-width: 640px; margin: 8vh auto; }
+.dash-code { font-size: 3.4rem; font-weight: 800; letter-spacing: 10px; margin-bottom: 10px; color: #f5b04a; }
+.dash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.dash-card { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; padding: 14px; }
+.dash-card.late { border-color: #ff8a80; }
+.dash-name { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; }
+.dash-nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; }
+.dash-nums b { display: block; font-size: 1.6rem; }
+.dash-nums span { font-size: 0.68rem; opacity: 0.8; }
+.dash-nums .bad b, b.bad { color: #ff9e94; }
+.dash-nums .good b { color: #7ee2b8; }
+.dash-tasks { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.dash-task { background: rgba(255,255,255,0.12); border-radius: 999px; padding: 6px 12px; font-size: 0.9rem; }
+.dash-task.late { background: rgba(255,120,110,0.25); }
+.dash-task i { color: #ffb4ab; font-style: normal; font-weight: 700; }
+.cover-note { background: var(--info-soft); color: var(--info); border: 1px solid #bcd7ef; border-radius: 10px; padding: 9px 12px; margin-bottom: 10px; font-size: 0.86rem; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
@@ -908,12 +1001,14 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 </button>
 <div class="logo-group" onclick="goHome()" title="Home">
 <span class="site-mark"><svg class="tk-logo" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="tkg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3fd3bd"/><stop offset="1" stop-color="#11867f"/></linearGradient></defs><path d="M60 8 Q64 8 67.5 10 L101 29.5 Q108 33.5 108 41.5 L108 78.5 Q108 86.5 101 90.5 L67.5 110 Q60 114 52.5 110 L19 90.5 Q12 86.5 12 78.5 L12 41.5 Q12 33.5 19 29.5 L52.5 10 Q56 8 60 8 Z" fill="url(#tkg2)"/><path d="M36 40 H84 V52 H66 V88 H54 V52 H36 Z" fill="#fff"/><circle cx="96" cy="26" r="17" fill="#22c55e" stroke="#fff" stroke-width="4"/><path d="M88 26 L94 32 L104 20" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-<img src="friends-logo.png" alt="Friends">
 </div>
 <span class="site-title">Taskando</span>
 </div>
 <div class="header-right">
 <span id="active-user-display" class="user-meta hidden"></span>
+<button id="btn-search" class="icon-action hidden" onclick="openUniSearch()" title="Search any Ref No, Case No, consignment, name or mobile" aria-label="Search">
+<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+</button>
 <button id="btn-notifications" class="icon-action hidden" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
@@ -947,6 +1042,8 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 <h2>Daily task list</h2>
 <label class="inline-label">Day <input type="date" id="daily-date" onchange="loadDaily()"></label>
 <label class="inline-label">Person <select id="daily-person" onchange="loadDaily()"><option value="">Pick a person</option></select></label>
+<label class="inline-label">Show <select id="daily-mode" onchange="loadDaily()"><option value="">Task list</option><option value="perf">Performance</option></select></label>
+<button class="btn btn-small" onclick="dailyYesterday()">Yesterday's performance</button>
 <button class="btn btn-small" onclick="loadDaily(true)">Show everyone</button>
 <div class="nav-spacer"></div>
 <button class="btn btn-small" onclick="closeDaily()">Close</button>
@@ -1024,6 +1121,7 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <button class="btn btn-primary" id="btn-temp-save-dynamic" onclick="saveDynamicEntry('Temp')" style="display:none;">Temp Save</button>
 <button class="btn btn-primary" id="btn-final-save-dynamic" onclick="saveDynamicEntry('Final')">Close Task</button>
 <button class="btn" id="btn-partial-save-dynamic" onclick="savePartial()">Partial Save</button>
+<button class="btn" id="btn-paste-excel" onclick="openPaste()" title="Close this task for many cases at once by pasting rows from Excel">Paste from Excel</button>
 <span id="partial-editing" class="partial-editing hidden"></span>
 </div>
 </div>
@@ -1133,6 +1231,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-cheque" onclick="showReportTab('cheque')">Cheque Report</button>
 <button class="phase-btn" id="rep-tab-exits" onclick="showReportTab('exits')">Out of the chain</button>
 <button class="phase-btn" id="rep-tab-trail" onclick="showReportTab('trail')">Case trail</button>
+<button class="phase-btn" id="rep-tab-data" onclick="showReportTab('data')">Task data</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -1212,6 +1311,16 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="cheque-summary"></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
 </div>
+<div id="report-data" class="hidden">
+<div class="report-bar">
+<label class="inline-label">Task <select id="data-task" onchange="dataTaskChanged()"></select></label>
+<label class="inline-label">Group by <select id="data-group" onchange="renderDataReport()"></select></label>
+<input type="text" id="data-q" class="report-search" placeholder="Search" oninput="renderDataReport()">
+<button class="btn btn-small" onclick="copyDataPicture()">Copy picture</button>
+</div>
+<div id="data-summary"></div>
+<div class="report-wrap"><table class="report-table" id="data-table"></table></div>
+</div>
 <div id="report-trail" class="hidden">
 <div class="report-bar">
 <input type="text" id="trail-q" class="report-search" placeholder="Ref No, Case No or Consignment Name" onkeydown="if(event.key==='Enter')loadTrail()">
@@ -1231,20 +1340,24 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <!-- CHEQUES (Jawad only) -->
 <div id="form-cheques" class="hidden">
 <div class="report-bar">
-<input type="text" id="quick-receive" class="report-search" placeholder="Ref or Case No" onkeydown="if(event.key==='Enter'){event.preventDefault();quickReceive();}">
+<input type="text" id="quick-receive" class="report-search" placeholder="Ref or Case No" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('quick-box').focus();}">
+<input type="text" id="quick-box" class="report-search" style="max-width:190px;" placeholder="Envelope / Box No" onkeydown="if(event.key==='Enter'){event.preventDefault();quickReceive();}">
 <button class="btn btn-small btn-primary" onclick="quickReceive()">Mark received</button>
-<span class="report-meta">Type the number on the cheque's case and press Enter.</span>
+<span class="report-meta">Type the case number, then the envelope or box you put the cheque in, and press Enter.</span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-cheques')" title="Full screen">&#x26F6;</button>
 </div>
 <div class="report-bar">
+<label class="inline-label">Claimed from <input type="date" id="cqa-from"></label>
+<label class="inline-label">to <input type="date" id="cqa-to"></label>
 <select id="cheque-filter" class="report-search" onchange="renderChequeAdmin()">
 <option value="open">With Salesman</option>
 <option value="overdue">Overdue</option>
 <option value="received">Received</option>
+<option value="returned">Returned to customer</option>
 <option value="all">All</option>
 </select>
-<input type="text" id="cheque-search" class="report-search" placeholder="Search ref, case, name, salesman" oninput="renderChequeAdmin()">
-<button class="btn btn-small" onclick="loadCheques(true)">Refresh</button>
+<input type="text" id="cheque-search" class="report-search" placeholder="Search ref, case, name, salesman, box" oninput="renderChequeAdmin()">
+<button class="btn btn-small btn-primary" onclick="showChequesAdmin()">Show</button>
 </div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-admin-table"></table></div>
 </div>
@@ -1329,12 +1442,52 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-wrap"><table class="report-table" id="assign-defs"></table></div>
 </div>
 
+<div id="form-reminders" class="hidden">
+<div class="report-bar">
+<button class="btn btn-primary btn-small" onclick="remEdit('')">+ New reminder</button>
+<button class="btn btn-small" id="rem-view-list" onclick="remView='list'; renderReminders()">List</button>
+<button class="btn btn-small" id="rem-view-cal" onclick="remView='cal'; renderReminders()">Calendar</button>
+<select id="rem-show" class="report-search" style="width:auto" onchange="renderReminders()"><option value="open">To do</option><option value="all">Everything</option><option value="done">Done</option></select>
+<select id="rem-group" class="report-search" style="width:auto" onchange="renderReminders()"></select>
+<select id="rem-tag" class="report-search" style="width:auto" onchange="renderReminders()"></select>
+<input type="text" id="rem-q" class="report-search" placeholder="Search reminders" oninput="renderReminders()">
+</div>
+<div id="rem-editor" class="schedule-box rem-editor hidden"></div>
+<div id="rem-list"></div>
+<p class="report-meta" style="margin-top:16px;">Only you see your reminders. They never count for points or reports.</p>
+</div>
+
 <div id="form-myassigned" class="hidden">
+<div id="cover-note"></div>
 <div id="myassigned-list"></div>
 <label style="margin-top:20px;">Done in the last 7 days</label>
 <div id="myassigned-done"></div>
 <label style="margin-top:20px;">My time requests</label>
 <div class="report-wrap"><table class="report-table" id="my-timereq"></table></div>
+<label style="margin-top:20px;">Leave</label>
+<div class="schedule-box" id="leave-form-box">
+<div class="report-bar">
+<label class="inline-label">From <input type="date" id="lv-from"></label>
+<label class="inline-label">To <input type="date" id="lv-to"></label>
+<label class="inline-label">Substitute <select id="lv-sub"></select></label>
+</div>
+<input type="text" id="lv-reason" placeholder="Reason for leave">
+<button class="btn btn-small btn-primary" onclick="applyLeave()">Apply for leave</button>
+<div class="builder-hint" style="margin:8px 0 0;">Once Jawad approves: your clock stops on those days (no late, no minus), and your cases and notifications go to the substitute, who gets the points.</div>
+</div>
+<div class="report-wrap" style="margin-top:10px;"><table class="report-table" id="my-leave"></table></div>
+</div>
+
+<div id="form-devices" class="hidden">
+<p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
+Everyone signs in with Google once on each phone or computer and then stays signed in for 30 days of use. Sign out a lost phone here. To put the dashboard on a TV or office screen, open <b>hayyairshad.github.io/Mahana360/#/dashboard</b> on that screen, then type the code it shows below.
+</p>
+<div class="report-bar">
+<input type="text" id="dash-code" class="report-search" inputmode="numeric" placeholder="6-number code from the screen" style="max-width:220px;" onkeydown="if(event.key==='Enter')approveScreen()">
+<input type="text" id="dash-name" class="report-search" placeholder="Name, e.g. Office TV" style="max-width:220px;">
+<button class="btn btn-small btn-primary" onclick="approveScreen()">Approve screen</button>
+</div>
+<div id="devices-list"></div>
 </div>
 
 <div id="form-push" class="hidden">
@@ -1353,6 +1506,8 @@ Staff ask here for more time on a case, or to fix a finish time they saved late.
 <button class="btn btn-small" onclick="loadApprovals()">Refresh</button>
 </div>
 <div class="report-wrap"><table class="report-table" id="approvals-table"></table></div>
+<label style="margin-top:20px;">Leave applications</label>
+<div class="report-wrap"><table class="report-table" id="leave-admin"></table></div>
 </div>
 
 <!-- WORKING HOURS (Jawad only) -->
@@ -1462,6 +1617,57 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 <div class="builder-actions" style="margin-top:12px;"><button class="btn btn-primary" id="btn-addcase" onclick="saveAddCase()">Add case</button></div>
 </div>
 </div>
+<div id="us-overlay" class="daily-overlay hidden" onclick="if(event.target===this)closeUniSearch()">
+<div class="daily-panel us-panel">
+<div class="daily-head">
+<h2>Search</h2>
+<input type="search" id="us-q" class="us-input" placeholder="Ref No, Case No, consignment, name or mobile" autocomplete="off" oninput="uniSearchSoon()" onkeydown="if(event.key==='Enter')uniSearch()">
+<button class="btn btn-small btn-primary" onclick="uniSearch()">Search</button>
+<div class="nav-spacer"></div>
+<button class="btn btn-small" onclick="closeUniSearch()">Close</button>
+</div>
+<div id="us-body"><div class="report-meta">Type a number or a name. You will see every case that matches, where it is waiting, its cheque, and its full trail.</div></div>
+</div>
+</div>
+
+<div class="collab-badge" title="In collaboration with Friends"><span>In collaboration with</span><img src="friends-logo.png" alt="Friends"></div>
+
+<div id="paste-overlay" class="daily-overlay hidden">
+<div class="daily-panel">
+<div class="daily-head"><h2 id="paste-title">Paste from Excel</h2><div class="nav-spacer"></div><button class="btn btn-small" onclick="closePaste()">Close</button></div>
+<textarea id="paste-text" rows="4" placeholder="Paste rows from Excel here (Ctrl+V)" oninput="parsePaste()"></textarea>
+<div id="paste-body"></div>
+</div>
+</div>
+
+<div id="pin-overlay" class="pin-overlay hidden">
+<div class="pin-card">
+<div class="login-brand" style="justify-content:center;"><div class="login-name" style="font-size:1.6rem;">Taskando</div></div>
+<p>Type your PIN</p>
+<input type="password" id="pin-input" inputmode="numeric" autocomplete="off" maxlength="6" class="pin-input">
+<div id="pin-msg" class="pin-msg"></div>
+<button class="btn btn-primary" id="pin-go">Open</button>
+<button class="btn btn-small pin-forgot" onclick="pinForgot()">Forgot PIN? Sign in with Google</button>
+</div>
+</div>
+
+<div id="pinset-overlay" class="daily-overlay hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+<div class="daily-panel" style="max-width:420px;">
+<h2>PIN for this device</h2>
+<p class="report-meta">You stay signed in on this phone or computer. With a PIN, Taskando asks for it each time you open it, instead of Google.</p>
+<label>New PIN (4 to 6 numbers)</label>
+<input type="password" id="pinset-a" inputmode="numeric" maxlength="6" autocomplete="off">
+<label>Type it again</label>
+<input type="password" id="pinset-b" inputmode="numeric" maxlength="6" autocomplete="off" onkeydown="if(event.key==='Enter')savePinSetup()">
+<div class="builder-actions"><button class="btn btn-primary" onclick="savePinSetup()">Save PIN</button><button class="btn" onclick="document.getElementById('pinset-overlay').classList.add('hidden')">Cancel</button><button class="btn icon-cross" id="pinset-off" onclick="removePin()">Remove PIN</button></div>
+</div>
+</div>
+
+<div id="dash-screen" class="dash-screen hidden">
+<div class="dash-head"><div class="login-brand"><div class="login-name" style="font-size:1.5rem;">Taskando</div></div><div class="nav-spacer"></div><span id="dash-at" class="dash-at"></span><button class="btn btn-small" onclick="toggleAppFullscreen()">Full screen</button></div>
+<div id="dash-body"><div class="dash-msg">Starting...</div></div>
+</div>
+
 <div id="toast"></div>
 
 <script>const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxn-JCO5-neqyNDZgj-jFeTQFDSd2JdD_ls-qoqrIcP4Ni0_t-B02inJTEtoTndGjUCEA/exec";
@@ -1575,6 +1781,8 @@ const ADMIN_TASKS = [
   { name: "Time Requests", phase: "Admin", panel: "approvals", description: "Time Requests",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Notifications", phase: "Admin", panel: "push", description: "Phone notifications",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Devices", phase: "Admin", panel: "devices", description: "Signed-in devices and dashboard screens",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -1624,6 +1832,189 @@ const DEFAULT_CHAIN = [
 ];
 
 let idToken = localStorage.getItem('mahana_idToken') || null;
+const SESSION_KEY = 'taskando_session';
+const PIN_KEY = 'taskando_pin';
+const PIN_OK_KEY = 'taskando_pin_ok';
+let sessionToken = (function () { try { return localStorage.getItem(SESSION_KEY) || null; } catch (e) { return null; } })();
+let reloginShown = false;
+
+function saveSession(t) {
+  sessionToken = t || null;
+  try { if (t) localStorage.setItem(SESSION_KEY, t); else localStorage.removeItem(SESSION_KEY); } catch (e) {}
+}
+
+async function pinHash(pin, salt) {
+  const txt = salt + ':' + pin;
+  try {
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+  } catch (e) {}
+  let h1 = 0x811c9dc5, h2 = 0x1234567;
+  for (let i = 0; i < txt.length; i++) { h1 = Math.imul(h1 ^ txt.charCodeAt(i), 16777619) >>> 0; h2 = Math.imul(h2 + txt.charCodeAt(i), 2654435761) >>> 0; }
+  return 'f' + h1.toString(16) + h2.toString(16);
+}
+
+function pinSaved() { try { return JSON.parse(localStorage.getItem(PIN_KEY) || 'null'); } catch (e) { return null; } }
+
+function pinNeeded() {
+  const p = pinSaved();
+  if (!p || !sessionToken) return false;
+  try { const t = Number(sessionStorage.getItem(PIN_OK_KEY) || 0); return !(t && Date.now() - t < 15 * 60000); } catch (e) { return true; }
+}
+
+function askPin() {
+  return new Promise(resolve => {
+    const ov = document.getElementById('pin-overlay');
+    const inp = document.getElementById('pin-input');
+    const msg = document.getElementById('pin-msg');
+    ov.classList.remove('hidden');
+    inp.value = ''; msg.innerText = '';
+    setTimeout(() => inp.focus(), 50);
+    let tries = 0;
+    const check = async () => {
+      const p = pinSaved();
+      if (!p) { ov.classList.add('hidden'); return resolve(true); }
+      if (await pinHash(inp.value, p.salt) === p.hash) {
+        try { sessionStorage.setItem(PIN_OK_KEY, String(Date.now())); } catch (e) {}
+        ov.classList.add('hidden');
+        return resolve(true);
+      }
+      tries++;
+      inp.value = '';
+      if (tries >= 5) { msg.innerText = 'Too many wrong tries. Sign in with Google again.'; setTimeout(pinForgot, 1200); return; }
+      msg.innerText = 'Wrong PIN. ' + (5 - tries) + ' tries left.';
+    };
+    document.getElementById('pin-go').onclick = check;
+    inp.onkeydown = e => { if (e.key === 'Enter') check(); };
+    inp.oninput = () => { inp.value = inp.value.replace(/\D/g, '').slice(0, 6); if (inp.value.length === (pinSaved() || {}).len) check(); };
+  });
+}
+
+function pinForgot() {
+  try { localStorage.removeItem(PIN_KEY); } catch (e) {}
+  if (sessionToken && navigator.sendBeacon) navigator.sendBeacon(APPS_SCRIPT_URL, JSON.stringify({ action: 'sessionEnd', session: sessionToken, version: APP_VERSION }));
+  saveSession(null);
+  idToken = null;
+  localStorage.removeItem('mahana_idToken');
+  location.reload();
+}
+
+function openPinSetup() {
+  document.getElementById('notif-panel').classList.add('hidden');
+  const ov = document.getElementById('pinset-overlay');
+  ov.classList.remove('hidden');
+  document.getElementById('pinset-a').value = '';
+  document.getElementById('pinset-b').value = '';
+  document.getElementById('pinset-off').classList.toggle('hidden', !pinSaved());
+  setTimeout(() => document.getElementById('pinset-a').focus(), 50);
+}
+
+async function savePinSetup() {
+  const a = valOf('pinset-a'), b = valOf('pinset-b');
+  if (!/^\d{4,6}$/.test(a)) return toast('Use 4 to 6 numbers.', true);
+  if (a !== b) return toast('The two PINs are not the same.', true);
+  if (!sessionToken) return toast('Sign in with Google once more first, then set the PIN.', true);
+  const salt = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  try { localStorage.setItem(PIN_KEY, JSON.stringify({ salt: salt, hash: await pinHash(a, salt), len: a.length })); sessionStorage.setItem(PIN_OK_KEY, String(Date.now())); } catch (e) { return toast('This browser cannot save a PIN.', true); }
+  document.getElementById('pinset-overlay').classList.add('hidden');
+  toast('PIN saved. Next time, open Taskando with your PIN.');
+}
+
+function removePin() {
+  try { localStorage.removeItem(PIN_KEY); } catch (e) {}
+  document.getElementById('pinset-overlay').classList.add('hidden');
+  toast('PIN removed.');
+}
+
+async function loadDevicesAdmin() {
+  const box = document.getElementById('devices-list');
+  box.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('sessionList');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    const users = r.items.filter(x => x.kind === 'user'), screens = r.items.filter(x => x.kind === 'dashboard' && x.status === 'Active');
+    box.innerHTML = `<label>Signed-in phones and computers</label>
+      <div class="report-wrap"><table class="report-table"><thead><tr><th class="left">Person</th><th>Device</th><th>Signed in</th><th>Last used</th><th></th></tr></thead><tbody>${
+        users.map(x => `<tr><td class="left"><b>${escapeHtml(x.name)}</b></td><td>${escapeHtml(x.device || '')}</td><td>${escapeHtml(x.created)}</td><td>${escapeHtml(x.last)}</td><td><button class="btn btn-small icon-cross" onclick="endDevice('${escapeHtml(x.id)}')">Sign out</button></td></tr>`).join('') || '<tr><td colspan="5" class="report-meta">Nobody yet. People appear here after they sign in once with R22.</td></tr>'}</tbody></table></div>
+      <label style="margin-top:18px;">Dashboard screens</label>
+      <div class="report-wrap"><table class="report-table"><thead><tr><th class="left">Screen</th><th>Approved</th><th>Last seen</th><th></th></tr></thead><tbody>${
+        screens.map(x => `<tr><td class="left"><b>${escapeHtml(x.name)}</b></td><td>${escapeHtml(x.last)}</td><td>${escapeHtml(x.last)}</td><td><button class="btn btn-small icon-cross" onclick="endDevice('${escapeHtml(x.id)}')">Remove</button></td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">No screens yet.</td></tr>'}</tbody></table></div>`;
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+async function endDevice(id) {
+  try {
+    const r = await apiCall('sessionEnd', { id: id });
+    if (!r.ok) return toast(r.error || 'Could not do it', true);
+    toast('Signed out. That device must sign in with Google again.');
+    loadDevicesAdmin();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function approveScreen() {
+  const code = valOf('dash-code');
+  if (!/^\d{6}$/.test(code.replace(/\D/g, ''))) return toast('Type the 6-number code shown on the screen.', true);
+  try {
+    const r = await apiCall('dashApprove', { code: code, name: valOf('dash-name') });
+    if (!r.ok) return toast(r.error || 'Could not approve', true);
+    toast('Screen approved. It will show the dashboard in a few seconds.');
+    document.getElementById('dash-code').value = '';
+    loadDevicesAdmin();
+  } catch (e) { toast('Network error', true); }
+}
+
+const DASH_KEY = 'taskando_dash';
+let dashTimer = null;
+
+function isDashboardUrl() { return /^#\/dashboard/.test(window.location.hash); }
+
+async function dashCall(action, payload) {
+  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action: action, version: APP_VERSION }, payload || {})) });
+  return res.json();
+}
+
+async function startDashboard() {
+  document.body.classList.add('dash-mode');
+  document.getElementById('scr-login').classList.add('hidden');
+  document.getElementById('dash-screen').classList.remove('hidden');
+  let tok = null;
+  try { tok = localStorage.getItem(DASH_KEY); } catch (e) {}
+  const box = document.getElementById('dash-body');
+  try {
+    if (!tok) {
+      const r = await dashCall('dashRequest', { device: (navigator.platform || 'Screen') + ' · ' + new Date().toLocaleDateString('en-GB') });
+      if (!r.ok) { box.innerHTML = `<div class="dash-msg">${escapeHtml(r.error || 'Could not start')}</div>`; return; }
+      tok = r.token;
+      try { localStorage.setItem(DASH_KEY, tok); } catch (e) {}
+    }
+    dashTick();
+  } catch (e) { box.innerHTML = '<div class="dash-msg">No internet. Trying again soon...</div>'; dashTimer = setTimeout(startDashboard, 30000); }
+}
+
+async function dashTick() {
+  clearTimeout(dashTimer);
+  const box = document.getElementById('dash-body');
+  let tok = null;
+  try { tok = localStorage.getItem(DASH_KEY); } catch (e) {}
+  try {
+    const r = await dashCall('dashData', { token: tok });
+    if (!r.ok && r.gone) { try { localStorage.removeItem(DASH_KEY); } catch (e) {} box.innerHTML = '<div class="dash-msg">This screen was signed out. Starting again...</div>'; dashTimer = setTimeout(startDashboard, 4000); return; }
+    if (r.waiting) {
+      if (r.expired) { try { localStorage.removeItem(DASH_KEY); } catch (e) {} return startDashboard(); }
+      box.innerHTML = `<div class="dash-msg"><div class="dash-code">${escapeHtml(r.code)}</div>Ask Jawad to open <b>Admin → Devices</b> in Taskando and type this code once.<br>This screen will then stay on by itself.</div>`;
+      dashTimer = setTimeout(dashTick, 5000);
+      return;
+    }
+    document.getElementById('dash-at').innerText = 'Updated ' + r.at;
+    box.innerHTML = `<div class="dash-grid">${r.people.map(p => `<div class="dash-card${p.late ? ' late' : ''}"><div class="dash-name">${escapeHtml(p.name)}</div>
+        <div class="dash-nums"><div><b>${p.waiting}</b><span>Waiting</span></div><div class="${p.late ? 'bad' : ''}"><b>${p.late}</b><span>Late</span></div><div class="good"><b>${p.doneToday}</b><span>Done today</span></div><div><b class="${p.points < 0 ? 'bad' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b><span>Points today</span></div></div></div>`).join('')}</div>
+      <div class="dash-tasks">${r.tasks.map(t => `<span class="dash-task${t.late ? ' late' : ''}">${escapeHtml(t.task)} <b>${t.waiting}</b>${t.late ? ' <i>' + t.late + ' late</i>' : ''}</span>`).join('')}</div>`;
+    dashTimer = setTimeout(dashTick, 120000);
+  } catch (e) { dashTimer = setTimeout(dashTick, 30000); }
+}
+
 let user = null;
 let profile = null;
 let currentTask = null;
@@ -1654,7 +2045,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R21";
+const APP_VERSION = "R22";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -1669,9 +2060,16 @@ async function apiCall(action, payload = {}) {
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action, idToken, version: APP_VERSION, ...payload })
+    body: JSON.stringify({ action, idToken, session: sessionToken, version: APP_VERSION, ...payload })
   });
-  return res.json();
+  const out = await res.json();
+  if (out && out.relogin && user && !reloginShown) {
+    reloginShown = true;
+    saveSession(null);
+    toast('Please sign in again.', true);
+    setTimeout(() => { idToken = null; localStorage.removeItem('mahana_idToken'); location.reload(); }, 1500);
+  }
+  return out;
 }
 
 let toastTimer = null;
@@ -1704,12 +2102,246 @@ let allChains = [];
 let allRecurring = [];
 
 const PANEL_PREFIX = "__panel_";
+const MY_REMINDERS = "Reminders";
+const REMINDERS_PROJECT = "__reminders";
+const MY_REMINDERS_TASK = { name: MY_REMINDERS, phase: "Reminders", panel: "reminders", description: "My reminders",
+  temp: false, fields: [], owners: [], slots: [], active: true };
+let remData = null;
+let remDraft = null;
+let remOpen = {};
+let remView = 'list';
+let remMonth = null;
+let remDayPick = '';
+
+function openReminders() {
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_REMINDERS);
+}
+
+async function loadReminders() {
+  const box = document.getElementById('rem-list');
+  if (!remData) box.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('remList');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    remData = r;
+    renderReminders();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function newRemDraft() {
+  return { id: '', title: '', notes: '', group: '', tags: '', priority: 'Normal', date: '', time: '', allDay: true, repeatOn: false, repeat: { freq: 'weekly', every: 1, days: [new Date().getDay()], until: '' }, remind: '' };
+}
+
+function remEdit(id) {
+  const x = id ? (remData.items || []).filter(i => i.id === id)[0] : null;
+  const d = newRemDraft();
+  if (x) {
+    Object.assign(d, { id: x.id, title: x.title, notes: x.notes, group: x.group, tags: x.tags.join(', '), priority: x.priority, allDay: x.allDay, remind: x.remindMins === null ? '' : String(x.remindMins) });
+    if (x.dueMs) {
+      const t = new Date(x.dueMs);
+      d.date = ymdLocal(t);
+      if (!x.allDay) { let h = t.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; d.time = h + ':' + String(t.getMinutes()).padStart(2, '0') + ' ' + ap; }
+    }
+    if (x.repeat) { d.repeatOn = true; d.repeat = Object.assign(d.repeat, x.repeat); }
+  } else if (remDayPick) d.date = remDayPick;
+  remDraft = d;
+  renderRemEditor();
+  const ed = document.getElementById('rem-editor');
+  ed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => { const el = document.getElementById('rem-title'); if (el) el.focus(); }, 60);
+}
+
+function remSet(k, v, redraw) { remDraft[k] = v; if (redraw) renderRemEditor(); }
+function remRepSet(k, v, redraw) { remDraft.repeat[k] = v; if (redraw) renderRemEditor(); }
+function remToggleDay(i) {
+  const days = remDraft.repeat.days || [];
+  const k = days.indexOf(i);
+  if (k === -1) days.push(i); else days.splice(k, 1);
+  remDraft.repeat.days = days.sort();
+  renderRemEditor();
+}
+
+function renderRemEditor() {
+  const ed = document.getElementById('rem-editor');
+  const d = remDraft;
+  if (!d) { ed.innerHTML = ''; ed.classList.add('hidden'); return; }
+  ed.classList.remove('hidden');
+  const groups = remData ? remData.groups : [];
+  const rp = d.repeat;
+  ed.innerHTML = `<div class="report-bar" style="margin-bottom:8px;"><b>${d.id ? 'Edit reminder' : 'New reminder'}</b></div>
+    <input type="text" id="rem-title" value="${escapeHtml(d.title)}" placeholder="What do you need to remember?" oninput="remSet('title', this.value)" onkeydown="if(event.key==='Enter')saveRem()">
+    <textarea placeholder="Notes (optional)" oninput="remSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
+    <div class="report-bar">
+      <label class="inline-label">Date <input type="date" value="${escapeHtml(d.date)}" onchange="remSet('date', this.value, true)"></label>
+      ${d.date ? `<label class="field-req-pick"><input type="checkbox"${d.allDay ? ' checked' : ''} onchange="remSet('allDay', this.checked, true)"> All day</label>
+      ${d.allDay ? '' : `<label class="inline-label">Time ${clockPicker('rem_t', d.time || '10:00 AM', "remSet('time', readClock('rem_t'))")}</label>`}` : '<span class="report-meta">No date: it stays on your list until you tick it.</span>'}
+    </div>
+    ${d.date ? `<div class="report-bar">
+      <label class="inline-label">Phone reminder <select onchange="remSet('remind', this.value)">${[['', 'None'], ['0', d.allDay ? 'In the morning (9 AM)' : 'At the time'], ['15', '15 minutes before'], ['60', '1 hour before'], ['1440', '1 day before'], ['10080', '1 week before']].map(o => `<option value="${o[0]}"${d.remind === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select></label>
+      <label class="field-req-pick"><input type="checkbox"${d.repeatOn ? ' checked' : ''} onchange="remSet('repeatOn', this.checked, true)"> Repeat</label>
+      ${d.repeatOn ? `<select style="width:auto;margin:0" onchange="remRepSet('freq', this.value, true)">${[['daily', 'Daily'], ['weekly', 'Weekly'], ['monthly', 'Monthly'], ['yearly', 'Yearly']].map(o => `<option value="${o[0]}"${rp.freq === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select>
+      <label class="inline-label">every <input type="number" min="1" value="${rp.every || 1}" style="width:64px" oninput="remRepSet('every', Math.max(1, Number(this.value) || 1))"> ${rp.freq === 'daily' ? 'day(s)' : rp.freq === 'monthly' ? 'month(s)' : rp.freq === 'yearly' ? 'year(s)' : 'week(s)'}</label>
+      <label class="inline-label">until <input type="date" value="${escapeHtml(rp.until || '')}" onchange="remRepSet('until', this.value)"></label>` : ''}
+    </div>
+    ${d.repeatOn && rp.freq === 'weekly' ? `<div class="day-pick">${DAY_NAMES.map((dn, i) => `<button type="button" class="day-btn${(rp.days || []).indexOf(i) !== -1 ? ' on' : ''}" onclick="remToggleDay(${i})">${dn}</button>`).join('')}</div>` : ''}` : ''}
+    <div class="report-bar">
+      <label class="inline-label">Group <input type="text" list="rem-groups" value="${escapeHtml(d.group)}" placeholder="e.g. Bank, Home" style="width:150px" oninput="remSet('group', this.value)"></label>
+      <datalist id="rem-groups">${groups.map(g => `<option value="${escapeHtml(g)}">`).join('')}</datalist>
+      <label class="inline-label">Tags <input type="text" value="${escapeHtml(d.tags)}" placeholder="urgent, call, follow up" style="width:200px" oninput="remSet('tags', this.value)"></label>
+      <label class="inline-label">Priority <select onchange="remSet('priority', this.value)">${ASSIGN_PRIORITIES.map(p => `<option${d.priority === p ? ' selected' : ''}>${p}</option>`).join('')}</select></label>
+    </div>
+    <div class="builder-actions">
+      <button class="btn btn-primary" id="btn-rem-save" onclick="saveRem()">${d.id ? 'Save' : 'Add reminder'}</button>
+      <button class="btn" onclick="remDraft = null; renderRemEditor()">Cancel</button>
+      ${d.id ? `<button class="btn icon-cross" onclick="remAct('${escapeHtml(d.id)}', 'delete')">Delete</button>` : ''}
+    </div>`;
+}
+
+async function saveRem() {
+  const d = remDraft;
+  if (!d || !d.title.trim()) return toast('Write what to remember.', true);
+  if (d.repeatOn && d.repeat.freq === 'weekly' && !(d.repeat.days || []).length) return toast('Pick at least one day.', true);
+  const dueMs = d.date ? (d.allDay ? localMs(d.date, '12:00 AM') : localMs(d.date, d.time || '10:00 AM')) : 0;
+  const btn = document.getElementById('btn-rem-save');
+  btn.disabled = true;
+  try {
+    const r = await apiCall('remSave', { id: d.id, title: d.title.trim(), notes: d.notes, group: d.group, tags: d.tags, priority: d.priority, dueMs: dueMs, allDay: !!(d.date && d.allDay), repeat: d.date && d.repeatOn ? d.repeat : null, remindMins: d.date ? d.remind : '' });
+    if (!r.ok) { btn.disabled = false; return toast(r.error || 'Could not save', true); }
+    toast(d.id ? 'Saved.' : 'Reminder added.');
+    remDraft = null;
+    renderRemEditor();
+    if (remData && r.item) {
+      const i = remData.items.findIndex(x => x.id === r.item.id);
+      if (i === -1) remData.items.push(r.item); else remData.items[i] = r.item;
+      renderReminders();
+    }
+    loadReminders();
+  } catch (e) { btn.disabled = false; toast('Network error', true); }
+}
+
+async function remAct(id, what, extra) {
+  try {
+    const r = await apiCall('remAct', Object.assign({ id: id, what: what }, extra || {}));
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    if (what === 'delete') { remDraft = null; renderRemEditor(); toast('Deleted.'); }
+    else if (what === 'done') toast(r.message ? 'Done. ' + r.message : 'Done.');
+    else if (what === 'snooze') toast(r.message);
+    const i = (remData.items || []).findIndex(x => x.id === id);
+    if (i !== -1) { if (what === 'delete') remData.items.splice(i, 1); else remData.items[i] = r.item; }
+    renderReminders();
+  } catch (e) { toast('Network error', true); }
+}
+
+function remComment(id) {
+  const el = document.getElementById('rc-' + id);
+  if (!el || !el.value.trim()) return toast('Write a comment.', true);
+  const t = el.value.trim();
+  el.value = '';
+  remAct(id, 'comment', { text: t });
+}
+
+function remBucket(x) {
+  if (x.status !== 'Open') return 'Done';
+  if (!x.dueMs) return 'No date';
+  const today = ymdLocal(new Date());
+  const d = new Date(); const tom = ymdLocal(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1));
+  const wk = ymdLocal(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 7));
+  if (x.late) return 'Overdue';
+  if (x.dueDay === today) return 'Today';
+  if (x.dueDay === tom) return 'Tomorrow';
+  if (x.dueDay <= wk) return 'This week';
+  return 'Later';
+}
+
+function remFiltered() {
+  const g = valOf('rem-group'), tag = valOf('rem-tag'), q = valOf('rem-q').toLowerCase(), show = valOf('rem-show');
+  return (remData.items || []).filter(x => {
+    if (g && x.group !== g) return false;
+    if (tag && x.tags.indexOf(tag) === -1) return false;
+    if (show === 'open' && x.status !== 'Open') return false;
+    if (show === 'done' && x.status === 'Open') return false;
+    if (remDayPick && x.dueDay !== remDayPick) return false;
+    if (q && [x.title, x.notes, x.group, x.tags.join(' ')].join(' ').toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+}
+
+function remItemHtml(x) {
+  const id = escapeHtml(x.id);
+  const open = remOpen[x.id];
+  const rp = x.repeat ? '&#8635; ' + escapeHtml(x.repeat.freq === 'weekly' ? 'Weekly ' + (x.repeat.days || []).map(i => DAY_NAMES[i]).join(' ') : x.repeat.freq[0].toUpperCase() + x.repeat.freq.slice(1)) + (x.repeat.every > 1 ? ' (every ' + x.repeat.every + ')' : '') : '';
+  const comments = (x.comments || []).filter(c => !c.done);
+  return `<div class="rem-item${x.late ? ' late' : ''}${x.status !== 'Open' ? ' done' : ''}">
+    <button class="rem-check" title="${x.status === 'Open' ? 'Mark done' : 'Open again'}" onclick="remAct('${id}', '${x.status === 'Open' ? 'done' : 'undo'}')">${x.status === 'Open' ? '' : '&#10003;'}</button>
+    <div class="rem-main" onclick="remOpen['${id}'] = !remOpen['${id}']; renderReminders()">
+      <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)}</div>
+      <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
+    </div>
+    ${open ? `<div class="rem-more">
+      ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : ''}
+      <div class="rem-comments">${(x.comments || []).map(c => `<div class="rem-comment${c.done ? ' is-done' : ''}"><span class="report-meta">${escapeHtml(fmtWhen(c.ms))}</span> ${escapeHtml(c.text)}</div>`).join('') || '<div class="report-meta">No comments yet.</div>'}</div>
+      <div class="report-bar"><input type="text" id="rc-${id}" placeholder="Add a comment or what you tried" onkeydown="if(event.key==='Enter')remComment('${id}')"><button class="btn btn-small" onclick="remComment('${id}')">Add</button></div>
+      <div class="report-bar">
+        <button class="btn btn-small" onclick="remEdit('${id}')">Edit</button>
+        ${x.status === 'Open' ? `<button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 60 })">Later +1h</button><button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 1440 })">Tomorrow</button>` : ''}
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+function fmtWhen(ms) {
+  const d = new Date(ms);
+  let h = d.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+  return d.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ', ' + h + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + ap;
+}
+
+function remCalendarHtml(list) {
+  const base = remMonth || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const y = base.getFullYear(), m = base.getMonth();
+  const first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+  const by = {};
+  list.forEach(x => { if (x.dueDay) (by[x.dueDay] = by[x.dueDay] || []).push(x); });
+  (remData.assigned || []).forEach(a => { if (a.dueMs) { const k = ymdLocal(new Date(a.dueMs)); (by[k] = by[k] || []).push({ title: a.title, assigned: true }); } });
+  const today = ymdLocal(new Date());
+  let cells = '';
+  for (let i = 0; i < first.getDay(); i++) cells += '<div class="cal-cell empty"></div>';
+  for (let dd = 1; dd <= days; dd++) {
+    const k = ymdLocal(new Date(y, m, dd));
+    const its = by[k] || [];
+    cells += `<div class="cal-cell${k === today ? ' today' : ''}${k === remDayPick ? ' picked' : ''}" onclick="remDayPick = remDayPick === '${k}' ? '' : '${k}'; renderReminders()"><span class="cal-n">${dd}</span>${its.slice(0, 3).map(x => `<span class="cal-dot${x.assigned ? ' as' : x.late ? ' late' : x.status && x.status !== 'Open' ? ' dn' : ''}">${escapeHtml(x.title)}</span>`).join('')}${its.length > 3 ? `<span class="cal-more">+${its.length - 3}</span>` : ''}</div>`;
+  }
+  return `<div class="cal-head"><button class="btn btn-small" onclick="remMonth = new Date(${y}, ${m - 1}, 1); renderReminders()">&#9664;</button><b>${first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</b><button class="btn btn-small" onclick="remMonth = new Date(${y}, ${m + 1}, 1); renderReminders()">&#9654;</button></div>
+    <div class="cal-grid">${DAY_NAMES.map(n => `<div class="cal-dn">${n}</div>`).join('')}${cells}</div>`;
+}
+
+function renderReminders() {
+  if (!remData) return;
+  const live = (remData.items || []);
+  remData.groups = uniqueSorted(live.map(x => x.group || ''));
+  remData.tags = uniqueSorted([].concat.apply([], live.map(x => x.tags || [])));
+  fillSelect('rem-group', remData.groups, 'All groups');
+  fillSelect('rem-tag', remData.tags, 'All tags');
+  const list = remFiltered();
+  const box = document.getElementById('rem-list');
+  const ass = (remData.assigned || []).filter(a => !valOf('rem-group') && !valOf('rem-tag') && valOf('rem-show') !== 'done' && (!remDayPick || (a.dueMs && ymdLocal(new Date(a.dueMs)) === remDayPick)));
+  const order = ['Overdue', 'Today', 'Tomorrow', 'This week', 'Later', 'No date', 'Done'];
+  const groups = {};
+  list.forEach(x => { const b = remBucket(x); (groups[b] = groups[b] || []).push(x); });
+  const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)}</div><div class="rem-meta">${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
+  const cal = remView === 'cal' ? `<div class="rem-cal">${remCalendarHtml(list)}</div>` : '';
+  box.innerHTML = cal + (remDayPick ? `<div class="report-bar"><span class="report-meta">Showing ${escapeHtml(formatDateDMY(remDayPick))}</span><button class="btn btn-small" onclick="remDayPick=''; renderReminders()">Show all days</button><button class="btn btn-small btn-primary" onclick="remEdit('')">+ Add on this day</button></div>` : '') +
+    order.filter(k => groups[k]).map(k => `<div class="rem-section"><div class="rem-sec-head">${k} <span class="sidebar-count${k === 'Overdue' ? ' late' : ''}">${groups[k].length}</span></div>${groups[k].map(remItemHtml).join('')}</div>`).join('') +
+    assHtml || '<div class="empty-tile" style="padding:30px 20px;">Nothing here. Press + New reminder to add one.</div>';
+  document.getElementById('rem-view-list').classList.toggle('btn-primary', remView === 'list');
+  document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
+}
+
 const MY_ASSIGNED = "My Assigned";
 const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassigned", description: "Tasks Assigned to You",
   temp: false, fields: [], owners: [], slots: [], active: true };
 
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK]);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK]);
 }
 
 function taskByName(name) {
@@ -1728,13 +2360,19 @@ function phaseOrder() {
   return out;
 }
 
+let AWAY = {};
+let COVER = {};
+
+function coveredBy(staffName) { return COVER[staffName] || []; }
+
 function taskListFor(staffName, all) {
   if (user && user.level === 0 && staffName === user.name) {
     return allTasks().filter(t => t.admin || t.active).map(t => t.name);
   }
-  let list = TASKS.filter(t => t.active && t.owners.indexOf(staffName) !== -1);
+  const covering = coveredBy(staffName);
+  let list = TASKS.filter(t => t.active && (t.owners.indexOf(staffName) !== -1 || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
-  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -1748,7 +2386,7 @@ function extraPanelsFor(staffName) {
 }
 
 function isPanelProject(pid) {
-  return pid === ASSIGNED_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
+  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
 }
 
 function recurringHidden(t) {
@@ -1771,12 +2409,14 @@ function projOfTask(name) {
   if (!t) return DEFAULT_PROJECT;
   if (t.admin) return isAdminPanel() ? ADMIN_PROJECT : PANEL_PREFIX + t.panel;
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
+  if (t.name === MY_REMINDERS) return REMINDERS_PROJECT;
   return t.project || DEFAULT_PROJECT;
 }
 
 function projectName(pid) {
   if (pid === ADMIN_PROJECT) return 'Admin';
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
+  if (pid === REMINDERS_PROJECT) return MY_REMINDERS;
   if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
   const p = PROJECTS.filter(x => x.id === pid)[0];
   return p ? p.name : pid;
@@ -1909,10 +2549,14 @@ function renderProjectNav() {
   const tiles = document.getElementById('project-tiles');
   const projs = visibleProjects();
   const mineAssigned = profile && user && profile.name === user.name ? assignedMine.length : 0;
+  const ownRem = profile && user && profile.name === user.name;
+  const remDue = ownRem && remData ? (remData.items || []).filter(x => x.status === 'Open' && x.dueDay && x.dueDay <= ymdLocal(new Date())).length : 0;
+  const remBtn = ownRem ? `<button class="btn btn-small my-assigned-btn${currentProject === REMINDERS_PROJECT ? ' btn-primary' : ''}" onclick="openReminders()">${MY_REMINDERS}${remDue ? ' <span class="sidebar-count">' + remDue + '</span>' : ''}</button>` : '';
+  const remTab = ownRem ? `<button class="ftab ftab-right${currentProject === REMINDERS_PROJECT ? ' active' : ''}" onclick="openReminders()">${MY_REMINDERS}${remDue ? '<span class="sidebar-count">' + remDue + '</span>' : ''}</button>` : '';
   const assignedBtn = `<button class="btn btn-small my-assigned-btn${currentProject === ASSIGNED_PROJECT ? ' btn-primary' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? ' <span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   if (!currentProject) {
     nav.classList.remove('hidden');
-    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${assignedBtn}`;
+    nav.innerHTML = `<div class="crumbs"><b>Projects</b></div><div class="nav-spacer"></div>${remBtn}${assignedBtn}`;
     tiles.classList.remove('hidden');
     const extraTiles = (profile ? extraPanelsFor(profile.name) : []).map(n => `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="openPanelTask('${escapeHtml(n)}')">
         <strong>${escapeHtml(n)}</strong>
@@ -1936,7 +2580,7 @@ function renderProjectNav() {
   }).join('');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
-  nav.innerHTML = `<div class="ftabs">${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${assignedTab}</div>
+  nav.innerHTML = `<div class="ftabs">${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
     ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
@@ -1960,7 +2604,8 @@ function isAdminPanel() {
 }
 
 function initGoogleSignIn() {
-  if (typeof google === 'undefined') { handleGsiLoadError(); return; }
+  if (isDashboardUrl()) { startDashboard(); return; }
+  if (typeof google === 'undefined') { if (sessionToken) { completeLogin(); return; } handleGsiLoadError(); return; }
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleCredentialResponse
@@ -1969,11 +2614,13 @@ function initGoogleSignIn() {
     document.getElementById('g_id_signin'),
     { theme: 'outline', size: 'large', width: 260 }
   );
-  if (idToken) completeLogin();
+  if (idToken || sessionToken) completeLogin();
   else google.accounts.id.prompt();
 }
 
 function handleGsiLoadError() {
+  if (isDashboardUrl()) { startDashboard(); return; }
+  if (sessionToken && !user) { completeLogin(); return; }
   document.getElementById('login-status').innerText =
     "Could not load Google Sign-In. Make sure this page is served over https:// and that you have an internet connection.";
 }
@@ -1987,16 +2634,19 @@ function handleCredentialResponse(response) {
 async function completeLogin() {
   const statusEl = document.getElementById('login-status');
   statusEl.innerText = "Verifying...";
+  if (pinNeeded()) await askPin();
   try {
-    const both = await Promise.all([apiCall('whoami'), loadTasks()]);
+    const both = await Promise.all([apiCall('whoami', { wantSession: !sessionToken, device: pushPlatform() }), loadTasks()]);
     const result = both[0];
     if (!result.ok) {
-      statusEl.innerText = result.error || "Authorization Failed";
+      statusEl.innerText = result.relogin && sessionToken ? "Please sign in with Google again." : (result.error || "Authorization Failed");
       idToken = null;
       localStorage.removeItem('mahana_idToken');
-      google.accounts.id.prompt();
+      saveSession(null);
+      try { google.accounts.id.prompt(); } catch (e) {}
       return;
     }
+    if (result.session) saveSession(result.session);
     user = { name: result.name, email: result.email, level: result.level, dailyViewer: !!result.dailyViewer };
     applyUsers(result.users);
     document.getElementById('btn-daily').classList.toggle('hidden', !user.dailyViewer);
@@ -2010,11 +2660,13 @@ async function completeLogin() {
     document.getElementById('btn-refresh').classList.remove('hidden');
     document.getElementById('btn-assign-new').classList.toggle('hidden', user.level > 1);
     document.getElementById('btn-notifications').classList.remove('hidden');
+    document.getElementById('btn-search').classList.remove('hidden');
     document.getElementById('active-user-display').classList.remove('hidden');
     document.getElementById('active-user-display').innerText = user.name;
 
     loadTemplates();
     loadPending();
+    apiCall('remList').then(r => { if (r && r.ok) { remData = r; if (typeof renderProjectNav === 'function' && profile) try { renderProjectNav(); } catch (e) {} } }).catch(() => {});
     await Promise.all([loadChain(), loadProjects()]);
     startBellTimer();
     setTimeout(() => initPush(false), 1500);
@@ -2034,9 +2686,12 @@ function doLogout() {
   window.removeEventListener('hashchange', route);
   try {
     const pt = localStorage.getItem(PUSH_TOKEN_KEY);
-    if (pt && idToken && navigator.sendBeacon) navigator.sendBeacon(APPS_SCRIPT_URL, JSON.stringify({ action: 'pushUnregister', idToken: idToken, version: APP_VERSION, token: pt }));
+    if (pt && (idToken || sessionToken) && navigator.sendBeacon) navigator.sendBeacon(APPS_SCRIPT_URL, JSON.stringify({ action: 'pushUnregister', idToken: idToken, session: sessionToken, version: APP_VERSION, token: pt }));
     localStorage.removeItem(PUSH_TOKEN_KEY);
+    if (sessionToken && navigator.sendBeacon) navigator.sendBeacon(APPS_SCRIPT_URL, JSON.stringify({ action: 'sessionEnd', session: sessionToken, version: APP_VERSION }));
+    localStorage.removeItem(PIN_KEY);
   } catch (e) {}
+  saveSession(null);
   idToken = null;
   localStorage.removeItem('mahana_idToken');
   try { localStorage.removeItem(PENDING_CACHE_KEY); } catch (e) {}
@@ -2079,6 +2734,8 @@ async function loadTasks() {
 
       TASKS = rows.length ? rows : DEFAULT_TASKS.map(normaliseTask);
       TASKS = TASKS.map(normaliseTask);
+      AWAY = result.away || {};
+      COVER = result.cover || {};
       tasksLoaded = true;
     }
   } catch (e) {
@@ -2141,7 +2798,8 @@ function normaliseTask(t) {
     project: String(t.project || DEFAULT_PROJECT),
     noPoints: Array.isArray(t.noPoints) ? t.noPoints.slice() : [],
     important: !!t.important,
-    clockFrom: t.clockFrom && t.clockFrom.date ? { date: String(t.clockFrom.date), time: String(t.clockFrom.time || '') } : null
+    clockFrom: t.clockFrom && t.clockFrom.date ? { date: String(t.clockFrom.date), time: String(t.clockFrom.time || '') } : null,
+    autoMove: t.autoMove && ((Number(t.autoMove.days) || 0) + (Number(t.autoMove.hours) || 0)) > 0 ? { days: Number(t.autoMove.days) || 0, hours: Number(t.autoMove.hours) || 0 } : null
   };
 }
 
@@ -2287,6 +2945,13 @@ function renderBuilderForm() {
       <label class="inline-label"><input type="number" min="0" max="23" value="${t.sla ? t.sla.hours : ''}" placeholder="0" onchange="setSla('hours', this.value)"> hours</label>
     </div>
     <div class="builder-hint">Counted in working hours only, from when a case lands in Pending until the task is closed. Leave both blank for no limit.</div>
+
+    <label>Move on by itself after</label>
+    <div class="report-bar" style="margin-bottom:6px;">
+      <label class="inline-label"><input type="number" min="0" value="${t.autoMove ? t.autoMove.days : ''}" placeholder="0" onchange="setAutoMove('days', this.value)"> working days</label>
+      <label class="inline-label"><input type="number" min="0" max="23" value="${t.autoMove ? t.autoMove.hours : ''}" placeholder="0" onchange="setAutoMove('hours', this.value)"> hours</label>
+    </div>
+    <div class="builder-hint">For a waiting step: the case stays in this task for this long, then closes by itself and goes to the next task in the chain. Nobody gets points for it. Leave blank so a person closes it.</div>
 
     ${t.clockFrom ? `<div class="builder-hint">Old setting: this task's time starts from ${escapeHtml(t.clockFrom.date)} of an earlier task. <button class="btn btn-small" onclick="setClockFrom('date', '')">Remove</button> Use "Next task starts from this" on the date field of the earlier task instead.</div>` : ''}
     <div class="builder-hint">Time is counted from when a case arrives. To count from a date set on this task (for example the visit time), use the &#9201; option on that date field below. It applies to the next task.</div>
@@ -2485,6 +3150,15 @@ function renderScheduleEditor(t) {
       </div>
       <div class="builder-hint" style="margin:0;">${escapeHtml(scheduleSummary(sch))}. On each day it shows up as a pending item for the owners; closing the task clears it. Not closed by the due time counts as late.</div>
     </div>`;
+}
+
+function setAutoMove(part, value) {
+  if (builderIndex < 0) return;
+  const t = builderTasks[builderIndex];
+  const a = t.autoMove || { days: 0, hours: 0 };
+  a[part] = Math.max(0, Number(value) || 0);
+  t.autoMove = (a.days + a.hours) > 0 ? a : null;
+  markBuilderDirty();
 }
 
 function setSla(part, value) {
@@ -3200,6 +3874,7 @@ function renderNotifPanel() {
     }
   }
   const pushOn = pushSupported() && Notification.permission === 'granted' && !!localStorage.getItem(PUSH_TOKEN_KEY);
+  html += `<div class="notif-push"><span>&#128274; PIN lock: <b>${pinSaved() ? 'On' : 'Off'}</b></span><button class="btn btn-small" onclick="openPinSetup()">${pinSaved() ? 'Change' : 'Set a PIN'}</button></div>`;
   html += `<div class="notif-push"><span>&#128241; Phone notifications: <b>${pushOn ? 'On' : 'Off'}</b></span>${pushOn ? '<button class="btn btn-small" onclick="sendPushTest()">Send me a test</button>' : '<button class="btn btn-small btn-primary" onclick="pushFromPanel()">Turn on</button>'}</div>`;
   panel.innerHTML = html;
 }
@@ -3326,7 +4001,7 @@ function showCaseInfo(p) {
     if (p.important) rows.push(['', '&#9733; Marked important']);
     if (p.assignedTo) rows.push(['For', escapeHtml(p.assignedTo)]);
     (p.info || []).forEach(x => rows.push([escapeHtml(x[0]), escapeHtml(x[1])]));
-    (p.hover || []).forEach(x => { if (x[1]) rows.push([escapeHtml(x[0]), escapeHtml(x[1])]); });
+    (p.hover || []).forEach(x => { if (x[1]) rows.push([escapeHtml(hoverLabel(x[0])), escapeHtml(x[1])]); });
     if (p.inputs) rows.push(['Inputs', escapeHtml(p.inputs)]);
   }
   if (!p) { box.classList.add('hidden'); box.innerHTML = ''; return; }
@@ -3798,11 +4473,22 @@ function renderChainKey(c) {
       'Only Jawad can start this chain. Leave the number empty on the first task and the next number is given automatically.'}</div>
     ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}
     <div class="hover-pick"><div class="chain-col-note" style="margin:0 0 6px;">Hover box shows <span class="report-meta">(tick as many as you like; none ticked shows the normal Salesman &amp; Branch box)</span></div>
-    <div class="owner-grid" style="margin:0;">${hoverColumnChoices(c).map(col => { const on = (k.hover || []).indexOf(col) !== -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(col)}</label>`; }).join('')}</div></div>`;
+    <div class="owner-grid" style="margin:0;">${hoverColumnChoices(c).map(col => { const on = (k.hover || []).indexOf(col) !== -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(hoverLabel(col))}</label>`; }).join('')}</div></div>`;
+}
+
+const HOVER_NAMES = { CustomerName: 'Customer name', CustomerMobile: 'Mobile', Comment: 'Comment', Remarks: 'Remarks', CorporatePartner: 'Corporate partner', Inputs: 'Inputs' };
+
+function hoverLabel(col) {
+  if (HOVER_NAMES[col]) return HOVER_NAMES[col];
+  for (let i = 0; i < TASKS.length; i++) {
+    const f = (TASKS[i].fields || []).filter(x => x.col === col)[0];
+    if (f && f.label) return f.label;
+  }
+  return col;
 }
 
 function hoverColumnChoices(c) {
-  const out = ['CustomerName', 'CustomerMobile', 'Comment', 'Remarks'];
+  const out = ['CustomerName', 'CustomerMobile', 'Inputs', 'CorporatePartner', 'Comment', 'Remarks'];
   const inChain = c && c.tasks && c.tasks.length ? c.tasks : TASKS.map(t => t.name);
   TASKS.filter(t => inChain.indexOf(t.name) !== -1).forEach(t => (t.fields || []).forEach(f => { if (f.col && f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && out.indexOf(f.col) === -1) out.push(f.col); }));
   ((c && c.key && c.key.hover) || []).forEach(h => { if (out.indexOf(h) === -1) out.push(h); });
@@ -4074,7 +4760,20 @@ function buildSearchResults(scope, q) {
     });
   });
 
-  return results.slice(0, SEARCH_LIMIT);
+  const own = names.length ? names : [];
+  (pendingItems || []).forEach(p => {
+    const hay = [p.refNo, p.caseNo, p.customerName, p.customerMobile].map(x => String(x || '').toLowerCase());
+    if (!hay.some(x => x && x.includes(needle))) return;
+    const staff = (p.assignedTo && own.indexOf(p.assignedTo) !== -1) ? p.assignedTo : (own.filter(n => taskListFor(n).indexOf(p.taskName) !== -1)[0] || '');
+    if (!staff) return;
+    const k = 'Case|' + p.id;
+    if (seen[k]) return;
+    seen[k] = true;
+    results.push({ kind: 'Case', label: keyLabel(p), sub: 'Waiting at ' + p.taskName, staffName: staff, taskName: p.taskName, phaseName: null, pendingId: p.id });
+  });
+  const out = results.slice(0, SEARCH_LIMIT);
+  if (needle.length >= 2) out.push({ kind: 'Search', label: 'Search everywhere for "' + q.trim() + '"', sub: 'Full trail and cheque', staffName: '', taskName: '', phaseName: null, us: q.trim() });
+  return out;
 }
 
 function runSearch(scope) {
@@ -4094,6 +4793,7 @@ function runSearch(scope) {
 
   box.innerHTML = results.map((r, i) => `
     <div class="search-item${i === 0 ? ' active' : ''}"
+         data-us="${escapeHtml(r.us || '')}" data-pid="${escapeHtml(r.pendingId || '')}"
          data-staff="${escapeHtml(r.staffName)}"
          data-task="${escapeHtml(r.taskName || '')}"
          data-phase="${escapeHtml(r.phaseName || '')}">
@@ -4115,6 +4815,15 @@ function clearSearchBoxes() {
 }
 
 function applySearchItem(el) {
+  const us = el.getAttribute('data-us');
+  if (us) { clearSearchBoxes(); openUniSearch(us); return; }
+  const pid = el.getAttribute('data-pid');
+  if (pid) {
+    const p = (pendingItems || []).filter(x => x.id === pid)[0];
+    clearSearchBoxes();
+    if (p) openPendingItem(p.taskName, p.refNo, p.caseNo, p.customerName, p.customerMobile);
+    return;
+  }
   const staffName = el.getAttribute('data-staff');
   const taskName = el.getAttribute('data-task');
   const phaseName = el.getAttribute('data-phase');
@@ -4395,7 +5104,7 @@ function pendingTip(p) {
   if (p.assignedTo) extra.push('For ' + p.assignedTo);
   (p.info || []).forEach(x => extra.push(x[0] + ': ' + x[1]));
   if (p.hover && p.hover.length) {
-    return extra.concat(p.hover.map(h => h[0] + ': ' + (h[1] || '-')), ['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
+    return extra.concat(p.hover.map(h => hoverLabel(h[0]) + ': ' + (h[1] || '-')), ['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
   }
   if (projOfTask(p.taskName) !== DEFAULT_PROJECT) {
     return extra.concat(['Days: ' + (p.caseDays === null || p.caseDays === undefined ? '-' : p.caseDays)]).join('\n');
@@ -4489,9 +5198,21 @@ function renderFormInterface() {
     loadAssign();
     return;
   }
+  if (t.panel === "reminders") {
+    document.getElementById('form-reminders').classList.remove('hidden');
+    renderRemEditor();
+    if (remData) renderReminders();
+    loadReminders();
+    return;
+  }
   if (t.panel === "myassigned") {
     document.getElementById('form-myassigned').classList.remove('hidden');
     loadMyAssigned();
+    return;
+  }
+  if (t.panel === "devices") {
+    document.getElementById('form-devices').classList.remove('hidden');
+    loadDevicesAdmin();
     return;
   }
   if (t.panel === "push") {
@@ -4507,7 +5228,6 @@ function renderFormInterface() {
   if (t.panel === "cheques") {
     document.getElementById('form-cheques').classList.remove('hidden');
     renderChequeAdmin();
-    loadCheques(true);
     return;
   }
 
@@ -4796,6 +5516,126 @@ async function saveDynamicEntry(type) {
   }
 }
 
+let pasteRows = [];
+let pasteMap = [];
+let pasteHasHead = true;
+
+function openPaste() {
+  const t = taskByName(currentTask);
+  if (!t || t.panel) return;
+  document.getElementById('paste-title').innerText = 'Paste from Excel · ' + t.name;
+  document.getElementById('paste-text').value = '';
+  pasteRows = []; pasteMap = [];
+  document.getElementById('paste-body').innerHTML = '<div class="report-meta">In Excel, select the rows (with the title row on top), press Ctrl+C, then click in the box above and press Ctrl+V.</div>';
+  document.getElementById('paste-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('paste-text').focus(), 50);
+}
+
+function closePaste() { document.getElementById('paste-overlay').classList.add('hidden'); }
+
+function pasteFields() {
+  const t = taskByName(currentTask);
+  return t ? t.fields.filter(f => f.type !== 'divider' && f.key !== 'assignNext') : [];
+}
+
+function normKey(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+function parsePaste() {
+  const raw = document.getElementById('paste-text').value.replace(/\r/g, '');
+  const lines = raw.split('\n').filter(l => l.trim() !== '');
+  const rows = lines.map(l => l.split('\t').map(c => c.trim()));
+  if (!rows.length) { document.getElementById('paste-body').innerHTML = ''; return; }
+  const fields = pasteFields();
+  const head = rows[0];
+  const guess = head.map(h => {
+    const k = normKey(h);
+    const f = fields.filter(x => normKey(x.label) === k || normKey(x.col) === k || (x.key === 'ref' && /^ref/.test(k)) || (x.key === 'case' && /^case/.test(k)))[0];
+    return f ? f.id : '';
+  });
+  pasteHasHead = guess.some(Boolean);
+  pasteMap = pasteHasHead ? guess : head.map((h, i) => fields[i] ? fields[i].id : '');
+  pasteRows = pasteHasHead ? rows.slice(1) : rows;
+  renderPaste();
+}
+
+function pasteDate(v) {
+  v = String(v || '').trim();
+  if (!v) return '';
+  let m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return formatDateDMY(m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0'));
+  m = v.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+  if (m) { const y = m[3].length === 2 ? '20' + m[3] : m[3]; return formatDateDMY(y + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0')); }
+  return v;
+}
+
+function pastePayload(row) {
+  const fields = pasteFields();
+  const values = { comment: '', refNo: '', caseNo: '', scheduledDate: '', scheduledTime: '', rating: '', approvalStatus: '', remarks: '' };
+  const extra = {};
+  pasteMap.forEach((fid, i) => {
+    const f = fields.filter(x => x.id === fid)[0];
+    if (!f) return;
+    let v = String(row[i] === undefined ? '' : row[i]).trim();
+    if (!v) return;
+    if (f.type === 'date') v = pasteDate(v);
+    if (f.builtin && f.key) {
+      if (f.key === 'ref') values.refNo = v;
+      else if (f.key === 'case') values.caseNo = v;
+      else values[f.key] = v;
+    } else extra[f.col] = v;
+  });
+  return Object.assign({}, values, { extra: extra });
+}
+
+function pasteProblem(row) {
+  const fields = pasteFields();
+  const p = pastePayload(row);
+  const miss = fields.filter(f => f.required && !(f.builtin && f.key ? (f.key === 'ref' ? p.refNo : f.key === 'case' ? p.caseNo : p[f.key]) : p.extra[f.col]));
+  if (miss.length) return 'Missing ' + miss.map(f => f.label).join(', ');
+  const hasRef = fields.some(f => f.key === 'ref'), hasCase = fields.some(f => f.key === 'case');
+  if ((hasRef || hasCase) && !p.refNo && !p.caseNo) return 'No Ref or Case No';
+  return '';
+}
+
+function renderPaste(results) {
+  const fields = pasteFields();
+  const box = document.getElementById('paste-body');
+  if (!pasteRows.length) { box.innerHTML = '<div class="report-meta">No rows found. Copy at least one row from Excel.</div>'; return; }
+  const cols = Math.max.apply(null, pasteRows.map(r => r.length).concat([pasteMap.length]));
+  while (pasteMap.length < cols) pasteMap.push('');
+  const bad = pasteRows.map(pasteProblem);
+  const okN = bad.filter(x => !x).length;
+  box.innerHTML = `<div class="report-meta" style="margin-bottom:8px;">${pasteRows.length} row${pasteRows.length === 1 ? '' : 's'}${pasteHasHead ? ' (title row matched)' : ''}. Check which field each column goes into.</div>
+    <div class="report-wrap" style="max-height:52vh;"><table class="report-table"><thead><tr><th>#</th>${pasteMap.map((fid, i) => `<th><select onchange="pasteMap[${i}] = this.value; renderPaste()" style="width:auto;margin:0;font-size:0.75rem"><option value="">Skip</option>${fields.map(f => `<option value="${escapeHtml(f.id)}"${f.id === fid ? ' selected' : ''}>${escapeHtml(f.label)}</option>`).join('')}</select></th>`).join('')}<th>Check</th></tr></thead><tbody>${
+      pasteRows.map((r, k) => { const res = results && results[k]; return `<tr class="${res ? (res.ok ? '' : 'overdue') : bad[k] ? 'overdue' : ''}"><td>${k + 1}</td>${pasteMap.map((fid, i) => `<td class="left">${escapeHtml(r[i] || '')}</td>`).join('')}<td class="left">${res ? (res.ok ? '<span class="status-pill status-done">Saved</span>' + (res.next ? ' <small class="report-meta">→ ' + escapeHtml(res.next) + '</small>' : '') : '<span class="status-pill status-late">' + escapeHtml(res.error || 'Failed') + '</span>') : bad[k] ? '<span class="band-late">' + escapeHtml(bad[k]) + '</span>' : '<span class="band-on">Ready</span>'}</td></tr>`; }).join('')}</tbody></table></div>
+    <div class="builder-actions" style="margin-top:12px;">${results ? '<button class="btn" onclick="closePaste()">Close</button>' : `<button class="btn btn-primary" id="btn-paste-save" onclick="savePaste()"${okN ? '' : ' disabled'}>Close task for ${okN} row${okN === 1 ? '' : 's'}</button>${okN < pasteRows.length ? '<span class="report-meta">Rows in red are skipped.</span>' : ''}`}</div>`;
+}
+
+async function savePaste() {
+  const good = [];
+  pasteRows.forEach((r, k) => { if (!pasteProblem(r)) good.push(k); });
+  if (!good.length) return;
+  const btn = document.getElementById('btn-paste-save');
+  btn.disabled = true;
+  const results = {};
+  try {
+    for (let s = 0; s < good.length; s += 25) {
+      const chunk = good.slice(s, s + 25);
+      btn.innerText = 'Saving ' + Math.min(s + 25, good.length) + ' of ' + good.length + '...';
+      const r = await apiCall('finalAddBulk', { targetStaffName: profile.name, taskName: currentTask, rows: chunk.map(k => pastePayload(pasteRows[k])) });
+      if (!r.ok) { toast(r.error || 'Could not save', true); break; }
+      r.results.forEach(x => { results[chunk[x.i]] = x; });
+      if (r.left) { toast('Saved ' + r.done + '. The rest took too long; paste them again.', true); break; }
+    }
+  } catch (e) { toast('Network error while saving.', true); }
+  pasteRows.forEach((r, k) => { if (!results[k]) results[k] = pasteProblem(r) ? { ok: false, error: 'Skipped: ' + pasteProblem(r) } : null; });
+  renderPaste(results);
+  const n = Object.keys(results).filter(k => results[k] && results[k].ok).length;
+  toast(n + ' saved.');
+  loadPending();
+  if (recentOpen) loadRecent();
+}
+
 let recentScope = 'task';
 let recentWho = 'all';
 
@@ -5062,12 +5902,15 @@ function showReportTab(tab) {
   document.getElementById('rep-tab-timing').classList.toggle('hidden', limited);
   document.getElementById('rep-tab-exits').classList.toggle('hidden', limited);
   reportTab = tab;
-  ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail'].forEach(k => {
+  ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data'].forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail');
   if (tab === 'trail') { document.getElementById('report-meta').innerText = ''; return; }
+  if (tab === 'data') fillDataTasks();
   if (tab !== 'exits' && !reportsApplied) { showReportWait(tab); return; }
+  if (tab === 'data') { if (dataReport && dataReport.task === valOf('data-task')) renderDataReport(); else loadDataReport(); return; }
   if (tab === 'simple') {
     if (reportData) renderSimpleReport(); else loadReport();
   } else if (tab === 'timing' || tab === 'employee') {
@@ -5088,15 +5931,101 @@ function showReportWait(tab) {
   if (tab === 'timing') document.getElementById('timing-table').innerHTML = msg;
   if (tab === 'employee') { document.getElementById('employee-grid').innerHTML = msg; document.getElementById('employee-cards').innerHTML = ''; }
   if (tab === 'cheque') { document.getElementById('cheque-summary').innerHTML = ''; document.getElementById('cheque-report-table').innerHTML = msg; }
+  if (tab === 'data') { document.getElementById('data-summary').innerHTML = ''; document.getElementById('data-table').innerHTML = msg; }
 }
 
 function refreshReports() {
   if (reportTab === 'trail') return loadTrail();
   if (!reportsApplied && reportTab !== 'exits') return applyReportDates();
+  if (reportTab === 'data') return loadDataReport();
   if (reportTab === 'simple') loadReport();
   else if (reportTab === 'timing' || reportTab === 'employee') loadTiming();
   else if (reportTab === 'exits') loadExits();
   else loadCheques(true);
+}
+
+
+let dataReport = null;
+
+function fillDataTasks() {
+  const sel = document.getElementById('data-task');
+  if (sel.options.length) return;
+  const list = TASKS.filter(t => t.active && !(t.schedule && t.schedule.on));
+  const byProj = {};
+  list.forEach(t => { const p = projectName(t.project || DEFAULT_PROJECT); (byProj[p] = byProj[p] || []).push(t); });
+  sel.innerHTML = Object.keys(byProj).map(p => `<optgroup label="${escapeHtml(p)}">${byProj[p].map(t => `<option value="${escapeHtml(t.name)}">${escapeHtml(t.name)}</option>`).join('')}</optgroup>`).join('');
+  const costing = list.filter(t => /cost/i.test(t.name))[0];
+  if (costing) sel.value = costing.name;
+  fillDataGroups();
+}
+
+function dataFields() {
+  const t = taskByName(valOf('data-task'));
+  return t ? t.fields.filter(f => f.type !== 'divider' && f.col && f.key !== 'assignNext') : [];
+}
+
+function fillDataGroups() {
+  const sel = document.getElementById('data-group');
+  const fields = dataFields().filter(f => f.type !== 'number' && f.key !== 'case' && f.type !== 'date' && f.type !== 'time');
+  const supplier = fields.filter(f => /supplier/i.test(f.label))[0];
+  sel.innerHTML = '<option value="">No grouping</option><option value="__by">Saved by</option>' + fields.map(f => `<option value="${escapeHtml(f.col)}">${escapeHtml(f.label)}</option>`).join('');
+  if (supplier) sel.value = supplier.col;
+}
+
+function dataTaskChanged() {
+  fillDataGroups();
+  if (reportsApplied) loadDataReport();
+}
+
+async function loadDataReport() {
+  const task = valOf('data-task');
+  const table = document.getElementById('data-table');
+  if (!task) return;
+  table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  try {
+    const r = await apiCall('finalList', { task: task, from: reportFromSaved, to: reportToApplied, report: true });
+    if (!r.ok) { table.innerHTML = `<tr><td>${escapeHtml(r.error || 'Could not load')}</td></tr>`; return; }
+    dataReport = { task: task, items: r.items || [], total: r.total };
+    renderDataReport();
+  } catch (e) { table.innerHTML = '<tr><td>Network error</td></tr>'; }
+}
+
+function dataVal(x, f) {
+  if (f.key === 'ref') return x.refNo;
+  if (f.key === 'case') return x.caseNo;
+  return (x.vals || {})[f.col] || '';
+}
+
+function dataNum(v) {
+  const n = Number(String(v || '').replace(/[, ]/g, ''));
+  return isNaN(n) ? 0 : n;
+}
+
+function renderDataReport() {
+  if (!dataReport) return;
+  const fields = dataFields();
+  const nums = fields.filter(f => f.type === 'number' && f.key !== 'ref' && f.key !== 'case');
+  const g = valOf('data-group');
+  const q = valOf('data-q').toLowerCase();
+  const items = dataReport.items.filter(x => !q || [x.refNo, x.caseNo, x.name, x.savedBy].concat(Object.values(x.vals || {})).join(' ').toLowerCase().indexOf(q) !== -1);
+  const groups = {};
+  items.forEach(x => { const k = g ? (g === '__by' ? x.savedBy : (x.vals || {})[g]) || '(not set)' : ''; (groups[k] = groups[k] || []).push(x); });
+  const keys = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length || a.localeCompare(b));
+  const fmtN = n => Math.round(n * 100) / 100 === Math.round(n) ? Math.round(n).toLocaleString('en-US') : (Math.round(n * 100) / 100).toLocaleString('en-US');
+  const sums = list => nums.map(f => list.reduce((a, x) => a + dataNum(dataVal(x, f)), 0));
+  const showFields = fields.filter(f => f.col !== g);
+  const head = `<thead><tr><th>Saved</th><th>By</th>${showFields.map(f => `<th>${escapeHtml(f.label)}</th>`).join('')}</tr></thead>`;
+  const rowHtml = x => `<tr><td class="nowrap">${escapeHtml(x.savedAt)}</td><td>${escapeHtml(x.savedBy)}</td>${showFields.map(f => `<td class="${f.type === 'number' ? '' : 'left'}">${escapeHtml(dataVal(x, f))}</td>`).join('')}</tr>`;
+  const totalCells = list => { const s = sums(list); return showFields.map(f => { const i = nums.indexOf(f); return `<td>${i === -1 ? '' : '<b>' + fmtN(s[i]) + '</b>'}</td>`; }).join(''); };
+  document.getElementById('data-table').innerHTML = items.length ? head + `<tbody>${keys.map(k => (g ? `<tr class="section-row"><td class="left" colspan="2"><b>${escapeHtml(k)}</b> · ${groups[k].length}</td>${totalCells(groups[k])}</tr>` : '') + groups[k].map(rowHtml).join('')).join('')}</tbody><tfoot><tr class="section-row"><td class="left" colspan="2">Total · ${items.length}</td>${totalCells(items)}</tr></tfoot>` : '<tr><td class="report-meta">Nothing saved for this task in these dates.</td></tr>';
+  const s = sums(items);
+  document.getElementById('data-summary').innerHTML = g && keys.length ? `<div class="summary-line"><b>${items.length}</b> entries in <b>${keys.length}</b> group${keys.length === 1 ? '' : 's'}${nums.map((f, i) => ' · ' + escapeHtml(f.label) + ' <b>' + fmtN(s[i]) + '</b>').join('')}</div>` : '';
+  document.getElementById('report-meta').innerText = dataReport.task + ' · ' + items.length + ' entries';
+}
+
+function copyDataPicture() {
+  if (!dataReport) return toast('Build the report first.', true);
+  copyPicture(() => nodesToBlob([document.getElementById('data-summary'), document.getElementById('data-table')], dataReport.task));
 }
 
 let timingData = null;
@@ -5188,13 +6117,14 @@ function renderEmployees() {
   const sum = k => people.reduce((n, P) => n + (Number(P[k]) || 0), 0);
   const bsum = b => people.reduce((n, P) => n + empBandCount(P, b), 0);
   const cell = (v, cls) => `<td class="${cls || ''}">${v ? v : ''}</td>`;
-  document.getElementById('employee-grid').innerHTML = people.length ? `<thead><tr><th class="left">Person</th><th>Points</th><th>Scored</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>On time</th><th>Done late</th><th>Open and late</th><th>Left undone (L)</th></tr></thead><tbody>${
+  document.getElementById('employee-grid').innerHTML = people.length ? `<thead><tr><th class="left">Person</th><th>Points</th><th title="If every task was done before time">Best possible</th><th title="If every task was done on time">If all on time</th><th>Scored</th><th>Before</th><th>On</th><th>After</th><th>After that</th><th>On time</th><th>Done late</th><th>Open and late</th><th>Left undone (L)</th></tr></thead><tbody>${
     people.map(P => `<tr class="emp-row${person === P.name ? ' row-selected' : ''}" onclick="pickEmpPerson('${escapeHtml(P.name).replace(/'/g, "\\'")}')">
       <td class="left"><b>${escapeHtml(P.name)}</b></td>
       <td><b class="${(P.points || 0) < 0 ? 'band-late' : 'band-on'}">${P.scoredCount ? (P.points > 0 ? '+' : '') + P.points : ''}</b></td>
+      ${cell(P.scoredCount ? P.bestPts : '', 'band-before')}${cell(P.scoredCount ? P.onPts : '', 'band-on')}
       ${cell(P.scoredCount)}${cell(empBandCount(P, 'before'), 'band-before')}${cell(empBandCount(P, 'on'), 'band-on')}${cell(empBandCount(P, 'after'), 'band-after')}${cell(empBandCount(P, 'late'), 'band-late')}
       ${cell(P.onTime)}${cell(P.late, 'band-late')}${cell(P.openLate, 'band-late')}${cell(P.leave || 0, 'band-late')}
-    </tr>`).join('')}</tbody><tfoot><tr class="section-row"><td class="left">Everyone</td><td>${sum('points') > 0 ? '+' : ''}${sum('points')}</td><td>${sum('scoredCount')}</td><td>${bsum('before')}</td><td>${bsum('on')}</td><td>${bsum('after')}</td><td>${bsum('late')}</td><td>${sum('onTime')}</td><td>${sum('late')}</td><td>${sum('openLate')}</td><td>${sum('leave')}</td></tr></tfoot>` : '<tr><td class="report-meta">Nothing timed yet.</td></tr>';
+    </tr>`).join('')}</tbody><tfoot><tr class="section-row"><td class="left">Everyone</td><td>${sum('points') > 0 ? '+' : ''}${sum('points')}</td><td>${sum('bestPts')}</td><td>${sum('onPts')}</td><td>${sum('scoredCount')}</td><td>${bsum('before')}</td><td>${bsum('on')}</td><td>${bsum('after')}</td><td>${bsum('late')}</td><td>${sum('onTime')}</td><td>${sum('late')}</td><td>${sum('openLate')}</td><td>${sum('leave')}</td></tr></tfoot>` : '<tr><td class="report-meta">Nothing timed yet.</td></tr>';
   const shown = people.filter(P => !person || P.name === person);
   const BANDS = { before: 'Before', on: 'On', after: 'After', late: 'After that', scored: 'Scored', leave: 'Left undone' };
   document.getElementById('employee-cards').innerHTML = shown.map(P => {
@@ -5202,7 +6132,7 @@ function renderEmployees() {
     const listHtml = !its.list.length ? `<div class="report-meta" style="margin-top:6px;">${band ? 'Nothing in ' + escapeHtml(BANDS[band] || band) + ' for these dates.' : 'Nothing late. Well done.'}</div>` :
       its.kind === 'scored'
         ? `<table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Closed</th><th>Band</th><th>Points</th></tr></thead><tbody>${
-            its.list.map((x, k) => `<tr class="${k >= 12 ? 'emp-more' : ''}"><td class="left">${escapeHtml(x.task)}</td><td>${x.recurring ? escapeHtml(formatDateDMY(x.occurrence)) : escapeHtml(chequeKey(x))}</td><td>${escapeHtml(x.done || '')}</td><td class="band-${x.band}">${escapeHtml(BAND_NAME[x.band] || x.band)}</td><td><b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b></td></tr>`).join('')}</tbody></table>`
+            its.list.map((x, k) => `<tr class="${k >= 12 ? 'emp-more' : ''}"><td class="left">${escapeHtml(x.task)}</td><td>${x.recurring ? escapeHtml(formatDateDMY(x.occurrence)) : escapeHtml(chequeKey(x))}</td><td>${escapeHtml(x.done || '')}</td><td class="band-${x.band}">${escapeHtml(BAND_NAME[x.band] || x.band)}</td><td><b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>${x.lateDays > 1 ? ' <small class="report-meta">(' + x.lateDays + ' days)</small>' : ''}</td></tr>`).join('')}</tbody></table>`
         : `<table class="report-table emp-table"><thead><tr><th>Task</th><th>Ref / Case</th><th>Late by</th><th>Status</th></tr></thead><tbody>${
             its.list.map((it, k) => `<tr class="overdue${k >= 12 ? ' emp-more' : ''}"><td class="left">${escapeHtml(it.task)}</td>
               <td style="color:var(--danger); font-weight:700;">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
@@ -5212,6 +6142,7 @@ function renderEmployees() {
         <div><div class="emp-name">${escapeHtml(P.name)}</div><div class="report-meta">${P.scoredCount ? P.scoredCount + ' scored' : 'No points yet'}</div></div>
         <div class="emp-points${(P.points || 0) < 0 ? ' neg' : ''}">${P.scoredCount ? (P.points > 0 ? '+' : '') + P.points : '–'}<small>points</small></div>
       </div>
+      ${P.scoredCount ? `<div class="emp-compare"><div><b class="band-before">${P.bestPts}</b><span>If all before time</span></div><div><b class="band-on">${P.onPts}</b><span>If all on time</span></div><div><b class="${(P.points || 0) < 0 ? 'band-late' : 'band-on'}">${P.points}</b><span>What ${escapeHtml(P.name)} got</span></div><div><b>${P.bestPts ? Math.round(100 * P.points / P.bestPts) : 0}%</b><span>of best</span></div></div>` : ''}
       <div class="emp-stats">
         <div class="emp-stat ok"><b>${P.onTime}</b><span>On time</span></div>
         <div class="emp-stat bad"><b>${P.late}</b><span>Done late</span></div>
@@ -5325,7 +6256,7 @@ async function applyReportDates() {
   if (from && to && to < from) return toast('To date is before From date', true);
   reportFromSaved = from || firstOfMonthYmd();
   reportToApplied = to;
-  reportData = null; timingData = null; chequesLoaded = false;
+  reportData = null; timingData = null; chequesLoaded = false; dataReport = null;
   reportsApplied = true;
   if (reportTab === 'trail') return loadTrail();
   refreshReports();
@@ -5428,7 +6359,7 @@ function renderSimpleReport() {
 }
 
 function reportRowTip(r) {
-  if (r.hover && r.hover.length) return r.hover.map(h => h[0] + ': ' + (h[1] || '-')).concat(['Days: ' + (r.days === '' ? '-' : r.days)]).join('\n');
+  if (r.hover && r.hover.length) return r.hover.map(h => hoverLabel(h[0]) + ': ' + (h[1] || '-')).concat(['Days: ' + (r.days === '' ? '-' : r.days)]).join('\n');
   if (reportData && reportData.project && reportData.project !== DEFAULT_PROJECT) return 'Days: ' + (r.days === '' ? '-' : r.days);
   return caseTip(r.formSB, r.days, r.inputs, r.corporate);
 }
@@ -5617,9 +6548,50 @@ function dailyItemHtml(it, person) {
     <span class="daily-kind k-${it.kind.toLowerCase()}">${escapeHtml(it.kind === 'Partial' ? 'Part done' : it.kind)}</span>
     <div class="daily-text">${it.important ? '<span class="imp-tag">&#9733; Important</span> ' : ''}<b>${escapeHtml(it.task)}</b>${it.count ? ` <span class="daily-count">${it.count}</span>` : ''}
       ${it.due ? `<div class="daily-due">${escapeHtml(it.due)}</div>` : ''}
-      ${it.phase || (it.projectName && it.projectName !== 'Mahana') ? `<div class="daily-proj">${escapeHtml([it.projectName && it.projectName !== 'Mahana' ? it.projectName : '', it.phase ? 'Phase: ' + it.phase : ''].filter(Boolean).join(' · '))}</div>` : ''}
+      ${it.phase || it.projectName ? `<div class="daily-proj">${escapeHtml([it.projectName || 'Mahana', it.phase].filter(Boolean).join(' › '))}</div>` : ''}
       ${it.cases && it.cases.length ? `<div class="daily-cases">${it.cases.map(escapeHtml).join(', ')}${it.count > it.cases.length ? ' and ' + (it.count - it.cases.length) + ' more' : ''}</div>` : ''}
     </div></a>`;
+}
+
+function dailyYesterday() {
+  const d = new Date();
+  document.getElementById('daily-date').value = ymdLocal(new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1));
+  document.getElementById('daily-mode').value = 'perf';
+  loadDaily(!valOf('daily-person'));
+}
+
+function perfRowHtml(x) {
+  return `<tr class="${x.late ? 'overdue' : ''}"><td class="left"><b>${escapeHtml(x.task)}</b>${x.key || x.name ? '<div class="report-meta">' + escapeHtml([x.key, x.name].filter(Boolean).join(' · ')) + '</div>' : ''}</td>
+    <td>${escapeHtml(x.taken || '')}${x.allowed && x.taken ? ' / ' + escapeHtml(x.allowed) : ''}</td>
+    <td>${x.late ? '<span class="status-pill status-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-done">On time</span>'}</td>
+    <td>${x.band ? `<b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>${x.lateDays > 1 ? ' <small class="report-meta">(' + x.lateDays + ' days)</small>' : ''}` : ''}</td></tr>`;
+}
+
+async function loadDailyPerf(everyone) {
+  const body = document.getElementById('daily-body');
+  const sel = document.getElementById('daily-person');
+  const person = everyone ? '' : sel.value;
+  body.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('dailyPerf', { date: valOf('daily-date'), person: person });
+    if (!r.ok) { body.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    dailyData = r;
+    const dayText = new Date(r.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    body.innerHTML = (r.people || []).map((p, pi) => `
+      <div class="daily-card" id="daily-card-${pi}">
+        <div class="daily-card-head">
+          <div><div class="daily-name">${escapeHtml(p.name)} · performance</div><div class="daily-date">${escapeHtml(dayText)}</div></div>
+          <span class="daily-brand">Taskando</span>
+        </div>
+        <div class="emp-compare"><div><b>${p.done.length}</b><span>Done</span></div><div><b class="band-on">${p.onTime}</b><span>On time</span></div><div><b class="band-late">${p.late}</b><span>Late</span></div><div><b class="${p.points < 0 ? 'band-late' : 'band-on'}">${p.points > 0 ? '+' : ''}${p.points}</b><span>Points (best ${p.bestPts}, on time ${p.onPts})</span></div></div>
+        ${p.done.length ? `<table class="report-table emp-table"><thead><tr><th>Task</th><th>Took / allowed</th><th>Status</th><th>Points</th></tr></thead><tbody>${p.done.map(perfRowHtml).join('')}</tbody></table>` : '<div class="report-meta">Nothing closed on this day.</div>'}
+        ${p.missed.length ? `<div class="daily-helper"><div class="daily-col-head">Left undone <span>${p.missed.length}</span></div>${p.missed.map(m => `<div class="daily-item"><b>${escapeHtml(m.task)}</b> <span class="report-meta">${escapeHtml(m.why)}</span></div>`).join('')}</div>` : ''}
+        <div class="daily-actions">
+          <button class="btn btn-small btn-primary" onclick="dailyPicture(${pi}, 'copy')">Copy picture</button>
+          <button class="btn btn-small" onclick="dailyPicture(${pi}, 'save')">Save picture</button>
+        </div>
+      </div>`).join('') || '<div class="report-meta">Nobody closed anything on this day.</div>';
+  } catch (e) { body.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
 async function loadDaily(everyone) {
@@ -5628,6 +6600,7 @@ async function loadDaily(everyone) {
   if (everyone) sel.value = '';
   const person = sel.value;
   if (!person && !everyone) { body.innerHTML = '<div class="report-meta">Pick a person, or press Show everyone.</div>'; return; }
+  if (valOf('daily-mode') === 'perf') return loadDailyPerf(everyone);
   body.innerHTML = '<div class="report-meta">Loading...</div>';
   try {
     const r = await apiCall('dailyTasks', { date: valOf('daily-date'), person: person });
@@ -5713,13 +6686,38 @@ document.addEventListener('keydown', function (e) {
   document.body.classList.remove('fs-mode');
 });
 
+let chequeAdminLoaded = false;
+let chequeReturnModes = ["Trash (video)", "By branch cashier", "By salesman", "Self pick", "Posted"];
+let chequeAct = null;
+
+async function showChequesAdmin() {
+  const from = valOf('cqa-from'), to = valOf('cqa-to');
+  if (from && !goodDay(from)) return toast('From date is not complete', true);
+  if (to && !goodDay(to)) return toast('To date is not complete', true);
+  const table = document.getElementById('cheque-admin-table');
+  table.innerHTML = '<tr><td style="color:var(--text-dim); padding:14px;">Loading cheques...</td></tr>';
+  const f = valOf('cheque-filter');
+  try {
+    const result = await apiCall('chequeList', { from: from, to: to, keepOpen: f === 'open' || f === 'overdue' });
+    if (!result.ok) return toast(result.error || "Could not load cheques", true);
+    chequeItems = result.items || [];
+    chequeOverdueDays = result.overdueDays || 5;
+    if (result.returnModes) chequeReturnModes = result.returnModes;
+    chequeAdminLoaded = true;
+    chequesLoaded = false;
+    renderChequeAdmin();
+  } catch (e) { toast("Network error", true); }
+}
+
 async function loadCheques(render) {
   try {
     const result = await apiCall('chequeList');
     if (!result.ok) { toast(result.error || "Could not load cheques", true); return; }
     chequeItems = result.items || [];
     chequeOverdueDays = result.overdueDays || 5;
+    if (result.returnModes) chequeReturnModes = result.returnModes;
     chequesLoaded = true;
+    chequeAdminLoaded = false;
     if (render) {
       if (currentTask === 'Cheques') renderChequeAdmin();
       if (currentTask === 'Reports' && reportTab === 'cheque') renderChequeReport();
@@ -5730,7 +6728,8 @@ async function loadCheques(render) {
 }
 
 function chequeStatusPill(c) {
-  if (c.status === 'Received') return '<span class="status-pill status-done">Received</span>';
+  if (c.status === 'Returned') return '<span class="status-pill status-done" title="' + escapeHtml((c.returnedBy ? 'by ' + c.returnedBy + ' ' : '') + (c.returnedAt || '')) + '">Returned · ' + escapeHtml(c.returnMode || '') + '</span>';
+  if (c.status === 'Received') return '<span class="status-pill status-done">Received</span>' + (c.box ? ' <span class="box-tag" title="Envelope / box">' + escapeHtml(c.box) + '</span>' : '');
   if (c.overdue) return '<span class="status-pill status-late">Overdue</span>';
   return '<span class="status-pill status-open">With Salesman</span>';
 }
@@ -5748,7 +6747,7 @@ function chequeGroupTable(title, field) {
     const k = c[field] || '(not set)';
     if (!g[k]) g[k] = { claimed: 0, received: 0, open: 0, overdue: 0 };
     g[k].claimed++;
-    if (c.status === 'Received') g[k].received++; else g[k].open++;
+    if (c.status === 'With Salesman') g[k].open++; else g[k].received++;
     if (c.overdue) g[k].overdue++;
   });
   const keys = Object.keys(g).sort((a, b) => g[b].open - g[a].open || a.localeCompare(b));
@@ -5789,13 +6788,14 @@ function renderChequeReport() {
   const inRange = chequeFiltered();
   const total = inRange.length;
   const received = inRange.filter(c => c.status === 'Received').length;
+  const returnedN = inRange.filter(c => c.status === 'Returned').length;
   const open = total - received;
   const overdue = inRange.filter(c => c.overdue).length;
   const onDel = inRange.filter(c => c.onDelivery).length;
   meta.innerText = total + ' cheques claimed ' + (reportFromSaved ? 'from ' + formatDateDMY(reportFromSaved) : '') + (reportToApplied ? ' to ' + formatDateDMY(reportToApplied) : ' to today') + ' · red after ' + chequeOverdueDays + ' days';
 
   const bySalesman = {};
-  inRange.filter(c => c.status !== 'Received').forEach(c => {
+  inRange.filter(c => c.status === 'With Salesman').forEach(c => {
     const k = c.salesman || '(not set)';
     bySalesman[k] = (bySalesman[k] || 0) + 1;
   });
@@ -5805,12 +6805,12 @@ function renderChequeReport() {
   const groups = chequeGroupTable('By Salesman', 'salesman') + chequeGroupTable('By Branch', 'branch');
   chequeItems = keep;
 
-  sum.innerHTML = `<div class="summary-line"><b>${total}</b> claimed, <b>${received}</b> received, <b>${open}</b> outstanding${
+  sum.innerHTML = `<div class="summary-line"><b>${total}</b> claimed, <b>${received}</b> received${returnedN ? `, <b>${returnedN}</b> returned to customer` : ''}, <b>${open - returnedN}</b> outstanding${
     overdue ? `, <b style="color:var(--danger)">${overdue} overdue</b>` : ''}${onDel ? `, <b>${onDel}</b> on delivery` : ''}${withText ? ' — ' + escapeHtml(withText) : ''}</div>
     <div class="summary-grid">${groups}</div>`;
 
   const showReceived = document.getElementById('cheque-show-received').checked;
-  const rows = inRange.filter(c => showReceived || c.status !== 'Received')
+  const rows = inRange.filter(c => showReceived || c.status === 'With Salesman')
     .sort((a, b) => ((b.onDelivery ? 1 : 0) - (a.onDelivery ? 1 : 0)) || (b.overdue - a.overdue) || (b.days - a.days));
   table.innerHTML = `<thead><tr><th>On delivery</th><th>Ref / Case</th><th>Name</th><th>Branch</th><th>Salesman</th><th>Claimed</th><th>By</th><th>Due date</th><th>Received</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead><tbody>${
     rows.map(c => `<tr${c.overdue ? ' class="overdue"' : ''} data-tip="${escapeHtml('Salesman & Branch: ' + ([c.salesman, c.branch].filter(Boolean).join(' · ') || 'Not set in Adv & Chq') + '\nDays: ' + c.days)}">
@@ -5842,15 +6842,16 @@ function chequeSelect(id, col, value) {
 function renderChequeAdmin() {
   const table = document.getElementById('cheque-admin-table');
   if (!table) return;
-  if (!chequesLoaded) { table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Loading cheques...</td></tr>`; return; }
+  if (!chequeAdminLoaded && !chequesLoaded) { table.innerHTML = `<tr><td class="report-wait">Pick the claimed dates and what to show, then press <b>Show</b>. Leave the dates empty to see every cheque.</td></tr>`; return; }
   const filter = document.getElementById('cheque-filter').value;
   const q = (document.getElementById('cheque-search').value || '').trim().toLowerCase();
   const rows = chequeItems.filter(c => {
-    if (filter === 'open' && c.status === 'Received') return false;
+    if ((filter === 'open' || filter === 'overdue') && c.status !== 'With Salesman') return false;
     if (filter === 'received' && c.status !== 'Received') return false;
+    if (filter === 'returned' && c.status !== 'Returned') return false;
     if (filter === 'overdue' && !c.overdue) return false;
     if (!q) return true;
-    return [c.refNo, c.caseNo, c.customerName, c.salesman, c.branch].some(x => String(x || '').toLowerCase().includes(q));
+    return [c.refNo, c.caseNo, c.customerName, c.salesman, c.branch, c.box].some(x => String(x || '').toLowerCase().includes(q));
   }).sort((a, b) => (b.overdue - a.overdue) || (b.days - a.days));
 
   const dueCells = c => `<td class="nowrap">${escapeHtml(c.due || '')}</td><td>${c.onDelivery ? '<span class="tick-yes" title="Cheque on delivery">&#10003;</span>' : ''}</td>`;
@@ -5875,14 +6876,39 @@ function renderChequeAdmin() {
         <td>${escapeHtml(c.branch)}</td><td>${escapeHtml(c.salesman)}</td>
         <td>${escapeHtml(c.dateClaimed)}</td>${dueCells(c)}<td>${escapeHtml(c.dateReceived || '')}</td>
         <td>${c.days}</td><td>${chequeStatusPill(c)}</td><td class="left">${escapeHtml(c.notes)}</td>
-        <td style="white-space:nowrap;">
-          ${c.status === 'Received'
-            ? `<button class="btn btn-small" onclick="setChequeStatus('${id}','With Salesman')">Undo</button>`
-            : `<button class="btn btn-small btn-primary" onclick="setChequeStatus('${id}','Received')">Mark received</button>`}
-          <button class="btn btn-small" onclick="editCheque('${id}')">Edit</button>
-        </td></tr>`;
+        <td style="white-space:nowrap;">${chequeActions(c)}</td></tr>`;
     }).join('') || `<tr><td colspan="12" style="color:var(--text-dim)">Nothing here.</td></tr>`
   }</tbody>`;
+}
+
+function chequeActions(c) {
+  const id = escapeHtml(c.id);
+  if (chequeAct && chequeAct.id === c.id && chequeAct.kind === 'receive') return `<input type="text" id="ca-box" placeholder="Envelope / Box No" value="${escapeHtml(c.box || '')}" style="width:140px;margin:0" onkeydown="if(event.key==='Enter')chequeActSave()"> <button class="btn btn-small btn-primary" onclick="chequeActSave()">Save</button> <button class="btn btn-small" onclick="chequeActStart('')">Cancel</button>`;
+  if (chequeAct && chequeAct.id === c.id && chequeAct.kind === 'return') return `<select id="ca-mode" style="width:auto;margin:0"><option value="">How did it go back?</option>${chequeReturnModes.map(m => `<option>${escapeHtml(m)}</option>`).join('')}</select> <button class="btn btn-small btn-primary" onclick="chequeActSave()">Save</button> <button class="btn btn-small" onclick="chequeActStart('')">Cancel</button>`;
+  if (c.status === 'With Salesman') return `<button class="btn btn-small btn-primary" onclick="chequeActStart('${id}','receive')">Mark received</button> <button class="btn btn-small" onclick="chequeActStart('${id}','return')">Returned</button> <button class="btn btn-small" onclick="editCheque('${id}')">Edit</button>`;
+  return `${c.status === 'Received' ? `<button class="btn btn-small" onclick="chequeActStart('${id}','receive')">Box</button> <button class="btn btn-small" onclick="chequeActStart('${id}','return')">Returned to customer</button> ` : ''}<button class="btn btn-small" onclick="setChequeStatus('${id}','With Salesman')">Undo</button> <button class="btn btn-small" onclick="editCheque('${id}')">Edit</button>`;
+}
+
+function chequeActStart(id, kind) {
+  chequeAct = id ? { id: id, kind: kind } : null;
+  renderChequeAdmin();
+  setTimeout(() => { const el = document.getElementById(kind === 'return' ? 'ca-mode' : 'ca-box'); if (el) el.focus(); }, 30);
+}
+
+function chequeActSave() {
+  if (!chequeAct) return;
+  const c = chequeItems.filter(x => x.id === chequeAct.id)[0];
+  if (!c) return;
+  if (chequeAct.kind === 'return') {
+    const mode = valOf('ca-mode');
+    if (!mode) return toast('Pick how the cheque went back to the customer.', true);
+    chequeAct = null;
+    return updateCheque(c.id, { status: 'Returned', returnMode: mode }, 'Cheque marked returned · ' + mode + '.');
+  }
+  const box = valOf('ca-box');
+  chequeAct = null;
+  if (c.status === 'With Salesman') updateCheque(c.id, { status: 'Received', box: box }, 'Marked received' + (box ? ' · kept in ' + box : '') + '.');
+  else updateCheque(c.id, { box: box }, box ? 'Kept in ' + box + '.' : 'Box removed.');
 }
 
 function editCheque(id) {
@@ -6061,6 +7087,7 @@ function newAssignDraft() {
   return {
     id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '5:00 PM', repeat: false,
     schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: RECUR_DEFAULT_TIME, start: todayYmd(), end: 'never', until: '', count: 5 }, important: false,
+    priority: 'Normal', dueKind: 'date', allowD: 1, allowH: 0, remind: '', remindDate: todayYmd(), remindTime: '10:00 AM',
     pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
   };
 }
@@ -6103,6 +7130,7 @@ function renderAssignForm() {
       <option value="each"${d.mode === 'each' ? ' selected' : ''}>Each person does their own copy</option>
       <option value="shared"${d.mode === 'shared' ? ' selected' : ''}>One person finishing closes it for everyone</option>
     </select></div>` : ''}
+    <div class="report-bar"><label class="inline-label">Priority <select onchange="asSet('priority', this.value)">${ASSIGN_PRIORITIES.map(p => `<option${d.priority === p ? ' selected' : ''}>${p}</option>`).join('')}</select></label></div>
     <div class="owner-grid" style="margin-top:6px;"><label class="owner-pick${d.repeat ? ' on' : ''}"><input type="checkbox"${d.repeat ? ' checked' : ''} onchange="assignDraft.repeat = this.checked; renderAssignForm()"> Repeat on a schedule</label></div>
     ${d.repeat ? `<div class="schedule-box">
       <div class="report-bar">
@@ -6129,9 +7157,16 @@ function renderAssignForm() {
       </div>
       <div class="builder-hint" style="margin:0;">${escapeHtml(scheduleSummary(sch))}.</div>
     </div>` : `<div class="report-bar">
-      <label class="inline-label">Due <input type="date" value="${escapeHtml(d.dueDate)}" onchange="asSet('dueDate', this.value)"></label>
-      <label class="inline-label">by ${clockPicker('as_due', d.dueTime, "asSet('dueTime', readClock('as_due'))")}</label>
+      <select class="report-search" style="width:auto" onchange="asSet('dueKind', this.value); renderAssignForm()"><option value="date"${d.dueKind !== 'allow' ? ' selected' : ''}>Due on a date</option><option value="allow"${d.dueKind === 'allow' ? ' selected' : ''}>Allowed time from now</option></select>
+      ${d.dueKind === 'allow' ? `<label class="inline-label"><input type="number" min="0" value="${d.allowD}" style="width:70px" oninput="asSet('allowD', asNum(this.value))"> working days</label>
+      <label class="inline-label"><input type="number" min="0" value="${d.allowH}" style="width:70px" oninput="asSet('allowH', asNum(this.value))"> hours</label>
+      <span class="report-meta">Counted in their working hours.</span>` : `<label class="inline-label">Due <input type="date" value="${escapeHtml(d.dueDate)}" onchange="asSet('dueDate', this.value)"></label>
+      <label class="inline-label">by ${clockPicker('as_due', d.dueTime, "asSet('dueTime', readClock('as_due'))")}</label>`}
     </div>`}
+    <div class="report-bar">
+      <label class="inline-label">Phone reminder <select onchange="asSet('remind', this.value); renderAssignForm()">${ASSIGN_REMINDS.filter(r => !(d.repeat && r[0] === 'at')).map(r => `<option value="${r[0]}"${String(d.remind) === r[0] ? ' selected' : ''}>${r[1]}</option>`).join('')}</select></label>
+      ${d.remind === 'at' && !d.repeat ? `<label class="inline-label">on <input type="date" value="${escapeHtml(d.remindDate)}" onchange="asSet('remindDate', this.value)"></label><label class="inline-label">at ${clockPicker('as_rem', d.remindTime, "asSet('remindTime', readClock('as_rem'))")}</label>` : ''}
+    </div>
     <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.important ? ' on' : ''}"><input type="checkbox"${d.important ? ' checked' : ''} onchange="assignDraft.important = this.checked; renderAssignForm()"> &#9733; Important</label>${user && user.level === 0 ? `<label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label>` : ''}</div>
     ${d.pointsOn && user && user.level === 0 ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
       <span class="pt-cell"><b>Before</b> at least <input type="number" class="pt-in" value="${pv('bd')}" placeholder="d" oninput="asPointSet('bd', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('bh')}" placeholder="h" oninput="asPointSet('bh', this.value)"><small>h early</small> = <input type="number" class="pt-in" value="${pv('bp')}" placeholder="0" oninput="asPointSet('bp', this.value)"></span>
@@ -6142,6 +7177,14 @@ function renderAssignForm() {
     <div class="builder-actions" style="margin-top:14px;">
       <button class="btn btn-primary" id="btn-assign-save" onclick="saveAssign()">${d.id ? 'Save changes' : 'Assign'}</button>
     </div>`;
+}
+
+const ASSIGN_PRIORITIES = ['Urgent', 'High', 'Normal', 'Low'];
+const ASSIGN_REMINDS = [['', 'No reminder'], ['0', 'At the due time'], ['15', '15 minutes before'], ['60', '1 hour before'], ['180', '3 hours before'], ['1440', '1 day before'], ['at', 'At a time I pick']];
+
+function priorityBadge(p) {
+  if (!p || p === 'Normal') return '';
+  return '<span class="prio-badge prio-' + p.toLowerCase() + '">' + escapeHtml(p) + '</span>';
 }
 
 function cancelAssignEdit() {
@@ -6168,9 +7211,17 @@ async function saveAssign() {
     dueMs: d.repeat ? 0 : localMs(d.dueDate, d.dueTime),
     schedule: d.repeat ? Object.assign({}, d.schedule, { on: true }) : null,
     points: d.pointsOn && user.level === 0 ? d.points : null,
-    important: !!d.important
+    important: !!d.important,
+    priority: d.priority || 'Normal',
+    allow: !d.repeat && d.dueKind === 'allow' ? { d: asNum(d.allowD), h: asNum(d.allowH) } : null,
+    remind: d.remind === '' ? null : d.remind === 'at' ? { mode: 'at', ms: localMs(d.remindDate, d.remindTime) } : { mode: 'before', mins: Number(d.remind) }
   };
-  if (!d.repeat && !payload.dueMs) return toast("Pick a due date and time.", true);
+  if (payload.allow) {
+    if (!payload.allow.d && !payload.allow.h) return toast("Type the allowed days or hours.", true);
+    payload.dueMs = 0;
+  }
+  if (!d.repeat && !payload.dueMs && !payload.allow) return toast("Pick a due date and time.", true);
+  if (payload.remind && payload.remind.mode === 'at' && !payload.remind.ms) return toast("Pick the reminder date and time.", true);
   const btn = document.getElementById('btn-assign-save');
   btn.disabled = true;
   try {
@@ -6224,7 +7275,7 @@ function renderAssignList() {
   document.getElementById('as-tab-done').innerText = 'Done (' + counts.done + ')';
   document.getElementById('assign-table').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Due</th><th>Status</th><th>Done by</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>${
     items.map(x => `<tr class="${x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
-      <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b>${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
+      <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b> ${priorityBadge(x.priority)}${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
       <td>${escapeHtml(x.due)}</td><td>${assignStatusPill(x)}</td><td>${escapeHtml(x.doneBy || '')}</td><td>${escapeHtml(x.doneAt || '')}</td>
       <td class="left">${escapeHtml(x.note || '')}</td>
       <td class="nowrap">${assignMineById(x.assignId) ? `${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button>` : ''}</td>
@@ -6263,6 +7314,15 @@ function editAssign(id) {
   }
   if (a.points) { d.pointsOn = true; d.points = Object.assign(d.points, a.points); }
   d.important = !!a.important;
+  d.priority = a.priority || 'Normal';
+  if (a.remind && a.remind.mode === 'before') d.remind = String(a.remind.mins);
+  else if (a.remind && a.remind.mode === 'at') {
+    d.remind = 'at';
+    const t = new Date(a.remind.ms);
+    d.remindDate = ymdLocal(t);
+    let h = t.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+    d.remindTime = h + ':' + String(Math.round(t.getMinutes() / 15) * 15 % 60).padStart(2, '0') + ' ' + ap;
+  }
   assignDraft = d;
   renderAssignForm();
   document.getElementById('assign-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -6304,8 +7364,82 @@ async function deleteAssign(id, itemId) {
   } catch (e) { if (btn) btn.disabled = false; toast("Network error", true); }
 }
 
+async function loadMyLeave() {
+  const table = document.getElementById('my-leave');
+  if (!table) return;
+  const own = user && profile && user.name === profile.name;
+  document.getElementById('leave-form-box').classList.toggle('hidden', !own);
+  try {
+    const r = await apiCall('leaveList');
+    if (!r.ok) return;
+    const sel = document.getElementById('lv-sub');
+    if (sel && !sel.options.length) sel.innerHTML = '<option value="">Nobody</option>' + (r.staff || []).filter(n => n !== user.name).map(n => `<option>${escapeHtml(n)}</option>`).join('');
+    const items = r.items.filter(x => x.person === profile.name || x.substitute === profile.name).slice(0, 20);
+    table.innerHTML = items.length ? `<thead><tr><th>Who</th><th>Days</th><th>Substitute</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${items.map(x => `<tr><td>${escapeHtml(x.person)}</td><td class="nowrap">${escapeHtml(formatDateDMY(x.from))}${x.to !== x.from ? ' – ' + escapeHtml(formatDateDMY(x.to)) : ''} <small class="report-meta">(${x.days} day${x.days === 1 ? '' : 's'})</small></td><td>${escapeHtml(x.substitute || '-')}</td><td class="left">${escapeHtml(x.reason)}</td><td>${leaveStatus(x)}</td><td>${x.person === user.name && (x.status === 'Waiting' || x.status === 'Approved') ? `<button class="btn btn-small icon-cross" onclick="cancelLeave('${escapeHtml(x.id)}')">Cancel</button>` : ''}</td></tr>`).join('')}</tbody>` : '<tr><td class="report-meta">No leave yet.</td></tr>';
+    const cov = coveredBy(profile.name), away = AWAY[profile.name];
+    document.getElementById('cover-note').innerHTML = (cov.length ? `<div class="cover-note">&#128101; Today you cover for <b>${cov.map(escapeHtml).join(', ')}</b>. Their tasks are in your list and you get the points.</div>` : '') + (away !== undefined ? `<div class="cover-note">&#127796; You are on leave today${away ? '; ' + escapeHtml(away) + ' covers your work' : ''}.</div>` : '');
+  } catch (e) {}
+}
+
+function leaveStatus(x) {
+  if (x.status === 'Approved') return x.now ? '<span class="status-pill status-done">On leave now</span>' : '<span class="status-pill status-done">Approved</span>';
+  if (x.status === 'Rejected') return '<span class="status-pill status-late">Not approved</span>';
+  if (x.status === 'Cancelled') return '<span class="status-pill status-open">Cancelled</span>';
+  return '<span class="status-pill status-open">Waiting</span>';
+}
+
+async function applyLeave() {
+  const from = valOf('lv-from'), to = valOf('lv-to') || valOf('lv-from');
+  if (!goodDay(from)) return toast('Pick the first day of leave.', true);
+  try {
+    const r = await apiCall('leaveApply', { from: from, to: to, substitute: valOf('lv-sub'), reason: valOf('lv-reason') });
+    if (!r.ok) return toast(r.error || 'Could not apply', true);
+    toast('Sent to Jawad.');
+    ['lv-from', 'lv-to', 'lv-reason'].forEach(id => { document.getElementById(id).value = ''; });
+    loadMyLeave();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function cancelLeave(id) {
+  try {
+    const r = await apiCall('leaveDecide', { id: id, cancel: true });
+    if (!r.ok) return toast(r.error || 'Could not cancel', true);
+    toast('Leave cancelled.');
+    loadMyLeave();
+    loadTasks();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function loadLeaveAdmin() {
+  const table = document.getElementById('leave-admin');
+  if (!table) return;
+  try {
+    const r = await apiCall('leaveList');
+    if (!r.ok) { table.innerHTML = `<tr><td>${escapeHtml(r.error || '')}</td></tr>`; return; }
+    const staff = r.staff || [];
+    table.innerHTML = `<thead><tr><th>Asked</th><th>Who</th><th>Days</th><th>Substitute</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${r.items.map(x => `<tr>
+      <td class="nowrap">${escapeHtml(x.createdAt)}</td><td><b>${escapeHtml(x.person)}</b></td>
+      <td class="nowrap">${escapeHtml(formatDateDMY(x.from))}${x.to !== x.from ? ' – ' + escapeHtml(formatDateDMY(x.to)) : ''} <small class="report-meta">(${x.days})</small></td>
+      <td>${x.status === 'Waiting' ? `<select id="lvs-${escapeHtml(x.id)}" style="width:auto;margin:0"><option value="">Nobody</option>${staff.filter(n => n !== x.person).map(n => `<option${n === x.substitute ? ' selected' : ''}>${escapeHtml(n)}</option>`).join('')}</select>` : escapeHtml(x.substitute || '-')}</td>
+      <td class="left">${escapeHtml(x.reason)}</td><td>${leaveStatus(x)}${x.decidedBy ? `<br><small class="report-meta">${escapeHtml(x.decidedBy)} · ${escapeHtml(x.decidedAt)}</small>` : ''}</td>
+      <td class="nowrap">${x.status === 'Waiting' ? `<button class="btn btn-small btn-primary" onclick="decideLeave('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small icon-cross" onclick="decideLeave('${escapeHtml(x.id)}', false)">Reject</button>` : x.status === 'Approved' ? `<button class="btn btn-small icon-cross" onclick="cancelLeave('${escapeHtml(x.id)}').then(loadLeaveAdmin)">Cancel</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="report-meta">No leave applications.</td></tr>'}</tbody>`;
+  } catch (e) {}
+}
+
+async function decideLeave(id, approve) {
+  const sel = document.getElementById('lvs-' + id);
+  try {
+    const r = await apiCall('leaveDecide', { id: id, approve: approve, substitute: sel ? sel.value : undefined });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast(approve ? 'Leave approved.' : 'Leave not approved.');
+    loadLeaveAdmin();
+    loadTasks();
+  } catch (e) { toast('Network error', true); }
+}
+
 async function loadMyAssigned() {
   loadMyTimeReqs();
+  loadMyLeave();
   const list = document.getElementById('myassigned-list');
   list.innerHTML = '<div class="report-meta">Loading...</div>';
   try {
@@ -6317,12 +7451,18 @@ async function loadMyAssigned() {
     const done = items.filter(x => x.status === 'Done');
     list.innerHTML = open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
-        <h3>${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
+        <h3>${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''} ${priorityBadge(x.priority)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
         <div class="report-meta">${x.by ? 'Assigned by <b>' + escapeHtml(x.by) + '</b> to <b>' + escapeHtml((x.people || []).join(', ')) + '</b> · ' : ''}${x.repeat ? '&#8635; ' + escapeHtml(scheduleSummary(x.repeat)) + ' · ' : ''}Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
         ${canDo ? `<div class="report-bar">
           <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for ${escapeHtml(x.by || 'Jawad')} (optional)">
           <button class="btn btn-primary btn-small" onclick="markAssignedDone('${escapeHtml(x.id)}')">Done</button>
+          ${user.name === profile.name ? `<button class="btn btn-small" onclick="document.getElementById('ag-${escapeHtml(x.id)}').classList.toggle('hidden')">Ask for more time</button>` : ''}
+        </div>
+        <div id="ag-${escapeHtml(x.id)}" class="report-bar grace-form hidden">
+          <select id="agh-${escapeHtml(x.id)}">${['1', '2', '3', '4', '6', 'd1', 'd2', 'd3', 'd5'].map(h => `<option value="${h}">${h[0] === 'd' ? h.slice(1) + ' working day' + (h === 'd1' ? '' : 's') : h + ' hour' + (h === '1' ? '' : 's')}</option>`).join('')}</select>
+          <input type="text" id="agr-${escapeHtml(x.id)}" placeholder="Why do you need more time?">
+          <button class="btn btn-small btn-primary" onclick="sendAssignGrace('${escapeHtml(x.id)}')">Send to Jawad</button>
         </div>` : ''}
       </div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned right now.</div>';
     document.getElementById('myassigned-done').innerHTML = done.map(x => `
@@ -6331,6 +7471,18 @@ async function loadMyAssigned() {
         <div class="report-meta">${escapeHtml(x.doneAt)} by ${escapeHtml(x.doneBy)}${x.note ? ' · ' + escapeHtml(x.note) : ''}</div>
       </div>`).join('') || '<div class="report-meta">Nothing yet.</div>';
   } catch (e) { list.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+async function sendAssignGrace(id) {
+  const reason = valOf('agr-' + id);
+  if (!reason) return toast('Write why you need more time.', true);
+  const g = valOf('agh-' + id);
+  try {
+    const r = await apiCall('timeReqAdd', { type: 'agrace', itemId: id, hours: g[0] === 'd' ? 0 : Number(g), days: g[0] === 'd' ? Number(g.slice(1)) : 0, reason: reason });
+    if (!r.ok) return toast(r.error || 'Could not send', true);
+    toast('Sent. Jawad will approve or reject it.');
+    loadMyAssigned();
+  } catch (e) { toast('Network error', true); }
 }
 
 async function markAssignedDone(id) {
@@ -6755,18 +7907,29 @@ async function saveWork() {
   btn.disabled = false;
 }
 
-function quickReceive() {
+async function quickReceive() {
   const input = document.getElementById('quick-receive');
   const v = String(input.value || '').trim();
   if (!v) return toast("Type a Ref or Case No first.", true);
+  if (!chequeAdminLoaded && !chequesLoaded) {
+    try {
+      const result = await apiCall('chequeList', { keepOpen: true });
+      if (!result.ok) return toast(result.error || "Could not load cheques", true);
+      chequeItems = result.items || [];
+      chequeAdminLoaded = true;
+    } catch (e) { return toast("Network error", true); }
+  }
   const hits = chequeItems.filter(c =>
     String(c.refNo).split(',').map(x => x.trim()).indexOf(v) !== -1 ||
     String(c.caseNo).split(',').map(x => x.trim()).indexOf(v) !== -1);
   if (!hits.length) return toast("No cheque found for " + v + ".", true);
-  const open = hits.filter(c => c.status !== 'Received');
-  if (!open.length) return toast("That cheque is already marked received.", true);
+  const open = hits.filter(c => c.status === 'With Salesman');
+  if (!open.length) return toast("That cheque is already marked " + hits[0].status.toLowerCase() + ".", true);
+  const box = valOf('quick-box');
   input.value = '';
-  updateCheque(open[0].id, { status: 'Received' }, "Cheque for " + chequeKey(open[0]) + " marked received.");
+  document.getElementById('quick-box').value = '';
+  input.focus();
+  updateCheque(open[0].id, { status: 'Received', box: box }, "Cheque for " + chequeKey(open[0]) + " marked received" + (box ? " · kept in " + box : "") + ".");
 }
 
 function setChequeStatus(id, status) {
@@ -7054,6 +8217,7 @@ document.addEventListener('keydown', handleEnterKey);
 let approvalItems = [];
 
 async function loadApprovals() {
+  loadLeaveAdmin();
   const table = document.getElementById('approvals-table');
   table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
   try {
@@ -7066,6 +8230,12 @@ async function loadApprovals() {
 
 function timeReqWhat(x) {
   if (x.type === 'done') return 'Finish time: ' + escapeHtml(x.oldDone || '?') + ' → <b>' + escapeHtml(x.newDone) + '</b>';
+  if (x.status === 'Waiting' && user && user.level === 0 && document.getElementById('form-approvals') && !document.getElementById('form-approvals').classList.contains('hidden')) {
+    const cur = x.days ? 'd' + x.days : String(x.hours);
+    const opts = ['1', '2', '3', '4', '6', 'd1', 'd2', 'd3', 'd5', 'd7', 'd10'];
+    if (opts.indexOf(cur) === -1) opts.unshift(cur);
+    return `<select id="tre-${escapeHtml(x.id)}" style="width:auto;margin:0" title="Change it before approving if you want">${opts.map(h => `<option value="${h}"${h === cur ? ' selected' : ''}>+${h[0] === 'd' ? h.slice(1) + ' working day' + (h === 'd1' ? '' : 's') : h + ' hour' + (h === '1' ? '' : 's')}</option>`).join('')}</select>`;
+  }
   return x.days ? '<b>+' + x.days + ' working day' + (x.days === 1 ? '' : 's') + '</b> more time' : '<b>+' + escapeHtml(String(x.hours)) + ' hour' + (x.hours === 1 ? '' : 's') + '</b> more time';
 }
 
@@ -7078,18 +8248,24 @@ function timeReqStatus(x) {
 function renderApprovals() {
   const f = valOf('tr-filter');
   const rows = approvalItems.filter(x => !f || x.status === f);
-  document.getElementById('approvals-table').innerHTML = `<thead><tr><th>Asked</th><th>Who</th><th>Task</th><th>Ref / Case</th><th>Asking for</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${
+  document.getElementById('approvals-table').innerHTML = `<thead><tr><th>Asked</th><th>Who</th><th>Task</th><th>Ref / Case</th><th>Asking for</th><th title="Taken / allowed before and after">Before → After</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${
     rows.map(x => `<tr>
       <td class="nowrap">${escapeHtml(x.createdAt)}</td><td>${escapeHtml(x.person)}</td><td class="left">${escapeHtml(x.task)}</td>
-      <td>${escapeHtml(chequeKey(x))}</td><td class="left">${timeReqWhat(x)}</td><td class="left">${escapeHtml(x.reason)}</td>
+      <td>${escapeHtml(chequeKey(x))}</td><td class="left">${timeReqWhat(x)}${x.type === 'done' && x.status === 'Waiting' ? `<br><input type="datetime-local" id="trd-${escapeHtml(x.id)}" style="width:auto;margin:4px 0 0" title="Change the finish time before approving if you want">` : ''}</td>
+      <td class="left nowrap">${x.before ? `<span class="${x.beforeLate ? 'band-late' : ''}">Old: ${escapeHtml(x.before)}</span><br><b>New: ${escapeHtml(x.after || '')}</b>` : ''}</td><td class="left">${escapeHtml(x.reason)}${x.note ? '<br><small class="report-meta">' + escapeHtml(x.note) + '</small>' : ''}</td>
       <td>${timeReqStatus(x)}${x.decidedBy ? `<br><small class="report-meta">${escapeHtml(x.decidedBy)} · ${escapeHtml(x.decidedAt)}</small>` : ''}</td>
       <td class="nowrap">${x.status === 'Waiting' ? `<button class="btn btn-small btn-primary" onclick="decideTimeReq('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small icon-cross" onclick="decideTimeReq('${escapeHtml(x.id)}', false)">Reject</button>` : ''}</td>
-    </tr>`).join('') || '<tr><td colspan="8" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
+    </tr>`).join('') || '<tr><td colspan="9" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
 }
 
 async function decideTimeReq(id, approve) {
+  const sel = document.getElementById('tre-' + id);
+  const dt = document.getElementById('trd-' + id);
+  const extra = {};
+  if (sel) { const g = sel.value; if (g[0] === 'd') extra.days = Number(g.slice(1)); else extra.hours = Number(g); }
+  if (dt && dt.value) extra.doneMs = new Date(dt.value).getTime();
   try {
-    const r = await apiCall('timeReqDecide', { id: id, approve: approve });
+    const r = await apiCall('timeReqDecide', Object.assign({ id: id, approve: approve }, extra));
     if (!r.ok) return toast(r.error || 'Could not save', true);
     toast(approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
     loadApprovals();
@@ -7142,6 +8318,43 @@ async function sendFixTime(i) {
 
 let trailData = null;
 
+const TRAIL_SYM = { done: ['&#9679;', 'sym-done', 'Done'], wait: ['?', 'sym-wait', 'Waiting now'], out: ['&#10005;', 'sym-out', 'Left the chain'], temp: ['&#9675;', 'sym-temp', 'Part done'], skip: ['&ndash;', 'sym-skip', 'Skipped'], '': ['', '', 'Not reached'] };
+
+function chequeLine(c) {
+  const st = c.status === 'Returned' ? 'Returned to customer' + (c.returnMode ? ' (' + c.returnMode + ')' : '') : c.status === 'Received' ? 'Received' : 'With ' + (c.salesman || 'salesman');
+  const bits = [
+    '<b>Cheque: ' + escapeHtml(st) + '</b>' + (c.overdue ? ' <span class="status-pill status-late">Overdue ' + c.days + ' days</span>' : ''),
+    c.claimedBy ? 'Claimed by ' + escapeHtml(c.claimedBy) + (c.claimedAt ? ' on ' + escapeHtml(c.claimedAt) : '') : '',
+    c.salesman || c.branch ? 'Salesman ' + escapeHtml([c.salesman, c.branch].filter(Boolean).join(' · ')) : '',
+    c.receivedBy ? 'Received by ' + escapeHtml(c.receivedBy) + (c.receivedAt ? ' on ' + escapeHtml(c.receivedAt) : '') : '',
+    c.box ? 'Kept in <span class="box-tag">' + escapeHtml(c.box) + '</span>' : '',
+    c.returnedBy ? 'Returned by ' + escapeHtml(c.returnedBy) + (c.returnedAt ? ' on ' + escapeHtml(c.returnedAt) : '') : ''
+  ].filter(Boolean);
+  return bits.join(' &middot; ');
+}
+
+function renderTrailHtml(r, go) {
+  const head = [r.name, r.mobile, r.inputs, [r.salesman, r.branch].filter(Boolean).join(' · ')].filter(Boolean);
+  const nav = `<div class="trail-nav">${r.prev ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.prev).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">&#9664; ${escapeHtml(r.prev)}</button>` : '<button class="btn btn-small" disabled>&#9664; First</button>'}
+    <div class="nav-spacer"></div>${r.next ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.next).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">${escapeHtml(r.next)} &#9654;</button>` : '<button class="btn btn-small" disabled>Last &#9654;</button>'}</div>`;
+  const chains = (r.chains || []).length ? `<label>Where it is in each chain</label><div class="trail-chains">${r.chains.map(c => `<div class="trail-chain"><div class="trail-chain-name">${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</div><div class="trail-steps">${c.tasks.map(t => { const S = TRAIL_SYM[t.sym] || TRAIL_SYM['']; return `<div class="trail-step${t.late ? ' late' : ''}" title="${escapeHtml(S[2])}"><b class="${S[1]}">${S[0] || '&nbsp;'}</b>${escapeHtml(t.task)}${t.took || t.allowed ? `<small>${escapeHtml(t.took || '-')} / ${escapeHtml(t.allowed || '-')}</small>` : ''}</div>`; }).join('')}</div></div>`).join('')}</div>` : '';
+  const cheques = (r.cheques || []).map(c => `<div class="trail-cheque">${chequeLine(c)}</div>`).join('');
+  return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
+    ${cheques}${chains}
+    <label>Steps</label>
+    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Arrived</th><th>Closed</th><th>By</th><th>Took</th><th>Allowed</th><th>Status</th><th>Points</th></tr></thead><tbody>${
+      r.steps.map(x => `<tr${x.late ? ' class="overdue"' : ''}><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(x.arrived)}</td><td>${escapeHtml(x.closed)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.took)}</td><td>${escapeHtml(x.allowed)}</td>
+        <td>${x.status === 'Pending' ? (x.late ? '<span class="status-pill status-late">Waiting · late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-open">Waiting</span>') : x.status === 'Done' ? (x.late ? '<span class="status-pill status-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-done">On time</span>') : escapeHtml(x.status)}</td>
+        <td>${x.band ? `<b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="report-meta">No steps yet.</td></tr>'}</tbody></table></div>
+    <label style="margin-top:16px;">Everything that happened</label>
+    <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}</span></div>`).join('')}</div>`;
+}
+
+function trailGo(key) {
+  document.getElementById('trail-q').value = key;
+  loadTrail();
+}
+
 async function loadTrail() {
   const q = valOf('trail-q');
   const box = document.getElementById('trail-body');
@@ -7152,15 +8365,62 @@ async function loadTrail() {
     if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     trailData = r;
     if (!r.found) { box.innerHTML = '<div class="report-meta">Nothing found for ' + escapeHtml(q) + '.</div>'; return; }
-    const head = [r.name, r.mobile, r.inputs, [r.salesman, r.branch].filter(Boolean).join(' · ')].filter(Boolean);
-    box.innerHTML = `<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
-      <label>Steps</label>
-      <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Arrived</th><th>Closed</th><th>By</th><th>Took</th><th>Allowed</th><th>Status</th><th>Points</th></tr></thead><tbody>${
-        r.steps.map(x => `<tr${x.late ? ' class="overdue"' : ''}><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(x.arrived)}</td><td>${escapeHtml(x.closed)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.took)}</td><td>${escapeHtml(x.allowed)}</td>
-          <td>${x.status === 'Pending' ? (x.late ? '<span class="status-pill status-late">Waiting · late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-open">Waiting</span>') : x.status === 'Done' ? (x.late ? '<span class="status-pill status-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-done">On time</span>') : escapeHtml(x.status)}</td>
-          <td>${x.band ? `<b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="report-meta">No steps yet.</td></tr>'}</tbody></table></div>
-      <label style="margin-top:16px;">Everything that happened</label>
-      <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}</span></div>`).join('')}</div>`;
+    box.innerHTML = renderTrailHtml(r, 'trailGo');
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+let usTimer = null;
+let usLast = null;
+
+function openUniSearch(q) {
+  document.getElementById('us-overlay').classList.remove('hidden');
+  const inp = document.getElementById('us-q');
+  if (q !== undefined && q !== null) { inp.value = q; uniSearch(); }
+  setTimeout(() => inp.focus(), 50);
+}
+
+function closeUniSearch() { document.getElementById('us-overlay').classList.add('hidden'); }
+
+function uniSearchSoon() {
+  clearTimeout(usTimer);
+  usTimer = setTimeout(uniSearch, 600);
+}
+
+async function uniSearch() {
+  clearTimeout(usTimer);
+  const q = valOf('us-q');
+  const box = document.getElementById('us-body');
+  if (q.length < 2) { box.innerHTML = '<div class="report-meta">Type at least 2 letters or numbers.</div>'; return; }
+  box.innerHTML = '<div class="report-meta">Searching...</div>';
+  try {
+    const r = await apiCall('searchAll', { q: q });
+    if (valOf('us-q') !== q) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not search')}</div>`; return; }
+    usLast = r;
+    if (r.items.length === 1 && r.items[0].exact) return uniTrail(r.items[0].key, true);
+    renderUniResults();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderUniResults() {
+  const r = usLast;
+  const box = document.getElementById('us-body');
+  if (!r) return;
+  box.innerHTML = r.items.length ? `<div class="report-meta" style="margin-bottom:8px;">${r.items.length} found. Tap one to see its full trail.</div><div class="us-list">${r.items.map((x, i) => `<div class="us-item" onclick="uniTrail(usLast.items[${i}].key)">
+      <span class="us-key">${escapeHtml(x.key)}</span>${x.name ? `<span class="us-name">${escapeHtml(x.name)}</span>` : ''}${x.mobile ? `<span class="report-meta">${escapeHtml(x.mobile)}</span>` : ''}
+      ${x.cheque ? `<span class="status-pill ${x.cheque.status === 'With Salesman' ? (x.cheque.overdue ? 'status-late' : 'status-open') : 'status-done'}">Cheque: ${escapeHtml(x.cheque.status === 'With Salesman' ? 'with ' + (x.cheque.salesman || 'salesman') : x.cheque.status)}${x.cheque.box ? ' · ' + escapeHtml(x.cheque.box) : ''}</span>` : ''}
+      <div class="us-sub">${[x.project, x.last ? 'Last: ' + x.last : ''].filter(Boolean).map(escapeHtml).join(' · ')}${x.waiting.length ? '<br>Waiting at ' + x.waiting.map(t => `<span class="us-chip">${escapeHtml(t)}</span>`).join('') : ' · Not waiting anywhere'}</div>
+    </div>`).join('')}</div>` : '<div class="report-meta">Nothing found for ' + escapeHtml(r.q) + '.</div>';
+}
+
+async function uniTrail(key, single) {
+  const box = document.getElementById('us-body');
+  box.innerHTML = '<div class="report-meta">Loading the trail...</div>';
+  try {
+    const r = await apiCall('caseTrail', { q: key });
+    if (!r.ok || !r.found) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Nothing found for ' + key)}</div>`; return; }
+    trailData = r;
+    box.innerHTML = `<div class="trail-nav">${usLast && !single ? '<button class="btn btn-small" onclick="renderUniResults()">&larr; Back to results</button>' : ''}<button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById(\'us-trail\')], \'Case trail · \' + trailData.q))">Copy picture</button></div><div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
@@ -7337,14 +8597,15 @@ async function sendPushTest(person) {
 }
 
 const PUSH_TYPE_NAMES = {
-  newcase: ['New case on their task (sent together)', '8 tasks waiting for you · 6 new, 2 late'],
-  late: ['A case became late (sent together)', 'Counted in the same 8-task notification'],
+  newcase: ['New case on their task', 'Right away, or together once 8 build up'],
+  late: ['A case became late', 'Sent the same way as new cases'],
   assign: ['A task was assigned to them', 'New task from Jawad'],
   assigndone: ['Their assigned task was finished', 'Waqas finished a task'],
   recurring: ['A recurring task is due today', 'Today: File Tele'],
   timereq: ['Someone asks for more time (Jawad)', 'Junaid asks for 1 more day'],
   timedecide: ['Their time request was decided', 'Approved: more time'],
-  morning: ['Morning summary', 'Your tasks today: 6 waiting, 2 late']
+  morning: ['Summary (up to 3 times a day)', 'Your tasks today: 6 waiting, 2 late'],
+  remind: ['Reminders they set (and assigned task reminders)', 'Reminder: Pay electricity bill']
 };
 let pushAdmin = null;
 
@@ -7367,16 +8628,19 @@ function renderPushAdmin() {
   (r.people || []).forEach(p => { onBy[p.person] = p; });
   box.innerHTML = `${r.keySet ? '' : '<div class="push-warn">The Firebase key is missing in Apps Script (Script Properties → FIREBASE_KEY). Nothing can be sent until it is added.</div>'}
     <label>Which notifications are sent</label>
-    <div class="owner-grid push-types">${(r.types || []).map(t => { const on = r.off.indexOf(t) === -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="togglePushType('${t}', this.checked)"> <span><b>${escapeHtml(PUSH_TYPE_NAMES[t][0])}</b><br><small class="report-meta">${escapeHtml(PUSH_TYPE_NAMES[t][1])}</small></span></label>`; }).join('')}</div>
+    <div class="owner-grid push-types">${(r.types || []).filter(t => PUSH_TYPE_NAMES[t]).map(t => { const on = r.off.indexOf(t) === -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="togglePushType('${t}', this.checked)"> <span><b>${escapeHtml(PUSH_TYPE_NAMES[t][0])}</b><br><small class="report-meta">${escapeHtml(PUSH_TYPE_NAMES[t][1])}</small></span></label>`; }).join('')}</div>
     <div class="report-bar"><label class="inline-label">Morning summary at ${clockPicker('push_morning', r.morning, "pushAdmin.morning = readClock('push_morning')")}</label>
-    <label class="inline-label">Send new and late cases together once there are <input type="number" id="push_batch" min="1" max="50" value="${Number(r.batch) || 8}" style="width:70px;margin:0" oninput="pushAdmin.batch = this.value"></label>
+    <label class="inline-label">New and late cases <select id="push_mode" style="width:auto;margin:0" onchange="pushAdmin.mode = this.value; renderPushAdmin()"><option value="batch"${r.mode !== 'now' ? ' selected' : ''}>Send together</option><option value="now"${r.mode === 'now' ? ' selected' : ''}>Send right away</option></select></label>
+    ${r.mode !== 'now' ? `<label class="inline-label">once there are <input type="number" id="push_batch" min="1" max="50" value="${Number(r.batch) || 8}" style="width:70px;margin:0" oninput="pushAdmin.batch = this.value"></label>` : ''}
+    </div><div class="report-bar"><span class="report-meta">Summary of all waiting tasks, up to 3 times a day:</span>
+    ${[0, 1].map(i => `<label class="inline-label">${i ? 'and' : 'Also at'} <select style="width:auto;margin:0" onchange="pushMoreSet(${i}, this.value)"><option value="">-</option>${['11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'].map(t => `<option${(r.more || [])[i] === t ? ' selected' : ''}>${t}</option>`).join('')}</select></label>`).join('')}
     <button class="btn btn-primary btn-small" id="btn-push-save" onclick="savePushAdmin()">Save</button></div>
     <label style="margin-top:18px;">Who has turned them on</label>
     <div class="report-wrap"><table class="report-table"><thead><tr><th class="left">Person</th><th>Status</th><th>Devices</th><th>Last opened</th><th></th></tr></thead><tbody>${
       staff.map(n => { const p = onBy[n]; return `<tr><td class="left"><b>${escapeHtml(n)}</b></td><td>${p ? '<span class="status-pill status-done">On</span>' : '<span class="status-pill status-late">Not yet</span>'}</td><td class="left">${p ? escapeHtml(p.devices + ' · ' + p.platforms.join(', ')) : ''}</td><td>${p ? escapeHtml(p.lastSeenText) : ''}</td><td>${p ? `<button class="btn btn-small" onclick="sendPushTest('${escapeHtml(n).replace(/'/g, "\\'")}')">Send test</button>` : ''}</td></tr>`; }).join('')}</tbody></table></div>
     <label style="margin-top:18px;">Last notifications</label>
     <div class="report-wrap"><table class="report-table"><thead><tr><th>When</th><th>To</th><th class="left">Notification</th><th>Status</th></tr></thead><tbody>${
-      (r.recent || []).map(x => `<tr><td class="nowrap">${escapeHtml(x.when)}</td><td>${escapeHtml(x.person)}</td><td class="left"><b>${escapeHtml(x.title)}</b><br><small class="report-meta">${escapeHtml(x.body)}</small></td><td>${x.status === 'Sent' ? '<span class="status-pill status-done">Sent</span>' : x.status === 'Waiting' ? (x.type === 'newcase' || x.type === 'late' ? '<span class="status-pill status-open">Held until ' + (Number(pushAdmin.batch) || 8) + ' build up</span>' : '<span class="status-pill status-open">Waiting for work hours</span>') : `<span class="status-pill status-late">${escapeHtml(x.status)}</span>`}${x.note ? `<br><small class="report-meta">${escapeHtml(x.note)}</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Nothing sent yet.</td></tr>'}</tbody></table></div>`;
+      (r.recent || []).map(x => `<tr><td class="nowrap">${escapeHtml(x.when)}</td><td>${escapeHtml(x.person)}</td><td class="left"><b>${escapeHtml(x.title)}</b><br><small class="report-meta">${escapeHtml(x.body)}</small></td><td>${x.status === 'Sent' ? '<span class="status-pill status-done">Sent</span>' : x.status === 'Waiting' ? ((x.type === 'newcase' || x.type === 'late') && pushAdmin.mode !== 'now' ? '<span class="status-pill status-open">Held until ' + (Number(pushAdmin.batch) || 8) + ' build up</span>' : '<span class="status-pill status-open">Waiting for work hours</span>') : `<span class="status-pill status-late">${escapeHtml(x.status)}</span>`}${x.note ? `<br><small class="report-meta">${escapeHtml(x.note)}</small>` : ''}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Nothing sent yet.</td></tr>'}</tbody></table></div>`;
 }
 
 function togglePushType(t, on) {
@@ -7385,11 +8649,17 @@ function togglePushType(t, on) {
   renderPushAdmin();
 }
 
+function pushMoreSet(i, v) {
+  const m = (pushAdmin.more || []).slice();
+  m[i] = v;
+  pushAdmin.more = m.filter(Boolean);
+}
+
 async function savePushAdmin() {
   const btn = document.getElementById('btn-push-save');
   btn.disabled = true;
   try {
-    const r = await apiCall('pushSettingsSave', { off: pushAdmin.off, morning: pushAdmin.morning, batch: pushAdmin.batch });
+    const r = await apiCall('pushSettingsSave', { off: pushAdmin.off, morning: pushAdmin.morning, batch: pushAdmin.batch, mode: pushAdmin.mode, more: pushAdmin.more || [] });
     if (!r.ok) toast(r.error || 'Could not save', true); else toast('Notification settings saved.');
   } catch (e) { toast('Network error', true); }
   btn.disabled = false;
