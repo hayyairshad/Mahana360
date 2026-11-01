@@ -990,6 +990,16 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .dash-task.late { background: rgba(255,120,110,0.25); }
 .dash-task i { color: #ffb4ab; font-style: normal; font-weight: 700; }
 .cover-note { background: var(--info-soft); color: var(--info); border: 1px solid #bcd7ef; border-radius: 10px; padding: 9px 12px; margin-bottom: 10px; font-size: 0.86rem; }
+.trail-step.dim { opacity: 0.45; }
+.dim-row td { opacity: 0.45; }
+.phase-row td { background: var(--accent-soft); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.trail-table table { font-size: 0.8rem; }
+.trail-table td, .trail-table th { padding: 6px 7px; }
+.rem-group, .rem-tag { cursor: pointer; }
+.rem-group:hover, .rem-tag:hover { text-decoration: underline; }
+.rem-group.on, .rem-tag.on { outline: 2px solid var(--info); border-radius: 6px; }
+.rem-parse { margin: -12px 0 12px; min-height: 1.2em; }
+.rem-when { display: inline-block; background: var(--danger-soft); color: var(--danger); border: 1px solid #f1b8b3; border-radius: 999px; padding: 2px 10px; font-weight: 700; font-size: 0.8rem; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
@@ -1272,7 +1282,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <select id="tm-person" class="report-search" onchange="renderTiming()"></select>
 <select id="tm-task" class="report-search" onchange="renderTiming()"></select>
 <select id="tm-state" class="report-search" onchange="renderTiming()">
-<option value="">All</option><option value="late">Late only</option><option value="open">Still open</option><option value="ontime">On time</option>
+<option value="">All</option><option value="before">Before time</option><option value="on">On time (points band)</option><option value="after">After</option><option value="aftert">After that</option><option value="ontime">On time (not late)</option><option value="late">Late (done or open)</option><option value="donelate">Done late</option><option value="openlate">Open and late</option><option value="open">Still open</option>
 </select>
 <input type="text" id="tm-search" class="report-search" placeholder="Search ref, case or name" oninput="renderTiming()">
 </div>
@@ -2045,7 +2055,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R22";
+const APP_VERSION = "R23";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2151,6 +2161,83 @@ function remEdit(id) {
   setTimeout(() => { const el = document.getElementById('rem-title'); if (el) el.focus(); }, 60);
 }
 
+
+const MONTHS3 = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const WEEKDAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+function parseRemDay(core, d0) {
+  core = core.trim();
+  let x;
+  if (core === 'today') return d0;
+  if (core === 'tomorrow' || core === 'tmrw' || core === 'tom') return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 1);
+  if (core === 'day after tomorrow') return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 2);
+  if ((x = core.match(/^in (\d+) (day|days|week|weeks)$/))) return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + Number(x[1]) * (/week/.test(x[2]) ? 7 : 1));
+  if ((x = core.match(/^(next |this )?([a-z]+)$/)) && WEEKDAYS.indexOf(x[2].slice(0, 3)) !== -1 && x[2].length >= 3) {
+    const want = WEEKDAYS.indexOf(x[2].slice(0, 3));
+    let add = (want - d0.getDay() + 7) % 7;
+    if (add === 0) add = 7;
+    return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + add);
+  }
+  if ((x = core.match(/^(\d{1,2})(?:st|nd|rd|th)?\s*(?:of\s+)?([a-z]{3,})(?:\s+(\d{4}))?$/)) && MONTHS3.indexOf(x[2].slice(0, 3)) !== -1) return remYear(Number(x[1]), MONTHS3.indexOf(x[2].slice(0, 3)), x[3], d0);
+  if ((x = core.match(/^([a-z]{3,})\s+(\d{1,2})(?:st|nd|rd|th)?(?:\s+(\d{4}))?$/)) && MONTHS3.indexOf(x[1].slice(0, 3)) !== -1) return remYear(Number(x[2]), MONTHS3.indexOf(x[1].slice(0, 3)), x[3], d0);
+  if ((x = core.match(/^(\d{1,2})[\/\-.](\d{1,2})(?:[\/\-.](\d{2,4}))?$/))) return remYear(Number(x[1]), Number(x[2]) - 1, x[3], d0);
+  if ((x = core.match(/^(\d{1,2})(?:st|nd|rd|th)$/))) {
+    let d = new Date(d0.getFullYear(), d0.getMonth(), Number(x[1]));
+    if (d < d0) d = new Date(d0.getFullYear(), d0.getMonth() + 1, Number(x[1]));
+    return d;
+  }
+  return null;
+}
+
+function parseRemWhen(text) {
+  const m = String(text || '').match(/(^|\s)\/(\S.*)$/);
+  if (!m) return null;
+  const rest = m[2].toLowerCase().replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
+  const now = new Date();
+  const d0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let day = parseRemDay(rest, d0), time = null;
+  if (!day) {
+    const t = rest.match(/^(.*?)\s*(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/);
+    if (t) {
+      let h = Number(t[2]); const mi = Number(t[3] || 0);
+      if (t[4] === 'pm' && h < 12) h += 12;
+      if (t[4] === 'am' && h === 12) h = 0;
+      if (h <= 23 && mi <= 59) {
+        const d = t[1] ? parseRemDay(t[1], d0) : d0;
+        if (d) { day = d; time = { h: h, m: mi }; }
+      }
+    }
+  }
+  if (!day || isNaN(day.getTime())) return null;
+  const title = String(text).slice(0, m.index).trim();
+  let timeTxt = null;
+  if (time) { const ap = time.h >= 12 ? 'PM' : 'AM'; timeTxt = ((time.h % 12) || 12) + ':' + String(time.m).padStart(2, '0') + ' ' + ap; }
+  return { title: title, date: ymdLocal(day), time: timeTxt, label: day.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }) + (timeTxt ? ', ' + timeTxt : ' (all day)') };
+}
+
+function remYear(dd, mm, y, d0) {
+  if (mm < 0 || mm > 11 || dd < 1 || dd > 31) return null;
+  if (y) { y = Number(y); if (y < 100) y += 2000; return new Date(y, mm, dd); }
+  let d = new Date(d0.getFullYear(), mm, dd);
+  if (d < d0) d = new Date(d0.getFullYear() + 1, mm, dd);
+  return d;
+}
+
+function remTitleTyped(v) {
+  remDraft.title = v;
+  const p = parseRemWhen(v);
+  const el = document.getElementById('rem-parse');
+  if (el) el.innerHTML = p ? `<span class="rem-when">&#128197; ${escapeHtml(p.label)}</span> <small class="report-meta">from what you typed after /</small>` : '<small class="report-meta">Tip: type / and a date, like "Pay bill /12th Nov 16" or "/tomorrow 9am" or "/next sunday".</small>';
+}
+
+function applyRemWhen() {
+  const p = parseRemWhen(remDraft.title);
+  if (!p) return;
+  remDraft.title = p.title || remDraft.title;
+  remDraft.date = p.date;
+  if (p.time) { remDraft.allDay = false; remDraft.time = p.time; } else remDraft.allDay = true;
+}
+
 function remSet(k, v, redraw) { remDraft[k] = v; if (redraw) renderRemEditor(); }
 function remRepSet(k, v, redraw) { remDraft.repeat[k] = v; if (redraw) renderRemEditor(); }
 function remToggleDay(i) {
@@ -2169,7 +2256,8 @@ function renderRemEditor() {
   const groups = remData ? remData.groups : [];
   const rp = d.repeat;
   ed.innerHTML = `<div class="report-bar" style="margin-bottom:8px;"><b>${d.id ? 'Edit reminder' : 'New reminder'}</b></div>
-    <input type="text" id="rem-title" value="${escapeHtml(d.title)}" placeholder="What do you need to remember?" oninput="remSet('title', this.value)" onkeydown="if(event.key==='Enter')saveRem()">
+    <input type="text" id="rem-title" value="${escapeHtml(d.title)}" placeholder="What to remember, e.g. Order Homa /12th Nov 16" oninput="remTitleTyped(this.value)" onkeydown="if(event.key==='Enter')saveRem()">
+    <div id="rem-parse" class="rem-parse"></div>
     <textarea placeholder="Notes (optional)" oninput="remSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
     <div class="report-bar">
       <label class="inline-label">Date <input type="date" value="${escapeHtml(d.date)}" onchange="remSet('date', this.value, true)"></label>
@@ -2195,10 +2283,12 @@ function renderRemEditor() {
       <button class="btn" onclick="remDraft = null; renderRemEditor()">Cancel</button>
       ${d.id ? `<button class="btn icon-cross" onclick="remAct('${escapeHtml(d.id)}', 'delete')">Delete</button>` : ''}
     </div>`;
+  remTitleTyped(d.title);
 }
 
 async function saveRem() {
   const d = remDraft;
+  if (d) applyRemWhen();
   if (!d || !d.title.trim()) return toast('Write what to remember.', true);
   if (d.repeatOn && d.repeat.freq === 'weekly' && !(d.repeat.days || []).length) return toast('Pick at least one day.', true);
   const dueMs = d.date ? (d.allDay ? localMs(d.date, '12:00 AM') : localMs(d.date, d.time || '10:00 AM')) : 0;
@@ -2231,6 +2321,16 @@ async function remAct(id, what, extra) {
     renderReminders();
   } catch (e) { toast('Network error', true); }
 }
+
+document.addEventListener('click', function (e) {
+  const el = e.target.closest ? e.target.closest('[data-remf]') : null;
+  if (!el) return;
+  e.stopPropagation();
+  const sel = document.getElementById(el.getAttribute('data-remf') === 'group' ? 'rem-group' : 'rem-tag');
+  const v = el.getAttribute('data-remv');
+  sel.value = sel.value === v ? '' : v;
+  renderReminders();
+}, true);
 
 function remComment(id) {
   const el = document.getElementById('rc-' + id);
@@ -2275,7 +2375,7 @@ function remItemHtml(x) {
     <button class="rem-check" title="${x.status === 'Open' ? 'Mark done' : 'Open again'}" onclick="remAct('${id}', '${x.status === 'Open' ? 'done' : 'undo'}')">${x.status === 'Open' ? '' : '&#10003;'}</button>
     <div class="rem-main" onclick="remOpen['${id}'] = !remOpen['${id}']; renderReminders()">
       <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)}</div>
-      <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
+      <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group' + (valOf('rem-group') === x.group ? ' on' : '') + '" data-remf="group" data-remv="' + escapeHtml(x.group) + '" title="Click to show only this group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag' + (valOf('rem-tag') === t ? ' on' : '') + '" data-remf="tag" data-remv="' + escapeHtml(t) + '" title="Click to show only this tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
     </div>
     ${open ? `<div class="rem-more">
       ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : ''}
@@ -5138,8 +5238,9 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'partial-section', 'recent-section']
-    .forEach(id => document.getElementById(id).classList.add('hidden'));
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'partial-section', 'recent-section']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+  document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => el.classList.add('hidden'));
 }
 
 function renderFormInterface() {
@@ -5887,8 +5988,8 @@ let reportTab = 'simple';
 function fillReportProjects() {
   const el = document.getElementById('report-project');
   if (!el || el.options.length) return;
-  el.innerHTML = PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('') + '<option value="">All projects</option>';
-  el.value = PROJECTS.length ? PROJECTS[0].id : '';
+  el.innerHTML = '<option value="">All projects</option>' + PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+  el.value = '';
 }
 
 function staffReportsOnly() {
@@ -6071,6 +6172,9 @@ function renderTiming() {
     if (person && !(it.by === person || (it.lateOwners || []).indexOf(person) !== -1 || (it.open && (it.owners || []).indexOf(person) !== -1) || (it.assigned && String(it.name || '').split(', ').indexOf(person) !== -1))) return false;
     if (task && it.task !== task) return false;
     if (state === 'late' && !it.late) return false;
+    if (['before', 'on', 'after', 'aftert'].indexOf(state) !== -1 && (it.open || it.band !== (state === 'aftert' ? 'late' : state))) return false;
+    if (state === 'donelate' && (it.open || !it.late)) return false;
+    if (state === 'openlate' && !(it.open && it.late)) return false;
     if (state === 'open' && !it.open) return false;
     if (state === 'ontime' && (it.late || it.open)) return false;
     if (q && ![it.refNo, it.caseNo, it.name, it.occurrence].some(x => String(x || '').toLowerCase().includes(q))) return false;
@@ -6342,7 +6446,7 @@ function renderSimpleReport() {
   const rowHtml = r => `<tr data-tip="${escapeHtml(reportRowTip(r))}">
       <td class="${caseCellClass(r)}">${escapeHtml(r.refNo)}</td>
       <td class="left name-col ${caseCellClass(r)}">${escapeHtml(r.name || '')}</td><td>${escapeHtml(String(r.days))}</td>
-      ${timeView ? r.cells.map((c, i) => { const x = (r.times || [])[i]; return x ? `<td class="tcell${x.late ? ' tlate' : ''}${x.open ? ' topen' : ''}" title="${escapeHtml((x.open ? 'Still open: ' : 'Took ') + x.t + ' of ' + x.a + ' allowed')}">${escapeHtml(x.t)}/${escapeHtml(x.a)}</td>` : `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`; }).join('') : r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
+      ${timeView ? r.cells.map((c, i) => { const x = (r.times || [])[i]; return x ? `<td class="tcell${x.late ? ' tlate' : ''}${x.open ? ' topen' : ''}" title="${escapeHtml((x.open ? 'Still open: ' : 'Took ') + x.t + ' of ' + x.a + ' allowed' + (x.by ? ' · ' + (x.open ? 'with ' : 'by ') + x.by : ''))}">${escapeHtml(x.t)}/${escapeHtml(x.a)}</td>` : `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`; }).join('') : r.cells.map(c => `<td class="sym ${SYM_CLASS[c] || ''}" title="${escapeHtml(SYM_NAME[c] || '')}">${escapeHtml(c)}</td>`).join('')}
       <td>${escapeHtml(r.branch || '')}</td><td>${escapeHtml(r.salesman || '')}</td>
       <td>${r.out ? '<span class="out-tag">Out of chain</span>' : ''}</td><td class="nowrap">${escapeHtml(r.mobile || '')}</td>
     </tr>`;
@@ -6785,9 +6889,10 @@ function renderChequeReport() {
   const sum = document.getElementById('cheque-summary');
   const table = document.getElementById('cheque-report-table');
   const meta = document.getElementById('report-meta');
-  fillSelect('cq-user', uniqueSorted(chequeItems.map(c => c.claimedBy || '')), 'Everyone');
-  fillSelect('cq-branch', uniqueSorted(chequeItems.map(c => c.branch || '(not set)')), 'All');
-  fillSelect('cq-sales', uniqueSorted(chequeItems.map(c => c.salesman || '(not set)')), 'All');
+  fillSelect('cq-user', uniqueSorted(chequeItems.filter(c => inReportRange(c.claimedDay)).map(c => c.claimedBy || '')), 'Everyone');
+  fillSelect('cq-branch', uniqueSorted(chequeItems.filter(c => inReportRange(c.claimedDay)).map(c => c.branch || '(not set)')), 'All');
+  const inDates = chequeItems.filter(c => inReportRange(c.claimedDay));
+  fillSelect('cq-sales', uniqueSorted(inDates.map(c => c.salesman || '(not set)')), 'All');
   const inRange = chequeFiltered();
   const total = inRange.length;
   const received = inRange.filter(c => c.status === 'Received').length;
@@ -7133,7 +7238,8 @@ function renderAssignForm() {
       <option value="each"${d.mode === 'each' ? ' selected' : ''}>Each person does their own copy</option>
       <option value="shared"${d.mode === 'shared' ? ' selected' : ''}>One person finishing closes it for everyone</option>
     </select></div>` : ''}
-    <div class="report-bar"><label class="inline-label">Priority <select onchange="asSet('priority', this.value)">${ASSIGN_PRIORITIES.map(p => `<option${d.priority === p ? ' selected' : ''}>${p}</option>`).join('')}</select></label></div>
+    <div class="report-bar"><label class="inline-label">Priority <select onchange="asSet('priority', this.value)">${ASSIGN_PRIORITIES.map(p => `<option${d.priority === p ? ' selected' : ''}>${p}</option>`).join('')}</select></label>
+      ${PROJECTS.length > 1 ? `<label class="inline-label">Project <select onchange="asSet('project', this.value)">${PROJECTS.filter(p => p.active !== false).map(p => `<option value="${escapeHtml(p.id)}"${(d.project || DEFAULT_PROJECT) === p.id ? ' selected' : ''}>${escapeHtml(p.name)}</option>`).join('')}</select></label>` : ''}</div>
     <div class="owner-grid" style="margin-top:6px;"><label class="owner-pick${d.repeat ? ' on' : ''}"><input type="checkbox"${d.repeat ? ' checked' : ''} onchange="assignDraft.repeat = this.checked; renderAssignForm()"> Repeat on a schedule</label></div>
     ${d.repeat ? `<div class="schedule-box">
       <div class="report-bar">
@@ -7216,6 +7322,7 @@ async function saveAssign() {
     points: d.pointsOn && user.level === 0 ? d.points : null,
     important: !!d.important,
     priority: d.priority || 'Normal',
+    project: d.project || DEFAULT_PROJECT,
     allow: !d.repeat && d.dueKind === 'allow' ? { d: asNum(d.allowD), h: asNum(d.allowH) } : null,
     remind: d.remind === '' ? null : d.remind === 'at' ? { mode: 'at', ms: localMs(d.remindDate, d.remindTime) } : { mode: 'before', mins: Number(d.remind) }
   };
@@ -7318,6 +7425,7 @@ function editAssign(id) {
   if (a.points) { d.pointsOn = true; d.points = Object.assign(d.points, a.points); }
   d.important = !!a.important;
   d.priority = a.priority || 'Normal';
+  d.project = a.project || DEFAULT_PROJECT;
   if (a.remind && a.remind.mode === 'before') d.remind = String(a.remind.mins);
   else if (a.remind && a.remind.mode === 'at') {
     d.remind = 'at';
@@ -8340,17 +8448,57 @@ function renderTrailHtml(r, go) {
   const head = [r.name, r.mobile, r.inputs, [r.salesman, r.branch].filter(Boolean).join(' · ')].filter(Boolean);
   const nav = `<div class="trail-nav">${r.prev ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.prev).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">&#9664; ${escapeHtml(r.prev)}</button>` : '<button class="btn btn-small" disabled>&#9664; First</button>'}
     <div class="nav-spacer"></div>${r.next ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.next).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">${escapeHtml(r.next)} &#9654;</button>` : '<button class="btn btn-small" disabled>Last &#9654;</button>'}</div>`;
-  const chains = (r.chains || []).length ? `<label>Where it is in each chain</label><div class="trail-chains">${r.chains.map(c => `<div class="trail-chain"><div class="trail-chain-name">${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</div><div class="trail-steps">${c.tasks.map(t => { const S = TRAIL_SYM[t.sym] || TRAIL_SYM['']; return `<div class="trail-step${t.late ? ' late' : ''}" title="${escapeHtml(S[2])}"><b class="${S[1]}">${S[0] || '&nbsp;'}</b>${escapeHtml(t.task)}${t.took || t.allowed ? `<small>${escapeHtml(t.took || '-')} / ${escapeHtml(t.allowed || '-')}</small>` : ''}</div>`; }).join('')}</div></div>`).join('')}</div>` : '';
+  const chains = (r.chains || []).length ? `<label>Where it is in each chain</label><div class="trail-chains">${r.chains.map(c => `<div class="trail-chain"><div class="trail-chain-name">${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</div><div class="trail-steps">${c.tasks.map(t => { const S = TRAIL_SYM[t.sym] || TRAIL_SYM['']; return `<div class="trail-step${t.late ? ' late' : ''}${!t.sym || t.sym === 'skip' ? ' dim' : ''}" title="${escapeHtml(S[2])}"><b class="${S[1]}">${S[0] || '&nbsp;'}</b>${escapeHtml(t.task)}${t.took ? `<small>${escapeHtml(t.took)} / ${escapeHtml(t.allowed || '-')}</small>` : ''}</div>`; }).join('')}</div></div>`).join('')}</div>` : '';
   const cheques = (r.cheques || []).map(c => `<div class="trail-cheque">${chequeLine(c)}</div>`).join('');
   return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
     ${cheques}${chains}
-    <label>Steps</label>
-    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Arrived</th><th>Closed</th><th>By</th><th>Took</th><th>Allowed</th><th>Status</th><th>Points</th></tr></thead><tbody>${
-      r.steps.map(x => `<tr${x.late ? ' class="overdue"' : ''}><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(x.arrived)}</td><td>${escapeHtml(x.closed)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.took)}</td><td>${escapeHtml(x.allowed)}</td>
-        <td>${x.status === 'Pending' ? (x.late ? '<span class="status-pill status-late">Waiting · late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-open">Waiting</span>') : x.status === 'Done' ? (x.late ? '<span class="status-pill status-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="status-pill status-done">On time</span>') : escapeHtml(x.status)}</td>
-        <td>${x.band ? `<b class="band-${x.band}">${x.points > 0 ? '+' : ''}${x.points}</b>` : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="report-meta">No steps yet.</td></tr>'}</tbody></table></div>
+    ${trailTablesHtml(r)}
     <label style="margin-top:16px;">Everything that happened</label>
     <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}</span></div>`).join('')}</div>`;
+}
+
+function spanText(x) {
+  if (x.status === 'Pending') return x.late ? '<span class="band-late">Late ' + escapeHtml(x.lateBy) + ' (open)</span>' : '<span class="report-meta">Open</span>';
+  if (!x.closed) return '';
+  if (!x.band && !x.took) return '<span class="report-meta">Done</span>';
+  if (x.band === 'before') return '<span class="band-before">Before</span>';
+  if (x.band === 'on') return '<span class="band-on">On time</span>';
+  if (x.band === 'after') return '<span class="band-after">After</span>';
+  if (x.band === 'late') return '<span class="band-late">After that' + (x.lateDays > 1 ? ' · ' + x.lateDays + ' days' : '') + '</span>';
+  return x.late ? '<span class="band-late">Late ' + escapeHtml(x.lateBy) + '</span>' : '<span class="band-on">On time</span>';
+}
+
+function shortWhen(s) {
+  return String(s || '').replace(/ (\d{2}),/, ',');
+}
+
+function ptsCell(v, cls) {
+  return v === null || v === undefined ? '' : `<b class="${cls || (v < 0 ? 'band-late' : '')}">${v > 0 && cls === 'cur' ? '+' : ''}${v}</b>`;
+}
+
+function trailTablesHtml(r) {
+  const inChain = {};
+  const tables = (r.chains || []).map(c => {
+    let lastPhase = null, tb = 0, to = 0, tc = 0;
+    const rows = c.tasks.map(t => {
+      inChain[t.task] = true;
+      const reached = !!(t.arrived || t.closed || (t.sym && t.sym !== 'skip'));
+      if (reached || t.status) { tb += t.bestPts || 0; to += t.onPts || 0; tc += t.points || 0; }
+      const ph = t.phase !== lastPhase ? `<tr class="phase-row"><td class="left" colspan="11"><b>${escapeHtml(t.phase || 'Other')}</b></td></tr>` : '';
+      lastPhase = t.phase;
+      return ph + `<tr class="${!reached ? 'dim-row' : t.late ? 'overdue' : ''}"><td class="left">${escapeHtml(t.task)}</td><td class="left">${escapeHtml(t.by || (t.owners || []).join(', '))}</td>
+        <td>${escapeHtml(shortWhen(t.arrived))}</td><td>${t.status === 'Pending' ? '<span class="status-pill status-open">Open</span>' : escapeHtml(shortWhen(t.closed))}</td>
+        <td>${escapeHtml(t.allowed || '')}</td><td>${escapeHtml(t.took || '')}</td><td>${spanText(t)}</td>
+        <td>${ptsCell(t.bestPts, 'band-before')}</td><td>${ptsCell(t.onPts, 'band-on')}</td>
+        <td>${t.points !== null && t.points !== undefined ? ptsCell(t.points, 'cur') : t.noPts ? '<small class="report-meta">' + escapeHtml(t.noPts) + '</small>' : ''}</td></tr>`;
+    }).join('');
+    return `<label>${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</label>
+      <div class="report-wrap trail-table" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Assigned</th><th>Arrive</th><th>Closed</th><th>Allowed</th><th>Took</th><th>Span</th><th title="Points if done before time">Best</th><th title="Points if done on time">On</th><th>Now</th></tr></thead>
+      <tbody>${rows}</tbody><tfoot><tr class="section-row"><td class="left" colspan="7">Total (tasks reached so far)</td><td>${tb}</td><td>${to}</td><td><b class="${tc < 0 ? 'band-late' : 'band-on'}">${tc > 0 ? '+' : ''}${tc}</b></td></tr></tfoot></table></div>`;
+  }).join('');
+  const rest = (r.steps || []).filter(x => !inChain[x.task]);
+  const other = rest.length ? `<label>Other steps</label><div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Task</th><th>Arrived</th><th>Closed</th><th>By</th><th>Took</th><th>Allowed</th><th>Span</th><th>Points</th></tr></thead><tbody>${rest.map(x => `<tr${x.late ? ' class="overdue"' : ''}><td class="left">${escapeHtml(x.task)}</td><td>${escapeHtml(x.arrived)}</td><td>${escapeHtml(x.closed)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.took)}</td><td>${escapeHtml(x.allowed)}</td><td>${spanText(x)}</td><td>${x.points !== null && x.points !== undefined ? ptsCell(x.points, 'cur') : '<small class="report-meta">' + escapeHtml(x.noPts || '') + '</small>'}</td></tr>`).join('')}</tbody></table></div>` : '';
+  return tables + other || '<div class="report-meta">No steps yet.</div>';
 }
 
 function trailGo(key) {
