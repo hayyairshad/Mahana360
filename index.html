@@ -2370,7 +2370,8 @@ function taskListFor(staffName, all) {
     return allTasks().filter(t => t.admin || t.active).map(t => t.name);
   }
   const covering = coveredBy(staffName);
-  let list = TASKS.filter(t => t.active && (t.owners.indexOf(staffName) !== -1 || t.owners.some(o => covering.indexOf(o) !== -1)));
+  const meKey = String(staffName || '').trim().toLowerCase();
+  let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
   return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS] : []).concat(extraPanelsFor(staffName));
 }
@@ -2425,7 +2426,9 @@ function projectName(pid) {
 function visibleProjects() {
   if (!profile || !user) return [];
   const own = user.level === 0 && profile.name === user.name;
-  const list = PROJECTS.filter(p => p.active !== false && (own || (p.staff || []).indexOf(profile.name) !== -1))
+  const me = String(profile.name).trim().toLowerCase();
+  const mine = own ? [] : staffTaskList().map(t => projOfTask(t));
+  const list = PROJECTS.filter(p => p.active !== false && (own || (p.staff || []).some(n => String(n).trim().toLowerCase() === me) || mine.indexOf(p.id) !== -1))
     .map(p => ({ id: p.id, name: p.name }));
   if (!PROJECTS.length) list.push({ id: DEFAULT_PROJECT, name: 'Tasks' });
   if (own) list.push({ id: ADMIN_PROJECT, name: 'Admin' });
