@@ -824,7 +824,10 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .opt-ico { font-size: 0.85rem; line-height: 1; }
 .exit-rule { margin-top: 6px !important; }
 .opt-detail { margin-top: 6px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: 8px; background: var(--accent-softer); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.no-pts { color: var(--text-dim); font-size: 0.7rem; font-style: italic; }
+.fbox { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-2); }
+.fbox .phase-btn, .fbox .inline-label { margin: 0; }
+.as-proj { margin-top: 4px; padding: 2px 6px; font-size: 0.75rem; min-width: 0; width: auto; }
+.no-pts { color: var(--text-dim); font-size: 0.72rem; font-style: italic; display: inline-block; white-space: normal; min-width: 120px; line-height: 1.25; }
 .case-info-actions { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
 .grace-form { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .grace-form select, .grace-form input { margin: 0; padding: 5px 8px; font-size: 0.8rem; width: auto; }
@@ -1170,16 +1173,15 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <button class="recent-toggle" id="recent-toggle" onclick="toggleRecent()"><span class="recent-arrow">&#9656;</span> Recent Entries <span id="recent-who" class="report-meta" style="text-transform:none; letter-spacing:0;"></span></button>
 <div id="recent-body" class="hidden">
 <div class="report-bar date-bar">
-<button class="phase-btn" id="recent-r-today" onclick="recentRange('today')">Today</button>
+<div class="fbox"><button class="phase-btn" id="recent-r-today" onclick="recentRange('today')">Today</button>
 <button class="phase-btn" id="recent-r-week" onclick="recentRange('week')">This week</button>
 <button class="phase-btn" id="recent-r-month" onclick="recentRange('month')">This month</button>
 <button class="phase-btn hidden" id="recent-tab-task" onclick="setRecentScope('task')">This task</button>
-<button class="phase-btn hidden" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button>
-<span class="bar-sep"></span>
-<button class="phase-btn" id="recent-who-all" onclick="setRecentWho('all')">Everyone</button>
-<button class="phase-btn" id="recent-who-me" onclick="setRecentWho('me')">Only me</button>
-<label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
-<label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
+<button class="phase-btn hidden" id="recent-tab-all" onclick="setRecentScope('all')">All tasks</button></div>
+<div class="fbox"><button class="phase-btn" id="recent-who-all" onclick="setRecentWho('all')">Everyone</button>
+<button class="phase-btn" id="recent-who-me" onclick="setRecentWho('me')">Only me</button></div>
+<div class="fbox"><label class="inline-label">From <input type="date" id="recent-from" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label>
+<label class="inline-label">To <input type="date" id="recent-to" onkeydown="if(event.key==='Enter')loadRecent()" onchange="recentDatesChanged()"></label></div>
 <input type="text" id="recent-q" class="report-search" placeholder="Search ref or name" onkeydown="if(event.key==='Enter')loadRecent()">
 <button class="btn btn-small btn-primary" onclick="loadRecent()">Apply</button>
 <button class="btn btn-small" onclick="clearRecent()">Clear</button>
@@ -2102,7 +2104,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R24";
+const APP_VERSION = "R25";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2471,7 +2473,7 @@ function remCalendarHtml(list) {
   const first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
   const by = {};
   list.forEach(x => { if (x.dueDay) (by[x.dueDay] = by[x.dueDay] || []).push(x); });
-  (remData.assigned || []).forEach(a => { if (a.dueMs) { const k = ymdLocal(new Date(a.dueMs)); (by[k] = by[k] || []).push({ title: a.title, assigned: true }); } });
+  (remData.assigned || []).forEach(a => { if (a.dueMs) { const k = (a.occurrence || ymdLocal(new Date(a.dueMs))); (by[k] = by[k] || []).push({ title: a.title, assigned: true }); } });
   const today = ymdLocal(new Date());
   let cells = '';
   for (let i = 0; i < first.getDay(); i++) cells += '<div class="cal-cell empty"></div>';
@@ -2493,7 +2495,7 @@ function renderReminders() {
   fillSelect('rem-tag', remData.tags, 'All tags');
   const list = remFiltered();
   const box = document.getElementById('rem-list');
-  const ass = (remData.assigned || []).filter(a => !valOf('rem-group') && !valOf('rem-tag') && valOf('rem-show') !== 'done' && (!remDayPick || (a.dueMs && ymdLocal(new Date(a.dueMs)) === remDayPick)));
+  const ass = (remData.assigned || []).filter(a => !valOf('rem-group') && !valOf('rem-tag') && valOf('rem-show') !== 'done' && (!remDayPick || (a.dueMs && (a.occurrence || ymdLocal(new Date(a.dueMs))) === remDayPick)));
   const order = ['Overdue', 'Today', 'Tomorrow', 'This week', 'Later', 'No date', 'Done'];
   const groups = {};
   list.forEach(x => { const b = remBucket(x); (groups[b] = groups[b] || []).push(x); });
@@ -7554,7 +7556,7 @@ function renderAssignList() {
   document.getElementById('as-tab-done').innerText = 'Done (' + counts.done + ')';
   document.getElementById('assign-table').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Due</th><th>Status</th><th>Done by</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>${
     items.map(x => `<tr class="${x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
-      <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b> ${priorityBadge(x.priority)}${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
+      <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b> ${priorityBadge(x.priority)}${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}${assignProjectPick(x)}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
       <td>${escapeHtml(x.due)}</td><td>${assignStatusPill(x)}</td><td>${escapeHtml(x.doneBy || '')}</td><td>${escapeHtml(x.doneAt || '')}</td>
       <td class="left">${escapeHtml(x.note || '')}</td>
       <td class="nowrap">${assignMineById(x.assignId) ? `${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button>` : ''}</td>
@@ -7566,6 +7568,26 @@ function renderAssignList() {
       <td>${a.status === 'Active' ? '<span class="status-pill status-done">Active</span>' : '<span class="status-pill status-open">Stopped</span>'}</td>
       <td>${assignMineById(a.id) ? `${a.status === 'Active' ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(a.id)}')">Edit</button> <button class="btn btn-small icon-cross" id="stop-${escapeHtml(a.id)}" onclick="stopAssign('${escapeHtml(a.id)}')">Stop</button> ` : ''}<button class="btn btn-small icon-cross" id="del-def-${escapeHtml(a.id)}" onclick="deleteAssign('${escapeHtml(a.id)}', '')">Delete all</button>` : ''}</td>
     </tr>`).join('') || '<tr><td colspan="5" class="report-meta">No repeating assignments.</td></tr>'}</tbody>`;
+}
+
+function assignProjectPick(x) {
+  if (PROJECTS.length < 2) return '';
+  const cur = x.project || DEFAULT_PROJECT;
+  if (!assignMineById(x.assignId)) { const p = PROJECTS.filter(p => p.id === cur)[0]; return `<br><small class="report-meta">${escapeHtml(p ? p.name : cur)}</small>`; }
+  return `<br><select class="as-proj" onchange="setAssignProject('${escapeHtml(x.assignId)}', this)">${PROJECTS.filter(p => p.active !== false || p.id === cur).map(p => `<option value="${escapeHtml(p.id)}"${cur === p.id ? ' selected' : ''}>${escapeHtml(p.name)}</option>`).join('')}</select>`;
+}
+
+async function setAssignProject(id, sel) {
+  const project = sel.value;
+  sel.disabled = true;
+  try {
+    const r = await apiCall('assignProject', { id: id, project: project });
+    if (!r.ok) { toast(r.error || 'Could not change', true); renderAssignList(); return; }
+    assignData.items.forEach(x => { if (x.assignId === id) x.project = project; });
+    assignData.assignments.forEach(a => { if (a.id === id) a.project = project; });
+    toast('Project changed');
+    renderAssignList();
+  } catch (e) { toast('Network error', true); sel.disabled = false; }
 }
 
 function assignDefById(id) {
@@ -8621,7 +8643,7 @@ function renderTrailHtml(r, go) {
     ${cheques}${chains}
     ${trailTablesHtml(r)}
     <label style="margin-top:16px;">Everything that happened</label>
-    <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}</span></div>`).join('')}</div>`;
+    <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}${e.note ? '<div class="report-meta">' + escapeHtml(e.note) + '</div>' : ''}</span></div>`).join('')}</div>`;
 }
 
 function spanText(x) {
