@@ -852,6 +852,33 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .imp-card .report-wrap { margin: 8px; }
 .imp-name { font-weight: 700; margin-right: 6px; }
 .imp-hl { font-size: 0.78rem; color: var(--accent-dark); margin-top: 2px; }
+.imp-count { font-size: 0.78rem; color: var(--accent-dark); margin-left: 4px; }
+.imp-at { margin-top: 4px; }
+.imp-task-chip { display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; padding: 1px 7px; font-size: 0.75rem; background: var(--surface-2); margin: 2px 2px 2px 0; }
+.imp-task-chip.open { border-color: #e7b45a; background: #fff6e5; }
+.imp-task-chip small { color: var(--text-dim); }
+.imp-inner { padding: 0 4px 10px; }
+.imp-sec { margin: 10px 8px 0; }
+.imp-sec > b { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-dark); margin-bottom: 4px; }
+.imp-note { border-left: 3px solid var(--accent-color); background: var(--surface-2); border-radius: 6px; padding: 6px 10px; margin-bottom: 6px; }
+.imp-note-text { white-space: pre-wrap; font-size: 0.9rem; margin-top: 2px; }
+.imp-x { border: none; background: none; color: #b42318; cursor: pointer; font-size: 0.8rem; padding: 0 4px; }
+.imp-add { display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-start; margin-top: 6px; }
+.imp-add select { width: auto; min-width: 140px; margin: 0; }
+.imp-add textarea { flex: 1; min-width: 200px; margin: 0; }
+.imp-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 12px 8px 0; }
+.imp-del { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 8px; padding: 8px; border: 1px dashed #e0a39d; border-radius: 8px; }
+.imp-del input { width: auto; min-width: 180px; margin: 0; }
+.imp-viewers { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 6px 0 8px; }
+.imp-vw { display: inline-flex; align-items: center; gap: 4px; font-size: 0.85rem; margin: 0; }
+.imp-vw input { width: auto; margin: 0; }
+@media print {
+  body.imp-print * { visibility: hidden !important; }
+  body.imp-print .imp-printing, body.imp-print .imp-printing * { visibility: visible !important; }
+  body.imp-print .imp-printing { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+  body.imp-print .imp-printing .imp-noprint { display: none !important; }
+  body.imp-print .imp-printing .report-wrap { max-height: none !important; overflow: visible !important; }
+}
 .no-pts { color: var(--text-dim); font-size: 0.72rem; font-style: italic; display: inline-block; white-space: normal; min-width: 120px; line-height: 1.25; }
 .case-info-actions { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
 .grace-form { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
@@ -1511,11 +1538,15 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <p class="report-meta">In Dropbox: right-click the Excel file &rarr; Share &rarr; Copy link. Paste it here. It is kept private on the server and is never shown again.</p>
 <div class="imp-link-row"><input type="text" id="imp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="imp-link-btn" onclick="importSaveLink()">Save and sync</button></div>
 <div id="imp-link-status" class="report-meta"></div>
+<label style="margin-top:10px;">Who can see Import Data</label>
+<p class="report-meta">Jawad and Uzair always see it. Tick the others. If nobody is ticked, people in the Imports project see it.</p>
+<div id="imp-viewers" class="imp-viewers"></div>
+<button class="btn btn-small" id="imp-viewers-btn" onclick="importSaveViewers()">Save who can see</button>
 </details>
 <div id="imp-chips" class="imp-chips"></div>
 <div class="report-bar date-bar">
 <div class="fbox"><input type="text" id="imp-q" class="report-search" placeholder="Search consignment, model, product" oninput="renderImports()"></div>
-<div class="fbox"><select id="imp-status" onchange="renderImports()"></select><select id="imp-supplier" onchange="renderImports()"></select><select id="imp-product" onchange="renderImports()"></select><select id="imp-bm" onchange="renderImports()"></select></div>
+<div class="fbox"><select id="imp-show" onchange="renderImports()"><option value="open">Open consignments</option><option value="closed">Closed</option><option value="all">All</option><option value="deleted" class="imp-adm-only">Deleted</option></select><select id="imp-status" onchange="renderImports()"></select><select id="imp-supplier" onchange="renderImports()"></select><select id="imp-product" onchange="renderImports()"></select><select id="imp-bm" onchange="renderImports()"></select></div>
 <div class="fbox"><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button></div>
 <button class="btn btn-small" onclick="clearImpFilters()">Clear</button>
 </div>
@@ -2147,7 +2178,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R26";
+const APP_VERSION = "R27";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2211,6 +2242,8 @@ const IMPORTS_PROJECT = "__imports";
 const IMPORTS_TASK = { name: IMPORTS_NAME, phase: "Import Data", panel: "imports", description: "Consignments from the Dropbox file",
   temp: false, fields: [], owners: [], slots: [], active: true };
 let impData = null;
+let IMPORT_VIEWERS = [];
+let impGroups = [];
 let impView = 'group';
 let impOpen = {};
 
@@ -2234,6 +2267,7 @@ function canSeeImports(staffName) {
   const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
   if (lv <= 1) return true;
   const me = String(staffName).trim().toLowerCase();
+  if (IMPORT_VIEWERS.length) return IMPORT_VIEWERS.some(n => String(n).trim().toLowerCase() === me);
   const p = PROJECTS.filter(x => x.id === pid)[0];
   if (p && (p.staff || []).some(n => String(n).trim().toLowerCase() === me)) return true;
   return TASKS.some(t => (t.project || DEFAULT_PROJECT) === pid && (t.owners || []).some(o => String(o).trim().toLowerCase() === me));
@@ -2337,7 +2371,9 @@ function renderImports() {
   err.innerText = d.error ? 'Last sync problem: ' + d.error : '';
   const adm = document.getElementById('imp-admin');
   adm.classList.toggle('hidden', !d.isAdmin);
+  document.querySelectorAll('#imp-show .imp-adm-only').forEach(o => { o.hidden = !d.isAdmin; });
   if (d.isAdmin) {
+    renderImpViewers();
     document.getElementById('imp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
     if (!d.linkSet) adm.open = true;
   }
@@ -2373,29 +2409,150 @@ function renderImports() {
   const order = [];
   rows.forEach(r => { const k = r[C.group] || r[C.each] || '(no name)'; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
   const gStatus = list => Array.from(new Set(list.map(r => norm(r, C.status)).filter(v => v && v !== '0')));
-  order.sort((a, b) => Math.min(...gStatus(groups[a]).map(impStatusRank), 99) - Math.min(...gStatus(groups[b]).map(impStatusRank), 99) || a.localeCompare(b));
+  const states = d.states || {};
+  const show = valOf('imp-show') || 'open';
+  const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
+  const shown = order.filter(k => { const st = stateOf(k); return show === 'all' ? st !== 'Deleted' : show === 'closed' ? st === 'Closed' : show === 'deleted' ? st === 'Deleted' : st !== 'Closed' && st !== 'Deleted'; });
+  shown.sort((a, b) => Math.min(...gStatus(groups[a]).map(impStatusRank), 99) - Math.min(...gStatus(groups[b]).map(impStatusRank), 99) || a.localeCompare(b));
   const skip = [C.group, C.main, C.supplier, C.hl, C.bm];
-  const many = q || fs || fsu || fp || fb ? order.length <= 8 : false;
-  body.innerHTML = order.map(k => {
+  const many = q || fs || fsu || fp || fb ? shown.length <= 8 : false;
+  impGroups = shown.map(k => {
     const list = groups[k];
+    const names = Array.from(new Set([k].concat(list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
+    return { name: k, list: list, names: names, keys: names.map(impKey) };
+  });
+  const isAdm = d.level === 0, lead = d.level <= 1;
+  body.innerHTML = impGroups.map((g, gi) => {
+    const k = g.name, list = g.list;
     const st = gStatus(list);
     const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
     const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
     const hl = Array.from(new Set(list.map(r => String(r[C.hl] || '').trim()).filter(v => v && v !== '0')));
     const cols = H.map((h, j) => j).filter(j => skip.indexOf(j) === -1 && !(j === C.status && st.length <= 1) && list.some(r => impVal(r[j], NUM[j]) !== '' && !(j === C.each && r[j] === k)));
     const sums = H.map((h, j) => j).filter(j => NUM[j]).map(j => H[j] + ' ' + list.reduce((a, r) => a + (Number(r[j]) || 0), 0));
+    const prog = impProgress(g);
+    const notes = (d.notes || []).filter(n => g.keys.indexOf(n.key) !== -1);
+    const state = states[impKey(k)];
     const open = impOpen[k] !== undefined ? impOpen[k] : many;
-    return `<details class="imp-card"${open ? ' open' : ''} ontoggle="impOpen[this.dataset.k] = this.open" data-k="${escapeHtml(k)}"><summary>
+    const defTask = prog.open.length ? prog.open[0].task : (prog.done.length ? prog.done[prog.done.length - 1].task : '');
+    return `<details class="imp-card" id="imp-card-${gi}"${open ? ' open' : ''} ontoggle="impOpen[impGroups[${gi}].name] = this.open"><summary>
       <span class="imp-name">${escapeHtml(k)}</span>
       ${st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
       ${bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
-      <div class="report-meta">${escapeHtml(sup.join(', '))} · ${list.length} item${list.length === 1 ? '' : 's'}${sums.length ? ' · ' + escapeHtml(sums.join(' · ')) : ''}</div>
+      ${state && state.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(state.state)}</span>` : ''}
+      ${notes.length ? `<span class="imp-count">&#128172; ${notes.length}</span>` : ''}
+      <div class="report-meta">${escapeHtml(sup.join(', '))} · ${list.length} item${list.length === 1 ? '' : 's'}${sums.length ? ' · ' + escapeHtml(sums.join(' · ')) : ''}${g.names.length > 1 ? ' · includes ' + escapeHtml(g.names.filter(x => x !== k).join(', ')) : ''}</div>
       ${hl.length ? `<div class="imp-hl">${escapeHtml(hl.join(' | '))}</div>` : ''}
+      ${prog.open.length ? `<div class="imp-at">${prog.open.map(o => `<span class="imp-task-chip open">&#9203; ${escapeHtml(o.task)}${o.days ? ' · ' + o.days + 'd' : ''}</span>`).join(' ')}</div>` : (prog.done.length ? `<div class="imp-at"><span class="imp-task-chip">&#10003; ${escapeHtml(prog.done[prog.done.length - 1].task)}</span></div>` : '')}
     </summary>
+    <div class="imp-inner">
     <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${cols.map(j => `<th>${escapeHtml(H[j])}</th>`).join('')}</tr></thead><tbody>${
       list.map(r => `<tr>${cols.map(j => j === C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], NUM[j]))}</td>`).join('')}</tr>`).join('')
-    }</tbody></table></div></details>`;
+    }</tbody></table></div>
+    <div class="imp-sec"><b>Tasks</b> ${prog.done.length || prog.open.length ? prog.done.map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<span class="imp-task-chip open" title="${escapeHtml('Waiting since ' + x.arrived)}">&#9203; ${escapeHtml(x.task)} <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small></span>`).join(' ') : '<span class="report-meta">Not in any Imports task yet.</span>'}</div>
+    <div class="imp-sec"><b>Comments</b>
+      <div class="imp-notes">${notes.map(n => `<div class="imp-note"><div class="imp-note-head">${n.task ? `<span class="imp-task-chip">${escapeHtml(n.task)}</span>` : ''}<b>${escapeHtml(n.by)}</b> <span class="report-meta">${escapeHtml(n.at)}${n.consignment && impKey(n.consignment) !== impKey(k) ? ' · on ' + escapeHtml(n.consignment) : ''}</span>${isAdm || n.by === d.me ? ` <button class="imp-x imp-noprint" title="Delete" onclick="impDeleteNote('${escapeHtml(n.id)}')">&#10005;</button>` : ''}</div><div class="imp-note-text">${escapeHtml(n.text)}</div></div>`).join('') || '<div class="report-meta">No comments yet.</div>'}</div>
+      <div class="imp-add imp-noprint"><select id="imp-ntask-${gi}"><option value="">No task</option>${(d.tasks || []).map(t => `<option value="${escapeHtml(t)}"${t === defTask ? ' selected' : ''}>${escapeHtml(t)}</option>`).join('')}</select><textarea id="imp-ntext-${gi}" rows="2" placeholder="Write a comment"></textarea><button class="btn btn-small btn-primary" onclick="impAddNote(${gi}, this)">Save comment</button></div>
+    </div>
+    <div class="imp-actions imp-noprint">
+      <button class="btn btn-small" onclick="openUniSearch(impGroups[${gi}].name)">Full trail</button>
+      <button class="btn btn-small" onclick="impPrint(${gi})">Print / PDF</button>
+      ${lead ? (state && state.state === 'Closed' ? `<button class="btn btn-small" onclick="impSetState(${gi}, 'Open', this)">Reopen</button>` : state && state.state === 'Deleted' ? `<button class="btn btn-small" onclick="impSetState(${gi}, 'Open', this)">Bring back</button>` : `<button class="btn btn-small" onclick="impSetState(${gi}, 'Closed', this)">Close consignment</button>`) : ''}
+      ${isAdm && !(state && state.state === 'Deleted') ? `<button class="btn btn-small icon-cross" onclick="document.getElementById('imp-del-${gi}').classList.toggle('hidden')">Delete forever</button>` : ''}
+      ${state && state.state !== 'Open' ? `<span class="report-meta">${escapeHtml(state.state)} by ${escapeHtml(state.by)} · ${escapeHtml(state.at)}</span>` : ''}
+    </div>
+    ${isAdm ? `<div id="imp-del-${gi}" class="imp-del hidden imp-noprint"><span class="report-meta">This hides the consignment and deletes all its comments. Excel is not touched. Type <b>${escapeHtml(k)}</b> to confirm:</span><input type="text" id="imp-del-in-${gi}" autocomplete="off"><button class="btn btn-small icon-cross" onclick="impSetState(${gi}, 'Deleted', this)">Delete</button></div>` : ''}
+    </div></details>`;
   }).join('') || '<div class="report-meta">Nothing matches.</div>';
+}
+
+function impKey(s) {
+  return String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function shortWhenImp(s) {
+  return String(s || '').replace(/^(\d+ \w+) \d+, /, '$1, ');
+}
+
+function impProgress(g) {
+  const P = (impData && impData.progress) || {};
+  const seen = {};
+  const out = { open: [], done: [] };
+  g.keys.forEach(k => {
+    const p = P[k];
+    if (!p) return;
+    ['open', 'done'].forEach(w => p[w].forEach(x => { const id = w + '|' + x.task + '|' + x.arrivedMs; if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
+  });
+  out.done.sort((a, b) => (a.doneMs || 0) - (b.doneMs || 0));
+  out.open.sort((a, b) => (a.arrivedMs || 0) - (b.arrivedMs || 0));
+  return out;
+}
+
+async function impAddNote(gi, btn) {
+  const g = impGroups[gi];
+  const text = valOf('imp-ntext-' + gi);
+  if (!text) return toast('Write a comment first', true);
+  btn.disabled = true;
+  try {
+    const r = await apiCall('importNoteAdd', { consignment: g.name, task: valOf('imp-ntask-' + gi), text: text });
+    if (!r.ok) { toast(r.error || 'Could not save', true); btn.disabled = false; return; }
+    impData.notes.push(r.note);
+    impOpen[g.name] = true;
+    renderImports();
+    toast('Comment saved');
+  } catch (e) { toast('Network error', true); btn.disabled = false; }
+}
+
+async function impDeleteNote(id) {
+  try {
+    const r = await apiCall('importNoteDelete', { id: id });
+    if (!r.ok) return toast(r.error || 'Could not delete', true);
+    impData.notes = impData.notes.filter(n => n.id !== id);
+    renderImports();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function impSetState(gi, state, btn) {
+  const g = impGroups[gi];
+  const payload = { consignment: g.name, state: state };
+  if (state === 'Deleted') { payload.confirm = valOf('imp-del-in-' + gi); payload.alsoKeys = g.names; }
+  btn.disabled = true;
+  try {
+    const r = await apiCall('importState', payload);
+    if (!r.ok) { toast(r.error || 'Could not change', true); btn.disabled = false; return; }
+    toast(state === 'Closed' ? 'Consignment closed' : state === 'Deleted' ? 'Deleted · ' + r.removed + ' comments removed' : 'Consignment open again');
+    await loadImports();
+  } catch (e) { toast('Network error', true); btn.disabled = false; }
+}
+
+function impPrint(gi) {
+  const card = document.getElementById('imp-card-' + gi);
+  if (!card) return;
+  card.open = true;
+  card.classList.add('imp-printing');
+  document.body.classList.add('imp-print');
+  const done = () => { card.classList.remove('imp-printing'); document.body.classList.remove('imp-print'); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  setTimeout(() => { window.print(); setTimeout(done, 1500); }, 50);
+}
+
+function renderImpViewers() {
+  const box = document.getElementById('imp-viewers');
+  if (!box || !impData || impData.level !== 0) return;
+  const chosen = (impData.viewers || []).map(x => x.toLowerCase());
+  const names = Object.keys(STAFF).filter(n => !(STAFF[n] && STAFF[n].level <= 1)).sort();
+  box.innerHTML = names.map(n => `<label class="imp-vw"><input type="checkbox" value="${escapeHtml(n)}"${chosen.indexOf(n.toLowerCase()) !== -1 ? ' checked' : ''}> ${escapeHtml(n)}</label>`).join('') || '<span class="report-meta">No staff found.</span>';
+}
+
+async function importSaveViewers() {
+  const people = Array.from(document.querySelectorAll('#imp-viewers input:checked')).map(x => x.value);
+  const b = document.getElementById('imp-viewers-btn');
+  b.disabled = true;
+  try {
+    const r = await apiCall('importViewers', { people: people });
+    if (r.ok) { IMPORT_VIEWERS = r.viewers.slice(); impData.viewers = r.viewers; toast('Saved'); } else toast(r.error || 'Could not save', true);
+  } catch (e) { toast('Network error', true); }
+  b.disabled = false;
 }
 
 async function importSyncNow() {
@@ -8061,6 +8218,7 @@ async function markAssignedDone(id) {
 async function loadProjects() {
   try {
     const result = await apiCall('projectList');
+    if (result.ok) IMPORT_VIEWERS = (result.importViewers || []).slice();
     if (result.ok) PROJECTS = (result.projects || []).map(p => ({ id: p.id, name: p.name, staff: (p.staff || []).slice(), active: p.active !== false, settings: p.settings || {} }));
   } catch (e) {}
   if (!PROJECTS.some(p => p.id === adminProject)) adminProject = DEFAULT_PROJECT;
