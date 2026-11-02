@@ -826,7 +826,32 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .opt-detail { margin-top: 6px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: 8px; background: var(--accent-softer); display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .fbox { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-2); }
 .fbox .phase-btn, .fbox .inline-label { margin: 0; }
+.fbox select { width: auto; min-width: 130px; max-width: 220px; margin: 0; padding: 6px 8px; }
+.fbox .report-search { margin: 0; min-width: 220px; }
+@media (max-width: 600px) { .fbox select { min-width: 0; flex: 1 1 45%; max-width: none; } .fbox .report-search { min-width: 0; width: 100%; } }
 .as-proj { margin-top: 4px; padding: 2px 6px; font-size: 0.75rem; min-width: 0; width: auto; }
+.imp-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.imp-error { color: #b42318; background: #fdecea; border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; margin-bottom: 8px; }
+.imp-setup { border: 1px dashed var(--border-strong, #cfd8c8); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; }
+.imp-setup summary { cursor: pointer; font-weight: 600; }
+.imp-link-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.imp-link-row input { flex: 1; min-width: 220px; margin: 0; }
+.imp-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0 10px; }
+.imp-chip { border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 10px; font-size: 0.8rem; cursor: pointer; background: var(--panel-color, #fff); }
+.imp-chip.on { outline: 2px solid var(--accent-color); }
+.imp-pill { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+.imp-st-done { background: #e3f4e5; color: #1e6b2c; }
+.imp-st-cancel { background: #eceff1; color: #607d8b; }
+.imp-st-short { background: #fff1db; color: #a65d00; }
+.imp-st-move { background: #e3eefc; color: #1f4f9a; }
+.imp-st-early { background: #f3e8fd; color: #6a2ca0; }
+.imp-card { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 10px; background: var(--panel-color, #fff); }
+.imp-card > summary { cursor: pointer; padding: 10px 12px; list-style: none; }
+.imp-card > summary::-webkit-details-marker { display: none; }
+.imp-card[open] > summary { border-bottom: 1px solid var(--border-color); }
+.imp-card .report-wrap { margin: 8px; }
+.imp-name { font-weight: 700; margin-right: 6px; }
+.imp-hl { font-size: 0.78rem; color: var(--accent-dark); margin-top: 2px; }
 .no-pts { color: var(--text-dim); font-size: 0.72rem; font-style: italic; display: inline-block; white-space: normal; min-width: 120px; line-height: 1.25; }
 .case-info-actions { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
 .grace-form { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
@@ -1479,6 +1504,24 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-wrap"><table class="report-table" id="assign-defs"></table></div>
 </div>
 
+<div id="form-imports" class="hidden">
+<div class="imp-head"><div><b>Import Data</b> <small class="report-meta" id="imp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="imp-sync-btn" onclick="importSyncNow()">Sync now</button></div>
+<div id="imp-error" class="imp-error hidden"></div>
+<details id="imp-admin" class="imp-setup hidden"><summary>Dropbox file link</summary>
+<p class="report-meta">In Dropbox: right-click the Excel file &rarr; Share &rarr; Copy link. Paste it here. It is kept private on the server and is never shown again.</p>
+<div class="imp-link-row"><input type="text" id="imp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="imp-link-btn" onclick="importSaveLink()">Save and sync</button></div>
+<div id="imp-link-status" class="report-meta"></div>
+</details>
+<div id="imp-chips" class="imp-chips"></div>
+<div class="report-bar date-bar">
+<div class="fbox"><input type="text" id="imp-q" class="report-search" placeholder="Search consignment, model, product" oninput="renderImports()"></div>
+<div class="fbox"><select id="imp-status" onchange="renderImports()"></select><select id="imp-supplier" onchange="renderImports()"></select><select id="imp-product" onchange="renderImports()"></select><select id="imp-bm" onchange="renderImports()"></select></div>
+<div class="fbox"><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button></div>
+<button class="btn btn-small" onclick="clearImpFilters()">Clear</button>
+</div>
+<div id="imp-body"><div class="report-meta">Loading...</div></div>
+</div>
+
 <div id="form-reminders" class="hidden">
 <div class="report-bar">
 <button class="btn btn-primary btn-small" onclick="remEdit('')">+ New reminder</button>
@@ -2104,7 +2147,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R25";
+const APP_VERSION = "R26";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2163,6 +2206,14 @@ let allRecurring = [];
 const PANEL_PREFIX = "__panel_";
 const MY_REMINDERS = "Reminders";
 const REMINDERS_PROJECT = "__reminders";
+const IMPORTS_NAME = "Import Data";
+const IMPORTS_PROJECT = "__imports";
+const IMPORTS_TASK = { name: IMPORTS_NAME, phase: "Import Data", panel: "imports", description: "Consignments from the Dropbox file",
+  temp: false, fields: [], owners: [], slots: [], active: true };
+let impData = null;
+let impView = 'group';
+let impOpen = {};
+
 const MY_REMINDERS_TASK = { name: MY_REMINDERS, phase: "Reminders", panel: "reminders", description: "My reminders",
   temp: false, fields: [], owners: [], slots: [], active: true };
 let remData = null;
@@ -2171,6 +2222,209 @@ let remOpen = {};
 let remView = 'list';
 let remMonth = null;
 let remDayPick = '';
+
+function importPid() {
+  const p = (typeof PROJECTS !== 'undefined' ? PROJECTS : []).filter(x => x.active !== false && /import/i.test(x.name || ''))[0];
+  return p ? p.id : '';
+}
+
+function canSeeImports(staffName) {
+  const pid = importPid();
+  if (!pid || !user || !staffName) return false;
+  const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
+  if (lv <= 1) return true;
+  const me = String(staffName).trim().toLowerCase();
+  const p = PROJECTS.filter(x => x.id === pid)[0];
+  if (p && (p.staff || []).some(n => String(n).trim().toLowerCase() === me)) return true;
+  return TASKS.some(t => (t.project || DEFAULT_PROJECT) === pid && (t.owners || []).some(o => String(o).trim().toLowerCase() === me));
+}
+
+function openImports() {
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(IMPORTS_NAME);
+}
+
+async function loadImports() {
+  try {
+    const r = await apiCall('importData');
+    if (!r.ok) { document.getElementById('imp-body').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    impData = r;
+    renderImports();
+  } catch (e) { if (!impData) document.getElementById('imp-body').innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function impAgo(ms) {
+  if (!ms) return '';
+  const m = Math.round((Date.now() - ms) / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.round(m / 60);
+  if (h < 24) return h + ' h ago';
+  return Math.round(h / 24) + ' days ago';
+}
+
+function impTitle(s) {
+  return String(s || '').toLowerCase().replace(/\b([a-z])/g, (m, c) => c.toUpperCase());
+}
+
+function impStatusClass(s) {
+  const k = String(s || '').toLowerCase();
+  if (/recd|received/.test(k)) return 'imp-st-done';
+  if (/cancel/.test(k)) return 'imp-st-cancel';
+  if (/short/.test(k)) return 'imp-st-short';
+  if (/clear|road|load/.test(k)) return 'imp-st-move';
+  return 'imp-st-early';
+}
+
+const IMP_STATUS_ORDER = ['informal order', 'formal order', 'production', 'foreign banking', 'loaded', 'on road', 'clearance', 'short load', 'recently recd', 'already recd', 'cancel'];
+
+function impStatusRank(s) {
+  const i = IMP_STATUS_ORDER.indexOf(String(s || '').trim().toLowerCase());
+  return i === -1 ? 50 : i;
+}
+
+function impCols() {
+  const h = (impData.headers || []).map(x => String(x).trim().toLowerCase());
+  const find = (re, fb) => { const i = h.findIndex(x => re.test(x)); return i === -1 ? fb : i; };
+  return { group: find(/^final consign/, 0), main: find(/^main consign/, 1), each: find(/^each consign/, 2), product: find(/^product/, 3), model: find(/^model$/, 4),
+    status: find(/^status/, 9), supplier: find(/^supplier$/, 10), hl: find(/^highlight/, 11), bm: find(/^bm$/, 12) };
+}
+
+function impNumCols() {
+  const out = {};
+  (impData.headers || []).forEach((h, j) => {
+    const vals = impData.rows.map(r => r[j]).filter(v => v !== '' && v !== undefined);
+    out[j] = vals.length > 0 && vals.every(v => /^-?\d+(\.\d+)?$/.test(v));
+  });
+  return out;
+}
+
+function impVal(v, num) {
+  if (num) return v === '' || v === undefined ? '' : v;
+  return v === '0' ? '' : (v || '');
+}
+
+function impFill(id, label, values, keep) {
+  const el = document.getElementById(id);
+  const cur = keep !== undefined ? keep : el.value;
+  el.innerHTML = `<option value="">${label}</option>` + values.map(v => `<option value="${escapeHtml(v)}"${v === cur ? ' selected' : ''}>${escapeHtml(v)}</option>`).join('');
+  if (values.indexOf(cur) === -1) el.value = '';
+}
+
+function setImpView(v) {
+  impView = v;
+  renderImports();
+}
+
+function clearImpFilters() {
+  ['imp-q', 'imp-status', 'imp-supplier', 'imp-product', 'imp-bm'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  renderImports();
+}
+
+function impPickStatus(s) {
+  const el = document.getElementById('imp-status');
+  el.value = el.value === s ? '' : s;
+  renderImports();
+}
+
+function renderImports() {
+  if (!impData) return;
+  const d = impData;
+  const info = document.getElementById('imp-sync-info');
+  info.innerText = d.syncedMs ? '· from Dropbox, updated ' + d.syncedAt + ' (' + impAgo(d.syncedMs) + ')' + (d.checkedMs && d.checkedMs > d.syncedMs ? ' · checked ' + impAgo(d.checkedMs) : '') : '· not synced yet';
+  document.getElementById('imp-sync-btn').classList.toggle('hidden', !d.canSync);
+  const err = document.getElementById('imp-error');
+  err.classList.toggle('hidden', !d.error);
+  err.innerText = d.error ? 'Last sync problem: ' + d.error : '';
+  const adm = document.getElementById('imp-admin');
+  adm.classList.toggle('hidden', !d.isAdmin);
+  if (d.isAdmin) {
+    document.getElementById('imp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
+    if (!d.linkSet) adm.open = true;
+  }
+  document.getElementById('imp-v-group').classList.toggle('active', impView === 'group');
+  document.getElementById('imp-v-rows').classList.toggle('active', impView === 'rows');
+  const body = document.getElementById('imp-body');
+  if (!d.rows.length) { body.innerHTML = `<div class="report-meta">${d.isAdmin ? 'No data yet. Paste the Dropbox link above.' : 'No data yet. Jawad needs to add the Dropbox link.'}</div>`; document.getElementById('imp-chips').innerHTML = ''; return; }
+  const C = impCols(), NUM = impNumCols();
+  const norm = (r, j) => impTitle(r[j]).trim();
+  const uniq = (j, t) => Array.from(new Set(d.rows.map(r => t ? norm(r, j) : String(r[j] || '').trim()).filter(v => v && v !== '0'))).sort((a, b) => a.localeCompare(b));
+  const statuses = uniq(C.status, true).sort((a, b) => impStatusRank(a) - impStatusRank(b) || a.localeCompare(b));
+  impFill('imp-status', 'All status', statuses);
+  impFill('imp-supplier', 'All suppliers', uniq(C.supplier));
+  impFill('imp-product', 'All products', uniq(C.product));
+  impFill('imp-bm', 'All BM', uniq(C.bm));
+  const fs = valOf('imp-status'), fsu = valOf('imp-supplier'), fp = valOf('imp-product'), fb = valOf('imp-bm');
+  const q = String(valOf('imp-q') || '').trim().toLowerCase();
+  const base = d.rows.filter(r => (!fsu || String(r[C.supplier]).trim() === fsu) && (!fp || String(r[C.product]).trim() === fp) && (!fb || String(r[C.bm]).trim() === fb) && (!q || r.join(' ').toLowerCase().indexOf(q) !== -1));
+  const rows = base.filter(r => !fs || norm(r, C.status) === fs);
+  const consOf = list => new Set(list.map(r => r[C.group] || r[C.each])).size;
+  document.getElementById('imp-chips').innerHTML = statuses.map(s => {
+    const n = consOf(base.filter(r => norm(r, C.status) === s));
+    return n ? `<button class="imp-chip ${impStatusClass(s)}${fs === s ? ' on' : ''}" onclick="impPickStatus('${escapeHtml(s).replace(/'/g, "\\'")}')">${escapeHtml(s)} <b>${n}</b></button>` : '';
+  }).join('') + `<span class="report-meta">${consOf(rows)} consignments · ${rows.length} items</span>`;
+  const H = d.headers;
+  if (impView === 'rows') {
+    body.innerHTML = `<div class="report-wrap"><table class="report-table"><thead><tr>${H.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${
+      rows.map(r => `<tr>${H.map((h, j) => j === C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], NUM[j]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${H.length}" class="report-meta">Nothing matches.</td></tr>`
+    }</tbody></table></div>`;
+    return;
+  }
+  const groups = {};
+  const order = [];
+  rows.forEach(r => { const k = r[C.group] || r[C.each] || '(no name)'; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const gStatus = list => Array.from(new Set(list.map(r => norm(r, C.status)).filter(v => v && v !== '0')));
+  order.sort((a, b) => Math.min(...gStatus(groups[a]).map(impStatusRank), 99) - Math.min(...gStatus(groups[b]).map(impStatusRank), 99) || a.localeCompare(b));
+  const skip = [C.group, C.main, C.supplier, C.hl, C.bm];
+  const many = q || fs || fsu || fp || fb ? order.length <= 8 : false;
+  body.innerHTML = order.map(k => {
+    const list = groups[k];
+    const st = gStatus(list);
+    const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
+    const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
+    const hl = Array.from(new Set(list.map(r => String(r[C.hl] || '').trim()).filter(v => v && v !== '0')));
+    const cols = H.map((h, j) => j).filter(j => skip.indexOf(j) === -1 && !(j === C.status && st.length <= 1) && list.some(r => impVal(r[j], NUM[j]) !== '' && !(j === C.each && r[j] === k)));
+    const sums = H.map((h, j) => j).filter(j => NUM[j]).map(j => H[j] + ' ' + list.reduce((a, r) => a + (Number(r[j]) || 0), 0));
+    const open = impOpen[k] !== undefined ? impOpen[k] : many;
+    return `<details class="imp-card"${open ? ' open' : ''} ontoggle="impOpen[this.dataset.k] = this.open" data-k="${escapeHtml(k)}"><summary>
+      <span class="imp-name">${escapeHtml(k)}</span>
+      ${st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
+      ${bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
+      <div class="report-meta">${escapeHtml(sup.join(', '))} · ${list.length} item${list.length === 1 ? '' : 's'}${sums.length ? ' · ' + escapeHtml(sums.join(' · ')) : ''}</div>
+      ${hl.length ? `<div class="imp-hl">${escapeHtml(hl.join(' | '))}</div>` : ''}
+    </summary>
+    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${cols.map(j => `<th>${escapeHtml(H[j])}</th>`).join('')}</tr></thead><tbody>${
+      list.map(r => `<tr>${cols.map(j => j === C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], NUM[j]))}</td>`).join('')}</tr>`).join('')
+    }</tbody></table></div></details>`;
+  }).join('') || '<div class="report-meta">Nothing matches.</div>';
+}
+
+async function importSyncNow() {
+  const b = document.getElementById('imp-sync-btn');
+  b.disabled = true; b.innerText = 'Syncing...';
+  try {
+    const r = await apiCall('importSync');
+    if (r.ok) toast(r.rows ? 'Updated · ' + r.rows + ' rows' : 'Already up to date');
+    else toast(r.error || 'Could not sync', true);
+    await loadImports();
+  } catch (e) { toast('Network error', true); }
+  b.disabled = false; b.innerText = 'Sync now';
+}
+
+async function importSaveLink() {
+  const inp = document.getElementById('imp-link');
+  const link = inp.value.trim();
+  const st = document.getElementById('imp-link-status');
+  if (!link) { st.innerText = 'Paste the link first.'; return; }
+  const b = document.getElementById('imp-link-btn');
+  b.disabled = true; st.innerText = 'Saving and reading the file...';
+  try {
+    const r = await apiCall('importLinkSave', { link: link });
+    if (r.saved) inp.value = '';
+    st.innerText = r.ok ? 'Saved. ' + (r.rows || 0) + ' rows read.' : (r.error || 'Could not save');
+    if (r.ok) { toast('Dropbox link saved'); await loadImports(); }
+  } catch (e) { st.innerText = 'Network error'; }
+  b.disabled = false;
+}
 
 function openReminders() {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_REMINDERS);
@@ -2513,7 +2767,7 @@ const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassig
   temp: false, fields: [], owners: [], slots: [], active: true };
 
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK]);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
 }
 
 function taskByName(name) {
@@ -2545,7 +2799,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
-  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS] : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -2559,7 +2813,7 @@ function extraPanelsFor(staffName) {
 }
 
 function isPanelProject(pid) {
-  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
+  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || pid === IMPORTS_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
 }
 
 function recurringHidden(t) {
@@ -2583,6 +2837,7 @@ function projOfTask(name) {
   if (t.admin) return isAdminPanel() ? ADMIN_PROJECT : PANEL_PREFIX + t.panel;
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
   if (t.name === MY_REMINDERS) return REMINDERS_PROJECT;
+  if (t.name === IMPORTS_NAME) return IMPORTS_PROJECT;
   return t.project || DEFAULT_PROJECT;
 }
 
@@ -2590,6 +2845,7 @@ function projectName(pid) {
   if (pid === ADMIN_PROJECT) return 'Admin';
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
   if (pid === REMINDERS_PROJECT) return MY_REMINDERS;
+  if (pid === IMPORTS_PROJECT) return IMPORTS_NAME;
   if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
   const p = PROJECTS.filter(x => x.id === pid)[0];
   return p ? p.name : pid;
@@ -2744,15 +3000,15 @@ function renderProjectNav() {
         <small>${p.id === ADMIN_PROJECT ? 'Settings and reports' : projectChains(p.id).length + ' chain' + (projectChains(p.id).length === 1 ? '' : 's')}</small>
         ${n ? `<span class="sidebar-count project-bubble">${n.count}</span>` : ''}
       </a>`;
-    }).join('') + extraTiles || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
+    }).join('') + (profile && canSeeImports(profile.name) ? `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="openImports()"><strong>&#128230; ${IMPORTS_NAME}</strong><small>Consignments from Dropbox</small></a>` : '') + extraTiles || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
     return;
   }
   tiles.classList.add('hidden');
   nav.classList.remove('hidden');
   const projTabs = projs.map(p => {
     const n = pendingCountForProject(p.id);
-    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
-  }).join('');
+    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>` + (p.id === importPid() && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
+  }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
   nav.innerHTML = `<div class="ftabs">${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
@@ -5406,6 +5662,12 @@ function renderFormInterface() {
     renderRemEditor();
     if (remData) renderReminders();
     loadReminders();
+    return;
+  }
+  if (t.panel === "imports") {
+    document.getElementById('form-imports').classList.remove('hidden');
+    if (impData) renderImports();
+    loadImports();
     return;
   }
   if (t.panel === "myassigned") {
