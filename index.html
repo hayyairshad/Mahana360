@@ -280,7 +280,7 @@ color: #fff; font-weight: 600; }
 .empty-tile {
 border: 1px dashed var(--border-strong); border-radius: 12px; background: var(--surface-2);
 padding: 60px 20px; text-align: center;
-color: var(--text-dim); font-size: 0.9rem;
+color: var(--text-dim); font-size: 0.9rem; white-space: pre-line;
 }
 .sidebar-empty { color: var(--text-dim); font-size: 0.8rem; padding: 10px 2px; }
 
@@ -852,6 +852,44 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .imp-card .report-wrap { margin: 8px; }
 .imp-name { font-weight: 700; margin-right: 6px; }
 .imp-hl { font-size: 0.78rem; color: var(--accent-dark); margin-top: 2px; }
+.btn-busy { position: relative; color: transparent !important; pointer-events: none; }
+.btn-busy::after { content: ""; position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border: 2px solid currentColor; border-color: var(--accent-color) transparent var(--accent-color) transparent; border-radius: 50%; animation: btnspin 0.7s linear infinite; }
+@keyframes btnspin { to { transform: rotate(360deg); } }
+.hover-chosen { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.hover-chip { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-soft, #e3f1ef); border: 1px solid var(--accent-color); border-radius: 999px; padding: 2px 4px 2px 10px; font-size: 0.8rem; }
+.hover-chip button { border: none; background: none; cursor: pointer; color: var(--accent-dark); font-size: 0.75rem; padding: 0 4px; }
+.hover-find { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+.hover-find input { flex: 1; min-width: 180px; margin: 0; }
+.imp-search { width: 100%; margin: 0 0 8px; }
+.imp-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+.imp-row select { width: auto; min-width: 150px; margin: 0; }
+.imp-msg { position: sticky; top: 70px; z-index: 20; background: var(--panel-color, #fff); border: 1px solid var(--border-color); border-radius: 12px; padding: 8px 10px; margin: 6px 0 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+.imp-msg.on { border-color: var(--accent-color); }
+.imp-msg-to { font-size: 0.85rem; margin-bottom: 6px; }
+.imp-msg-row { display: flex; gap: 6px; align-items: flex-start; }
+.imp-msg-row select { width: auto; max-width: 170px; margin: 0; }
+.imp-msg-row textarea { flex: 1; margin: 0; min-height: 38px; resize: none; }
+.imp-sup { border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 6px; background: var(--panel-color, #fff); }
+.imp-sup-head { padding: 8px 12px; cursor: pointer; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.imp-sup-head:hover { background: var(--surface-2); }
+.imp-sup.open > .imp-sup-head { border-bottom: 1px solid var(--border-color); }
+.imp-sup-st { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.imp-arrow { width: 12px; color: var(--accent-dark); }
+.imp-sup-body { padding: 6px 8px 8px 26px; }
+.imp-line { border: 1px solid var(--border-color); border-radius: 10px; margin-bottom: 6px; background: var(--panel-color, #fff); }
+.imp-line.sel { border-color: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-soft, rgba(15,107,107,0.15)); }
+.imp-line-head { padding: 7px 10px; cursor: pointer; }
+.imp-line-head:hover { background: var(--surface-2); }
+.imp-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.imp-trail { padding: 2px 4px 10px; border-top: 1px solid var(--border-color); }
+a.imp-open-task { text-decoration: none; color: inherit; cursor: pointer; }
+a.imp-open-task:hover { border-color: var(--accent-color); }
+.imp-note.pending { opacity: 0.6; }
+.imp-note.failed { border-left-color: #b42318; }
+.imp-links { line-height: 1.5; }
+.imp-merge select, .imp-merge input { width: auto; margin: 0; }
+.imp-merge input { min-width: 240px; }
+@media (max-width: 600px) { .imp-msg { top: 110px; } .imp-msg-row { flex-wrap: wrap; } .imp-msg-row select { max-width: none; flex: 1 1 100%; } .imp-sub { white-space: normal; } .imp-sup-body { padding-left: 8px; } }
 .imp-count { font-size: 0.78rem; color: var(--accent-dark); margin-left: 4px; }
 .imp-at { margin-top: 4px; }
 .imp-task-chip { display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; padding: 1px 7px; font-size: 0.75rem; background: var(--surface-2); margin: 2px 2px 2px 0; }
@@ -875,6 +913,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 @media print {
   body.imp-print * { visibility: hidden !important; }
   body.imp-print .imp-printing, body.imp-print .imp-printing * { visibility: visible !important; }
+  body.imp-print .imp-msg { display: none !important; }
   body.imp-print .imp-printing { position: absolute; left: 0; top: 0; width: 100%; border: none; }
   body.imp-print .imp-printing .imp-noprint { display: none !important; }
   body.imp-print .imp-printing .report-wrap { max-height: none !important; overflow: visible !important; }
@@ -1534,7 +1573,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="form-imports" class="hidden">
 <div class="imp-head"><div><b>Import Data</b> <small class="report-meta" id="imp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="imp-sync-btn" onclick="importSyncNow()">Sync now</button></div>
 <div id="imp-error" class="imp-error hidden"></div>
-<details id="imp-admin" class="imp-setup hidden"><summary>Dropbox file link</summary>
+<details id="imp-admin" class="imp-setup hidden"><summary>Dropbox file link and who can see</summary>
 <p class="report-meta">In Dropbox: right-click the Excel file &rarr; Share &rarr; Copy link. Paste it here. It is kept private on the server and is never shown again.</p>
 <div class="imp-link-row"><input type="text" id="imp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="imp-link-btn" onclick="importSaveLink()">Save and sync</button></div>
 <div id="imp-link-status" class="report-meta"></div>
@@ -1543,12 +1582,21 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="imp-viewers" class="imp-viewers"></div>
 <button class="btn btn-small" id="imp-viewers-btn" onclick="importSaveViewers()">Save who can see</button>
 </details>
+<input type="text" id="imp-q" class="report-search imp-search" placeholder="Search supplier, consignment, model or message" oninput="impSearchSoon()" autocomplete="off">
+<div class="imp-row">
+<select id="imp-show" onchange="renderImports()"><option value="open">Open consignments</option><option value="closed">Closed</option><option value="all">All</option><option value="deleted" class="imp-adm-only">Deleted</option></select>
+<select id="imp-bm" onchange="renderImports()" title="Manager"></select>
+<input type="hidden" id="imp-status" value="">
+</div>
 <div id="imp-chips" class="imp-chips"></div>
-<div class="report-bar date-bar">
-<div class="fbox"><input type="text" id="imp-q" class="report-search" placeholder="Search consignment, model, product" oninput="renderImports()"></div>
-<div class="fbox"><select id="imp-show" onchange="renderImports()"><option value="open">Open consignments</option><option value="closed">Closed</option><option value="all">All</option><option value="deleted" class="imp-adm-only">Deleted</option></select><select id="imp-status" onchange="renderImports()"></select><select id="imp-supplier" onchange="renderImports()"></select><select id="imp-product" onchange="renderImports()"></select><select id="imp-bm" onchange="renderImports()"></select></div>
-<div class="fbox"><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button></div>
+<div class="imp-row">
+<div class="fbox"><button class="phase-btn" id="imp-v-sup" onclick="setImpView('sup')">By supplier</button><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button><button class="phase-btn" id="imp-v-diff" onclick="setImpView('diff')">Taskando vs C MSTR</button></div>
+<button class="btn btn-small" onclick="impCollapseAll()">Collapse all</button>
 <button class="btn btn-small" onclick="clearImpFilters()">Clear</button>
+</div>
+<div id="imp-msg" class="imp-msg">
+<div class="imp-msg-to" id="imp-msg-to">Click a consignment to write about it.</div>
+<div class="imp-msg-row"><select id="imp-msg-task" title="Which task this message is about"></select><textarea id="imp-msg-text" rows="1" placeholder="Type, Enter = save · Tab = next · Shift+Tab = back" onkeydown="impMsgKey(event)" oninput="impGrow(this)"></textarea><button class="btn btn-small btn-primary" onclick="impSendMsg()">Save</button></div>
 </div>
 <div id="imp-body"><div class="report-meta">Loading...</div></div>
 </div>
@@ -2178,7 +2226,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R27";
+const APP_VERSION = "R28";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2189,7 +2237,21 @@ function showVersionBanner() {
   if (v) v.innerText = ' (website ' + APP_VERSION + ', script ' + (serverVersion || '?') + ')';
 }
 
+let busyBtn = null, busyAt = 0;
+document.addEventListener('click', e => {
+  const b = e.target && e.target.closest ? e.target.closest('button') : null;
+  busyBtn = b; busyAt = Date.now();
+}, true);
+
 async function apiCall(action, payload = {}) {
+  const b = busyBtn && Date.now() - busyAt < 600 && !busyBtn.classList.contains('btn-busy') ? busyBtn : null;
+  busyBtn = null;
+  if (b) { b.classList.add('btn-busy'); b.disabled = true; }
+  try { return await apiCallRaw(action, payload); }
+  finally { if (b) { b.classList.remove('btn-busy'); b.disabled = false; } }
+}
+
+async function apiCallRaw(action, payload = {}) {
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -2244,7 +2306,7 @@ const IMPORTS_TASK = { name: IMPORTS_NAME, phase: "Import Data", panel: "imports
 let impData = null;
 let IMPORT_VIEWERS = [];
 let impGroups = [];
-let impView = 'group';
+let impView = 'sup';
 let impOpen = {};
 
 const MY_REMINDERS_TASK = { name: MY_REMINDERS, phase: "Reminders", panel: "reminders", description: "My reminders",
@@ -2281,7 +2343,10 @@ async function loadImports() {
   try {
     const r = await apiCall('importData');
     if (!r.ok) { document.getElementById('imp-body').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    const keepTmp = impData ? impData.notes.filter(n => n.pending || n.failed) : [];
     impData = r;
+    impData.notes = impData.notes.concat(keepTmp);
+    try { localStorage.setItem('tk_imp_cache', JSON.stringify(Object.assign({}, r, { notes: r.notes.filter(n => !n.pending && !n.failed) }))); } catch (e) {}
     renderImports();
   } catch (e) { if (!impData) document.getElementById('imp-body').innerHTML = '<div class="report-meta">Network error</div>'; }
 }
@@ -2349,8 +2414,14 @@ function setImpView(v) {
   renderImports();
 }
 
+let impSearchTimer = null;
+function impSearchSoon() {
+  clearTimeout(impSearchTimer);
+  impSearchTimer = setTimeout(renderImports, 120);
+}
+
 function clearImpFilters() {
-  ['imp-q', 'imp-status', 'imp-supplier', 'imp-product', 'imp-bm'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['imp-q', 'imp-status'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   renderImports();
 }
 
@@ -2358,6 +2429,84 @@ function impPickStatus(s) {
   const el = document.getElementById('imp-status');
   el.value = el.value === s ? '' : s;
   renderImports();
+}
+
+function impCollapseAll() {
+  impSupOpen = {};
+  impOpen = {};
+  impDetail = {};
+  impSel = '';
+  renderImports();
+}
+
+let impSupOpen = {};
+let impDetail = {};
+let impSel = '';
+let impBmInit = false;
+let impFlat = [];
+let impMergeOpen = '';
+
+function impKey(s) {
+  return String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function shortWhenImp(s) {
+  return String(s || '').replace(/^(\d+ \w+) \d+, /, '$1, ');
+}
+
+function impAliasKeys(keys) {
+  const out = keys.slice();
+  const links = (impData && impData.links) || [];
+  for (let pass = 0; pass < 4; pass++) links.forEach(L => { const n = impKey(L.new), o = impKey(L.old); if (out.indexOf(n) !== -1 && out.indexOf(o) === -1) out.push(o); });
+  return out;
+}
+
+function impProgress(g) {
+  const P = (impData && impData.progress) || {};
+  const seen = {};
+  const out = { open: [], done: [] };
+  g.keys.forEach(k => {
+    const p = P[k];
+    if (!p) return;
+    ['open', 'done'].forEach(w => p[w].forEach(x => { const id = w + '|' + (x.id || x.task + '|' + x.arrivedMs); if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
+  });
+  out.done.sort((a, b) => (a.doneMs || 0) - (b.doneMs || 0));
+  out.open.sort((a, b) => (a.arrivedMs || 0) - (b.arrivedMs || 0));
+  return out;
+}
+
+function impBuild() {
+  const d = impData;
+  const C = impCols(), NUM = impNumCols();
+  const norm = (r, j) => impTitle(r[j]).trim();
+  const fb = valOf('imp-bm'), fs = valOf('imp-status');
+  const q = String(valOf('imp-q') || '').trim().toLowerCase();
+  const states = d.states || {};
+  const show = valOf('imp-show') || 'open';
+  const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
+  const groups = {}, order = [];
+  d.rows.forEach(r => { const k = r[C.group] || r[C.each] || '(no name)'; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const noteText = {};
+  (d.notes || []).forEach(n => { noteText[n.key] = (noteText[n.key] || '') + ' ' + String(n.text || '').toLowerCase(); });
+  const all = order.map(k => {
+    const list = groups[k];
+    const names = Array.from(new Set([k].concat(list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
+    const keys = impAliasKeys(names.map(impKey));
+    const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
+    const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
+    const st = Array.from(new Set(list.map(r => norm(r, C.status)).filter(v => v && v !== '0')));
+    const g = { name: k, list: list, names: names, keys: keys, sup: sup, supplier: sup[0] || '(no supplier)', bm: bm, st: st, state: stateOf(k) };
+    g.notes = (d.notes || []).filter(n => keys.indexOf(n.key) !== -1);
+    g.prog = impProgress(g);
+    g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ')).toLowerCase();
+    return g;
+  }).filter(g => { const st = g.state; return show === 'all' ? st !== 'Deleted' : show === 'closed' ? st === 'Closed' : show === 'deleted' ? st === 'Deleted' : st !== 'Closed' && st !== 'Deleted'; })
+    .filter(g => !fb || g.bm.indexOf(fb) !== -1)
+    .filter(g => !q || g.hay.indexOf(q) !== -1);
+  const base = all;
+  const shown = base.filter(g => !fs || g.st.indexOf(fs) !== -1);
+  shown.sort((a, b) => Math.min(...a.st.map(impStatusRank), 99) - Math.min(...b.st.map(impStatusRank), 99) || a.name.localeCompare(b.name));
+  return { C: C, NUM: NUM, base: base, shown: shown, q: q, fs: fs };
 }
 
 function renderImports() {
@@ -2377,161 +2526,309 @@ function renderImports() {
     document.getElementById('imp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
     if (!d.linkSet) adm.open = true;
   }
-  document.getElementById('imp-v-group').classList.toggle('active', impView === 'group');
-  document.getElementById('imp-v-rows').classList.toggle('active', impView === 'rows');
+  ['sup', 'group', 'rows', 'diff'].forEach(v => document.getElementById('imp-v-' + v).classList.toggle('active', impView === v));
   const body = document.getElementById('imp-body');
   if (!d.rows.length) { body.innerHTML = `<div class="report-meta">${d.isAdmin ? 'No data yet. Paste the Dropbox link above.' : 'No data yet. Jawad needs to add the Dropbox link.'}</div>`; document.getElementById('imp-chips').innerHTML = ''; return; }
-  const C = impCols(), NUM = impNumCols();
-  const norm = (r, j) => impTitle(r[j]).trim();
-  const uniq = (j, t) => Array.from(new Set(d.rows.map(r => t ? norm(r, j) : String(r[j] || '').trim()).filter(v => v && v !== '0'))).sort((a, b) => a.localeCompare(b));
-  const statuses = uniq(C.status, true).sort((a, b) => impStatusRank(a) - impStatusRank(b) || a.localeCompare(b));
-  impFill('imp-status', 'All status', statuses);
-  impFill('imp-supplier', 'All suppliers', uniq(C.supplier));
-  impFill('imp-product', 'All products', uniq(C.product));
-  impFill('imp-bm', 'All BM', uniq(C.bm));
-  const fs = valOf('imp-status'), fsu = valOf('imp-supplier'), fp = valOf('imp-product'), fb = valOf('imp-bm');
-  const q = String(valOf('imp-q') || '').trim().toLowerCase();
-  const base = d.rows.filter(r => (!fsu || String(r[C.supplier]).trim() === fsu) && (!fp || String(r[C.product]).trim() === fp) && (!fb || String(r[C.bm]).trim() === fb) && (!q || r.join(' ').toLowerCase().indexOf(q) !== -1));
-  const rows = base.filter(r => !fs || norm(r, C.status) === fs);
-  const consOf = list => new Set(list.map(r => r[C.group] || r[C.each])).size;
+  const C0 = impCols();
+  const bms = Array.from(new Set(d.rows.map(r => String(r[C0.bm] || '').trim()).filter(v => v && v !== '0'))).sort();
+  impFill('imp-bm', 'All managers', bms, impBmInit ? undefined : (bms.indexOf('FR') !== -1 ? 'FR' : ''));
+  impBmInit = true;
+  const B = impBuild();
+  const fs = B.fs;
+  const statuses = Array.from(new Set(B.base.reduce((a, g) => a.concat(g.st), []))).sort((a, b) => impStatusRank(a) - impStatusRank(b) || a.localeCompare(b));
+  if (fs && statuses.indexOf(fs) === -1) statuses.push(fs);
   document.getElementById('imp-chips').innerHTML = statuses.map(s => {
-    const n = consOf(base.filter(r => norm(r, C.status) === s));
-    return n ? `<button class="imp-chip ${impStatusClass(s)}${fs === s ? ' on' : ''}" onclick="impPickStatus('${escapeHtml(s).replace(/'/g, "\\'")}')">${escapeHtml(s)} <b>${n}</b></button>` : '';
-  }).join('') + `<span class="report-meta">${consOf(rows)} consignments · ${rows.length} items</span>`;
-  const H = d.headers;
-  if (impView === 'rows') {
-    body.innerHTML = `<div class="report-wrap"><table class="report-table"><thead><tr>${H.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${
-      rows.map(r => `<tr>${H.map((h, j) => j === C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], NUM[j]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${H.length}" class="report-meta">Nothing matches.</td></tr>`
-    }</tbody></table></div>`;
-    return;
+    const n = B.base.filter(g => g.st.indexOf(s) !== -1).length;
+    return `<button class="imp-chip ${impStatusClass(s)}${fs === s ? ' on' : ''}" onclick="impPickStatus('${escapeHtml(s).replace(/'/g, "\\'")}')">${escapeHtml(s)} <b>${n}</b></button>`;
+  }).join('') + `<span class="report-meta">${B.shown.length} consignments · ${B.shown.reduce((a, g) => a + g.list.length, 0)} items</span>`;
+  impFlat = [];
+  if (impView === 'rows') body.innerHTML = impRowsHtml(B);
+  else if (impView === 'diff') body.innerHTML = impDiffHtml(B);
+  else if (impView === 'group') body.innerHTML = B.shown.map(g => impLineHtml(g, B)).join('') || '<div class="report-meta">Nothing matches.</div>';
+  else {
+    const bySup = {}, sorder = [];
+    B.shown.forEach(g => { if (!bySup[g.supplier]) { bySup[g.supplier] = []; sorder.push(g.supplier); } bySup[g.supplier].push(g); });
+    sorder.sort((a, b) => a.localeCompare(b));
+    const auto = B.q || fs ? sorder.length <= 6 : false;
+    body.innerHTML = sorder.map(sname => {
+      const list = bySup[sname];
+      const open = impSupOpen[sname] !== undefined ? impSupOpen[sname] : (auto || list.some(g => g.name === impSel));
+      const msgs = list.reduce((a, g) => a + g.notes.length, 0);
+      const waiting = list.filter(g => g.prog.open.length).length;
+      const stc = {};
+      list.forEach(g => g.st.forEach(s => { stc[s] = (stc[s] || 0) + 1; }));
+      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span><b>${escapeHtml(sname)}</b> <span class="report-meta">${list.length} consignment${list.length === 1 ? '' : 's'}${waiting ? ' · ' + waiting + ' in tasks' : ''}${msgs ? ' · &#128172; ' + msgs : ''}</span> <span class="imp-sup-st">${Object.keys(stc).sort((a, b) => impStatusRank(a) - impStatusRank(b)).map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)} ${stc[s]}</span>`).join(' ')}</span></div>
+        ${open ? `<div class="imp-sup-body">${list.map(g => impLineHtml(g, B)).join('')}</div>` : ''}</div>`;
+    }).join('') || '<div class="report-meta">Nothing matches.</div>';
   }
-  const groups = {};
-  const order = [];
-  rows.forEach(r => { const k = r[C.group] || r[C.each] || '(no name)'; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
-  const gStatus = list => Array.from(new Set(list.map(r => norm(r, C.status)).filter(v => v && v !== '0')));
-  const states = d.states || {};
-  const show = valOf('imp-show') || 'open';
-  const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
-  const shown = order.filter(k => { const st = stateOf(k); return show === 'all' ? st !== 'Deleted' : show === 'closed' ? st === 'Closed' : show === 'deleted' ? st === 'Deleted' : st !== 'Closed' && st !== 'Deleted'; });
-  shown.sort((a, b) => Math.min(...gStatus(groups[a]).map(impStatusRank), 99) - Math.min(...gStatus(groups[b]).map(impStatusRank), 99) || a.localeCompare(b));
-  const skip = [C.group, C.main, C.supplier, C.hl, C.bm];
-  const many = q || fs || fsu || fp || fb ? shown.length <= 8 : false;
-  impGroups = shown.map(k => {
-    const list = groups[k];
-    const names = Array.from(new Set([k].concat(list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
-    return { name: k, list: list, names: names, keys: names.map(impKey) };
-  });
-  const isAdm = d.level === 0, lead = d.level <= 1;
-  body.innerHTML = impGroups.map((g, gi) => {
-    const k = g.name, list = g.list;
-    const st = gStatus(list);
-    const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
-    const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
-    const hl = Array.from(new Set(list.map(r => String(r[C.hl] || '').trim()).filter(v => v && v !== '0')));
-    const cols = H.map((h, j) => j).filter(j => skip.indexOf(j) === -1 && !(j === C.status && st.length <= 1) && list.some(r => impVal(r[j], NUM[j]) !== '' && !(j === C.each && r[j] === k)));
-    const sums = H.map((h, j) => j).filter(j => NUM[j]).map(j => H[j] + ' ' + list.reduce((a, r) => a + (Number(r[j]) || 0), 0));
-    const prog = impProgress(g);
-    const notes = (d.notes || []).filter(n => g.keys.indexOf(n.key) !== -1);
-    const state = states[impKey(k)];
-    const open = impOpen[k] !== undefined ? impOpen[k] : many;
-    const defTask = prog.open.length ? prog.open[0].task : (prog.done.length ? prog.done[prog.done.length - 1].task : '');
-    return `<details class="imp-card" id="imp-card-${gi}"${open ? ' open' : ''} ontoggle="impOpen[impGroups[${gi}].name] = this.open"><summary>
-      <span class="imp-name">${escapeHtml(k)}</span>
-      ${st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
-      ${bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
-      ${state && state.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(state.state)}</span>` : ''}
-      ${notes.length ? `<span class="imp-count">&#128172; ${notes.length}</span>` : ''}
-      <div class="report-meta">${escapeHtml(sup.join(', '))} · ${list.length} item${list.length === 1 ? '' : 's'}${sums.length ? ' · ' + escapeHtml(sums.join(' · ')) : ''}${g.names.length > 1 ? ' · includes ' + escapeHtml(g.names.filter(x => x !== k).join(', ')) : ''}</div>
-      ${hl.length ? `<div class="imp-hl">${escapeHtml(hl.join(' | '))}</div>` : ''}
-      ${prog.open.length ? `<div class="imp-at">${prog.open.map(o => `<span class="imp-task-chip open">&#9203; ${escapeHtml(o.task)}${o.days ? ' · ' + o.days + 'd' : ''}</span>`).join(' ')}</div>` : (prog.done.length ? `<div class="imp-at"><span class="imp-task-chip">&#10003; ${escapeHtml(prog.done[prog.done.length - 1].task)}</span></div>` : '')}
-    </summary>
-    <div class="imp-inner">
-    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${cols.map(j => `<th>${escapeHtml(H[j])}</th>`).join('')}</tr></thead><tbody>${
-      list.map(r => `<tr>${cols.map(j => j === C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], NUM[j]))}</td>`).join('')}</tr>`).join('')
-    }</tbody></table></div>
-    <div class="imp-sec"><b>Tasks</b> ${prog.done.length || prog.open.length ? prog.done.map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<span class="imp-task-chip open" title="${escapeHtml('Waiting since ' + x.arrived)}">&#9203; ${escapeHtml(x.task)} <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small></span>`).join(' ') : '<span class="report-meta">Not in any Imports task yet.</span>'}</div>
-    <div class="imp-sec"><b>Comments</b>
-      <div class="imp-notes">${notes.map(n => `<div class="imp-note"><div class="imp-note-head">${n.task ? `<span class="imp-task-chip">${escapeHtml(n.task)}</span>` : ''}<b>${escapeHtml(n.by)}</b> <span class="report-meta">${escapeHtml(n.at)}${n.consignment && impKey(n.consignment) !== impKey(k) ? ' · on ' + escapeHtml(n.consignment) : ''}</span>${isAdm || n.by === d.me ? ` <button class="imp-x imp-noprint" title="Delete" onclick="impDeleteNote('${escapeHtml(n.id)}')">&#10005;</button>` : ''}</div><div class="imp-note-text">${escapeHtml(n.text)}</div></div>`).join('') || '<div class="report-meta">No comments yet.</div>'}</div>
-      <div class="imp-add imp-noprint"><select id="imp-ntask-${gi}"><option value="">No task</option>${(d.tasks || []).map(t => `<option value="${escapeHtml(t)}"${t === defTask ? ' selected' : ''}>${escapeHtml(t)}</option>`).join('')}</select><textarea id="imp-ntext-${gi}" rows="2" placeholder="Write a comment"></textarea><button class="btn btn-small btn-primary" onclick="impAddNote(${gi}, this)">Save comment</button></div>
+  impUpdateMsgBox();
+}
+
+function impJs(s) {
+  return escapeHtml(String(s)).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+
+function impToggleSup(name) {
+  const el = Array.from(document.querySelectorAll('.imp-sup')).filter(x => x.querySelector('.imp-sup-head b').textContent === name)[0];
+  impSupOpen[name] = !(el && el.classList.contains('open'));
+  renderImports();
+}
+
+function impLineHtml(g, B) {
+  impFlat.push(g);
+  const i = impFlat.length - 1;
+  const sel = g.name === impSel;
+  const sums = B.C ? g.list.length + ' item' + (g.list.length === 1 ? '' : 's') : '';
+  const numSums = (impData.headers || []).map((h, j) => j).filter(j => B.NUM[j]).map(j => impData.headers[j] + ' ' + g.list.reduce((a, r) => a + (Number(r[j]) || 0), 0));
+  const hl = Array.from(new Set(g.list.map(r => String(r[B.C.hl] || '').trim()).filter(v => v && v !== '0')));
+  const st = impData.states[impKey(g.name)];
+  return `<div class="imp-line${sel ? ' sel' : ''}" id="imp-line-${i}">
+    <div class="imp-line-head" onclick="impSelect(${i})">
+      <span class="imp-name">${escapeHtml(g.name)}</span>
+      ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
+      ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
+      ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
+      ${g.prog.open.map(o => `<span class="imp-task-chip open">&#9203; ${escapeHtml(o.task)}${o.days ? ' · ' + o.days + 'd' : ''}</span>`).join(' ')}
+      ${!g.prog.open.length && g.prog.done.length ? `<span class="imp-task-chip">&#10003; ${escapeHtml(g.prog.done[g.prog.done.length - 1].task)}</span>` : ''}
+      ${g.notes.length ? `<span class="imp-count">&#128172; ${g.notes.length}</span>` : ''}
+      <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${g.names.length > 1 ? ' · includes ' + escapeHtml(g.names.filter(x => x !== g.name).join(', ')) : ''}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
+    </div>
+    ${sel ? impTrailHtml(g, i, B) : ''}
+  </div>`;
+}
+
+function impTrailHtml(g, i, B) {
+  const d = impData, isAdm = d.level === 0, lead = d.level <= 1;
+  const st = d.states[impKey(g.name)];
+  const prog = g.prog;
+  const links = (d.links || []).filter(L => g.keys.indexOf(impKey(L.new)) !== -1 || g.keys.indexOf(impKey(L.old)) !== -1);
+  const cols = (d.headers || []).map((h, j) => j).filter(j => [B.C.group, B.C.main, B.C.supplier, B.C.hl, B.C.bm].indexOf(j) === -1 && g.list.some(r => impVal(r[j], B.NUM[j]) !== ''));
+  const fromNames = Object.keys(d.progress || {}).filter(k => g.keys.indexOf(k) !== -1).map(k => d.progress[k].name);
+  return `<div class="imp-trail">
+    <div class="imp-sec"><b>Tasks</b> ${prog.done.length || prog.open.length ? prog.done.map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<a class="imp-task-chip open imp-open-task" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ') : '<span class="report-meta">Not in any Imports task yet.</span>'}</div>
+    ${links.length ? `<div class="imp-sec imp-links">${links.map(L => `<span class="report-meta">${escapeHtml(L.kind === 'Split' ? 'Split' : 'Bunched')}: ${escapeHtml(L.old)} &rarr; ${escapeHtml(L.new)} · ${escapeHtml(L.at)}</span>`).join('<br>')}</div>` : ''}
+    <div class="imp-sec"><b>Messages</b>
+      <div class="imp-notes" id="imp-notes-${i}">${g.notes.map(n => impNoteHtml(n, g)).join('') || '<div class="report-meta">No messages yet. Type in the box above and press Enter.</div>'}</div>
     </div>
     <div class="imp-actions imp-noprint">
-      <button class="btn btn-small" onclick="openUniSearch(impGroups[${gi}].name)">Full trail</button>
-      <button class="btn btn-small" onclick="impPrint(${gi})">Print / PDF</button>
-      ${lead ? (state && state.state === 'Closed' ? `<button class="btn btn-small" onclick="impSetState(${gi}, 'Open', this)">Reopen</button>` : state && state.state === 'Deleted' ? `<button class="btn btn-small" onclick="impSetState(${gi}, 'Open', this)">Bring back</button>` : `<button class="btn btn-small" onclick="impSetState(${gi}, 'Closed', this)">Close consignment</button>`) : ''}
-      ${isAdm && !(state && state.state === 'Deleted') ? `<button class="btn btn-small icon-cross" onclick="document.getElementById('imp-del-${gi}').classList.toggle('hidden')">Delete forever</button>` : ''}
-      ${state && state.state !== 'Open' ? `<span class="report-meta">${escapeHtml(state.state)} by ${escapeHtml(state.by)} · ${escapeHtml(state.at)}</span>` : ''}
+      <button class="btn btn-small" onclick="impToggleDetail(${i})">${impDetail[g.name] ? 'Hide' : 'Show'} China Master detail</button>
+      <button class="btn btn-small" onclick="openUniSearch(impFlat[${i}].name)">Full trail</button>
+      <button class="btn btn-small" onclick="impPrint(${i})">Print / PDF</button>
+      ${lead ? `<button class="btn btn-small" onclick="impMergeOpen = impMergeOpen === impFlat[${i}].name ? '' : impFlat[${i}].name; renderImports()">Merge / split</button>` : ''}
+      ${lead ? (st && st.state === 'Closed' ? `<button class="btn btn-small" onclick="impSetState(${i}, 'Open', this)">Reopen</button>` : st && st.state === 'Deleted' ? `<button class="btn btn-small" onclick="impSetState(${i}, 'Open', this)">Bring back</button>` : `<button class="btn btn-small" onclick="impSetState(${i}, 'Closed', this)">Close consignment</button>`) : ''}
+      ${isAdm && !(st && st.state === 'Deleted') ? `<button class="btn btn-small icon-cross" onclick="document.getElementById('imp-del-${i}').classList.toggle('hidden')">Delete forever</button>` : ''}
+      ${st && st.state !== 'Open' ? `<span class="report-meta">${escapeHtml(st.state)} by ${escapeHtml(st.by)} · ${escapeHtml(st.at)}</span>` : ''}
     </div>
-    ${isAdm ? `<div id="imp-del-${gi}" class="imp-del hidden imp-noprint"><span class="report-meta">This hides the consignment and deletes all its comments. Excel is not touched. Type <b>${escapeHtml(k)}</b> to confirm:</span><input type="text" id="imp-del-in-${gi}" autocomplete="off"><button class="btn btn-small icon-cross" onclick="impSetState(${gi}, 'Deleted', this)">Delete</button></div>` : ''}
-    </div></details>`;
-  }).join('') || '<div class="report-meta">Nothing matches.</div>';
+    ${lead && impMergeOpen === g.name ? `<div class="imp-del imp-merge imp-noprint"><span class="report-meta">Running tasks under</span><select id="imp-mfrom-${i}">${(fromNames.length ? fromNames : g.names).map(n => `<option>${escapeHtml(n)}</option>`).join('')}</select><span class="report-meta">become</span><input type="text" id="imp-mto-${i}" placeholder="New name · for a split: Name A, Name B"><button class="btn btn-small btn-primary" onclick="impBunch(${i}, this)">Apply</button><span class="report-meta">Same new name as another consignment = merge. Commas = split (history is copied).</span></div>` : ''}
+    ${isAdm ? `<div id="imp-del-${i}" class="imp-del hidden imp-noprint"><span class="report-meta">This hides the consignment and deletes all its messages. Excel is not touched. Type <b>${escapeHtml(g.name)}</b> to confirm:</span><input type="text" id="imp-del-in-${i}" autocomplete="off"><button class="btn btn-small icon-cross" onclick="impSetState(${i}, 'Deleted', this)">Delete</button></div>` : ''}
+    ${impDetail[g.name] ? `<div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${cols.map(j => `<th>${escapeHtml(d.headers[j])}</th>`).join('')}</tr></thead><tbody>${
+      g.list.map(r => `<tr>${cols.map(j => j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`).join('')}</tr>`).join('')
+    }</tbody><tfoot><tr class="section-row">${cols.map((j, x) => `<td class="${x ? '' : 'left'}">${x === 0 ? '<b>Total</b>' : B.NUM[j] ? '<b>' + g.list.reduce((a, r) => a + (Number(r[j]) || 0), 0) + '</b>' : ''}</td>`).join('')}</tr></tfoot></table></div>` : ''}
+  </div>`;
 }
 
-function impKey(s) {
-  return String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+function impNoteHtml(n, g) {
+  const d = impData;
+  return `<div class="imp-note${n.pending ? ' pending' : ''}${n.failed ? ' failed' : ''}"><div class="imp-note-head">${n.task ? `<span class="imp-task-chip">${escapeHtml(n.task)}</span>` : ''}<b>${escapeHtml(n.by)}</b> <span class="report-meta">${escapeHtml(n.at)}${n.consignment && impKey(n.consignment) !== impKey(g.name) ? ' · on ' + escapeHtml(n.consignment) : ''}${n.pending ? ' · saving…' : ''}${n.failed ? ' · not saved, ' : ''}</span>${n.failed ? `<button class="imp-x" onclick="impRetry('${escapeHtml(n.id)}')">retry</button>` : ''}${!n.pending && !n.failed && (d.level === 0 || n.by === d.me) ? ` <button class="imp-x imp-noprint" title="Delete" onclick="impDeleteNote('${escapeHtml(n.id)}')">&#10005;</button>` : ''}</div><div class="imp-note-text">${escapeHtml(n.text)}</div></div>`;
 }
 
-function shortWhenImp(s) {
-  return String(s || '').replace(/^(\d+ \w+) \d+, /, '$1, ');
+function impTaskUrl(x) {
+  let who = user ? user.name : '';
+  if (user && user.level !== 0 && taskListFor(user.name).indexOf(x.task) === -1) who = accessibleStaffNames().filter(n => taskListFor(n).indexOf(x.task) !== -1)[0] || user.name;
+  return window.location.pathname + '#/staff/' + encodeURIComponent(who) + '/' + encodeURIComponent(x.task) + '/@' + encodeURIComponent(x.id || '');
 }
 
-function impProgress(g) {
-  const P = (impData && impData.progress) || {};
-  const seen = {};
-  const out = { open: [], done: [] };
-  g.keys.forEach(k => {
-    const p = P[k];
-    if (!p) return;
-    ['open', 'done'].forEach(w => p[w].forEach(x => { const id = w + '|' + x.task + '|' + x.arrivedMs; if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
-  });
-  out.done.sort((a, b) => (a.doneMs || 0) - (b.doneMs || 0));
-  out.open.sort((a, b) => (a.arrivedMs || 0) - (b.arrivedMs || 0));
-  return out;
+function impToggleDetail(i) {
+  const g = impFlat[i];
+  if (!g) return;
+  impDetail[g.name] = !impDetail[g.name];
+  renderImports();
 }
 
-async function impAddNote(gi, btn) {
-  const g = impGroups[gi];
-  const text = valOf('imp-ntext-' + gi);
-  if (!text) return toast('Write a comment first', true);
-  btn.disabled = true;
+function impSelect(i, keepFocus) {
+  const g = impFlat[i];
+  if (!g) return;
+  if (impSel === g.name && !keepFocus) { impSel = ''; renderImports(); return; }
+  impSel = g.name;
+  impSupOpen[g.supplier] = true;
+  renderImports();
+  const idx = impFlat.findIndex(x => x.name === impSel);
+  const el = document.getElementById('imp-line-' + idx);
+  if (el) el.scrollIntoView({ block: 'nearest' });
+  const box = document.getElementById('imp-msg-text');
+  if (box) box.focus();
+}
+
+function impSelGroup() {
+  return impFlat.filter(x => x.name === impSel)[0] || null;
+}
+
+function impUpdateMsgBox() {
+  const g = impSelGroup();
+  const to = document.getElementById('imp-msg-to');
+  const box = document.getElementById('imp-msg');
+  box.classList.toggle('on', !!g);
+  to.innerHTML = g ? `Writing on <b>${escapeHtml(g.name)}</b> <span class="report-meta">${escapeHtml(g.supplier)}</span>` : 'Click a consignment to write about it.';
+  const sel = document.getElementById('imp-msg-task');
+  const tasks = impData.tasks || [];
+  const def = g ? (g.prog.open.length ? g.prog.open[0].task : (g.prog.done.length ? g.prog.done[g.prog.done.length - 1].task : '')) : '';
+  if (sel.dataset.for !== impSel) {
+    sel.innerHTML = '<option value="">No task</option>' + tasks.map(t => `<option value="${escapeHtml(t)}"${t === def ? ' selected' : ''}>${escapeHtml(t)}</option>`).join('');
+    sel.dataset.for = impSel;
+  }
+}
+
+function impGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+function impMsgKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); impSendMsg(); return; }
+  if (e.key === 'Tab') {
+    if (!impFlat.length) return;
+    e.preventDefault();
+    impStep(e.shiftKey ? -1 : 1);
+  }
+}
+
+function impStep(dir) {
+  const B = impBuild();
+  let list = B.shown;
+  if (impView === 'sup') {
+    const bySup = {}, sorder = [];
+    list.forEach(g => { if (!bySup[g.supplier]) { bySup[g.supplier] = []; sorder.push(g.supplier); } bySup[g.supplier].push(g); });
+    sorder.sort((a, b) => a.localeCompare(b));
+    list = sorder.reduce((a, s) => a.concat(bySup[s]), []);
+  }
+  if (!list.length) return;
+  let i = list.findIndex(g => g.name === impSel);
+  i = i === -1 ? (dir > 0 ? 0 : list.length - 1) : Math.max(0, Math.min(list.length - 1, i + dir));
+  const g = list[i];
+  impSel = g.name;
+  impSupOpen[g.supplier] = true;
+  renderImports();
+  const idx = impFlat.findIndex(x => x.name === impSel);
+  const el = document.getElementById('imp-line-' + idx);
+  if (el) el.scrollIntoView({ block: 'nearest' });
+  document.getElementById('imp-msg-text').focus();
+}
+
+let impTmpSeq = 0;
+
+function impSendMsg() {
+  const g = impSelGroup();
+  const box = document.getElementById('imp-msg-text');
+  const text = box.value.trim();
+  if (!g) { toast('Click a consignment first', true); return; }
+  if (!text) return;
+  const task = valOf('imp-msg-task');
+  const now = new Date();
+  const tmp = { id: 'tmp' + (++impTmpSeq), key: impKey(g.name), consignment: g.name, task: task, text: text, by: impData.me || (user && user.name) || '', atMs: now.getTime(), at: now.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: '2-digit', hour: 'numeric', minute: '2-digit', hour12: true }).replace(',', ''), pending: true };
+  impData.notes.push(tmp);
+  box.value = '';
+  impGrow(box);
+  renderImports();
+  box.focus();
+  impPostNote(tmp);
+}
+
+async function impPostNote(tmp) {
   try {
-    const r = await apiCall('importNoteAdd', { consignment: g.name, task: valOf('imp-ntask-' + gi), text: text });
-    if (!r.ok) { toast(r.error || 'Could not save', true); btn.disabled = false; return; }
-    impData.notes.push(r.note);
-    impOpen[g.name] = true;
-    renderImports();
-    toast('Comment saved');
-  } catch (e) { toast('Network error', true); btn.disabled = false; }
+    const r = await apiCall('importNoteAdd', { consignment: tmp.consignment, task: tmp.task, text: tmp.text });
+    if (!r.ok) throw new Error(r.error || 'Could not save');
+    Object.assign(tmp, r.note, { pending: false, failed: false });
+  } catch (e) {
+    tmp.pending = false; tmp.failed = true;
+    toast('A message was not saved. Press retry.', true);
+  }
+  renderImports();
+}
+
+function impRetry(id) {
+  const n = impData.notes.filter(x => x.id === id)[0];
+  if (!n) return;
+  n.failed = false; n.pending = true;
+  renderImports();
+  impPostNote(n);
 }
 
 async function impDeleteNote(id) {
+  const before = impData.notes.slice();
+  impData.notes = impData.notes.filter(n => n.id !== id);
+  renderImports();
   try {
     const r = await apiCall('importNoteDelete', { id: id });
-    if (!r.ok) return toast(r.error || 'Could not delete', true);
-    impData.notes = impData.notes.filter(n => n.id !== id);
-    renderImports();
-  } catch (e) { toast('Network error', true); }
+    if (!r.ok) { impData.notes = before; renderImports(); toast(r.error || 'Could not delete', true); }
+  } catch (e) { impData.notes = before; renderImports(); toast('Network error', true); }
 }
 
-async function impSetState(gi, state, btn) {
-  const g = impGroups[gi];
+async function impSetState(i, state, btn) {
+  const g = impFlat[i];
   const payload = { consignment: g.name, state: state };
-  if (state === 'Deleted') { payload.confirm = valOf('imp-del-in-' + gi); payload.alsoKeys = g.names; }
+  if (state === 'Deleted') { payload.confirm = valOf('imp-del-in-' + i); payload.alsoKeys = g.names; }
   btn.disabled = true;
   try {
     const r = await apiCall('importState', payload);
     if (!r.ok) { toast(r.error || 'Could not change', true); btn.disabled = false; return; }
-    toast(state === 'Closed' ? 'Consignment closed' : state === 'Deleted' ? 'Deleted · ' + r.removed + ' comments removed' : 'Consignment open again');
+    toast(state === 'Closed' ? 'Consignment closed' : state === 'Deleted' ? 'Deleted · ' + r.removed + ' messages removed' : 'Consignment open again');
+    impData.states[impKey(g.name)] = { state: state, by: impData.me, at: 'just now' };
+    if (state === 'Deleted') impData.notes = impData.notes.filter(n => g.keys.indexOf(n.key) === -1);
+    if (state !== 'Open') impSel = '';
+    renderImports();
+  } catch (e) { toast('Network error', true); btn.disabled = false; }
+}
+
+async function impBunch(i, btn) {
+  const g = impFlat[i];
+  const from = valOf('imp-mfrom-' + i), names = valOf('imp-mto-' + i);
+  if (!names) return toast('Type the new name', true);
+  btn.disabled = true;
+  try {
+    const r = await apiCall('importBunch', { from: from, names: names });
+    if (!r.ok) { toast(r.error || 'Could not change', true); btn.disabled = false; return; }
+    toast(r.note || 'Done');
+    impMergeOpen = '';
     await loadImports();
   } catch (e) { toast('Network error', true); btn.disabled = false; }
 }
 
-function impPrint(gi) {
-  const card = document.getElementById('imp-card-' + gi);
-  if (!card) return;
-  card.open = true;
-  card.classList.add('imp-printing');
+function impRowsHtml(B) {
+  const d = impData, H = d.headers;
+  const rows = B.shown.reduce((a, g) => a.concat(g.list), []);
+  return `<div class="report-wrap"><table class="report-table"><thead><tr>${H.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${
+    rows.map(r => `<tr>${H.map((h, j) => j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${H.length}" class="report-meta">Nothing matches.</td></tr>`
+  }</tbody></table></div>`;
+}
+
+function impDiffHtml(B) {
+  const d = impData;
+  const C = B.C;
+  const excelKeys = {};
+  d.rows.forEach(r => [r[C.group], r[C.each], r[C.main]].forEach(v => { const k = impKey(v); if (k && k !== '0' && k !== 'order') excelKeys[k] = true; }));
+  impAliasKeys(Object.keys(excelKeys)).forEach(k => { excelKeys[k] = true; });
+  const P = d.progress || {};
+  const onlyTask = Object.keys(P).filter(k => !excelKeys[k]).map(k => ({ name: P[k].name, open: P[k].open, done: P[k].done })).sort((a, b) => (b.open.length - a.open.length) || a.name.localeCompare(b.name));
+  const onlyExcel = B.shown.filter(g => !g.prog.open.length && !g.prog.done.length && g.st.every(s => !/recd|cancel/i.test(s)));
+  return `<div class="imp-diff"><label>In Taskando tasks, not in C MSTR (${onlyTask.length})</label>
+    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Consignment</th><th>Waiting at</th><th>Last done</th></tr></thead><tbody>${
+      onlyTask.map(x => `<tr${x.open.length ? '' : ' class="dim-row"'}><td class="left"><b>${escapeHtml(x.name)}</b></td><td class="left">${x.open.map(o => `<a class="imp-task-chip open imp-open-task" href="${escapeHtml(impTaskUrl(o))}" target="_blank" rel="noopener">&#9203; ${escapeHtml(o.task)} &#8599;</a>`).join(' ')}</td><td class="left">${x.done.length ? escapeHtml(x.done[x.done.length - 1].task + ' · ' + shortWhenImp(x.done[x.done.length - 1].done)) : ''}</td></tr>`).join('') || '<tr><td colspan="3" class="report-meta">Everything in the tasks is in C MSTR.</td></tr>'
+    }</tbody></table></div>
+    <label style="margin-top:14px;">In C MSTR (not received yet), not in any Taskando task (${onlyExcel.length})</label>
+    <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Consignment</th><th>Supplier</th><th>Status</th><th>Manager</th></tr></thead><tbody>${
+      onlyExcel.map(g => `<tr><td class="left"><b>${escapeHtml(g.name)}</b></td><td class="left">${escapeHtml(g.sup.join(', '))}</td><td>${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}</td><td>${escapeHtml(g.bm.join(', '))}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Every open consignment has a task.</td></tr>'
+    }</tbody></table></div></div>`;
+}
+
+function impPrint(i) {
+  const line = document.getElementById('imp-line-' + i);
+  if (!line) return;
+  const g = impFlat[i];
+  if (!impDetail[g.name]) { impDetail[g.name] = true; renderImports(); }
+  const el = document.getElementById('imp-line-' + impFlat.findIndex(x => x.name === g.name));
+  el.classList.add('imp-printing');
   document.body.classList.add('imp-print');
-  const done = () => { card.classList.remove('imp-printing'); document.body.classList.remove('imp-print'); window.removeEventListener('afterprint', done); };
+  const done = () => { el.classList.remove('imp-printing'); document.body.classList.remove('imp-print'); window.removeEventListener('afterprint', done); };
   window.addEventListener('afterprint', done);
   setTimeout(() => { window.print(); setTimeout(done, 1500); }, 50);
 }
@@ -3246,7 +3543,6 @@ async function completeLogin() {
     document.getElementById('scr-login').classList.add('hidden');
     document.getElementById('btn-logout').classList.remove('hidden');
     document.getElementById('btn-refresh').classList.remove('hidden');
-    document.getElementById('btn-assign-new').classList.remove('hidden');
     document.getElementById('fab-plus').classList.remove('hidden');
     document.querySelectorAll('#plus-menu .lvl1').forEach(b => b.classList.toggle('hidden', user.level > 1));
     document.getElementById('btn-notifications').classList.remove('hidden');
@@ -4353,6 +4649,11 @@ async function loadPending() {
     const result = await apiCall('pendingList', { taskNames: visibleTaskNames() });
     if (result.ok) {
       pendingItems = result.items || [];
+      if (wantPendingId && currentTask) {
+        const wp = pendingItems.filter(x => x.pendingId === wantPendingId)[0];
+        wantPendingId = '';
+        if (wp && wp.taskName === currentTask) setTimeout(() => { fillKeys(wp.refNo, wp.caseNo, wp.customerName, wp.customerMobile); showCaseInfo(wp); }, 0);
+      }
       assignedMine = (result.assigned && result.assigned.mine) || [];
       assignedDone = (result.assigned && result.assigned.doneUnseen) || [];
       timeReqWaiting = Number(result.requests) || 0;
@@ -4522,6 +4823,7 @@ function openPendingItem(taskName, refNo, caseNo, customerName, customerMobile) 
 }
 
 let pendingKeysToFill = null;
+let wantPendingId = '';
 
 function keyLabel(p) {
   if (p.recurring) return 'Due ' + (p.due || '') + (p.next ? ' \u00b7 Next: ' + p.next : '');
@@ -5087,8 +5389,10 @@ function renderChainKey(c) {
       k.type === 'consignment' ? 'Only Jawad can start this chain, by typing the ' + escapeHtml(k.label || 'Consignment Name') + ' on the first task. It is kept separate from every other chain.' :
       'Only Jawad can start this chain. Leave the number empty on the first task and the next number is given automatically.'}</div>
     ${k.type === 'consignment' ? `<button class="btn btn-small" id="btn-fix-keys" onclick="fixChainKeys()">Fix old entries saved as 9999</button>` : ''}
-    <div class="hover-pick"><div class="chain-col-note" style="margin:0 0 6px;">Hover box shows <span class="report-meta">(tick as many as you like; none ticked shows the normal Salesman &amp; Branch box)</span></div>
-    <div class="owner-grid" style="margin:0;">${hoverColumnChoices(c).map(col => { const on = (k.hover || []).indexOf(col) !== -1; return `<label class="owner-pick${on ? ' on' : ''}"><input type="checkbox"${on ? ' checked' : ''} onchange="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(hoverLabel(col))}</label>`; }).join('')}</div></div>`;
+    <div class="hover-pick"><div class="chain-col-note" style="margin:0 0 6px;">Hover box shows <span class="report-meta">(none chosen shows the normal Salesman &amp; Branch box)</span></div>
+    <div class="hover-chosen">${(k.hover || []).map(col => `<span class="hover-chip">${escapeHtml(hoverLabel(col))}<button title="Remove" onclick="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', false)">&#10005;</button></span>`).join('') || '<span class="report-meta">Nothing chosen yet.</span>'}</div>
+    <div class="hover-find"><input type="text" id="hover-find" placeholder="Type to find a field to add" oninput="filterHoverPick(this.value)" autocomplete="off"><button class="btn btn-small" onclick="hoverShowAll = !hoverShowAll; renderChainEditor()">${hoverShowAll ? 'Hide list' : 'Show all fields'}</button></div>
+    <div class="owner-grid hover-grid${hoverShowAll ? '' : ' hidden'}" id="hover-grid" style="margin:0;">${hoverColumnChoices(c).filter(col => (k.hover || []).indexOf(col) === -1).map(col => `<label class="owner-pick" data-hl="${escapeHtml(hoverLabel(col).toLowerCase())}"><input type="checkbox" onchange="toggleHoverCol('${escapeHtml(col).replace(/'/g, "\\'")}', this.checked)"> ${escapeHtml(hoverLabel(col))}</label>`).join('')}</div></div>`;
 }
 
 const HOVER_NAMES = { CustomerName: 'Customer name', CustomerMobile: 'Mobile', Comment: 'Comment', Remarks: 'Remarks', CorporatePartner: 'Corporate partner', Inputs: 'Inputs' };
@@ -5108,6 +5412,16 @@ function hoverColumnChoices(c) {
   TASKS.filter(t => inChain.indexOf(t.name) !== -1).forEach(t => (t.fields || []).forEach(f => { if (f.col && f.type !== 'divider' && f.key !== 'ref' && f.key !== 'case' && out.indexOf(f.col) === -1) out.push(f.col); }));
   ((c && c.key && c.key.hover) || []).forEach(h => { if (out.indexOf(h) === -1) out.push(h); });
   return out;
+}
+
+let hoverShowAll = false;
+
+function filterHoverPick(q) {
+  const g = document.getElementById('hover-grid');
+  if (!g) return;
+  const n = String(q || '').trim().toLowerCase();
+  g.classList.toggle('hidden', !n && !hoverShowAll);
+  g.querySelectorAll('label').forEach(l => { l.style.display = !n || l.dataset.hl.indexOf(n) !== -1 ? '' : 'none'; });
 }
 
 function toggleHoverCol(col, on) {
@@ -5381,10 +5695,10 @@ function buildSearchResults(scope, q) {
     if (!hay.some(x => x && x.includes(needle))) return;
     const staff = (p.assignedTo && own.indexOf(p.assignedTo) !== -1) ? p.assignedTo : (own.filter(n => taskListFor(n).indexOf(p.taskName) !== -1)[0] || '');
     if (!staff) return;
-    const k = 'Case|' + p.id;
+    const k = 'Case|' + p.pendingId;
     if (seen[k]) return;
     seen[k] = true;
-    results.push({ kind: 'Case', label: keyLabel(p), sub: 'Waiting at ' + p.taskName, staffName: staff, taskName: p.taskName, phaseName: null, pendingId: p.id });
+    results.push({ kind: 'Case', label: keyLabel(p), sub: 'Waiting at ' + p.taskName, staffName: staff, taskName: p.taskName, phaseName: null, pendingId: p.pendingId });
   });
   const out = results.slice(0, SEARCH_LIMIT);
   if (needle.length >= 2) out.push({ kind: 'Search', label: 'Search everywhere for "' + q.trim() + '"', sub: 'Full trail and cheque', staffName: '', taskName: '', phaseName: null, us: q.trim() });
@@ -5434,7 +5748,7 @@ function applySearchItem(el) {
   if (us) { clearSearchBoxes(); openUniSearch(us); return; }
   const pid = el.getAttribute('data-pid');
   if (pid) {
-    const p = (pendingItems || []).filter(x => x.id === pid)[0];
+    const p = (pendingItems || []).filter(x => x.pendingId === pid)[0];
     clearSearchBoxes();
     if (p) openPendingItem(p.taskName, p.refNo, p.caseNo, p.customerName, p.customerMobile);
     return;
@@ -5495,6 +5809,12 @@ function route() {
 
     if (segments[2] && staffTaskList().indexOf(segments[2]) !== -1) {
       currentTask = segments[2];
+      if (segments[3] && segments[3][0] === '@') {
+        const pid = segments[3].slice(1);
+        const p = (pendingItems || []).filter(x => x.pendingId === pid)[0];
+        if (p) pendingKeysToFill = { refNo: p.refNo || '', caseNo: p.caseNo || '', customerName: p.customerName || '', customerMobile: p.customerMobile || '' };
+        else wantPendingId = pid;
+      }
       showProjectTiles = false;
       placeTask(currentTask);
       renderEntryScreen();
@@ -5570,8 +5890,17 @@ async function renderEntryScreen() {
       header.innerText = "Select a Phase";
       tile.innerText = "Select a phase from the top to begin";
     } else {
-      header.innerText = currentPhase + " Tasks";
-      tile.innerText = "Select a task from the sidebar to begin";
+      header.innerText = /tasks?$/i.test(String(currentPhase).trim()) ? currentPhase : currentPhase + " Tasks";
+      const inPhase = tasksInPhase(currentPhase);
+      const waiting = inPhase.filter(t => pendingForTask(t).length);
+      if (waiting.length && window.innerWidth < 700 && profile) {
+        window.location.replace('#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(waiting[0]));
+        return;
+      }
+      if (!waiting.length && inPhase.length) {
+        const nexts = inPhase.map(t => { const tk = taskByName(t); return tk && tk.schedule && tk.schedule.on ? t + ' · next ' + (nextDueText(tk.schedule) || 'none') : ''; }).filter(Boolean);
+        tile.innerText = 'Nothing is waiting here right now.' + (nexts.length ? '\n' + nexts.join('\n') : '');
+      } else tile.innerText = "Select a task from the sidebar to begin";
     }
     return;
   }
@@ -5823,6 +6152,7 @@ function renderFormInterface() {
   }
   if (t.panel === "imports") {
     document.getElementById('form-imports').classList.remove('hidden');
+    if (!impData) { try { const c = JSON.parse(localStorage.getItem('tk_imp_cache') || 'null'); if (c && c.me === (user && user.name)) impData = c; } catch (e) {} }
     if (impData) renderImports();
     loadImports();
     return;
@@ -7783,7 +8113,7 @@ let assignTab = 'open';
 
 function newAssignDraft() {
   return {
-    id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '5:00 PM', repeat: false,
+    id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '1:00 AM', repeat: false,
     schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: RECUR_DEFAULT_TIME, start: todayYmd(), end: 'never', until: '', count: 5 }, important: false,
     priority: 'Normal', dueKind: 'date', allowD: 1, allowH: 0, remind: '', remindDate: todayYmd(), remindTime: '10:00 AM',
     pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
@@ -7891,6 +8221,13 @@ function cancelAssignEdit() {
   renderAssignForm();
 }
 
+function endOfDayMs(ymd, clock) {
+  const ms = localMs(ymd, clock);
+  const c = String(clock || '').match(/^(\d{1,2}):(\d{2})\s*AM$/i);
+  if (ms && c && (Number(c[1]) % 12) * 60 + Number(c[2]) <= 60) return ms + 86400000;
+  return ms;
+}
+
 function localMs(ymd, clock) {
   const m = String(ymd || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
   const c = String(clock || '').match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
@@ -7907,7 +8244,7 @@ async function saveAssign() {
   if (d.repeat && d.schedule.freq === 'weekly' && !(d.schedule.days || []).length) return toast("Pick at least one day.", true);
   const payload = {
     id: d.id, title: d.title.trim(), notes: d.notes, people: d.people, mode: d.people.length > 1 ? d.mode : 'each',
-    dueMs: d.repeat ? 0 : localMs(d.dueDate, d.dueTime),
+    dueMs: d.repeat ? 0 : endOfDayMs(d.dueDate, d.dueTime),
     schedule: d.repeat ? Object.assign({}, d.schedule, { on: true }) : null,
     points: d.pointsOn && user.level === 0 ? d.points : null,
     important: !!d.important,
@@ -8026,7 +8363,8 @@ function editAssign(id) {
   d.id = a.id; d.title = a.title; d.notes = a.notes; d.people = a.people.slice(); d.mode = a.mode || 'each';
   if (a.schedule && a.schedule.on) { d.repeat = true; d.schedule = Object.assign(d.schedule, a.schedule); }
   else if (a.dueMs) {
-    const t = new Date(a.dueMs);
+    const t0 = new Date(a.dueMs);
+    const t = t0.getHours() * 60 + t0.getMinutes() <= 60 ? new Date(a.dueMs - 86400000) : t0;
     d.dueDate = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
     let h = t.getHours(); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
     const mm = String(Math.round(t.getMinutes() / 15) * 15 % 60).padStart(2, '0');
