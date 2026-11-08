@@ -2519,6 +2519,18 @@ let dashTo = '';
 let dashProjId = '';
 let dashTickTimer = null;
 let dashSatBy = 'salesman';
+let dashPrefetch = null;
+let dashFreshNext = false;
+
+function dashStartPrefetch() {
+  const r = dashRangeDates(dashRange);
+  dashFrom = r[0]; dashTo = r[1];
+  dashPrefetch = { key: dashCacheKeyFor(), p: apiCall('dashboard', { from: dashFrom, to: dashTo }).catch(() => ({ ok: false })) };
+}
+
+function dashCacheKeyFor() {
+  return 'tk_dash_' + ((user && user.name) || (function () { try { return localStorage.getItem('tk_last_name') || ''; } catch (e) { return ''; } })()) + '_' + dashRange + '_' + dashFrom + '_' + dashTo;
+}
 const DASH_COLORS = ['#0f8b8d', '#f2a541', '#e4572e', '#6c5ce7', '#2a9d8f', '#3a86ff', '#c44569', '#8ab17d'];
 
 function openDashboard() {
@@ -2553,7 +2565,7 @@ function dashCustom() {
 }
 
 function dashCacheKey() {
-  return 'tk_dash_' + (user ? user.name : '') + '_' + dashRange + '_' + dashFrom + '_' + dashTo;
+  return dashCacheKeyFor();
 }
 
 async function loadDash(showNow) {
@@ -2565,7 +2577,11 @@ async function loadDash(showNow) {
     if (c && c.ok) { dashData = c; renderDash(true); } else if (dashData) renderDash(true, true);
   }
   try {
-    const r = await apiCall('dashboard', { from: dashFrom, to: dashTo });
+    const pf = dashPrefetch && dashPrefetch.key === key ? dashPrefetch.p : null;
+    dashPrefetch = null;
+    const r = await (pf || apiCall('dashboard', { from: dashFrom, to: dashTo, fresh: !!dashFreshNext }));
+    dashFreshNext = false;
+    if (r && r.ok && r.stale) { dashFreshNext = true; setTimeout(() => loadDash(false), 50); }
     if (!r.ok) { if (!dashData) document.getElementById('dash-root').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     if (key !== dashCacheKey()) return;
     const first = !dashData || dashData.from !== r.from || dashData.to !== r.to;
@@ -4184,7 +4200,8 @@ function wantWelcome() {
 function showWelcome() {
   let nm = '';
   try { nm = localStorage.getItem('tk_last_name') || ''; } catch (e) {}
-  document.getElementById('wb-name').innerText = nm || 'friend';
+  document.getElementById('wb-name').innerText = nm || ' ';
+  if (!nm) apiCall('whoami', { device: pushPlatform() }).then(r => { if (r && r.ok && r.name) { try { localStorage.setItem('tk_last_name', r.name); } catch (e) {} const el = document.getElementById('wb-name'); if (el) el.innerText = r.name; } }).catch(() => {});
   document.getElementById('welcome-back').classList.remove('hidden');
   document.getElementById('g_id_signin').classList.add('hidden');
   setTimeout(() => { const b = document.getElementById('wb-go'); if (b) b.focus(); }, 50);
@@ -4239,6 +4256,9 @@ async function completeLogin() {
   statusEl.innerText = "Verifying...";
   if (pinNeeded()) await askPin();
   try {
+    const freshOpen = !window.location.hash || window.location.hash === '#' || /^#\/dashboard/.test(window.location.hash) || /Dashboard$/.test(decodeURIComponent(window.location.hash));
+    if (sessionToken && freshOpen) dashStartPrefetch();
+    const early = sessionToken ? [loadChain(), loadProjects()] : [];
     const both = await Promise.all([apiCall('whoami', { wantSession: !sessionToken, device: pushPlatform() }), loadTasks()]);
     const result = both[0];
     if (!result.ok) {
@@ -4272,7 +4292,7 @@ async function completeLogin() {
     loadTemplates();
     loadPending();
     apiCall('remList').then(r => { if (r && r.ok) { remData = r; if (typeof renderProjectNav === 'function' && profile) try { renderProjectNav(); } catch (e) {} } }).catch(() => {});
-    await Promise.all([loadChain(), loadProjects()]);
+    await Promise.all(early.length ? early : [loadChain(), loadProjects()]);
     startBellTimer();
     setTimeout(() => initPush(false), 1500);
 
@@ -7797,13 +7817,17 @@ function renderTaskTimes() {
 
 let timingData = null;
 
-async function loadTiming() {
+let timingSeq = 0;
+async function loadTiming(fresh) {
   const meta = document.getElementById('report-meta');
-  document.getElementById('timing-table').innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Working it out...</td></tr>`;
+  const seq = fresh ? timingSeq : ++timingSeq;
+  if (!fresh) document.getElementById('timing-table').innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Working it out...</td></tr>`;
   try {
     const to = reportToApplied;
-    const result = await apiCall('timingReport', { from: reportFromSaved, to: to, project: valOf('report-project') });
+    const result = await apiCall('timingReport', { from: reportFromSaved, to: to, project: valOf('report-project'), fresh: !!fresh });
+    if (seq !== timingSeq) return;
     if (!result.ok) return toast(result.error || "Could not load timing", true);
+    if (result.stale && !fresh) setTimeout(() => loadTiming(true), 50);
     timingData = result;
     meta.innerText = (result.items || []).length + ' timed items · ' + formatDateDMY(result.reportFrom) + (to ? ' to ' + formatDateDMY(to) : ' to today') + ' · built ' + (result.builtAt || '');
     fillSelect('tm-task', uniqueSorted((result.items || []).map(i => i.task)), 'All tasks');
@@ -7930,16 +7954,20 @@ function renderEmployees() {
   }).join('') || '';
 }
 
-async function loadReport() {
+let reportSeq = 0;
+async function loadReport(fresh) {
   const table = document.getElementById('report-table');
   const meta = document.getElementById('report-meta');
-  table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Building report...</td></tr>`;
+  if (!fresh) table.innerHTML = `<tr><td style="color:var(--text-dim); padding:14px;">Building report...</td></tr>`;
   try {
     fillReportChains();
     ensureReportDates();
     const sel = (valOf('report-chain') || '').split('\u0001');
-    const result = await apiCall('reportBuild', { project: sel[0] || '', chain: sel[1] || '', from: reportFromSaved });
+    const seq = fresh ? reportSeq : ++reportSeq;
+    const result = await apiCall('reportBuild', { project: sel[0] || '', chain: sel[1] || '', from: reportFromSaved, fresh: !!fresh });
+    if (seq !== reportSeq) return;
     if (!result.ok) { table.innerHTML = `<tr><td>${escapeHtml(result.error || 'Could not build report')}</td></tr>`; return; }
+    if (result.stale && !fresh) setTimeout(() => loadReport(true), 50);
     reportData = result;
     meta.innerText = (result.rows || []).length + ' cases started ' + formatDateDMY(result.reportFrom) + (reportToApplied ? ' to ' + formatDateDMY(reportToApplied) : ' to today') + ' · built ' + (result.builtAt || '');
     fillReportFilterOptions();
