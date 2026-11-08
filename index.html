@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Lora:ital,wght@1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Lora:ital,wght@1,600&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer onload="initGoogleSignIn()"
 onerror="handleGsiLoadError()"></script>
 <style>
@@ -862,6 +862,168 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .hover-find input { flex: 1; min-width: 180px; margin: 0; }
 .tr-bulk { display: inline-flex; gap: 6px; align-items: center; margin-left: 8px; }
 #grace-date { width: auto; margin: 0; }
+#form-dash { margin: -6px -4px 0; }
+.dsh { font-family: 'Manrope', sans-serif; }
+.dsh-hero { position: relative; overflow: hidden; border-radius: 22px; padding: 26px 28px; color: #fff; display: flex; gap: 20px; justify-content: space-between; flex-wrap: wrap; background: radial-gradient(120% 140% at 0% 0%, #1f7a6d 0%, #14584f 45%, #0d3b36 100%); box-shadow: 0 18px 40px -18px rgba(13,59,54,0.55); }
+.dsh-hero.dsh-import { background: radial-gradient(120% 140% at 0% 0%, #2c5d8f 0%, #1d3f66 50%, #122a45 100%); }
+.dsh-hero-bg { position: absolute; inset: 0; pointer-events: none; }
+.entry-layout.dash-full { display: block; }
+.entry-layout.dash-full > .task-sidebar, .entry-layout.dash-full #bold-task-header, .entry-layout.dash-full #template-tiles, .entry-layout.dash-full #empty-tile { display: none !important; }
+.dsh-hero-bg span { position: absolute; border-radius: 50%; filter: blur(2px); opacity: 0.18; }
+.dsh-hero-bg span:nth-child(1) { width: 260px; height: 260px; right: -60px; top: -90px; background: radial-gradient(circle, #f5b04a, transparent 70%); opacity: 0.45; }
+.dsh-hero-bg span:nth-child(2) { width: 180px; height: 180px; left: 38%; bottom: -110px; border: 28px solid #3fd3bd; opacity: 0.12; }
+.dsh-hero-bg span:nth-child(3) { width: 90px; height: 90px; left: -30px; top: 40%; background: #3fd3bd; opacity: 0.15; }
+.dsh-hero-l, .dsh-hero-r { position: relative; z-index: 1; }
+.dsh-hero-r { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.dsh-hello { font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; color: #f5c46e; font-size: 1.05rem; }
+.dsh-title { font-family: 'Fraunces', 'Lora', Georgia, serif; font-weight: 800; font-size: clamp(1.7rem, 3.4vw, 2.6rem); letter-spacing: -0.02em; margin: 4px 0 6px; line-height: 1.05; color: #fff; }
+.dsh-title em { font-style: italic; font-weight: 500; color: #bfeee6; }
+.dsh-sub { font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+.dsh-projs { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+.dsh-projs button, .dsh-ranges button, .dsh-custom button { border: 1px solid rgba(255,255,255,0.28); background: rgba(255,255,255,0.08); color: #fff; border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; backdrop-filter: blur(6px); transition: background .2s, transform .2s; }
+.dsh-projs button:hover, .dsh-ranges button:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+.dsh-projs button.on, .dsh-ranges button.on { background: #f5b04a; border-color: #f5b04a; color: #1c2a22; }
+.dsh-ranges { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.dsh-custom { display: flex; gap: 6px; align-items: center; }
+.dsh-custom input { margin: 0; width: auto; padding: 5px 8px; border-radius: 10px; border: none; font-size: 0.8rem; }
+.dsh-custom span { font-size: 0.8rem; }
+.dsh-hero-gauge { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 18px; padding: 8px 14px 6px; text-align: center; min-width: 150px; }
+.dsh-gauge { width: 140px; display: block; margin: 0 auto; }
+.dsh-gauge-txt { font-family: 'Fraunces', serif; font-weight: 800; font-size: 22px; fill: #fff; }
+.dsh-gauge-lbl { font-size: 0.72rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.08em; }
+.dsh-gauge-arc { transition: stroke-dasharray 1s ease; }
+.dsh-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin: 18px 0; }
+.dsh-kpi { position: relative; overflow: hidden; background: #fff; border-radius: 18px; padding: 16px 16px 10px; border: 1px solid #e3eadc; box-shadow: 0 6px 18px -12px rgba(20,60,40,0.35); transition: transform .25s, box-shadow .25s; }
+.dsh-kpi:hover { transform: translateY(-3px); box-shadow: 0 14px 28px -14px rgba(20,60,40,0.4); }
+.dsh-kpi::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--kc); }
+.dsh-kpi-top { display: flex; align-items: center; gap: 8px; }
+.dsh-kpi-ico { width: 34px; height: 34px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; color: var(--kc); background: color-mix(in srgb, var(--kc) 14%, white); }
+.dsh-kpi-ico svg { width: 19px; height: 19px; }
+.dsh-kpi-lbl { font-size: 0.78rem; font-weight: 700; color: #5c6b60; text-transform: uppercase; letter-spacing: 0.05em; }
+.dsh-kpi-val { font-family: 'Fraunces', serif; font-weight: 800; font-size: 2.3rem; line-height: 1.1; margin-top: 8px; color: #18261d; letter-spacing: -0.02em; }
+.dsh-kpi-sub { font-size: 0.78rem; color: #7a877e; }
+.dsh-kpi-spark { margin: 4px -16px -10px; height: 38px; }
+.dsh-spark { width: 100%; height: 38px; display: block; }
+.dsh-card { background: #fff; border-radius: 20px; padding: 18px 18px 14px; border: 1px solid #e3eadc; box-shadow: 0 6px 18px -12px rgba(20,60,40,0.3); margin-bottom: 16px; min-width: 0; }
+.dsh-card-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.dsh-card-h h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.12rem; margin: 0; color: #18261d; }
+.dsh-card-h > span { font-size: 0.75rem; color: #8a968d; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.dsh-grid2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
+.dsh-grid2 > .dsh-card { margin-bottom: 0; }
+.dsh-grid2, .dsh-grid3 { margin-bottom: 16px; }
+.dsh-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.dsh-grid3 > .dsh-card { margin-bottom: 0; }
+.dsh-area { width: 100%; height: auto; display: block; }
+.dsh-grid { stroke: #eef2ea; stroke-width: 1; }
+.dsh-axis { font-size: 10px; fill: #93a096; font-family: 'Manrope', sans-serif; }
+.dsh-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.8rem; color: #5c6b60; margin-top: 6px; }
+.dsh-legend i, .dsh-donut-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+.dsh-legend b { color: #18261d; margin-left: 4px; }
+.dsh-anim .dsh-line { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: dshdraw 1.4s ease forwards; }
+.dsh-anim .dsh-areafill { opacity: 0; animation: dshfade 1s .5s ease forwards; }
+@keyframes dshdraw { to { stroke-dashoffset: 0; } }
+@keyframes dshfade { to { opacity: 1; } }
+.dsh-donut-wrap { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.dsh-donut { width: 170px; height: 170px; }
+.dsh-anim .dsh-seg { animation: dshfade .8s ease both; }
+.dsh-donut-big { font-family: 'Fraunces', serif; font-weight: 800; font-size: 28px; fill: #18261d; }
+.dsh-donut-small { font-size: 10px; fill: #8a968d; text-transform: uppercase; letter-spacing: 0.08em; }
+.dsh-donut-legend { display: flex; flex-direction: column; gap: 6px; min-width: 150px; font-size: 0.85rem; }
+.dsh-donut-legend div { display: grid; grid-template-columns: auto 1fr auto auto; gap: 6px; align-items: center; }
+.dsh-donut-legend small { color: #8a968d; width: 34px; text-align: right; }
+.dsh-bars { display: flex; flex-direction: column; gap: 10px; }
+.dsh-bar-row { display: flex; gap: 10px; align-items: center; }
+.dsh-rank { width: 22px; height: 22px; border-radius: 8px; background: #f1f5ec; color: #5c6b60; font-size: 0.72rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.dsh-bar-main { flex: 1; min-width: 0; }
+.dsh-bar-top { display: flex; justify-content: space-between; gap: 8px; font-size: 0.86rem; }
+.dsh-bar-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-bar-top b { font-family: 'Fraunces', serif; }
+.dsh-bar-top small { font-family: 'Manrope', sans-serif; color: #8a968d; font-weight: 600; }
+.dsh-track { height: 9px; border-radius: 999px; background: #f1f5ec; overflow: hidden; margin-top: 4px; }
+.dsh-fill { height: 100%; width: var(--w); border-radius: 999px; }
+.dsh-anim .dsh-fill { animation: dshgrow 1s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes dshgrow { from { width: 0; } }
+.dsh-av { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; font-weight: 800; flex: none; box-shadow: 0 0 0 3px #fff, 0 4px 10px -4px rgba(0,0,0,0.4); }
+.dsh-podium { display: flex; justify-content: center; align-items: flex-end; gap: 14px; padding: 10px 0 0; }
+.dsh-pod { display: flex; flex-direction: column; align-items: center; text-align: center; width: 31%; max-width: 160px; }
+.dsh-medal { font-size: 1.6rem; margin-bottom: 4px; }
+.dsh-pod-1 .dsh-medal { font-size: 2.1rem; animation: dshbob 2.6s ease-in-out infinite; }
+@keyframes dshbob { 50% { transform: translateY(-4px); } }
+.dsh-pod-name { font-weight: 800; margin-top: 8px; font-size: 0.9rem; }
+.dsh-pod-pts { font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.25rem; color: #14584f; }
+.dsh-pod-pts small { font-family: 'Manrope', sans-serif; font-size: 0.7rem; color: #8a968d; }
+.dsh-pod-step { width: 100%; margin-top: 8px; border-radius: 14px 14px 0 0; font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.5rem; color: rgba(255,255,255,0.9); display: flex; align-items: flex-start; justify-content: center; padding-top: 8px; }
+.dsh-pod-1 .dsh-pod-step { height: 96px; background: linear-gradient(180deg, #f5b04a, #e08e1a); }
+.dsh-pod-2 .dsh-pod-step { height: 70px; background: linear-gradient(180deg, #b9c4cc, #8d9aa5); }
+.dsh-pod-3 .dsh-pod-step { height: 52px; background: linear-gradient(180deg, #d79a6a, #b0703f); }
+.dsh-anim .dsh-pod-step { animation: dshrise .9s cubic-bezier(.2,.8,.2,1) both; transform-origin: bottom; }
+@keyframes dshrise { from { transform: scaleY(0); } }
+.dsh-rest { margin-top: 12px; border-top: 1px dashed #e3eadc; padding-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.dsh-rest-row { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; }
+.dsh-rest-n { flex: 1; }
+.dsh-rest-row b { font-family: 'Fraunces', serif; color: #14584f; }
+.dsh-rest-row b.neg, .dsh-pts.neg { color: #c0392b; }
+.dsh-toggle { display: inline-flex; background: #f1f5ec; border-radius: 999px; padding: 2px; text-transform: none !important; letter-spacing: 0 !important; }
+.dsh-toggle button { border: none; background: none; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; color: #5c6b60; cursor: pointer; }
+.dsh-toggle button.on { background: #fff; color: #14584f; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.dsh-team { display: flex; flex-direction: column; }
+.dsh-team-row { display: grid; grid-template-columns: 2fr 0.8fr 0.7fr 1.1fr 0.9fr 0.9fr 0.9fr 1.1fr; gap: 8px; align-items: center; padding: 9px 4px; border-bottom: 1px solid #f1f5ec; font-size: 0.86rem; }
+.dsh-team-row:hover:not(.dsh-team-head) { background: #f8fbf5; border-radius: 10px; }
+.dsh-team-head { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8a968d; font-weight: 800; border-bottom: 2px solid #eef2ea; }
+.dsh-team-p { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.dsh-team-p b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-pts { font-family: 'Fraunces', serif; font-size: 1rem; }
+.dsh-pts.pos { color: #14584f; }
+.dsh-mini { display: inline-block; width: 46px; height: 6px; border-radius: 999px; background: #eef2ea; margin-right: 6px; vertical-align: middle; overflow: hidden; }
+.dsh-mini i { display: block; height: 100%; border-radius: 999px; }
+.dsh-late { color: #c0392b; font-weight: 700; }
+.dsh-live { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #c8d1c4; margin-right: 6px; }
+.dsh-live.on { background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.6); animation: dshping 1.8s infinite; }
+@keyframes dshping { 70% { box-shadow: 0 0 0 8px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+.dsh-list { display: flex; flex-direction: column; gap: 8px; }
+.dsh-li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: #f8fbf5; border: 1px solid #eef2ea; }
+.dsh-li > div { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.dsh-li small { color: #8a968d; font-size: 0.75rem; }
+.dsh-li-dot { width: 10px; height: 10px; border-radius: 50%; background: #2a9d8f; flex: none; }
+.dsh-li.late { background: #fff4f1; border-color: #f6d5cc; }
+.dsh-li.late .dsh-li-dot { background: #e4572e; }
+.dsh-chip { font-size: 0.72rem; font-weight: 800; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.dsh-chip.late { background: #fde3dc; color: #b42318; }
+.dsh-chip.ok { background: #e3f4e5; color: #1e6b2c; }
+.dsh-empty { color: #8a968d; font-size: 0.88rem; padding: 14px 4px; }
+.dsh-foot { text-align: center; color: #9aa69d; font-size: 0.75rem; margin: 6px 0 4px; letter-spacing: 0.04em; }
+.dsh-flow { margin-bottom: 16px; }
+.dsh-anim .dsh-kpi, .dsh-anim .dsh-card { animation: dshup .6s cubic-bezier(.2,.8,.2,1) both; }
+.dsh-anim .dsh-kpi:nth-child(2) { animation-delay: .05s; } .dsh-anim .dsh-kpi:nth-child(3) { animation-delay: .1s; } .dsh-anim .dsh-kpi:nth-child(4) { animation-delay: .15s; } .dsh-anim .dsh-kpi:nth-child(5) { animation-delay: .2s; }
+@keyframes dshup { from { opacity: 0; transform: translateY(12px); } }
+.dash-tab { font-weight: 800 !important; }
+@media (max-width: 900px) {
+  .dsh-grid2, .dsh-grid3 { grid-template-columns: 1fr; }
+  .dsh-hero-r { align-items: flex-start; width: 100%; }
+  .dsh-ranges { justify-content: flex-start; }
+  .dsh-team-head { display: none; }
+  .dsh-team-row { grid-template-columns: 1fr 1fr; row-gap: 4px; padding: 10px 6px; }
+  .dsh-team-row .dsh-team-p { grid-column: 1 / -1; }
+  .dsh-team-row > span[data-l]::before { content: attr(data-l) ": "; color: #8a968d; font-size: 0.75rem; }
+}
+@media (max-width: 520px) {
+  .dsh-hero { padding: 20px 18px; border-radius: 18px; }
+  .dsh-kpis { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .dsh-kpi-val { font-size: 1.8rem; }
+  .dsh-hero-gauge { display: none; }
+  .dsh-podium { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .dsh-anim * { animation: none !important; } }
+
+.trail-sug-wrap { position: relative; flex: 1; min-width: 220px; }
+.trail-sug-wrap .report-search { width: 100%; }
+.trail-sug { position: absolute; left: 0; right: 0; top: 100%; z-index: 40; background: #fff; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,0.12); margin-top: 4px; max-height: 320px; overflow: auto; }
+.trail-sug-item { padding: 7px 12px; cursor: pointer; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; border-bottom: 1px solid #f1f5ec; font-size: 0.88rem; }
+.trail-sug-item span { color: var(--text-dim); }
+.trail-sug-item small { color: #b26a00; margin-left: auto; }
+.trail-sug-item:hover, .trail-sug-item.on { background: var(--accent-softer, #f3f7f0); }
+.imp-trail-msgs { border: 1px solid #f2d79c; background: #fffaf0; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
+.imp-trail-msgs > b { display: block; margin-bottom: 6px; font-family: 'Fraunces', serif; }
 .imp-search { width: 100%; margin: 0 0 8px; }
 .imp-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
 .imp-row select { width: auto; min-width: 150px; margin: 0; }
@@ -907,6 +1069,12 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .imp-hide { position: relative; }
 .imp-hide summary { cursor: pointer; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; list-style: none; }
 .imp-hide[open] .imp-viewers { position: absolute; z-index: 30; background: var(--panel-color, #fff); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; min-width: 200px; flex-direction: column; box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+.imp-open-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.imp-tchip { border: 1px solid; border-radius: 8px; padding: 1px 8px; font-size: 0.75rem; cursor: pointer; background: #fff; }
+.imp-tchip small { opacity: 0.85; }
+.imp-tchip.ok, .imp-task-chip.ok { border-color: #8cc59a; background: #ecf8ef; color: #1e6b2c; }
+.imp-tchip.soon, .imp-task-chip.soon { border-color: #e7b45a; background: #fff6e5; color: #8a5300; }
+.imp-tchip.late, .imp-task-chip.late { border-color: #e48a80; background: #fdecea; color: #b42318; }
 .imp-count { font-size: 0.78rem; color: var(--accent-dark); margin-left: 4px; }
 .imp-at { margin-top: 4px; }
 .imp-task-chip { display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; padding: 1px 7px; font-size: 0.75rem; background: var(--surface-2); margin: 2px 2px 2px 0; }
@@ -996,6 +1164,12 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .login-quote { font-size: 1.3rem; line-height: 1.5; font-weight: 600; margin: 34px 0 0; }
 .login-quote span { color: #3fd9c2; }
 .login-motto { font-size: 1.25rem; line-height: 1.4; margin: 26px 0 0; }
+.welcome-back { text-align: center; }
+.wb-hello { font-family: 'Lora', Georgia, serif; font-style: italic; color: #f5c46e; font-size: 1.05rem; }
+.wb-name { font-family: 'Fraunces', 'Lora', serif; font-weight: 800; font-size: 1.9rem; color: #fff; margin: 2px 0 16px; }
+.wb-go { background: #f5b04a; color: #1c2a22; border: none; border-radius: 999px; padding: 12px 34px; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 22px -10px rgba(245,176,74,0.9); transition: transform .2s; }
+.wb-go:hover { transform: translateY(-2px); }
+.wb-switch { display: block; margin-top: 14px; color: rgba(255,255,255,0.7); font-size: 0.8rem; }
 .login-sign { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.18); }
 #login-status { text-align: center; color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-top: 14px; min-height: 1em; }
 .site-title { display: inline-flex; align-items: center; gap: 8px; }
@@ -1197,6 +1371,12 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 <p class="login-quote">"Your group chat is not a task manager.<br><span>It's Taskando."</span></p>
 <p class="login-motto">Taskando: Where excuses come to die.</p>
 <div class="login-sign">
+<div id="welcome-back" class="welcome-back hidden">
+<div class="wb-hello">Welcome back,</div>
+<div class="wb-name" id="wb-name"></div>
+<button class="wb-go" id="wb-go" onclick="welcomeContinue()">Continue &rarr;</button>
+<a href="javascript:void(0)" class="wb-switch" onclick="welcomeSwitch()">Not you? Sign in with another account</a>
+</div>
 <div id="g_id_signin" style="display:flex; justify-content:center;"></div>
 <div id="login-status"></div>
 </div>
@@ -1462,7 +1642,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="report-trail" class="hidden">
 <div class="report-bar">
-<input type="text" id="trail-q" class="report-search" placeholder="Ref No, Case No or Consignment Name" onkeydown="if(event.key==='Enter')loadTrail()">
+<div class="trail-sug-wrap"><input type="text" id="trail-q" class="report-search" placeholder="Ref No, Case No or Consignment Name" autocomplete="off" oninput="trailSuggest()" onfocus="trailSuggest()" onkeydown="trailSugKey(event)"><div id="trail-sug" class="trail-sug hidden"></div></div>
 <button class="btn btn-small btn-primary" onclick="loadTrail()">Show trail</button>
 <button class="btn btn-small" onclick="copyTrailPicture()">Copy picture</button>
 </div>
@@ -1592,6 +1772,8 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-wrap"><table class="report-table" id="assign-defs"></table></div>
 </div>
 
+<div id="form-dash" class="hidden"><div id="dash-root" class="dsh"><div class="dsh-empty">Loading your dashboard…</div></div></div>
+
 <div id="form-imports" class="hidden">
 <div class="imp-head"><div><b>Import Data</b> <small class="report-meta" id="imp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="imp-sync-btn" onclick="importSyncNow()">Sync now</button></div>
 <div id="imp-error" class="imp-error hidden"></div>
@@ -1600,7 +1782,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="imp-link-row"><input type="text" id="imp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="imp-link-btn" onclick="importSaveLink()">Save and sync</button></div>
 <div id="imp-link-status" class="report-meta"></div>
 <label style="margin-top:10px;">Who can see Import Data</label>
-<p class="report-meta">Jawad and Uzair always see it. Tick the others. If nobody is ticked, people in the Imports project see it.</p>
+<p class="report-meta">Jawad, Uzair and everyone who owns an Imports task always see it. Tick anyone else who should see it.</p>
 <div id="imp-viewers" class="imp-viewers"></div>
 <button class="btn btn-small" id="imp-viewers-btn" onclick="importSaveViewers()">Save who can see</button>
 <label style="margin-top:12px;">Details from tasks to show on each consignment</label>
@@ -1667,9 +1849,9 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 
 <div id="form-devices" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Everyone signs in with Google once on each phone or computer and then stays signed in for 30 days of use. Sign out a lost phone here. To put the dashboard on a TV or office screen, open <b>hayyairshad.github.io/Mahana360/#/dashboard</b> on that screen, then type the code it shows below.
+Everyone signs in with Google once on each phone or computer and then stays signed in for 30 days of use. Sign out a lost phone here. The Dashboard tab shows live numbers to everyone after they sign in.
 </p>
-<div class="report-bar">
+<div class="report-bar hidden">
 <input type="text" id="dash-code" class="report-search" inputmode="numeric" placeholder="6-number code from the screen" style="max-width:220px;" onkeydown="if(event.key==='Enter')approveScreen()">
 <input type="text" id="dash-name" class="report-search" placeholder="Name, e.g. Office TV" style="max-width:220px;">
 <button class="btn btn-small btn-primary" onclick="approveScreen()">Approve screen</button>
@@ -2177,7 +2359,7 @@ async function approveScreen() {
 const DASH_KEY = 'taskando_dash';
 let dashTimer = null;
 
-function isDashboardUrl() { return /^#\/dashboard/.test(window.location.hash); }
+function isDashboardUrl() { return false; }
 
 async function dashCall(action, payload) {
   const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action: action, version: APP_VERSION }, payload || {})) });
@@ -2254,7 +2436,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R29";
+const APP_VERSION = "R30";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2327,6 +2509,351 @@ let allRecurring = [];
 const PANEL_PREFIX = "__panel_";
 const MY_REMINDERS = "Reminders";
 const REMINDERS_PROJECT = "__reminders";
+const DASH_NAME = "Dashboard";
+const DASH_PROJECT = "__dash";
+const DASH_TASK = { name: DASH_NAME, phase: "Dashboard", panel: "dash", description: "Live numbers for your project", temp: false, fields: [], owners: [], slots: [], active: true };
+let dashData = null;
+let dashRange = 'month';
+let dashFrom = '';
+let dashTo = '';
+let dashProjId = '';
+let dashTickTimer = null;
+let dashSatBy = 'salesman';
+const DASH_COLORS = ['#0f8b8d', '#f2a541', '#e4572e', '#6c5ce7', '#2a9d8f', '#3a86ff', '#c44569', '#8ab17d'];
+
+function openDashboard() {
+  if (!profile) return;
+  window.location.hash = '#/staff/' + encodeURIComponent(user ? user.name : profile.name) + '/' + encodeURIComponent(DASH_NAME);
+}
+
+function dashYmd(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function dashRangeDates(key) {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  if (key === 'today') return [dashYmd(t), dashYmd(t)];
+  if (key === 'week') { const s = new Date(t); const dow = (s.getDay() + 6) % 7; s.setDate(s.getDate() - dow); return [dashYmd(s), dashYmd(t)]; }
+  if (key === 'lastmonth') { const s = new Date(t.getFullYear(), t.getMonth() - 1, 1); const e = new Date(t.getFullYear(), t.getMonth(), 0); return [dashYmd(s), dashYmd(e)]; }
+  if (key === 'custom' && dashFrom && dashTo) return [dashFrom, dashTo];
+  return [dashYmd(new Date(t.getFullYear(), t.getMonth(), 1)), dashYmd(t)];
+}
+
+function dashSetRange(key) {
+  dashRange = key;
+  if (key !== 'custom') { const r = dashRangeDates(key); dashFrom = r[0]; dashTo = r[1]; }
+  loadDash(true);
+}
+
+function dashCustom() {
+  const f = valOf('dash-from'), t = valOf('dash-to');
+  if (!f || !t) return;
+  dashFrom = f; dashTo = t; dashRange = 'custom';
+  loadDash(true);
+}
+
+function dashCacheKey() {
+  return 'tk_dash_' + (user ? user.name : '') + '_' + dashRange + '_' + dashFrom + '_' + dashTo;
+}
+
+async function loadDash(showNow) {
+  if (!dashFrom) { const r = dashRangeDates(dashRange); dashFrom = r[0]; dashTo = r[1]; }
+  const key = dashCacheKey();
+  if (showNow) {
+    let c = null;
+    try { c = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
+    if (c && c.ok) { dashData = c; renderDash(true); } else if (dashData) renderDash(true, true);
+  }
+  try {
+    const r = await apiCall('dashboard', { from: dashFrom, to: dashTo });
+    if (!r.ok) { if (!dashData) document.getElementById('dash-root').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    if (key !== dashCacheKey()) return;
+    const first = !dashData || dashData.from !== r.from || dashData.to !== r.to;
+    dashData = r;
+    try { localStorage.setItem(key, JSON.stringify(r)); } catch (e) {}
+    renderDash(first);
+  } catch (e) { if (!dashData) document.getElementById('dash-root').innerHTML = '<div class="report-meta">Network error. Pull to refresh.</div>'; }
+}
+
+function dashStartTimer() {
+  clearInterval(dashTickTimer);
+  dashTickTimer = setInterval(() => {
+    const el = document.getElementById('form-dash');
+    if (!el || el.classList.contains('hidden') || document.hidden) return;
+    loadDash(false);
+  }, 120000);
+}
+
+function dashGreeting() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+}
+
+function dashFmtDay(ymd) {
+  const m = String(ymd).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return ymd;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+function dashAgo(ms) {
+  if (!ms) return 'never';
+  const m = Math.round((Date.now() - ms) / 60000);
+  if (m < 2) return 'online now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.round(m / 60);
+  if (h < 24) return h + ' h ago';
+  const d = Math.round(h / 24);
+  return d + ' day' + (d === 1 ? '' : 's') + ' ago';
+}
+
+function dashInitials(n) {
+  return String(n || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+}
+
+function dashColor(n) {
+  let h = 0;
+  String(n || '').split('').forEach(c => { h = (h * 31 + c.charCodeAt(0)) >>> 0; });
+  return DASH_COLORS[h % DASH_COLORS.length];
+}
+
+function dashAvatar(n, size) {
+  const s = size || 38;
+  return `<span class="dsh-av" style="width:${s}px;height:${s}px;background:${dashColor(n)};font-size:${Math.round(s * 0.38)}px">${escapeHtml(dashInitials(n))}</span>`;
+}
+
+function dashSpark(vals, color) {
+  const v = vals.length ? vals : [0];
+  const w = 120, h = 36, max = Math.max(1, ...v);
+  const step = v.length > 1 ? w / (v.length - 1) : w;
+  const pts = v.map((x, i) => [i * step, h - 3 - (x / max) * (h - 8)]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const id = 'sg' + Math.random().toString(36).slice(2, 8);
+  return `<svg class="dsh-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity="0.35"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs><path d="${line} L${w} ${h} L0 ${h} Z" fill="url(#${id})"/><path d="${line}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function dashArea(days, series, label) {
+  const W = 640, H = 230, L = 34, B = 26, T = 14, R = 10;
+  const iw = W - L - R, ih = H - T - B;
+  const max = Math.max(1, ...series.reduce((a, s) => a.concat(s.values), []));
+  const nice = max <= 5 ? 5 : Math.ceil(max / 5) * 5;
+  const n = days.length;
+  const x = i => L + (n > 1 ? (i / (n - 1)) * iw : iw / 2);
+  const y = v => T + ih - (v / nice) * ih;
+  let grid = '';
+  for (let k = 0; k <= 4; k++) { const v = Math.round(nice * k / 4); grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="dsh-grid"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" class="dsh-axis">${v}</text>`; }
+  const every = Math.max(1, Math.ceil(n / 8));
+  let xl = '';
+  days.forEach((d, i) => { if (i % every === 0 || i === n - 1) xl += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" class="dsh-axis">${escapeHtml(dashFmtDay(d))}</text>`; });
+  const paths = series.map((s, si) => {
+    const pts = s.values.map((v, i) => [x(i), y(v)]);
+    const line = pts.map((p, i) => {
+      if (!i) return 'M' + p[0] + ' ' + p[1];
+      const q = pts[i - 1], cx = (q[0] + p[0]) / 2;
+      return `C${cx} ${q[1]} ${cx} ${p[1]} ${p[0]} ${p[1]}`;
+    }).join(' ');
+    const id = 'ag' + si + Math.random().toString(36).slice(2, 7);
+    const dots = pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="${n > 40 ? 0 : 3}" fill="${s.color}" class="dsh-dot"><title>${escapeHtml(dashFmtDay(days[i]) + ' · ' + s.name + ': ' + s.values[i])}</title></circle><rect x="${p[0] - iw / n / 2}" y="${T}" width="${Math.max(2, iw / n)}" height="${ih}" fill="transparent"><title>${escapeHtml(dashFmtDay(days[i]) + ' · ' + series.map(z => z.name + ': ' + z.values[i]).join(' · '))}</title></rect>`).join('');
+    return `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.color}" stop-opacity="${si ? 0.18 : 0.32}"/><stop offset="1" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs>
+      <path d="${line} L${x(n - 1)} ${T + ih} L${x(0)} ${T + ih} Z" fill="url(#${id})" class="dsh-areafill"/>
+      <path d="${line}" fill="none" stroke="${s.color}" stroke-width="2.6" stroke-linecap="round" class="dsh-line"/>${dots}`;
+  }).join('');
+  return `<svg class="dsh-area" viewBox="0 0 ${W} ${H}" role="img" aria-label="${escapeHtml(label)}">${grid}${xl}${paths}</svg>
+    <div class="dsh-legend">${series.map(s => `<span><i style="background:${s.color}"></i>${escapeHtml(s.name)} <b>${s.values.reduce((a, b) => a + b, 0)}</b></span>`).join('')}</div>`;
+}
+
+function dashDonut(parts, centerBig, centerSmall) {
+  const total = parts.reduce((a, p) => a + p.n, 0);
+  const r = 62, c = 2 * Math.PI * r;
+  let off = 0;
+  const segs = total ? parts.map(p => {
+    const len = (p.n / total) * c;
+    const s = `<circle r="${r}" cx="80" cy="80" fill="none" stroke="${p.color}" stroke-width="20" stroke-dasharray="${Math.max(0, len - 2)} ${c}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)" class="dsh-seg"><title>${escapeHtml(p.name + ': ' + p.n)}</title></circle>`;
+    off += len;
+    return s;
+  }).join('') : `<circle r="${r}" cx="80" cy="80" fill="none" stroke="#e8ece4" stroke-width="20"/>`;
+  return `<div class="dsh-donut-wrap"><svg viewBox="0 0 160 160" class="dsh-donut"><circle r="${r}" cx="80" cy="80" fill="none" stroke="#eef2ea" stroke-width="20"/>${segs}<text x="80" y="80" text-anchor="middle" class="dsh-donut-big">${escapeHtml(centerBig)}</text><text x="80" y="100" text-anchor="middle" class="dsh-donut-small">${escapeHtml(centerSmall)}</text></svg>
+    <div class="dsh-donut-legend">${parts.map(p => `<div><i style="background:${p.color}"></i><span>${escapeHtml(p.name)}</span><b>${p.n}</b><small>${total ? Math.round(p.n * 100 / total) : 0}%</small></div>`).join('')}</div></div>`;
+}
+
+function dashBars(list, color, icon, unit) {
+  if (!list || !list.length) return '<div class="dsh-empty">Nothing yet in these dates.</div>';
+  const max = Math.max(1, ...list.map(x => x.n));
+  return `<div class="dsh-bars">${list.map((x, i) => `<div class="dsh-bar-row"><span class="dsh-rank">${i + 1}</span><div class="dsh-bar-main"><div class="dsh-bar-top"><span class="dsh-bar-name">${icon ? icon + ' ' : ''}${escapeHtml(x.name)}</span><b>${x.n}${unit ? ' <small>' + unit + '</small>' : ''}</b></div><div class="dsh-track"><div class="dsh-fill" style="--w:${Math.max(4, Math.round(x.n * 100 / max))}%;background:${typeof color === 'function' ? color(i) : color}"></div></div></div></div>`).join('')}</div>`;
+}
+
+function dashGauge(pct, label) {
+  const r = 46, c = Math.PI * r;
+  const p = Math.max(0, Math.min(100, pct || 0));
+  if (!p) return `<svg viewBox="0 0 120 70" class="dsh-gauge"><path d="M14 62 A46 46 0 0 1 106 62" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="12" stroke-linecap="round"/><text x="60" y="58" text-anchor="middle" class="dsh-gauge-txt">–</text></svg><div class="dsh-gauge-lbl">${escapeHtml(label)}</div>`;
+  const col = p >= 80 ? '#2a9d8f' : p >= 60 ? '#f2a541' : '#e4572e';
+  return `<svg viewBox="0 0 120 70" class="dsh-gauge"><path d="M14 62 A46 46 0 0 1 106 62" fill="none" stroke="#eef2ea" stroke-width="12" stroke-linecap="round"/><path d="M14 62 A46 46 0 0 1 106 62" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(p / 100) * c} ${c}" class="dsh-gauge-arc"/><text x="60" y="58" text-anchor="middle" class="dsh-gauge-txt">${p}%</text></svg><div class="dsh-gauge-lbl">${escapeHtml(label)}</div>`;
+}
+
+const DASH_ICONS = {
+  inbox: '<path d="M4 13h4l2 3h4l2-3h4M4 13l2.5-7h11L20 13v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/>',
+  building: '<path d="M4 20V6l8-3 8 3v14M9 20v-4h6v4M8 9h.01M12 9h.01M16 9h.01M8 13h.01M12 13h.01M16 13h.01"/>',
+  smile: '<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 10h.01M15 10h.01"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  alert: '<path d="M12 4 2.5 20h19zM12 10v4M12 17h.01"/>',
+  box: '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5 12 12l9-4.5M12 12v9"/>',
+  chat: '<path d="M4 5h16v11H8l-4 4z"/>',
+  bike: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8M10 9 8 6H6M15 9h3"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>'
+};
+
+function dashIcon(k) {
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${DASH_ICONS[k] || ''}</svg>`;
+}
+
+function dashKpi(icon, color, value, label, sub, spark) {
+  return `<div class="dsh-kpi" style="--kc:${color}">
+    <div class="dsh-kpi-top"><span class="dsh-kpi-ico">${dashIcon(icon)}</span><span class="dsh-kpi-lbl">${escapeHtml(label)}</span></div>
+    <div class="dsh-kpi-val" data-count="${Number(value) || 0}">${Number(value) || 0}</div>
+    <div class="dsh-kpi-sub">${sub || '&nbsp;'}</div>
+    ${spark ? `<div class="dsh-kpi-spark">${spark}</div>` : ''}
+  </div>`;
+}
+
+function dashPct(a, b) {
+  return b ? Math.round(a * 100 / b) : 0;
+}
+
+function renderDash(animate, stale) {
+  const root = document.getElementById('dash-root');
+  if (!root || !dashData) return;
+  const D = dashData;
+  const projs = D.projects || [];
+  if (!projs.length) { root.innerHTML = '<div class="dsh-empty">No project to show yet. Ask Jawad to add you to a task.</div>'; return; }
+  if (!projs.some(p => p.id === dashProjId)) dashProjId = (projs.filter(p => p.kind === 'mahana')[0] || projs[0]).id;
+  const P = projs.filter(p => p.id === dashProjId)[0];
+  const days = P.daily.map(x => x.d);
+  const ranges = [['today', 'Today'], ['week', 'This week'], ['month', 'This month'], ['lastmonth', 'Last month'], ['custom', 'Pick dates']];
+  const me = D.me || (user && user.name) || '';
+  const first = String(me).split(' ')[0];
+  const rangeTxt = D.from === D.to ? dashFmtDay(D.from) : dashFmtDay(D.from) + ' – ' + dashFmtDay(D.to);
+  const onPct = dashPct(P.onTime, P.onTime + P.late);
+  let html = `<section class="dsh-hero dsh-${P.kind}">
+    <div class="dsh-hero-bg"><span></span><span></span><span></span></div>
+    <div class="dsh-hero-l">
+      <div class="dsh-hello">${escapeHtml(dashGreeting())}, ${escapeHtml(first)}</div>
+      <h1 class="dsh-title">${escapeHtml(P.name)} <em>at a glance</em></h1>
+      <div class="dsh-sub">${escapeHtml(rangeTxt)} · updated ${escapeHtml(D.at || '')}${stale ? ' · refreshing…' : ''}</div>
+      ${projs.length > 1 ? `<div class="dsh-projs">${projs.map(p => `<button class="${p.id === dashProjId ? 'on' : ''}" onclick="dashProjId='${escapeHtml(p.id)}'; renderDash(true)">${p.kind === 'import' ? '&#128230; ' : p.kind === 'mahana' ? '&#127968; ' : ''}${escapeHtml(p.name)}</button>`).join('')}</div>` : ''}
+    </div>
+    <div class="dsh-hero-r">
+      <div class="dsh-ranges">${ranges.map(r => `<button class="${dashRange === r[0] ? 'on' : ''}" onclick="${r[0] === 'custom' ? "document.getElementById('dash-custom').classList.toggle('hidden')" : "dashSetRange('" + r[0] + "')"}">${r[1]}</button>`).join('')}</div>
+      <div id="dash-custom" class="dsh-custom${dashRange === 'custom' ? '' : ' hidden'}"><input type="date" id="dash-from" value="${escapeHtml(dashFrom)}"><span>to</span><input type="date" id="dash-to" value="${escapeHtml(dashTo)}"><button onclick="dashCustom()">Show</button></div>
+      <div class="dsh-hero-gauge">${dashGauge(onPct, 'closed on time')}</div>
+    </div>
+  </section>`;
+  const closedSeries = P.daily.map(x => x.closed);
+  const lateSeries = P.daily.map(x => x.late);
+  if (P.kind === 'mahana' && P.mahana) {
+    const M = P.mahana;
+    html += `<section class="dsh-kpis">
+      ${dashKpi('inbox', '#0f8b8d', M.refs, 'Cases arrived', 'new Ref Nos', dashSpark(M.daily.map(x => x.refs), '#0f8b8d'))}
+      ${dashKpi('building', '#6c5ce7', M.corp, 'Corporate', dashPct(M.corp, M.refs) + '% of cases', '')}
+      ${dashKpi('smile', '#f2a541', M.satisfied, 'Satisfied', dashPct(M.satisfied, M.refs) + '% of cases', dashSpark(M.daily.map(x => x.satisfied), '#f2a541'))}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
+    </section>
+    <section class="dsh-grid2">
+      <div class="dsh-card dsh-wide"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases per day')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>On time vs late</h3><span>tasks closed</span></div>${dashDonut([{ name: 'On time', n: P.onTime, color: '#2a9d8f' }, { name: 'Late', n: P.late, color: '#e4572e' }], onPct + '%', 'on time')}</div>
+    </section>`;
+  } else if (P.kind === 'import' && P.imports) {
+    const I = P.imports;
+    html += `<section class="dsh-kpis">
+      ${dashKpi('box', '#0f8b8d', I.open, 'Open consignments', 'not received yet', '')}
+      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', 'in Imports', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting ? dashPct(P.lateOpen, P.waiting) + '% of waiting' : 'nothing waiting', '')}
+      ${dashKpi('chat', '#f2a541', I.messages, 'Messages written', 'in these dates', '')}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
+    </section>
+    <section class="dsh-grid2">
+      <div class="dsh-card dsh-wide"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashDonut(I.status.slice(0, 8).map((s, i) => ({ name: s.name, n: s.n, color: DASH_COLORS[i % DASH_COLORS.length] })), String(I.status.reduce((a, s) => a + s.n, 0)), 'consignments')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>On time vs late</h3><span>tasks closed</span></div>${dashDonut([{ name: 'On time', n: P.onTime, color: '#2a9d8f' }, { name: 'Late', n: P.late, color: '#e4572e' }], onPct + '%', 'on time')}</div>
+    </section>`;
+  } else {
+    html += `<section class="dsh-kpis">
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
+      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', '', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', '', '')}
+      ${dashKpi('star', '#f2a541', P.points, 'Points earned', 'whole team', '')}
+    </section>`;
+  }
+  html += `<section class="dsh-card dsh-flow"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green on time · red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: closedSeries }, { name: 'Late', color: '#e4572e', values: lateSeries }], 'Tasks closed per day')}</section>`;
+  const ppl = P.people.filter(p => p.closed || p.points || p.waiting);
+  const podium = ppl.slice().sort((a, b) => b.points - a.points).slice(0, 3);
+  const order = [podium[1], podium[0], podium[2]].filter(Boolean);
+  html += `<section class="dsh-grid2">
+    <div class="dsh-card dsh-podium-card"><div class="dsh-card-h"><h3>Top performers</h3><span>by points</span></div>
+      ${podium.length ? `<div class="dsh-podium">${order.map(p => { const place = podium.indexOf(p); return `<div class="dsh-pod dsh-pod-${place + 1}"><div class="dsh-medal">${['&#129351;', '&#129352;', '&#129353;'][place]}</div>${dashAvatar(p.name, place === 0 ? 64 : 52)}<div class="dsh-pod-name">${escapeHtml(p.name)}</div><div class="dsh-pod-pts">${p.points > 0 ? '+' : ''}${p.points} <small>pts</small></div><div class="dsh-pod-step">${place + 1}</div></div>`; }).join('')}</div>` : '<div class="dsh-empty">No points yet in these dates.</div>'}
+      ${ppl.length > 3 ? `<div class="dsh-rest">${ppl.slice().sort((a, b) => b.points - a.points).slice(3, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i + 4}</span>${dashAvatar(p.name, 26)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><b class="${p.points < 0 ? 'neg' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : ''}
+    </div>
+    <div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>
+  </section>`;
+  if (P.kind === 'mahana' && P.mahana) {
+    const M = P.mahana;
+    const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
+    html += `<section class="dsh-grid3">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${dashBars(M.branches, 'linear-gradient(90deg,#6c5ce7,#a29bfe)', '', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashBars(M.salesmen, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '')}</div>
+    </section>
+    <section class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashBars(M.riders, i => DASH_COLORS[i % DASH_COLORS.length], '&#128757;', 'visits')}</section>`;
+  }
+  if (P.kind === 'import' && P.imports) {
+    const I = P.imports;
+    html += `<section class="dsh-grid2">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Busiest suppliers</h3><span>open consignments</span></div>${dashBars(I.suppliers, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${dashBars(I.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '')}</div>
+    </section>`;
+  }
+  html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
+    <div class="dsh-team-row dsh-team-head"><span>Person</span><span>Points</span><span>Closed</span><span>On time</span><span>Avg speed</span><span>Extra time asked</span><span>Waiting</span><span>Last seen</span></div>
+    ${P.people.map(p => { const pc = dashPct(p.onTime, p.onTime + p.late); const live = p.lastMs && Date.now() - p.lastMs < 3600000; return `<div class="dsh-team-row">
+      <span class="dsh-team-p">${dashAvatar(p.name, 32)}<b>${escapeHtml(p.name)}</b></span>
+      <span><b class="dsh-pts ${p.points < 0 ? 'neg' : p.points > 0 ? 'pos' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></span>
+      <span data-l="Closed">${p.closed}</span>
+      <span data-l="On time"><span class="dsh-mini"><i style="width:${pc}%;background:${pc >= 80 ? '#2a9d8f' : pc >= 60 ? '#f2a541' : '#e4572e'}"></i></span>${p.closed ? pc + '%' : '–'}</span>
+      <span data-l="Avg speed">${escapeHtml(p.avg || '–')}</span>
+      <span data-l="Extra time">${p.grace || 0}</span>
+      <span data-l="Waiting">${p.waiting || 0}${p.lateOpen ? ` <small class="dsh-late">${p.lateOpen} late</small>` : ''}</span>
+      <span data-l="Last seen"><i class="dsh-live${live ? ' on' : ''}"></i>${escapeHtml(dashAgo(p.lastMs))}</span>
+    </div>`; }).join('') || '<div class="dsh-empty">No one has worked in these dates yet.</div>'}
+  </div></section>`;
+  const remItems = remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 6) : [];
+  html += `<section class="dsh-grid2">
+    <div class="dsh-card"><div class="dsh-card-h"><h3>Assigned tasks open</h3><span>${P.assigned.length}</span></div>
+      ${P.assigned.length ? `<div class="dsh-list">${P.assigned.slice(0, 10).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-chip late">late ${escapeHtml(a.lateBy)}</span>` : '<span class="dsh-chip ok">on track</span>'}</div>`).join('')}</div>` : '<div class="dsh-empty">No assigned task is open. &#127881;</div>'}
+    </div>
+    <div class="dsh-card"><div class="dsh-card-h"><h3>My reminders</h3><span>coming up</span></div>
+      ${remItems.length ? `<div class="dsh-list">${remItems.map(x => { const late = x.dueMs < Date.now(); return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || new Date(x.dueMs).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }))}</small></div></div>`; }).join('')}</div>` : `<div class="dsh-empty">No reminders coming up. <a href="javascript:void(0)" onclick="openReminders()">Add one</a></div>`}
+    </div>
+  </section>
+  <div class="dsh-foot">Live · refreshes every 2 minutes · Taskando</div>`;
+  root.innerHTML = html;
+  root.classList.toggle('dsh-anim', !!animate);
+  if (animate) dashCountUp(root);
+  if (!remData) { apiCall('remList').then(r => { if (r && r.ok) { remData = r; renderDash(false); } }).catch(() => {}); }
+}
+
+function dashCountUp(root) {
+  const els = root.querySelectorAll('[data-count]');
+  const t0 = performance.now();
+  const dur = 900;
+  const step = now => {
+    const k = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    els.forEach(el => { const v = Number(el.getAttribute('data-count')) || 0; el.textContent = Math.round(v * e); });
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+
 const IMPORTS_NAME = "Import Data";
 const IMPORTS_PROJECT = "__imports";
 const IMPORTS_TASK = { name: IMPORTS_NAME, phase: "Import Data", panel: "imports", description: "Consignments from the Dropbox file",
@@ -2357,10 +2884,8 @@ function canSeeImports(staffName) {
   const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
   if (lv <= 1) return true;
   const me = String(staffName).trim().toLowerCase();
-  if (IMPORT_VIEWERS.length) return IMPORT_VIEWERS.some(n => String(n).trim().toLowerCase() === me);
-  const p = PROJECTS.filter(x => x.id === pid)[0];
-  if (p && (p.staff || []).some(n => String(n).trim().toLowerCase() === me)) return true;
-  return TASKS.some(t => (t.project || DEFAULT_PROJECT) === pid && (t.owners || []).some(o => String(o).trim().toLowerCase() === me));
+  if (IMPORT_VIEWERS.some(n => String(n).trim().toLowerCase() === me)) return true;
+  return TASKS.some(t => t.active !== false && (t.project || DEFAULT_PROJECT) === pid && (t.owners || []).some(o => String(o).trim().toLowerCase() === me));
 }
 
 function openImports() {
@@ -2698,13 +3223,30 @@ function impLineHtml(g, B) {
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
-      <span class="imp-icons">${nOpen ? `<button class="imp-ico" title="Open tasks" onclick="event.stopPropagation(); impSelect(${i}, true)">&#9203; ${nOpen}</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      <span class="imp-icons">${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      ${nOpen ? `<div class="imp-open-row">${g.prog.open.map(o => `<button class="imp-tchip ${impLateCls(o)}" title="${escapeHtml(impLateTip(o))}" onclick="event.stopPropagation(); impSelect(${i}, true)">&#9203; ${escapeHtml(o.task)} <small>${escapeHtml(impLateTxt(o))}</small></button>`).join('')}</div>` : ''}
       <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
     </div>
     ${sel ? impTrailHtml(g, i, B) : ''}
   </div>`;
+}
+
+function impLateCls(o) {
+  if (o.late) return 'late';
+  if (o.leftMs !== undefined && o.leftMs <= 4 * 3600000) return 'soon';
+  return 'ok';
+}
+
+function impLateTxt(o) {
+  if (o.late) return 'late ' + (o.lateBy || '');
+  if (o.left) return o.left + ' left';
+  return o.days ? o.days + 'd' : '';
+}
+
+function impLateTip(o) {
+  return (o.late ? 'Late by ' + (o.lateBy || '') : o.left ? o.left + ' left' : 'Waiting') + ' · since ' + (o.arrived || '') + (o.who ? ' · ' + o.who : '');
 }
 
 let impShowDone = {};
@@ -2719,16 +3261,15 @@ function impTrailHtml(g, i, B) {
   const cols = (d.headers || []).map((h, j) => j).filter(j => [B.C.group, B.C.main, B.C.supplier, B.C.hl, B.C.bm].indexOf(j) === -1 && g.list.some(r => impVal(r[j], B.NUM[j]) !== ''));
   const fromNames = Object.keys(d.progress || {}).filter(k => g.keys.indexOf(k) !== -1).map(k => d.progress[k].name);
   return `<div class="imp-trail">
-    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}${prog.done.length || prog.open.length ? (impShowDone[g.name] ? prog.done : []).map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<a class="imp-task-chip open imp-open-task" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ') : ''}${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
+    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}${prog.done.length || prog.open.length ? (impShowDone[g.name] ? prog.done : []).map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<a class="imp-task-chip open imp-open-task ${impLateCls(x)}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <small>${escapeHtml(impLateTxt(x))} · since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ') : ''}${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
     ${impDetailText(g).length ? `<div class="imp-sec imp-det imp-det-big">${impDetailText(g).map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
-    ${links.length ? `<div class="imp-sec imp-links">${links.map(L => `<span class="report-meta">${escapeHtml(L.kind === 'Split' ? 'Split' : 'Bunched')}: ${escapeHtml(L.old)} &rarr; ${escapeHtml(L.new)} · ${escapeHtml(L.at)}</span>`).join('<br>')}</div>` : ''}
     <div class="imp-sec"><b>Messages</b>
       <div class="imp-notes" id="imp-notes-${i}">${impNotesShown(g).map(n => impNoteHtml(n, g)).join('') || '<div class="report-meta">No messages yet. Type in the box above and press Enter.</div>'}</div>
       ${g.notes.filter(n => !n.pinned).length > 2 ? `<button class="btn btn-small imp-mini" onclick="impAllMsgs[impFlat[${i}].name] = !impAllMsgs[impFlat[${i}].name]; renderImports()">${impAllMsgs[g.name] ? 'Show only the last 2' : 'Show all ' + g.notes.length + ' messages'}</button>` : ''}
     </div>
     <div class="imp-actions imp-noprint">
       <button class="btn btn-small" onclick="impToggleDetail(${i})">${impDetail[g.name] ? 'Hide' : 'Show'} China Master detail</button>
-      <button class="btn btn-small" onclick="openUniSearch(impFlat[${i}].name)">Full trail</button>
+      <button class="btn btn-small" onclick="impFullTrail(${i})">Full trail + messages</button>
       <button class="btn btn-small" onclick="impPrint(${i})">Print / PDF</button>
       ${lead ? `<button class="btn btn-small" onclick="impMergeOpen = impMergeOpen === impFlat[${i}].name ? '' : impFlat[${i}].name; renderImports()">Merge / split</button>` : ''}
       ${lead ? (st && st.state === 'Closed' ? `<button class="btn btn-small" onclick="impSetState(${i}, 'Open', this)">Reopen</button>` : st && st.state === 'Deleted' ? `<button class="btn btn-small" onclick="impSetState(${i}, 'Open', this)">Bring back</button>` : (impCloseArm === g.name ? `<button class="btn btn-small icon-cross" onclick="impCloseArm = ''; impSetState(${i}, 'Closed', this)">Sure? Click again to close</button><button class="btn btn-small" onclick="impCloseArm = ''; renderImports()">Cancel</button>` : `<button class="btn btn-small" onclick="impCloseArm = impFlat[${i}].name; renderImports()">Close consignment</button>`)) : ''}
@@ -2764,6 +3305,16 @@ async function impPin(id, on) {
     const r = await apiCall('importNotePin', { id: id, pinned: on });
     if (!r.ok) { n.pinned = !on; renderImports(); toast(r.error || 'Could not pin', true); }
   } catch (e) { n.pinned = !on; renderImports(); toast('Network error', true); }
+}
+
+function impFullTrail(i) {
+  const g = impFlat[i];
+  if (!g) return;
+  document.getElementById('us-overlay').classList.remove('hidden');
+  document.getElementById('us-q').value = g.name;
+  usLast = null;
+  uniTrailExtra = `<div class="imp-trail-msgs"><b>Messages on ${escapeHtml(g.name)}</b>${g.notes.map(n => impNoteHtml(n, g)).join('') || '<div class="report-meta">No messages yet.</div>'}</div>`;
+  uniTrail(g.name, true);
 }
 
 function impTaskUrl(x) {
@@ -3355,7 +3906,7 @@ const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassig
   temp: false, fields: [], owners: [], slots: [], active: true };
 
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK, DASH_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
 }
 
 function taskByName(name) {
@@ -3387,7 +3938,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
-  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS] : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS, DASH_NAME] : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -3401,7 +3952,7 @@ function extraPanelsFor(staffName) {
 }
 
 function isPanelProject(pid) {
-  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || pid === IMPORTS_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
+  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || pid === IMPORTS_PROJECT || pid === DASH_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
 }
 
 function recurringHidden(t) {
@@ -3426,6 +3977,7 @@ function projOfTask(name) {
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
   if (t.name === MY_REMINDERS) return REMINDERS_PROJECT;
   if (t.name === IMPORTS_NAME) return IMPORTS_PROJECT;
+  if (t.name === DASH_NAME) return DASH_PROJECT;
   return t.project || DEFAULT_PROJECT;
 }
 
@@ -3434,6 +3986,7 @@ function projectName(pid) {
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
   if (pid === REMINDERS_PROJECT) return MY_REMINDERS;
   if (pid === IMPORTS_PROJECT) return IMPORTS_NAME;
+  if (pid === DASH_PROJECT) return DASH_NAME;
   if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
   const p = PROJECTS.filter(x => x.id === pid)[0];
   return p ? p.name : pid;
@@ -3581,7 +4134,7 @@ function renderProjectNav() {
         <strong>${escapeHtml(n)}</strong>
         <small>${n === 'Reports' ? 'Presentation, employee and cheque reports' : 'Give someone a task'}</small>
       </a>`).join('');
-    tiles.innerHTML = projs.map(p => {
+    tiles.innerHTML = (profile && user && profile.name === user.name ? `<a class="dashboard-item project-tile dash-tile" href="javascript:void(0)" onclick="openDashboard()"><strong>&#10024; Dashboard</strong><small>Live numbers for your project</small></a>` : '') + projs.map(p => {
       const n = pendingCountForProject(p.id);
       return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
         <strong>${escapeHtml(p.name)}</strong>
@@ -3599,7 +4152,7 @@ function renderProjectNav() {
   }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
-  nav.innerHTML = `<div class="ftabs">${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
+  nav.innerHTML = `<div class="ftabs">${(profile && user && profile.name === user.name ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
     ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
@@ -3622,9 +4175,39 @@ function isAdminPanel() {
   return !!(user && user.level === 0 && profile && profile.name === user.name);
 }
 
+function wantWelcome() {
+  let seen = false;
+  try { seen = sessionStorage.getItem('tk_in') === '1'; } catch (e) {}
+  return !!sessionToken && !seen && !user;
+}
+
+function showWelcome() {
+  let nm = '';
+  try { nm = localStorage.getItem('tk_last_name') || ''; } catch (e) {}
+  document.getElementById('wb-name').innerText = nm || 'friend';
+  document.getElementById('welcome-back').classList.remove('hidden');
+  document.getElementById('g_id_signin').classList.add('hidden');
+  setTimeout(() => { const b = document.getElementById('wb-go'); if (b) b.focus(); }, 50);
+}
+
+function welcomeContinue() {
+  try { sessionStorage.setItem('tk_in', '1'); } catch (e) {}
+  document.getElementById('welcome-back').classList.add('hidden');
+  completeLogin();
+}
+
+function welcomeSwitch() {
+  saveSession(null);
+  idToken = null;
+  try { localStorage.removeItem('mahana_idToken'); localStorage.removeItem('tk_last_name'); } catch (e) {}
+  document.getElementById('welcome-back').classList.add('hidden');
+  document.getElementById('g_id_signin').classList.remove('hidden');
+  try { google.accounts.id.prompt(); } catch (e) {}
+}
+
 function initGoogleSignIn() {
   if (isDashboardUrl()) { startDashboard(); return; }
-  if (typeof google === 'undefined') { if (sessionToken) { completeLogin(); return; } handleGsiLoadError(); return; }
+  if (typeof google === 'undefined') { if (sessionToken) { if (wantWelcome()) { showWelcome(); return; } completeLogin(); return; } handleGsiLoadError(); return; }
   google.accounts.id.initialize({
     client_id: GOOGLE_CLIENT_ID,
     callback: handleCredentialResponse
@@ -3633,13 +4216,14 @@ function initGoogleSignIn() {
     document.getElementById('g_id_signin'),
     { theme: 'outline', size: 'large', width: 260 }
   );
-  if (idToken || sessionToken) completeLogin();
+  if (wantWelcome()) showWelcome();
+  else if (idToken || sessionToken) completeLogin();
   else google.accounts.id.prompt();
 }
 
 function handleGsiLoadError() {
   if (isDashboardUrl()) { startDashboard(); return; }
-  if (sessionToken && !user) { completeLogin(); return; }
+  if (sessionToken && !user) { if (wantWelcome()) { showWelcome(); return; } completeLogin(); return; }
   document.getElementById('login-status').innerText =
     "Could not load Google Sign-In. Make sure this page is served over https:// and that you have an internet connection.";
 }
@@ -3667,6 +4251,7 @@ async function completeLogin() {
     }
     if (result.session) saveSession(result.session);
     user = { name: result.name, email: result.email, level: result.level, dailyViewer: !!result.dailyViewer };
+    try { localStorage.setItem('tk_last_name', result.name); sessionStorage.setItem('tk_in', '1'); } catch (e) {}
     applyUsers(result.users);
     document.getElementById('btn-daily').classList.toggle('hidden', !user.dailyViewer);
     serverVersion = result.version || 'old';
@@ -3693,8 +4278,8 @@ async function completeLogin() {
 
     window.addEventListener('hashchange', route);
 
-    if (window.location.hash && window.location.hash !== '#') route();
-    else redirectToDefault();
+    if (/^#\/dashboard/.test(window.location.hash) || !window.location.hash || window.location.hash === '#') window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/' + encodeURIComponent(DASH_NAME);
+    else route();
   } catch (e) {
     statusEl.innerText = "Could not reach the server. Please try again.";
     idToken = null;
@@ -6250,6 +6835,8 @@ function corpBadge(p) {
 }
 
 function hideAllForms() {
+  const el0 = document.getElementById('entry-layout');
+  if (el0) el0.classList.remove('dash-full');
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
@@ -6322,6 +6909,15 @@ function renderFormInterface() {
     renderRemEditor();
     if (remData) renderReminders();
     loadReminders();
+    return;
+  }
+  if (t.panel === "dash") {
+    document.getElementById('form-dash').classList.remove('hidden');
+    document.getElementById('entry-layout').classList.add('dash-full');
+    if (!dashFrom) { const r = dashRangeDates(dashRange); dashFrom = r[0]; dashTo = r[1]; }
+    if (dashData) renderDash(false); else { try { const c = JSON.parse(localStorage.getItem(dashCacheKey()) || 'null'); if (c && c.ok) { dashData = c; renderDash(true); } } catch (e) {} }
+    loadDash(false);
+    dashStartTimer();
     return;
   }
   if (t.panel === "imports") {
@@ -9706,6 +10302,60 @@ function trailTablesHtml(r) {
   return tables + other || '<div class="report-meta">No steps yet.</div>';
 }
 
+let caseKeys = null;
+let caseKeysAt = 0;
+let caseKeysLoading = null;
+let trailSugIdx = -1;
+const trailMem = {};
+
+function loadCaseKeys() {
+  if (caseKeys && Date.now() - caseKeysAt < 600000) return Promise.resolve(caseKeys);
+  if (!caseKeys) { try { const c = JSON.parse(localStorage.getItem('tk_case_keys') || 'null'); if (c && c.keys) { caseKeys = c.keys; caseKeysAt = c.at || 0; } } catch (e) {} }
+  if (caseKeysLoading) return caseKeysLoading;
+  caseKeysLoading = apiCall('caseKeys').then(r => {
+    caseKeysLoading = null;
+    if (r && r.ok) { caseKeys = r.keys; caseKeysAt = Date.now(); try { localStorage.setItem('tk_case_keys', JSON.stringify({ keys: caseKeys, at: caseKeysAt })); } catch (e) {} if (document.activeElement && document.activeElement.id === 'trail-q') trailSuggest(); }
+    return caseKeys;
+  }).catch(() => { caseKeysLoading = null; return caseKeys; });
+  return caseKeys ? Promise.resolve(caseKeys) : caseKeysLoading;
+}
+
+function trailSuggest() {
+  const box = document.getElementById('trail-sug');
+  const q = valOf('trail-q').toLowerCase();
+  loadCaseKeys();
+  if (!q || !caseKeys) { box.classList.add('hidden'); return; }
+  const starts = [], has = [];
+  for (const k of caseKeys) {
+    const a = String(k[0]).toLowerCase(), n = String(k[1] || '').toLowerCase();
+    if (a.indexOf(q) === 0) starts.push(k);
+    else if (a.indexOf(q) !== -1 || (q.length >= 3 && n.indexOf(q) !== -1)) has.push(k);
+    if (starts.length >= 10) break;
+  }
+  const list = starts.concat(has).slice(0, 10);
+  trailSugIdx = -1;
+  if (!list.length) { box.classList.add('hidden'); return; }
+  box.innerHTML = list.map((k, i) => `<div class="trail-sug-item" data-i="${i}" onmousedown="event.preventDefault(); trailGo(this.dataset.k)" data-k="${escapeHtml(k[0])}"><b>${escapeHtml(k[0])}</b>${k[1] ? `<span>${escapeHtml(k[1])}</span>` : ''}${k[2] ? `<small>waiting at ${escapeHtml(k[2])}</small>` : ''}</div>`).join('');
+  box.classList.remove('hidden');
+}
+
+function trailSugKey(e) {
+  const box = document.getElementById('trail-sug');
+  const items = box.querySelectorAll('.trail-sug-item');
+  if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && items.length && !box.classList.contains('hidden')) {
+    e.preventDefault();
+    trailSugIdx = (trailSugIdx + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+    items.forEach((x, i) => x.classList.toggle('on', i === trailSugIdx));
+    return;
+  }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (trailSugIdx >= 0 && items[trailSugIdx]) trailGo(items[trailSugIdx].dataset.k);
+    else loadTrail();
+  }
+  if (e.key === 'Escape') box.classList.add('hidden');
+}
+
 function trailGo(key) {
   document.getElementById('trail-q').value = key;
   loadTrail();
@@ -9714,10 +10364,16 @@ function trailGo(key) {
 async function loadTrail() {
   const q = valOf('trail-q');
   const box = document.getElementById('trail-body');
+  const sg = document.getElementById('trail-sug');
+  if (sg) sg.classList.add('hidden');
   if (!q) { box.innerHTML = '<div class="report-meta">Type a Ref No, Case No or Consignment Name first.</div>'; return; }
-  box.innerHTML = '<div class="report-meta">Looking it up...</div>';
+  const mk = q.toLowerCase();
+  if (trailMem[mk]) { trailData = trailMem[mk]; box.innerHTML = renderTrailHtml(trailMem[mk], 'trailGo'); }
+  else box.innerHTML = '<div class="report-meta">Looking it up...</div>';
   try {
     const r = await apiCall('caseTrail', { q: q });
+    if (valOf('trail-q') !== q) return;
+    if (r.ok && r.found) trailMem[mk] = r;
     if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     trailData = r;
     if (!r.found) { box.innerHTML = '<div class="report-meta">Nothing found for ' + escapeHtml(q) + '.</div>'; return; }
@@ -9726,6 +10382,7 @@ async function loadTrail() {
 }
 
 let usTimer = null;
+let uniTrailExtra = '';
 let usLast = null;
 
 function openUniSearch(q) {
@@ -9771,12 +10428,17 @@ function renderUniResults() {
 
 async function uniTrail(key, single) {
   const box = document.getElementById('us-body');
-  box.innerHTML = '<div class="report-meta">Loading the trail...</div>';
+  box.innerHTML = uniTrailExtra + '<div class="report-meta">Loading the trail...</div>';
   try {
+    const mk = String(key).toLowerCase();
+    const extra = uniTrailExtra;
+    uniTrailExtra = '';
+    if (trailMem[mk]) { trailData = trailMem[mk]; box.innerHTML = extra + `<div id="us-trail">${renderTrailHtml(trailMem[mk], 'uniTrail')}</div>`; }
     const r = await apiCall('caseTrail', { q: key });
     if (!r.ok || !r.found) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Nothing found for ' + key)}</div>`; return; }
+    trailMem[mk] = r;
     trailData = r;
-    box.innerHTML = `<div class="trail-nav">${usLast && !single ? '<button class="btn btn-small" onclick="renderUniResults()">&larr; Back to results</button>' : ''}<button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById(\'us-trail\')], \'Case trail · \' + trailData.q))">Copy picture</button></div><div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
+    box.innerHTML = extra + `<div class="trail-nav">${usLast && !single ? '<button class="btn btn-small" onclick="renderUniResults()">&larr; Back to results</button>' : ''}<button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById(\'us-trail\')], \'Case trail · \' + trailData.q))">Copy picture</button></div><div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
