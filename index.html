@@ -1093,6 +1093,20 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .imp-at { margin-top: 4px; }
 .imp-task-chip { display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; padding: 1px 7px; font-size: 0.75rem; background: var(--surface-2); margin: 2px 2px 2px 0; }
 .imp-task-chip.open { border-color: #e7b45a; background: #fff6e5; }
+.imp-tiles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.imp-open-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.case-chip.imp-tile { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px; text-decoration: none; color: var(--text-color); font: inherit; font-size: 0.82rem; cursor: pointer; text-align: left; }
+.case-chip.imp-tile b { font-weight: 700; }
+.case-chip.imp-tile small { flex-basis: 100%; margin-left: 0; font-size: 0.72rem; }
+.case-chip.imp-tile.soon { background: #fff4dc; border-color: #e8c37a; }
+.case-chip.imp-tile.done { background: #f3f7f2; }
+.case-chip.imp-tile.done.late { background: var(--danger-soft); }
+.imp-tile .imp-go { color: var(--text-dim); margin-left: 4px; }
+.left-badge, .ok-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; vertical-align: middle; background: #d3f0dc; color: #1e6b2c; }
+.left-badge.soon { background: #ffd27a; color: #5c3a00; }
+.ok-badge.st-early { background: #dbe7ff; color: #1d4ed8; }
+.tr-why { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.tr-why input { width: 220px; margin: 0; }
 .imp-task-chip.st-ok, .imp-task-chip.st-early { border-color: #8cc59a; background: #ecf8ef; color: #1e6b2c; }
 .imp-task-chip.st-soon { border-color: #e7b45a; background: #fff3d6; color: #8a5300; }
 .imp-task-chip.st-late { border-color: #e48a80; background: #fdecea; color: #b42318; }
@@ -1939,7 +1953,7 @@ Staff ask here for more time on a case, or to fix a finish time they saved late.
 <div class="report-bar">
 <select id="tr-filter" class="report-search" onchange="renderApprovals()"><option value="Waiting">Waiting</option><option value="">All</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select>
 <button class="btn btn-small" onclick="loadApprovals()">Refresh</button>
-<span id="tr-bulk" class="tr-bulk hidden"><b id="tr-bulk-n">0</b> selected <button class="btn btn-small btn-primary" onclick="decideSelected(true)">Approve selected</button> <button class="btn btn-small icon-cross" onclick="decideSelected(false)">Reject selected</button></span>
+<span id="tr-bulk" class="tr-bulk hidden"><b id="tr-bulk-n">0</b> selected <button class="btn btn-small btn-primary" onclick="decideSelected(true)">Approve selected</button> <button class="btn btn-small icon-cross" onclick="trBulkReject()">Reject selected</button><span id="tr-bulk-why" class="tr-why hidden"><input type="text" id="tr-bulk-note" placeholder="Why rejected? The staff will see this" onkeydown="if (event.key === 'Enter') decideSelected(false)"><button class="btn btn-small icon-cross" onclick="decideSelected(false)">Reject</button><button class="btn btn-small" onclick="document.getElementById('tr-bulk-why').classList.add('hidden')">Cancel</button></span></span>
 </div>
 <div class="report-wrap"><table class="report-table" id="approvals-table"></table></div>
 <label style="margin-top:20px;">Leave applications</label>
@@ -2534,7 +2548,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R32";
+const APP_VERSION = "R33";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3206,6 +3220,21 @@ function shortWhenImp(s) {
   return String(s || '').replace(/^(\d+ \w+) \d+, /, '$1, ');
 }
 
+function impMergeMap() {
+  const to = {};
+  ((impData && impData.links) || []).forEach(L => { if (String(L.kind || '') === 'Bunch' && impKey(L.old) !== impKey(L.new)) to[impKey(L.old)] = L.new; });
+  return name => {
+    let cur = String(name), seen = {};
+    for (let n = 0; n < 6; n++) {
+      const nx = to[impKey(cur)];
+      if (!nx || seen[impKey(nx)]) break;
+      seen[impKey(cur)] = true;
+      cur = nx;
+    }
+    return cur;
+  };
+}
+
 function impAliasKeys(keys) {
   const out = keys.slice();
   const links = (impData && impData.links) || [];
@@ -3237,12 +3266,13 @@ function impBuild() {
   const show = valOf('imp-show') || 'open';
   const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
   const groups = {}, order = [];
-  d.rows.forEach(r => { const k = r[C.group] || r[C.each] || '(no name)'; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const into = impMergeMap();
+  d.rows.forEach(r => { const k0 = r[C.group] || r[C.each] || '(no name)'; const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
   const noteText = {};
   (d.notes || []).forEach(n => { noteText[n.key] = (noteText[n.key] || '') + ' ' + String(n.text || '').toLowerCase(); });
   const all = order.map(k => {
     const list = groups[k];
-    const names = Array.from(new Set([k].concat(list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
+    const names = Array.from(new Set([k].concat(list.map(r => r[C.group]), list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
     const keys = impAliasKeys(names.map(impKey));
     const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
     const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
@@ -3423,13 +3453,35 @@ function impLineHtml(g, B) {
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
       <span class="imp-icons">${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
-      ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => `<button class="imp-tchip ${impLateCls(o)}" title="${escapeHtml(impLateTip(o))}" onclick="event.stopPropagation(); impSelect(${i}, true)">&#9203; ${escapeHtml(o.task)} <small>${escapeHtml(impLateTxt(o))}</small></button>`).join('')}</div>` : ''}
+      ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
       <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
     </div>
     ${sel ? impTrailHtml(g, i, B) : ''}
   </div>`;
+}
+
+function impGraceTxt(x, g) {
+  const list = ((g && g.prog && g.prog.reqs) || []).filter(r => r.pendingId && r.pendingId === x.id && r.status === 'Approved' && r.added);
+  return list.length ? list.map(r => '+' + r.added).join(' ') : '';
+}
+
+function impTileHtml(x, g, kind, click) {
+  const grace = impGraceTxt(x, g);
+  const gb = grace ? `<span class="grace-badge" title="More time approved">&#9201; ${escapeHtml(grace)}</span>` : '';
+  if (kind === 'done') {
+    const late = x.state === 'late';
+    const badge = late ? `<span class="late-badge">${escapeHtml(x.stateTxt)}</span>` : x.stateTxt ? `<span class="ok-badge st-${escapeHtml(x.state || 'ok')}">${escapeHtml(x.stateTxt)}</span>` : '<span class="ok-badge">Closed</span>';
+    const sub = ['closed ' + shortWhenImp(x.done), x.by ? 'by ' + x.by : '', x.took ? 'took ' + x.took + (x.allowed ? ' of ' + x.allowed : '') : ''].filter(Boolean).join(' · ');
+    return `<span class="case-chip imp-tile done${late ? ' late' : ''}" title="${escapeHtml(sub)}"><b>&#10003; ${escapeHtml(x.task)}</b>${badge}${gb}<small>${escapeHtml(sub)}</small></span>`;
+  }
+  const cls = impLateCls(x);
+  const badge = cls === 'late' ? `<span class="late-badge">${escapeHtml(impLateTxt(x))}</span>` : `<span class="left-badge${cls === 'soon' ? ' soon' : ''}">${escapeHtml(impLateTxt(x) || 'Waiting')}</span>`;
+  const sub = [x.took ? 'took ' + x.took.replace(' so far', '') + (x.allowed ? ' of ' + x.allowed : '') : '', 'since ' + shortWhenImp(x.arrived), x.who || ''].filter(Boolean).join(' · ');
+  const inner = `<b>${escapeHtml(x.task)}</b>${badge}${gb}<small>${escapeHtml(sub)}</small>`;
+  if (click) return `<button class="case-chip imp-tile${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" title="${escapeHtml(sub)}" onclick="${click}">${inner}</button>`;
+  return `<a class="case-chip imp-tile imp-open-task${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab"><b>${escapeHtml(x.task)}</b>${badge}${gb}<span class="imp-go">&#8599;</span><small>${escapeHtml(sub)}</small></a>`;
 }
 
 function impLateCls(o) {
@@ -3460,7 +3512,7 @@ function impTrailHtml(g, i, B) {
   const cols = (d.headers || []).map((h, j) => j).filter(j => [B.C.group, B.C.main, B.C.supplier, B.C.hl, B.C.bm].indexOf(j) === -1 && g.list.some(r => impVal(r[j], B.NUM[j]) !== ''));
   const fromNames = Object.keys(d.progress || {}).filter(k => g.keys.indexOf(k) !== -1).map(k => d.progress[k].name);
   return `<div class="imp-trail">
-    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}${(impShowDone[g.name] ? prog.done : []).map(x => `<span class="imp-task-chip st-${escapeHtml(x.state || 'ok')}" title="${escapeHtml('Closed ' + x.done + (x.by ? ' by ' + x.by : '') + (x.took ? ' · took ' + x.took : '') + (x.allowed ? ' · allowed ' + x.allowed : ''))}">&#10003; ${escapeHtml(x.task)} <b class="chip-st">${escapeHtml(x.stateTxt || 'Closed')}</b> <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ')} ${prog.open.map(x => `<a class="imp-task-chip imp-open-task st-${impLateCls(x)}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <b class="chip-st">${escapeHtml(impLateTxt(x))}</b> <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ')}${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
+    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}<div class="imp-tiles">${prog.open.map(x => impTileHtml(x, g, 'open')).join('')}${(impShowDone[g.name] ? prog.done.slice().reverse() : []).map(x => impTileHtml(x, g, 'done')).join('')}</div>${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
     ${impDetailText(g).length ? `<div class="imp-sec imp-det imp-det-big">${impDetailText(g).map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
     <div class="imp-sec"><b>Messages and what happened</b>
       ${impFeedBox(g, i)}
@@ -10343,7 +10395,7 @@ function timeReqWhat(x) {
 
 function timeReqStatus(x) {
   if (x.status === 'Approved') return '<span class="status-pill status-done">Approved</span>';
-  if (x.status === 'Rejected') return '<span class="status-pill status-late">Rejected</span>';
+  if (x.status === 'Rejected') return '<span class="status-pill status-late">Rejected</span>' + (x.note ? '<br><small class="report-meta">' + escapeHtml((x.decidedBy || 'Jawad') + ': ' + x.note) + '</small>' : '');
   return '<span class="status-pill status-open">Waiting</span>';
 }
 
@@ -10358,12 +10410,19 @@ function renderApprovals() {
       <td>${escapeHtml(chequeKey(x))}</td><td class="left">${timeReqWhat(x)}${x.type === 'done' && x.status === 'Waiting' ? `<br><input type="datetime-local" id="trd-${escapeHtml(x.id)}" style="width:auto;margin:4px 0 0" title="Change the finish time before approving if you want">` : ''}</td>
       <td class="left nowrap">${x.before ? `<span class="${x.beforeLate ? 'band-late' : ''}">Old: ${escapeHtml(x.before)}</span><br><b>New: ${escapeHtml(x.after || '')}</b>` : ''}</td><td class="left">${escapeHtml(x.reason)}${x.note ? '<br><small class="report-meta">' + escapeHtml(x.note) + '</small>' : ''}</td>
       <td>${timeReqStatus(x)}${x.decidedBy ? `<br><small class="report-meta">${escapeHtml(x.decidedBy)} · ${escapeHtml(x.decidedAt)}</small>` : ''}</td>
-      <td class="nowrap">${x.status === 'Waiting' ? `<button class="btn btn-small btn-primary" onclick="decideTimeReq('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small icon-cross" onclick="decideTimeReq('${escapeHtml(x.id)}', false)">Reject</button>` : ''}</td>
+      <td class="nowrap">${x.status === 'Waiting' ? (trRejectArm === x.id ? `<div class="tr-why"><input type="text" id="trn-${escapeHtml(x.id)}" placeholder="Why rejected? The staff will see this" onkeydown="if (event.key === 'Enter') decideTimeReq('${escapeHtml(x.id)}', false)"><button class="btn btn-small icon-cross" onclick="decideTimeReq('${escapeHtml(x.id)}', false)">Reject</button><button class="btn btn-small" onclick="trRejectArm = ''; renderApprovals()">Cancel</button></div>` : `<button class="btn btn-small btn-primary" onclick="decideTimeReq('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small icon-cross" onclick="trRejectArm = '${escapeHtml(x.id)}'; renderApprovals(); const i = document.getElementById('trn-${escapeHtml(x.id)}'); if (i) i.focus()">Reject</button>`) : ''}</td>
     </tr>`).join('') || '<tr><td colspan="10" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
   trBulkBar();
 }
 
 let trPicked = {};
+let trRejectArm = '';
+
+function trBulkReject() {
+  const w = document.getElementById('tr-bulk-why');
+  w.classList.remove('hidden');
+  document.getElementById('tr-bulk-note').focus();
+}
 
 function trPick(id, on) {
   if (on) trPicked[id] = true; else delete trPicked[id];
@@ -10386,12 +10445,15 @@ function trBulkBar() {
 async function decideSelected(approve) {
   const ids = Object.keys(trPicked);
   if (!ids.length) return;
+  const note = approve ? '' : valOf('tr-bulk-note');
+  if (!approve && !note) { trBulkReject(); return toast('Write why they are rejected', true); }
   const keep = approvalItems.map(x => Object.assign({}, x));
   approvalItems.forEach(x => { if (trPicked[x.id]) { x.status = approve ? 'Approved' : 'Rejected'; x.decidedBy = user ? user.name : ''; x.decidedAt = 'just now'; } });
   trPicked = {};
   renderApprovals();
   try {
-    const r = await apiCall('timeReqDecideMany', { ids: ids, approve: approve });
+    const r = await apiCall('timeReqDecideMany', { ids: ids, approve: approve, note: note });
+    if (r.ok && !approve) { document.getElementById('tr-bulk-note').value = ''; document.getElementById('tr-bulk-why').classList.add('hidden'); }
     if (!r.ok) { approvalItems = keep; renderApprovals(); return toast(r.error || 'Could not save', true); }
     toast((approve ? 'Approved ' : 'Rejected ') + r.done + (r.errors && r.errors.length ? ' · ' + r.errors.length + ' could not be changed' : ''), !!(r.errors && r.errors.length));
     loadApprovals();
@@ -10405,6 +10467,11 @@ async function decideTimeReq(id, approve) {
   const extra = {};
   if (sel) { const g = sel.value; if (g[0] === 'd') extra.days = Number(g.slice(1)); else extra.hours = Number(g); }
   if (dt && dt.value) extra.doneMs = new Date(dt.value).getTime();
+  if (!approve) {
+    extra.note = valOf('trn-' + id);
+    if (!extra.note) { trRejectArm = id; renderApprovals(); const i = document.getElementById('trn-' + id); if (i) i.focus(); return toast('Write why it is rejected', true); }
+    trRejectArm = '';
+  }
   const it = approvalItems.filter(x => x.id === id)[0];
   const was = it ? it.status : '';
   if (it) { it.status = approve ? 'Approved' : 'Rejected'; it.decidedBy = user ? user.name : ''; it.decidedAt = 'just now'; renderApprovals(); }
@@ -10511,7 +10578,7 @@ function taskPhaseOf(task) {
   return t ? String(t.phase || '') : '';
 }
 
-const TEV_ICON = { done: '&#10003;', auto: '&#9197;', wait: '&#9203;', resave: '&#8635;', grace: '&#9201;', note: '&#128172;', out: '&#9940;', temp: '&#9998;', other: '&#8226;' };
+const TEV_ICON = { done: '&#10003;', auto: '&#9197;', wait: '', resave: '&#8635;', grace: '&#9201;', note: '&#128172;', out: '&#9940;', temp: '&#9998;', other: '&#8226;' };
 
 function trailEvHtml(e, g) {
   const st = e.kind === 'grace' ? 'grace' : e.kind === 'resave' ? 'resave' : e.kind === 'note' ? 'note' : (e.state || '');
@@ -10672,6 +10739,19 @@ async function loadTrail() {
     if (!r.found) { box.innerHTML = '<div class="report-meta">Nothing found for ' + escapeHtml(q) + '.</div>'; return; }
     trailData = r;
     box.innerHTML = trailFreshNote(r) + renderTrailHtml(r, 'trailGo');
+    trailPrefetchNb(r);
+  });
+}
+
+const trailPre = {};
+
+function trailPrefetchNb(r) {
+  if (!r || r.stale) return;
+  [r.prev, r.next].filter(Boolean).forEach(k => {
+    const mk = trailMk(k);
+    if (trailPre[mk] || (trailMem[mk] && !trailMem[mk].stale)) return;
+    trailPre[mk] = true;
+    apiCallRaw('caseTrail', { q: k }).then(x => { if (x && x.ok && x.found) trailMemPut(mk, x); }).catch(() => {}).finally(() => { setTimeout(() => { delete trailPre[mk]; }, 60000); });
   });
 }
 
@@ -10776,6 +10856,7 @@ async function uniTrail(key, single) {
     if (!r.ok || !r.found) { if (!mem) box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Nothing found for ' + key)}</div>`; return; }
     trailData = r;
     box.innerHTML = extra + bar() + trailFreshNote(r) + `<div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
+    trailPrefetchNb(r);
   });
 }
 
