@@ -879,6 +879,8 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-title { font-family: 'Fraunces', 'Lora', Georgia, serif; font-weight: 800; font-size: clamp(1.7rem, 3.4vw, 2.6rem); letter-spacing: -0.02em; margin: 4px 0 6px; line-height: 1.05; color: #fff; }
 .dsh-title em { font-style: italic; font-weight: 500; color: #bfeee6; }
 .dsh-sub { font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+.dsh-loadbar { position: sticky; top: 0; z-index: 5; margin: 0 0 10px; padding: 8px 14px; border-radius: 10px; background: #fff4dc; color: #6b4500; font-weight: 600; font-size: 0.85rem; border: 1px solid #e8c37a; }
+.dsh-old section, .dsh-old .dsh-grid, .dsh-old .dsh-card { opacity: 0.55; transition: opacity 0.2s; }
 .dsh-projs { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
 .dsh-projs button, .dsh-ranges button, .dsh-custom button { border: 1px solid rgba(255,255,255,0.28); background: rgba(255,255,255,0.08); color: #fff; border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; backdrop-filter: blur(6px); transition: background .2s, transform .2s; }
 .dsh-projs button:hover, .dsh-ranges button:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
@@ -1024,6 +1026,18 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .trail-sug-item:hover, .trail-sug-item.on { background: var(--accent-softer, #f3f7f0); }
 .imp-trail-msgs { border: 1px solid #f2d79c; background: #fffaf0; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
 .imp-trail-msgs > b { display: block; margin-bottom: 6px; font-family: 'Fraunces', serif; }
+.stab-right { margin-left: auto; }
+.acc-table th, .acc-table td { text-align: center; }
+.acc-head { font-size: 0.75rem; white-space: normal; min-width: 70px; }
+.acc-group { background: var(--surface-2); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.acc-all { background: #fff8e8; }
+.acc-cell input { width: 18px; height: 18px; margin: 0; }
+.dsh-refreshing { color: #f5c46e; }
+.dsh-live-txt { color: #8ff0c9; font-weight: 700; }
+.dsh-live-txt::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22c55e; margin-right: 5px; vertical-align: middle; animation: dshping 1.8s infinite; }
+.dash-screen.dsh-screen { background: #f4f6f1; color: #18261d; }
+.dash-screen.dsh-screen .dash-head { color: #18261d; }
+.dash-screen.dsh-screen .login-name { color: #14584f; }
 .imp-search { width: 100%; margin: 0 0 8px; }
 .imp-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
 .imp-row select { width: auto; min-width: 150px; margin: 0; }
@@ -1079,6 +1093,51 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .imp-at { margin-top: 4px; }
 .imp-task-chip { display: inline-block; border: 1px solid var(--border-color); border-radius: 8px; padding: 1px 7px; font-size: 0.75rem; background: var(--surface-2); margin: 2px 2px 2px 0; }
 .imp-task-chip.open { border-color: #e7b45a; background: #fff6e5; }
+.imp-task-chip.st-ok, .imp-task-chip.st-early { border-color: #8cc59a; background: #ecf8ef; color: #1e6b2c; }
+.imp-task-chip.st-soon { border-color: #e7b45a; background: #fff3d6; color: #8a5300; }
+.imp-task-chip.st-late { border-color: #e48a80; background: #fdecea; color: #b42318; }
+.imp-task-chip .chip-st { font-weight: 700; }
+.imp-task-chip.st-ok .chip-st, .imp-task-chip.st-early .chip-st { color: #1e6b2c; }
+.imp-task-chip.st-late .chip-st { color: #b42318; }
+.imp-task-chip.st-soon .chip-st { color: #8a5300; }
+.imp-task-chip.st-early .chip-st { color: #1d4ed8; }
+.tev-list { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 8px; }
+.tev { display: flex; gap: 12px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 5px solid #94a3b8; background: var(--surface-2, #fafafa); font-size: 0.86rem; }
+.tev.st-ok { border-left-color: #2f9e55; background: #eef9f1; }
+.tev.st-early { border-left-color: #2563eb; background: #eef4ff; }
+.tev.st-soon { border-left-color: #e8a317; background: #fff4dc; }
+.tev.st-late { border-left-color: #d92d20; background: #fdeceb; }
+.tev.st-resave { border-left-color: #8b5cf6; background: #f4f0ff; border-style: dashed; border-left-style: solid; }
+.tev.st-grace { border-left-color: #0e9fb5; background: #eaf8fb; }
+.tev.st-note { border-left-color: var(--accent-color); background: var(--panel-color, #fff); }
+.tev.pinned { border-left-color: #e7b45a; background: #fff6e0; box-shadow: 0 0 0 1px #e7b45a inset; }
+.tev.pending { opacity: 0.6; }
+.tev-when { flex: none; width: 112px; color: var(--text-dim); font-size: 0.76rem; padding-top: 2px; }
+.tev-main { flex: 1; min-width: 0; }
+.tev-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.tev-ph { --ph: #64748b; display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: #fff; background: var(--ph); }
+.tev-arrow { color: var(--text-dim); }
+.tev-task { font-size: 0.92rem; }
+.tev-badge { margin-left: auto; font-weight: 700; font-size: 0.8rem; padding: 1px 8px; border-radius: 6px; white-space: nowrap; }
+.tev-badge.s-late { color: #fff; background: #d92d20; }
+.tev-badge.s-soon { color: #5c3a00; background: #ffd27a; }
+.tev-badge.s-ok { color: #1e6b2c; background: #d3f0dc; }
+.tev-badge.s-early { color: #1d4ed8; background: #dbe7ff; }
+.tev-badge.gr-approved { color: #1e6b2c; background: #d3f0dc; }
+.tev-badge.gr-rejected { color: #b42318; background: #fbd5d1; }
+.tev-badge.gr-waiting { color: #5c3a00; background: #ffe7b0; }
+.tev-meta { margin-top: 3px; color: var(--text-color); font-size: 0.8rem; }
+.tev-meta b { font-weight: 600; }
+.tev-what { font-weight: 700; }
+.tev.st-resave .tev-what { color: #6d28d9; }
+.tev-dot { color: var(--text-dim); }
+.tev-detail { margin-top: 3px; color: var(--text-dim); font-size: 0.78rem; white-space: pre-wrap; word-break: break-word; }
+.tev.k-note .tev-detail { color: var(--text-color); font-size: 0.9rem; }
+.tev-detail.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+.tev-tools { margin-left: 6px; display: inline-flex; gap: 4px; }
+.tev.k-note .tev-tools { margin-left: auto; }
+.trail-upd { margin: 4px 0 8px; }
+@media (max-width: 720px) { .tev { flex-direction: column; gap: 2px; } .tev-when { width: auto; } .tev-badge { margin-left: 0; } }
 .imp-task-chip small { color: var(--text-dim); }
 .imp-inner { padding: 0 4px 10px; }
 .imp-sec { margin: 10px 8px 0; }
@@ -1781,10 +1840,11 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <p class="report-meta">In Dropbox: right-click the Excel file &rarr; Share &rarr; Copy link. Paste it here. It is kept private on the server and is never shown again.</p>
 <div class="imp-link-row"><input type="text" id="imp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="imp-link-btn" onclick="importSaveLink()">Save and sync</button></div>
 <div id="imp-link-status" class="report-meta"></div>
-<label style="margin-top:10px;">Who can see Import Data</label>
+<div class="hidden"><label style="margin-top:10px;">Who can see Import Data</label>
 <p class="report-meta">Jawad, Uzair and everyone who owns an Imports task always see it. Tick anyone else who should see it.</p>
 <div id="imp-viewers" class="imp-viewers"></div>
-<button class="btn btn-small" id="imp-viewers-btn" onclick="importSaveViewers()">Save who can see</button>
+<button class="btn btn-small" id="imp-viewers-btn" onclick="importSaveViewers()">Save who can see</button></div>
+<p class="report-meta" style="margin-top:10px;">Who can see Import Data is set in <b>Admin → Who sees what</b>.</p>
 <label style="margin-top:12px;">Details from tasks to show on each consignment</label>
 <p class="report-meta">Tick fields saved in Imports tasks (like ETD, ETA, BL No). The latest saved value shows on the consignment line.</p>
 <div id="imp-detcols" class="imp-viewers"></div>
@@ -1847,11 +1907,17 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-wrap" style="margin-top:10px;"><table class="report-table" id="my-leave"></table></div>
 </div>
 
+<div id="form-access" class="hidden">
+<p class="report-meta">Jawad decides everything here. Tick who can see each thing. <b>Everyone</b> gives it to all staff, including people added later. Nobody else sees a tab unless it is ticked here. Changes apply when they refresh.</p>
+<div id="access-wrap" class="report-wrap" style="max-height:none;"><div class="report-meta">Loading...</div></div>
+<div class="report-bar" style="margin-top:10px;"><button class="btn btn-primary" id="access-save" onclick="saveAccess()">Save</button><span id="access-msg" class="report-meta"></span></div>
+</div>
+
 <div id="form-devices" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Everyone signs in with Google once on each phone or computer and then stays signed in for 30 days of use. Sign out a lost phone here. The Dashboard tab shows live numbers to everyone after they sign in.
+Everyone signs in with Google once on each phone or computer and then stays signed in for 30 days of use. Sign out a lost phone here. To put the dashboard on a TV or office screen, open <b>hayyairshad.github.io/Mahana360/#/dashboard</b> on that screen, then type the code it shows below. It then refreshes by itself.
 </p>
-<div class="report-bar hidden">
+<div class="report-bar">
 <input type="text" id="dash-code" class="report-search" inputmode="numeric" placeholder="6-number code from the screen" style="max-width:220px;" onkeydown="if(event.key==='Enter')approveScreen()">
 <input type="text" id="dash-name" class="report-search" placeholder="Name, e.g. Office TV" style="max-width:220px;">
 <button class="btn btn-small btn-primary" onclick="approveScreen()">Approve screen</button>
@@ -2174,6 +2240,8 @@ const ADMIN_TASKS = [
   { name: "Notifications", phase: "Admin", panel: "push", description: "Phone notifications",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Devices", phase: "Admin", panel: "devices", description: "Signed-in devices and dashboard screens",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Who sees what", phase: "Admin", panel: "access", description: "Choose who sees the dashboard, each report and Import Data",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -2359,7 +2427,8 @@ async function approveScreen() {
 const DASH_KEY = 'taskando_dash';
 let dashTimer = null;
 
-function isDashboardUrl() { return false; }
+function isDashboardUrl() { return /^#\/dashboard/.test(window.location.hash); }
+let dashScreenMode = false;
 
 async function dashCall(action, payload) {
   const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ action: action, version: APP_VERSION }, payload || {})) });
@@ -2389,8 +2458,13 @@ async function dashTick() {
   const box = document.getElementById('dash-body');
   let tok = null;
   try { tok = localStorage.getItem(DASH_KEY); } catch (e) {}
+  dashLoading = true;
+  dashUpdText();
   try {
-    const r = await dashCall('dashData', { token: tok });
+    if (!dashFrom) { const rg = dashRangeDates(dashRange); dashFrom = rg[0]; dashTo = rg[1]; }
+    const r = await dashCall('dashData', { token: tok, from: dashFrom, to: dashTo, fresh: !!dashFreshNext });
+    dashFreshNext = false;
+    dashLoading = false;
     if (!r.ok && r.gone) { try { localStorage.removeItem(DASH_KEY); } catch (e) {} box.innerHTML = '<div class="dash-msg">This screen was signed out. Starting again...</div>'; dashTimer = setTimeout(startDashboard, 4000); return; }
     if (r.waiting) {
       if (r.expired) { try { localStorage.removeItem(DASH_KEY); } catch (e) {} return startDashboard(); }
@@ -2398,16 +2472,40 @@ async function dashTick() {
       dashTimer = setTimeout(dashTick, 5000);
       return;
     }
+    if (r.projects) {
+      dashScreenMode = true;
+      document.getElementById('dash-screen').classList.add('dsh-screen');
+      document.getElementById('dash-at').innerText = r.screen || '';
+      const first = !dashData || dashData.from !== r.from || dashData.to !== r.to;
+      dashData = r;
+      renderDash(first);
+      if (r.stale) { dashFreshNext = true; dashTimer = setTimeout(dashTick, 50); return; }
+      dashTimer = setTimeout(dashTick, 120000);
+      return;
+    }
     document.getElementById('dash-at').innerText = 'Updated ' + r.at;
     box.innerHTML = `<div class="dash-grid">${r.people.map(p => `<div class="dash-card${p.late ? ' late' : ''}"><div class="dash-name">${escapeHtml(p.name)}</div>
         <div class="dash-nums"><div><b>${p.waiting}</b><span>Waiting</span></div><div class="${p.late ? 'bad' : ''}"><b>${p.late}</b><span>Late</span></div><div class="good"><b>${p.doneToday}</b><span>Done today</span></div><div><b class="${p.points < 0 ? 'bad' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b><span>Points today</span></div></div></div>`).join('')}</div>
       <div class="dash-tasks">${r.tasks.map(t => `<span class="dash-task${t.late ? ' late' : ''}">${escapeHtml(t.task)} <b>${t.waiting}</b>${t.late ? ' <i>' + t.late + ' late</i>' : ''}</span>`).join('')}</div>`;
     dashTimer = setTimeout(dashTick, 120000);
-  } catch (e) { dashTimer = setTimeout(dashTick, 30000); }
+  } catch (e) { dashLoading = false; dashUpdText(); dashTimer = setTimeout(dashTick, 30000); }
 }
 
 let user = null;
 let profile = null;
+let ACCESS = {};
+
+function can(f) {
+  return !!user && (user.level === 0 || !!ACCESS[f]);
+}
+
+function canDash() {
+  return !!user && (user.level === 0 || Object.keys(ACCESS).some(k => k.indexOf('dash:') === 0));
+}
+
+function canReports() {
+  return !!user && (user.level === 0 || Object.keys(ACCESS).some(k => k.indexOf('rep:') === 0));
+}
 let currentTask = null;
 let currentPhase = null;
 let tempEntries = [];
@@ -2436,7 +2534,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R30";
+const APP_VERSION = "R32";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2570,25 +2668,29 @@ function dashCacheKey() {
 
 async function loadDash(showNow) {
   if (!dashFrom) { const r = dashRangeDates(dashRange); dashFrom = r[0]; dashTo = r[1]; }
+  if (dashScreenMode) { if (showNow) dashFreshNext = false; return dashTick(); }
+  dashLoading = true;
+  dashUpdText();
   const key = dashCacheKey();
   if (showNow) {
     let c = null;
     try { c = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
-    if (c && c.ok) { dashData = c; renderDash(true); } else if (dashData) renderDash(true, true);
+    if (c && c.ok) { dashData = c; renderDash(true, !c.atMs || Date.now() - c.atMs > 600000); } else if (dashData) renderDash(false, true);
   }
   try {
     const pf = dashPrefetch && dashPrefetch.key === key ? dashPrefetch.p : null;
     dashPrefetch = null;
     const r = await (pf || apiCall('dashboard', { from: dashFrom, to: dashTo, fresh: !!dashFreshNext }));
     dashFreshNext = false;
-    if (r && r.ok && r.stale) { dashFreshNext = true; setTimeout(() => loadDash(false), 50); }
+    dashLoading = false;
+    if (r && r.ok && r.stale) { dashFreshNext = true; dashLoading = true; setTimeout(() => loadDash(false), 50); }
     if (!r.ok) { if (!dashData) document.getElementById('dash-root').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     if (key !== dashCacheKey()) return;
     const first = !dashData || dashData.from !== r.from || dashData.to !== r.to;
     dashData = r;
     try { localStorage.setItem(key, JSON.stringify(r)); } catch (e) {}
-    renderDash(first);
-  } catch (e) { if (!dashData) document.getElementById('dash-root').innerHTML = '<div class="report-meta">Network error. Pull to refresh.</div>'; }
+    renderDash(first, !!r.stale && Date.now() - (r.atMs || 0) > 600000);
+  } catch (e) { dashLoading = false; dashUpdText(); if (!dashData) document.getElementById('dash-root').innerHTML = '<div class="report-meta">Network error. Pull to refresh.</div>'; }
 }
 
 function dashStartTimer() {
@@ -2599,6 +2701,13 @@ function dashStartTimer() {
     loadDash(false);
   }, 120000);
 }
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden || dashScreenMode) return;
+  const el = document.getElementById('form-dash');
+  if (!el || el.classList.contains('hidden') || dashLoading) return;
+  if (!dashData || Date.now() - (dashData.atMs || 0) > 120000) loadDash(false);
+});
 
 function dashGreeting() {
   const h = new Date().getHours();
@@ -2651,7 +2760,7 @@ function dashArea(days, series, label) {
   const W = 640, H = 230, L = 34, B = 26, T = 14, R = 10;
   const iw = W - L - R, ih = H - T - B;
   const max = Math.max(1, ...series.reduce((a, s) => a.concat(s.values), []));
-  const nice = max <= 5 ? 5 : Math.ceil(max / 5) * 5;
+  const nice = max <= 4 ? 4 : Math.ceil(max / 4) * 4;
   const n = days.length;
   const x = i => L + (n > 1 ? (i / (n - 1)) * iw : iw / 2);
   const y = v => T + ih - (v / nice) * ih;
@@ -2736,25 +2845,26 @@ function dashPct(a, b) {
 }
 
 function renderDash(animate, stale) {
-  const root = document.getElementById('dash-root');
+  const root = document.getElementById(dashScreenMode ? 'dash-body' : 'dash-root');
+  if (root && dashScreenMode) root.classList.add('dsh');
   if (!root || !dashData) return;
   const D = dashData;
   const projs = D.projects || [];
-  if (!projs.length) { root.innerHTML = '<div class="dsh-empty">No project to show yet. Ask Jawad to add you to a task.</div>'; return; }
+  if (!projs.length) { root.innerHTML = '<div class="dsh-empty">Jawad has not turned on the dashboard for you yet.</div>'; return; }
   if (!projs.some(p => p.id === dashProjId)) dashProjId = (projs.filter(p => p.kind === 'mahana')[0] || projs[0]).id;
   const P = projs.filter(p => p.id === dashProjId)[0];
   const days = P.daily.map(x => x.d);
   const ranges = [['today', 'Today'], ['week', 'This week'], ['month', 'This month'], ['lastmonth', 'Last month'], ['custom', 'Pick dates']];
   const me = D.me || (user && user.name) || '';
-  const first = String(me).split(' ')[0];
+  const first = dashScreenMode ? '' : String(me).split(' ')[0];
   const rangeTxt = D.from === D.to ? dashFmtDay(D.from) : dashFmtDay(D.from) + ' – ' + dashFmtDay(D.to);
   const onPct = dashPct(P.onTime, P.onTime + P.late);
   let html = `<section class="dsh-hero dsh-${P.kind}">
     <div class="dsh-hero-bg"><span></span><span></span><span></span></div>
     <div class="dsh-hero-l">
-      <div class="dsh-hello">${escapeHtml(dashGreeting())}, ${escapeHtml(first)}</div>
+      <div class="dsh-hello">${escapeHtml(dashGreeting())}${first ? ', ' + escapeHtml(first) : ''}</div>
       <h1 class="dsh-title">${escapeHtml(P.name)} <em>at a glance</em></h1>
-      <div class="dsh-sub">${escapeHtml(rangeTxt)} · updated ${escapeHtml(D.at || '')}${stale ? ' · refreshing…' : ''}</div>
+      <div class="dsh-sub">${escapeHtml(rangeTxt)} · <span id="dsh-upd"></span></div>
       ${projs.length > 1 ? `<div class="dsh-projs">${projs.map(p => `<button class="${p.id === dashProjId ? 'on' : ''}" onclick="dashProjId='${escapeHtml(p.id)}'; renderDash(true)">${p.kind === 'import' ? '&#128230; ' : p.kind === 'mahana' ? '&#127968; ' : ''}${escapeHtml(p.name)}</button>`).join('')}</div>` : ''}
     </div>
     <div class="dsh-hero-r">
@@ -2840,7 +2950,7 @@ function renderDash(animate, stale) {
       <span data-l="Last seen"><i class="dsh-live${live ? ' on' : ''}"></i>${escapeHtml(dashAgo(p.lastMs))}</span>
     </div>`; }).join('') || '<div class="dsh-empty">No one has worked in these dates yet.</div>'}
   </div></section>`;
-  const remItems = remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 6) : [];
+  const remItems = !dashScreenMode && remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 6) : [];
   html += `<section class="dsh-grid2">
     <div class="dsh-card"><div class="dsh-card-h"><h3>Assigned tasks open</h3><span>${P.assigned.length}</span></div>
       ${P.assigned.length ? `<div class="dsh-list">${P.assigned.slice(0, 10).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-chip late">late ${escapeHtml(a.lateBy)}</span>` : '<span class="dsh-chip ok">on track</span>'}</div>`).join('')}</div>` : '<div class="dsh-empty">No assigned task is open. &#127881;</div>'}
@@ -2850,11 +2960,28 @@ function renderDash(animate, stale) {
     </div>
   </section>
   <div class="dsh-foot">Live · refreshes every 2 minutes · Taskando</div>`;
-  root.innerHTML = html;
+  const want = dashRangeDates(dashRange);
+  const wrong = !dashScreenMode && (D.from !== (dashRange === 'custom' ? dashFrom : want[0]) || D.to !== (dashRange === 'custom' ? dashTo : want[1]));
+  const old = !!stale || wrong;
+  root.innerHTML = (old ? `<div class="dsh-loadbar">&#8635; ${wrong ? 'Loading ' + escapeHtml((ranges.filter(x => x[0] === dashRange)[0] || ['', 'new dates'])[1]) + '… the numbers below are still the old ones.' : 'Showing the last saved numbers, getting the newest…'}</div>` : '') + html;
+  root.classList.toggle('dsh-old', old);
+  dashUpdText();
   root.classList.toggle('dsh-anim', !!animate);
   if (animate) dashCountUp(root);
-  if (!remData) { apiCall('remList').then(r => { if (r && r.ok) { remData = r; renderDash(false); } }).catch(() => {}); }
+  if (!remData && !dashScreenMode) { apiCall('remList').then(r => { if (r && r.ok) { remData = r; renderDash(false); } }).catch(() => {}); }
 }
+
+let dashLoading = false;
+
+function dashUpdText() {
+  const el = document.getElementById('dsh-upd');
+  if (!el || !dashData) return;
+  const ms = dashData.atMs || 0;
+  const m = ms ? Math.max(0, Math.round((Date.now() - ms) / 60000)) : null;
+  el.innerHTML = (m === null ? 'updated ' + escapeHtml(dashData.at || '') : m < 1 ? 'updated just now' : 'updated ' + m + ' min ago') + (dashLoading ? ' · <span class="dsh-refreshing">refreshing…</span>' : ' · <span class="dsh-live-txt">live</span>');
+}
+
+setInterval(dashUpdText, 20000);
 
 function dashCountUp(root) {
   const els = root.querySelectorAll('[data-count]');
@@ -2897,11 +3024,67 @@ function importPid() {
 function canSeeImports(staffName) {
   const pid = importPid();
   if (!pid || !user || !staffName) return false;
+  if (staffName === user.name) return can('import');
+  if (user.level === 0) return true;
   const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
   if (lv <= 1) return true;
   const me = String(staffName).trim().toLowerCase();
   if (IMPORT_VIEWERS.some(n => String(n).trim().toLowerCase() === me)) return true;
   return TASKS.some(t => t.active !== false && (t.project || DEFAULT_PROJECT) === pid && (t.owners || []).some(o => String(o).trim().toLowerCase() === me));
+}
+
+let accessData = null;
+
+async function loadAccess() {
+  const wrap = document.getElementById('access-wrap');
+  try {
+    const r = await apiCall('accessGet');
+    if (!r.ok) { wrap.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    accessData = r;
+    renderAccess();
+  } catch (e) { wrap.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderAccess() {
+  const d = accessData;
+  const F = d.features;
+  const groups = [];
+  F.forEach(f => { if (groups.indexOf(f.group) === -1) groups.push(f.group); });
+  const g = d.grid || {};
+  const on = (fid, who) => who === '*' ? !!(g[fid] && g[fid].all) : !!(g[fid] && (g[fid].people || []).some(n => n.toLowerCase() === who.toLowerCase()));
+  const cell = (fid, who) => `<td class="acc-cell"><input type="checkbox" data-f="${escapeHtml(fid)}" data-w="${escapeHtml(who)}"${on(fid, who) ? ' checked' : ''}${who !== '*' && g[fid] && g[fid].all ? ' disabled title="Everyone already has this"' : ''} onchange="accessTick(this)"></td>`;
+  document.getElementById('access-wrap').innerHTML = `<table class="report-table acc-table"><thead>
+    <tr><th></th>${groups.map(gr => `<th colspan="${F.filter(f => f.group === gr).length}" class="acc-group">${escapeHtml(gr)}</th>`).join('')}</tr>
+    <tr><th class="left">Person</th>${F.map(f => `<th class="acc-head">${escapeHtml(f.label.replace(/^Dashboard · /, ''))}</th>`).join('')}</tr></thead><tbody>
+    <tr class="acc-all"><td class="left"><b>Everyone</b></td>${F.map(f => cell(f.id, '*')).join('')}</tr>
+    ${d.people.map(n => `<tr><td class="left">${escapeHtml(n)}</td>${F.map(f => cell(f.id, n)).join('')}</tr>`).join('')}
+  </tbody></table>`;
+}
+
+function accessTick(cb) {
+  const g = accessData.grid = accessData.grid || {};
+  const f = cb.dataset.f, w = cb.dataset.w;
+  const x = g[f] = g[f] || { all: false, people: [] };
+  if (w === '*') x.all = cb.checked;
+  else { x.people = (x.people || []).filter(n => n.toLowerCase() !== w.toLowerCase()); if (cb.checked) x.people.push(w); }
+  document.getElementById('access-msg').innerText = 'Not saved yet';
+  if (w === '*') renderAccess();
+}
+
+async function saveAccess() {
+  try {
+    const r = await apiCall('accessSave', { grid: accessData.grid || {} });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    accessData.grid = r.grid;
+    document.getElementById('access-msg').innerText = 'Saved';
+    toast('Saved. People see the change when they refresh.');
+  } catch (e) { toast('Network error', true); }
+}
+
+function leaveImportsTo(pid, cid) {
+  showProjectTiles = false;
+  currentProject = pid; currentChain = cid; currentPhase = null; currentTask = null;
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name);
 }
 
 function openImports() {
@@ -3033,11 +3216,11 @@ function impAliasKeys(keys) {
 function impProgress(g) {
   const P = (impData && impData.progress) || {};
   const seen = {};
-  const out = { open: [], done: [] };
+  const out = { open: [], done: [], reqs: [] };
   g.keys.forEach(k => {
     const p = P[k];
     if (!p) return;
-    ['open', 'done'].forEach(w => p[w].forEach(x => { const id = w + '|' + (x.id || x.task + '|' + x.arrivedMs); if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
+    ['open', 'done', 'reqs'].forEach(w => (p[w] || []).forEach(x => { const id = w + '|' + (x.id || x.task + '|' + x.arrivedMs); if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
   });
   out.done.sort((a, b) => (a.doneMs || 0) - (b.doneMs || 0));
   out.open.sort((a, b) => (a.arrivedMs || 0) - (b.arrivedMs || 0));
@@ -3240,7 +3423,7 @@ function impLineHtml(g, B) {
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
       <span class="imp-icons">${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
-      ${nOpen ? `<div class="imp-open-row">${g.prog.open.map(o => `<button class="imp-tchip ${impLateCls(o)}" title="${escapeHtml(impLateTip(o))}" onclick="event.stopPropagation(); impSelect(${i}, true)">&#9203; ${escapeHtml(o.task)} <small>${escapeHtml(impLateTxt(o))}</small></button>`).join('')}</div>` : ''}
+      ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => `<button class="imp-tchip ${impLateCls(o)}" title="${escapeHtml(impLateTip(o))}" onclick="event.stopPropagation(); impSelect(${i}, true)">&#9203; ${escapeHtml(o.task)} <small>${escapeHtml(impLateTxt(o))}</small></button>`).join('')}</div>` : ''}
       <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
@@ -3251,12 +3434,12 @@ function impLineHtml(g, B) {
 
 function impLateCls(o) {
   if (o.late) return 'late';
-  if (o.leftMs !== undefined && o.leftMs <= 4 * 3600000) return 'soon';
+  if (o.leftMs !== undefined && o.leftMs <= 3600000) return 'soon';
   return 'ok';
 }
 
 function impLateTxt(o) {
-  if (o.late) return 'late ' + (o.lateBy || '');
+  if (o.late) return 'Late ' + (o.lateBy || '');
   if (o.left) return o.left + ' left';
   return o.days ? o.days + 'd' : '';
 }
@@ -3277,11 +3460,10 @@ function impTrailHtml(g, i, B) {
   const cols = (d.headers || []).map((h, j) => j).filter(j => [B.C.group, B.C.main, B.C.supplier, B.C.hl, B.C.bm].indexOf(j) === -1 && g.list.some(r => impVal(r[j], B.NUM[j]) !== ''));
   const fromNames = Object.keys(d.progress || {}).filter(k => g.keys.indexOf(k) !== -1).map(k => d.progress[k].name);
   return `<div class="imp-trail">
-    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}${prog.done.length || prog.open.length ? (impShowDone[g.name] ? prog.done : []).map(x => `<span class="imp-task-chip" title="${escapeHtml('Done ' + x.done + (x.by ? ' by ' + x.by : ''))}">&#10003; ${escapeHtml(x.task)} <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ') + ' ' + prog.open.map(x => `<a class="imp-task-chip open imp-open-task ${impLateCls(x)}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <small>${escapeHtml(impLateTxt(x))} · since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ') : ''}${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
+    <div class="imp-sec"><b>Tasks</b> ${prog.open.length ? '' : '<span class="report-meta">No open task. </span>'}${prog.done.length ? `<button class="btn btn-small imp-mini" onclick="impShowDone[impFlat[${i}].name] = !impShowDone[impFlat[${i}].name]; renderImports()">${impShowDone[g.name] ? 'Hide' : 'Show'} closed tasks (${prog.done.length})</button> ` : ''}${(impShowDone[g.name] ? prog.done : []).map(x => `<span class="imp-task-chip st-${escapeHtml(x.state || 'ok')}" title="${escapeHtml('Closed ' + x.done + (x.by ? ' by ' + x.by : '') + (x.took ? ' · took ' + x.took : '') + (x.allowed ? ' · allowed ' + x.allowed : ''))}">&#10003; ${escapeHtml(x.task)} <b class="chip-st">${escapeHtml(x.stateTxt || 'Closed')}</b> <small>${escapeHtml(shortWhenImp(x.done))}${x.by ? ' · ' + escapeHtml(x.by) : ''}</small></span>`).join(' ')} ${prog.open.map(x => `<a class="imp-task-chip imp-open-task st-${impLateCls(x)}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab">&#9203; ${escapeHtml(x.task)} <b class="chip-st">${escapeHtml(impLateTxt(x))}</b> <small>since ${escapeHtml(shortWhenImp(x.arrived))}${x.who ? ' · ' + escapeHtml(x.who) : ''}</small> &#8599;</a>`).join(' ')}${!prog.done.length && !prog.open.length ? '<span class="report-meta">Not in any Imports task yet.</span>' : ''}</div>
     ${impDetailText(g).length ? `<div class="imp-sec imp-det imp-det-big">${impDetailText(g).map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
-    <div class="imp-sec"><b>Messages</b>
-      <div class="imp-notes" id="imp-notes-${i}">${impNotesShown(g).map(n => impNoteHtml(n, g)).join('') || '<div class="report-meta">No messages yet. Type in the box above and press Enter.</div>'}</div>
-      ${g.notes.filter(n => !n.pinned).length > 2 ? `<button class="btn btn-small imp-mini" onclick="impAllMsgs[impFlat[${i}].name] = !impAllMsgs[impFlat[${i}].name]; renderImports()">${impAllMsgs[g.name] ? 'Show only the last 2' : 'Show all ' + g.notes.length + ' messages'}</button>` : ''}
+    <div class="imp-sec"><b>Messages and what happened</b>
+      ${impFeedBox(g, i)}
     </div>
     <div class="imp-actions imp-noprint">
       <button class="btn btn-small" onclick="impToggleDetail(${i})">${impDetail[g.name] ? 'Hide' : 'Show'} China Master detail</button>
@@ -3304,6 +3486,33 @@ function impNoteHtml(n, g) {
   const d = impData;
   const canPin = !n.pending && !n.failed && (d.level <= 1 || n.by === d.me);
   return `<div class="imp-note${n.pending ? ' pending' : ''}${n.failed ? ' failed' : ''}${n.pinned ? ' pinned' : ''}">${canPin ? `<button class="imp-x imp-pinbtn imp-noprint" title="${n.pinned ? 'Unpin' : 'Pin this note on top'}" onclick="impPin('${escapeHtml(n.id)}', ${n.pinned ? 'false' : 'true'})">${n.pinned ? '&#128204; Unpin' : '&#128204;'}</button>` : ''}<div class="imp-note-head">${n.task ? `<span class="imp-task-chip">${escapeHtml(n.task)}</span>` : ''}<b>${escapeHtml(n.by)}</b> <span class="report-meta">${escapeHtml(n.at)}${n.consignment && impKey(n.consignment) !== impKey(g.name) ? ' · on ' + escapeHtml(n.consignment) : ''}${n.pending ? ' · saving…' : ''}${n.failed ? ' · not saved, ' : ''}</span>${n.failed ? `<button class="imp-x" onclick="impRetry('${escapeHtml(n.id)}')">retry</button>` : ''}${!n.pending && !n.failed && (d.level === 0 || n.by === d.me) ? ` <button class="imp-x imp-noprint" title="Delete" onclick="impDeleteNote('${escapeHtml(n.id)}')">&#10005;</button>` : ''}</div><div class="imp-note-text">${escapeHtml(n.text)}</div></div>`;
+}
+
+function impFeed(g) {
+  const out = [];
+  g.notes.forEach(n => out.push({ kind: 'note', ms: n.atMs || Date.now(), when: n.at || '', what: 'Message', task: n.task, phase: taskPhaseOf(n.task), by: n.by, detail: n.text, pinned: !!n.pinned, note: n }));
+  g.prog.done.forEach(x => { const auto = x.by === 'Auto'; out.push({ kind: auto ? 'auto' : 'done', ms: x.doneMs, when: x.done, what: auto ? 'Moved on by itself' : 'Closed', task: x.task, phase: x.phase || taskPhaseOf(x.task), by: auto ? '' : x.by, took: auto ? '' : x.took, allowed: auto ? '' : x.allowed, state: auto ? '' : x.state, stateTxt: auto ? '' : x.stateTxt }); });
+  g.prog.open.forEach(x => out.push({ kind: 'wait', ms: x.arrivedMs, when: x.arrived, what: 'Waiting', task: x.task, phase: x.phase || taskPhaseOf(x.task), by: x.who, took: x.took, allowed: x.allowed, state: impLateCls(x), stateTxt: impLateTxt(x) }));
+  (g.prog.reqs || []).forEach(r => out.push({ kind: 'grace', ms: r.atMs, when: r.at, what: r.what, task: r.task, phase: r.phase || taskPhaseOf(r.task), by: r.by, detail: r.reason, status: r.status, stateTxt: r.status + (r.decidedBy && r.status !== 'Waiting' ? ' by ' + r.decidedBy : '') }));
+  out.sort((a, b) => (b.ms || 0) - (a.ms || 0));
+  return out;
+}
+
+function impFeedBox(g, i) {
+  const all = impFeed(g);
+  if (!all.length) return '<div class="report-meta">Nothing yet. Type in the box above and press Enter.</div>';
+  const pins = all.filter(e => e.pinned), rest = all.filter(e => !e.pinned);
+  const open = !!impAllMsgs[g.name];
+  const shown = pins.concat(open ? rest : rest.slice(0, 2));
+  const more = rest.length - (open ? rest.length : Math.min(2, rest.length));
+  return `<div class="tev-list imp-notes" id="imp-notes-${i}">${shown.map(e => trailEvHtml(e, g)).join('')}</div>${rest.length > 2 ? `<button class="btn btn-small imp-mini imp-noprint" onclick="impAllMsgs[impFlat[${i}].name] = !impAllMsgs[impFlat[${i}].name]; renderImports()">${open ? 'Show only the newest 2' : 'Show ' + more + ' more'}</button>` : ''}`;
+}
+
+function impNoteTools(n, g) {
+  const d = impData;
+  if (!d || n.pending || n.failed) return n.failed ? `<button class="imp-x" onclick="impRetry('${escapeHtml(n.id)}')">retry</button>` : '';
+  const canPin = d.level <= 1 || n.by === d.me;
+  return `<span class="tev-tools imp-noprint">${canPin ? `<button class="imp-x" title="${n.pinned ? 'Unpin' : 'Pin this on top'}" onclick="impPin('${escapeHtml(n.id)}', ${n.pinned ? 'false' : 'true'})">${n.pinned ? '&#128204; Unpin' : '&#128204;'}</button>` : ''}${d.level === 0 || n.by === d.me ? `<button class="imp-x" title="Delete" onclick="impDeleteNote('${escapeHtml(n.id)}')">&#10005;</button>` : ''}</span>`;
 }
 
 function impNotesShown(g) {
@@ -3329,7 +3538,8 @@ function impFullTrail(i) {
   document.getElementById('us-overlay').classList.remove('hidden');
   document.getElementById('us-q').value = g.name;
   usLast = null;
-  uniTrailExtra = `<div class="imp-trail-msgs"><b>Messages on ${escapeHtml(g.name)}</b>${g.notes.map(n => impNoteHtml(n, g)).join('') || '<div class="report-meta">No messages yet.</div>'}</div>`;
+  uniTrailExtra = '';
+  uniTrailLocal = { key: impKey(g.name), name: g.name, events: impFeed(g).map(e => Object.assign({}, e, { note: undefined })) };
   uniTrail(g.name, true);
 }
 
@@ -3954,14 +4164,14 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
-  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS, DASH_NAME] : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
   if (!user) return [];
   if (user.level === 0 && staffName === user.name) return [];
   if (staffName !== user.name && !canAccessStaffFrontend(staffName)) return [];
-  const out = ['Reports'];
+  const out = staffName === user.name ? (canReports() ? ['Reports'] : []) : ['Reports'];
   const lv = staffName === user.name ? user.level : (STAFF[staffName] ? STAFF[staffName].level : 2);
   if (lv === 1) out.push('Assign');
   return out;
@@ -4150,29 +4360,34 @@ function renderProjectNav() {
         <strong>${escapeHtml(n)}</strong>
         <small>${n === 'Reports' ? 'Presentation, employee and cheque reports' : 'Give someone a task'}</small>
       </a>`).join('');
-    tiles.innerHTML = (profile && user && profile.name === user.name ? `<a class="dashboard-item project-tile dash-tile" href="javascript:void(0)" onclick="openDashboard()"><strong>&#10024; Dashboard</strong><small>Live numbers for your project</small></a>` : '') + projs.map(p => {
+    tiles.innerHTML = (profile && user && profile.name === user.name && canDash() ? `<a class="dashboard-item project-tile dash-tile" href="javascript:void(0)" onclick="openDashboard()"><strong>&#10024; Dashboard</strong><small>Live numbers for your project</small></a>` : '') + projs.map(p => {
       const n = pendingCountForProject(p.id);
       return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
         <strong>${escapeHtml(p.name)}</strong>
         <small>${p.id === ADMIN_PROJECT ? 'Settings and reports' : projectChains(p.id).length + ' chain' + (projectChains(p.id).length === 1 ? '' : 's')}</small>
         ${n ? `<span class="sidebar-count project-bubble">${n.count}</span>` : ''}
       </a>`;
-    }).join('') + (profile && canSeeImports(profile.name) ? `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="openImports()"><strong>&#128230; ${IMPORTS_NAME}</strong><small>Consignments from Dropbox</small></a>` : '') + extraTiles || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
+    }).join('') + extraTiles || '<div class="empty-tile">No projects for this person yet. Jawad can add them under Admin → Projects.</div>';
     return;
   }
   tiles.classList.add('hidden');
   nav.classList.remove('hidden');
   const projTabs = projs.map(p => {
     const n = pendingCountForProject(p.id);
-    return `<button class="ftab${p.id === currentProject ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>` + (p.id === importPid() && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
+    const on = p.id === currentProject || (currentProject === IMPORTS_PROJECT && p.id === importPid());
+    return `<button class="ftab${on ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
   }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
-  const ch = isPanelProject(currentProject) ? [] : projectChains(currentProject);
-  nav.innerHTML = `<div class="ftabs">${(profile && user && profile.name === user.name ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
-    ${ch.length ? `<div class="ftabs-sub">${ch.map(c => {
+  const inImp = currentProject === IMPORTS_PROJECT && importPid() && projs.some(p => p.id === importPid());
+  const chPid = inImp ? importPid() : currentProject;
+  const ch = inImp ? projectChains(chPid) : (isPanelProject(currentProject) ? [] : projectChains(currentProject));
+  const impStab = chPid === importPid() && canSeeImports(profile.name) && projs.some(p => p.id === importPid()) ? `<button class="stab stab-right${inImp ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '';
+  nav.innerHTML = `<div class="ftabs">${(profile && user && profile.name === user.name && canDash() ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
+    ${ch.length || impStab ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
-      return `<button class="stab${c.id === currentChain ? ' active' : ''}" onclick="setChain('${escapeHtml(c.id).replace(/'/g, "\\'")}')"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
-    }).join('')}</div>` : ''}`;
+      const cid = escapeHtml(c.id).replace(/'/g, "\\'");
+      return `<button class="stab${!inImp && c.id === currentChain ? ' active' : ''}" onclick="${inImp ? `leaveImportsTo('${escapeHtml(chPid)}', '${cid}')` : `setChain('${cid}')`}"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
+    }).join('')}${impStab}</div>` : ''}`;
 }
 
 function pendBubble(list) {
@@ -4257,7 +4472,9 @@ async function completeLogin() {
   if (pinNeeded()) await askPin();
   try {
     const freshOpen = !window.location.hash || window.location.hash === '#' || /^#\/dashboard/.test(window.location.hash) || /Dashboard$/.test(decodeURIComponent(window.location.hash));
-    if (sessionToken && freshOpen) dashStartPrefetch();
+    let lastAccess = {};
+    try { lastAccess = JSON.parse(localStorage.getItem('tk_last_access') || '{}') || {}; } catch (e) {}
+    if (sessionToken && freshOpen && Object.keys(lastAccess).some(k => k.indexOf('dash:') === 0 || k === 'all')) dashStartPrefetch();
     const early = sessionToken ? [loadChain(), loadProjects()] : [];
     const both = await Promise.all([apiCall('whoami', { wantSession: !sessionToken, device: pushPlatform() }), loadTasks()]);
     const result = both[0];
@@ -4271,6 +4488,8 @@ async function completeLogin() {
     }
     if (result.session) saveSession(result.session);
     user = { name: result.name, email: result.email, level: result.level, dailyViewer: !!result.dailyViewer };
+    ACCESS = result.access || {};
+    try { localStorage.setItem('tk_last_access', JSON.stringify(result.level === 0 ? { all: true } : ACCESS)); } catch (e) {}
     try { localStorage.setItem('tk_last_name', result.name); sessionStorage.setItem('tk_in', '1'); } catch (e) {}
     applyUsers(result.users);
     document.getElementById('btn-daily').classList.toggle('hidden', !user.dailyViewer);
@@ -4298,8 +4517,9 @@ async function completeLogin() {
 
     window.addEventListener('hashchange', route);
 
-    if (/^#\/dashboard/.test(window.location.hash) || !window.location.hash || window.location.hash === '#') window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/' + encodeURIComponent(DASH_NAME);
-    else route();
+    if ((!window.location.hash || window.location.hash === '#') && canDash()) window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/' + encodeURIComponent(DASH_NAME);
+    else if (window.location.hash && window.location.hash !== '#') route();
+    else redirectToDefault();
   } catch (e) {
     statusEl.innerText = "Could not reach the server. Please try again.";
     idToken = null;
@@ -6942,6 +7162,7 @@ function renderFormInterface() {
   }
   if (t.panel === "imports") {
     document.getElementById('form-imports').classList.remove('hidden');
+    document.getElementById('entry-layout').classList.add('dash-full');
     if (!impData) { try { const c = JSON.parse(localStorage.getItem('tk_imp_cache') || 'null'); if (c && c.me === (user && user.name)) impData = c; } catch (e) {} }
     if (impData) renderImports();
     loadImports();
@@ -6950,6 +7171,11 @@ function renderFormInterface() {
   if (t.panel === "myassigned") {
     document.getElementById('form-myassigned').classList.remove('hidden');
     loadMyAssigned();
+    return;
+  }
+  if (t.panel === "access") {
+    document.getElementById('form-access').classList.remove('hidden');
+    loadAccess();
     return;
   }
   if (t.panel === "devices") {
@@ -7652,15 +7878,16 @@ function staffReportsOnly() {
   return !isAdminPanel();
 }
 
+const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times'];
+
 function showReportTab(tab) {
-  const limited = staffReportsOnly();
-  if (limited && (tab === 'timing' || tab === 'exits')) tab = 'simple';
+  const allowed = REPORT_TABS.filter(k => can('rep:' + k));
+  if (allowed.indexOf(tab) === -1) tab = allowed[0] || 'simple';
   ensureReportDates();
   preloadPictureTool();
   fillReportProjects();
   document.getElementById('report-project-wrap').classList.toggle('hidden', !(tab === 'timing' || tab === 'employee') || PROJECTS.length < 2);
-  document.getElementById('rep-tab-timing').classList.toggle('hidden', limited);
-  document.getElementById('rep-tab-exits').classList.toggle('hidden', limited);
+  REPORT_TABS.forEach(k => document.getElementById('rep-tab-' + k).classList.toggle('hidden', allowed.indexOf(k) === -1));
   reportTab = tab;
   ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times'].forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
@@ -10259,8 +10486,48 @@ function renderTrailHtml(r, go) {
   return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
     ${cheques}${chains}
     ${trailTablesHtml(r)}
-    <label style="margin-top:16px;">Everything that happened</label>
-    <div class="trail-list">${r.events.map(e => `<div class="trail-ev k-${e.kind}"><span class="trail-when">${escapeHtml(e.when || '-')}</span><span class="trail-what"><b>${escapeHtml(e.what)}</b> ${escapeHtml(e.task)}${e.by ? ' <span class="report-meta">by ' + escapeHtml(e.by) + '</span>' : ''}${e.detail ? '<div class="trail-detail">' + escapeHtml(e.detail) + '</div>' : ''}${e.note ? '<div class="report-meta">' + escapeHtml(e.note) + '</div>' : ''}</span></div>`).join('')}</div>`;
+    <label style="margin-top:16px;">Everything that happened <small class="report-meta">newest first</small></label>
+    ${trailFeedHtml(r.events || [])}`;
+}
+
+const PHASE_PAL = ['#2563eb', '#059669', '#9333ea', '#d97706', '#0891b2', '#db2777', '#4d7c0f', '#7c3aed', '#b45309', '#0f766e', '#be123c', '#1d4ed8', '#a16207', '#475569'];
+let phaseIdx = null;
+
+function phaseColor(p) {
+  if (!p) return '#64748b';
+  if (!phaseIdx || phaseIdx.n !== TASKS.length) {
+    phaseIdx = { n: TASKS.length, m: {} };
+    let k = 0;
+    TASKS.forEach(t => { const ph = String(t.phase || ''); if (ph && ph !== 'Admin' && !(ph in phaseIdx.m)) phaseIdx.m[ph] = k++; });
+  }
+  let i = phaseIdx.m[p];
+  if (i === undefined) { let h = 0; for (const c of String(p)) h = (h * 31 + c.charCodeAt(0)) >>> 0; i = h; }
+  return PHASE_PAL[i % PHASE_PAL.length];
+}
+
+function taskPhaseOf(task) {
+  if (!task) return '';
+  const t = TASKS.filter(x => x.name === task)[0];
+  return t ? String(t.phase || '') : '';
+}
+
+const TEV_ICON = { done: '&#10003;', auto: '&#9197;', wait: '&#9203;', resave: '&#8635;', grace: '&#9201;', note: '&#128172;', out: '&#9940;', temp: '&#9998;', other: '&#8226;' };
+
+function trailEvHtml(e, g) {
+  const st = e.kind === 'grace' ? 'grace' : e.kind === 'resave' ? 'resave' : e.kind === 'note' ? 'note' : (e.state || '');
+  const ph = e.task ? `<span class="tev-ph" style="--ph:${phaseColor(e.phase)}">${escapeHtml(e.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b class="tev-task">${escapeHtml(e.task)}</b>` : '';
+  const badge = e.stateTxt ? `<span class="tev-badge ${e.kind === 'grace' ? 'gr-' + escapeHtml(String(e.status || 'Waiting').toLowerCase()) : 's-' + escapeHtml(e.state || '')}">${escapeHtml(e.stateTxt)}</span>` : '';
+  const meta = [`<span class="tev-what">${TEV_ICON[e.kind] || ''} ${escapeHtml(e.what || '')}</span>`, e.by ? 'by <b>' + escapeHtml(e.by) + '</b>' : '', e.took ? 'took <b>' + escapeHtml(e.took) + '</b>' : '', e.allowed ? 'allowed <b>' + escapeHtml(e.allowed) + '</b>' : ''].filter(Boolean).join(' <span class="tev-dot">&middot;</span> ');
+  const long = e.detail && e.kind === 'done';
+  const det = e.detail ? `<div class="tev-detail${long ? ' clamp' : ''}"${long ? ' onclick="this.classList.toggle(\'clamp\')" title="Click to see all"' : ''}>${escapeHtml(e.detail)}</div>` : '';
+  const tools = e.kind === 'note' && e.note && g ? impNoteTools(e.note, g) : '';
+  return `<div class="tev k-${escapeHtml(e.kind)} st-${escapeHtml(st)}${e.pinned ? ' pinned' : ''}${e.note && e.note.pending ? ' pending' : ''}"><div class="tev-when">${e.pinned ? '&#128204; ' : ''}${escapeHtml(shortWhen(e.when) || '-')}</div><div class="tev-main"><div class="tev-top">${ph}${badge}${tools}</div><div class="tev-meta">${meta}</div>${det}</div></div>`;
+}
+
+function trailFeedHtml(events) {
+  const pins = events.filter(e => e.pinned), rest = events.filter(e => !e.pinned);
+  const list = pins.concat(rest);
+  return list.length ? `<div class="tev-list">${list.map(e => trailEvHtml(e)).join('')}</div>` : '<div class="report-meta">Nothing yet.</div>';
 }
 
 function spanText(x) {
@@ -10395,18 +10662,52 @@ async function loadTrail() {
   const sg = document.getElementById('trail-sug');
   if (sg) sg.classList.add('hidden');
   if (!q) { box.innerHTML = '<div class="report-meta">Type a Ref No, Case No or Consignment Name first.</div>'; return; }
-  const mk = q.toLowerCase();
-  if (trailMem[mk]) { trailData = trailMem[mk]; box.innerHTML = renderTrailHtml(trailMem[mk], 'trailGo'); }
+  const mk = trailMk(q);
+  const mem = trailMemGet(mk);
+  if (mem) { trailData = mem; box.innerHTML = trailFreshNote(mem) + renderTrailHtml(mem, 'trailGo'); }
   else box.innerHTML = '<div class="report-meta">Looking it up...</div>';
-  try {
-    const r = await apiCall('caseTrail', { q: q });
+  await trailFetch(q, false, r => {
     if (valOf('trail-q') !== q) return;
-    if (r.ok && r.found) trailMem[mk] = r;
-    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
-    trailData = r;
+    if (!r.ok) { if (!mem) box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     if (!r.found) { box.innerHTML = '<div class="report-meta">Nothing found for ' + escapeHtml(q) + '.</div>'; return; }
-    box.innerHTML = renderTrailHtml(r, 'trailGo');
-  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+    trailData = r;
+    box.innerHTML = trailFreshNote(r) + renderTrailHtml(r, 'trailGo');
+  });
+}
+
+function trailMk(q) {
+  return String(q || '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function trailMemGet(mk) {
+  if (trailMem[mk]) return trailMem[mk];
+  try { const c = JSON.parse(localStorage.getItem('tk_trail_' + mk) || 'null'); if (c && c.found) { c.stale = true; trailMem[mk] = c; return c; } } catch (e) {}
+  return null;
+}
+
+function trailMemPut(mk, r) {
+  trailMem[mk] = r;
+  try {
+    localStorage.setItem('tk_trail_' + mk, JSON.stringify(r));
+    let idx = []; try { idx = JSON.parse(localStorage.getItem('tk_trail_idx') || '[]'); } catch (e) {}
+    idx = [mk].concat(idx.filter(x => x !== mk));
+    idx.slice(15).forEach(x => localStorage.removeItem('tk_trail_' + x));
+    localStorage.setItem('tk_trail_idx', JSON.stringify(idx.slice(0, 15)));
+  } catch (e) {}
+}
+
+function trailFreshNote(r) {
+  return r && r.stale ? '<div class="report-meta trail-upd">&#8635; Showing the last saved copy, getting the newest…</div>' : '';
+}
+
+async function trailFetch(q, fresh, show) {
+  const mk = trailMk(q);
+  try {
+    const r = await apiCall('caseTrail', { q: q, fresh: !!fresh });
+    if (r.ok && r.found) trailMemPut(mk, r);
+    show(r);
+    if (r.ok && r.found && r.stale && !fresh) return trailFetch(q, true, show);
+  } catch (e) { show({ ok: false, error: 'Network error' }); }
 }
 
 let usTimer = null;
@@ -10454,20 +10755,28 @@ function renderUniResults() {
     </div>`).join('')}</div>` : '<div class="report-meta">Nothing found for ' + escapeHtml(r.q) + '.</div>';
 }
 
+let uniTrailLocal = null;
+let uniTrailNow = '';
+
 async function uniTrail(key, single) {
   const box = document.getElementById('us-body');
-  box.innerHTML = uniTrailExtra + '<div class="report-meta">Loading the trail...</div>';
-  try {
-    const mk = String(key).toLowerCase();
-    const extra = uniTrailExtra;
-    uniTrailExtra = '';
-    if (trailMem[mk]) { trailData = trailMem[mk]; box.innerHTML = extra + `<div id="us-trail">${renderTrailHtml(trailMem[mk], 'uniTrail')}</div>`; }
-    const r = await apiCall('caseTrail', { q: key });
-    if (!r.ok || !r.found) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Nothing found for ' + key)}</div>`; return; }
-    trailMem[mk] = r;
+  const mk = trailMk(key);
+  uniTrailNow = mk;
+  const extra = uniTrailExtra;
+  uniTrailExtra = '';
+  const local = uniTrailLocal && uniTrailLocal.key === mk ? uniTrailLocal : null;
+  uniTrailLocal = null;
+  const bar = () => `<div class="trail-nav">${usLast && !single ? '<button class="btn btn-small" onclick="renderUniResults()">&larr; Back to results</button>' : ''}<button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById(\'us-trail\')], \'Case trail · \' + trailData.q))">Copy picture</button></div>`;
+  const mem = trailMemGet(mk);
+  if (mem) { trailData = mem; box.innerHTML = extra + bar() + trailFreshNote(mem) + `<div id="us-trail">${renderTrailHtml(mem, 'uniTrail')}</div>`; }
+  else if (local) box.innerHTML = extra + `<div class="trail-head"><div class="trail-title">${escapeHtml(local.name)}</div><div class="report-meta trail-upd">&#8635; Loading the tables… the list below is ready.</div></div><label>Everything that happened <small class="report-meta">newest first</small></label>${trailFeedHtml(local.events)}`;
+  else box.innerHTML = extra + '<div class="report-meta">Loading the trail...</div>';
+  await trailFetch(key, false, r => {
+    if (uniTrailNow !== mk) return;
+    if (!r.ok || !r.found) { if (!mem) box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Nothing found for ' + key)}</div>`; return; }
     trailData = r;
-    box.innerHTML = extra + `<div class="trail-nav">${usLast && !single ? '<button class="btn btn-small" onclick="renderUniResults()">&larr; Back to results</button>' : ''}<button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById(\'us-trail\')], \'Case trail · \' + trailData.q))">Copy picture</button></div><div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
-  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+    box.innerHTML = extra + bar() + trailFreshNote(r) + `<div id="us-trail">${renderTrailHtml(r, 'uniTrail')}</div>`;
+  });
 }
 
 function copyTrailPicture() {
