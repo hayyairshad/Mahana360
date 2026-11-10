@@ -791,6 +791,14 @@ a.daily-item.imp { background: rgba(255,244,229,0.9); border-left: 3px solid #d2
 .jump-rule { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 10px; margin-top: 8px; background: var(--surface-2); font-size: 0.85rem; }
 .jump-rule select, .jump-rule input { margin: 0; padding: 6px 8px; font-size: 0.82rem; width: auto; max-width: 100%; }
 .jump-rule span { color: var(--text-dim); font-weight: 600; }
+.off-rule { border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; margin-top: 8px; background: var(--panel-color, #fff); }
+.off-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.off-step { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; border: 1px solid #8cc59a; background: #ecf8ef; color: #1e6b2c; font: inherit; font-size: 0.8rem; cursor: pointer; }
+.off-step .off-sw { width: 26px; height: 14px; border-radius: 999px; background: #2f9e55; position: relative; flex: none; }
+.off-step .off-sw::after { content: ''; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; }
+.off-step.is-off { border-color: #e4a29b; background: #fdecea; color: #9e2f27; text-decoration: line-through; }
+.off-step.is-off .off-sw { background: #c9c9c9; }
+.off-step.is-off .off-sw::after { right: auto; left: 2px; }
 .tick-yes { color: var(--ok); font-weight: 800; font-size: 1.05rem; }
 a.daily-item.daily-link { color: inherit; text-decoration: none; cursor: pointer; border-radius: 8px; }
 a.daily-item.daily-link:hover { background: rgba(255,255,255,0.7); }
@@ -1105,6 +1113,23 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .left-badge, .ok-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; vertical-align: middle; background: #d3f0dc; color: #1e6b2c; }
 .left-badge.soon { background: #ffd27a; color: #5c3a00; }
 .ok-badge.st-early { background: #dbe7ff; color: #1d4ed8; }
+.late-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 4px 0 10px; }
+.late-bar input[type=date] { width: auto; margin: 0 0 0 4px; }
+.late-head { margin: 12px 0 6px; font-weight: 800; font-size: 0.95rem; }
+.late-head.st-late { color: #b42318; }
+.late-head.st-soon { color: #8a5300; }
+.late-line { display: flex; align-items: center; gap: 12px; padding: 8px 12px; margin-bottom: 6px; border-radius: 10px; border: 1px solid var(--border-color); border-left: 5px solid #d92d20; background: #fdeceb; cursor: pointer; }
+.late-line.st-soon { border-left-color: #e8a317; background: #fff4dc; }
+.late-line:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.late-key { width: 170px; flex: none; display: flex; flex-direction: column; }
+.late-key small { color: var(--text-dim); font-size: 0.72rem; }
+.late-task { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.late-sub { flex-basis: 100%; color: var(--text-dim); font-size: 0.76rem; }
+.late-right { flex: none; }
+.late-right .late-badge, .late-right .left-badge { font-size: 0.8rem; padding: 2px 10px; }
+.late-none { padding: 18px; border-radius: 12px; background: #ecf8ef; color: #1e6b2c; font-weight: 700; text-align: center; }
+.imp-v-late, .rep-tab-late { color: #b42318; font-weight: 700; }
+@media (max-width: 720px) { .late-line { flex-wrap: wrap; } .late-key { width: auto; } }
 .tr-why { display: inline-flex; gap: 4px; align-items: center; flex-wrap: wrap; }
 .tr-why input { width: 220px; margin: 0; }
 .imp-task-chip.st-ok, .imp-task-chip.st-early { border-color: #8cc59a; background: #ecf8ef; color: #1e6b2c; }
@@ -1589,6 +1614,10 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="chain-col-note">After a task is closed, if its answer matches, the case goes straight to a later task and skips the ones in between. Example: after Save Contacts, if Inputs is Satisfied, go to Adv &amp; Chq.</div>
 <div id="jump-list"></div>
 <button class="btn btn-small" style="margin-top:8px;" onclick="addJumpRule()">+ Add rule</button>
+<div class="chain-col-head" style="margin-top:18px;">Steps on / off rules</div>
+<div class="chain-col-note">If a case matches the rule, the steps switched OFF are skipped for that case. Other cases run the full chain. Example: if Manager is BB, switch off the steps BB does not need.</div>
+<div id="off-list"></div>
+<button class="btn btn-small" style="margin-top:8px;" onclick="addOffRule()">+ Add on / off rule</button>
 </div>
 <div class="chain-col">
 <div class="chain-col-head">Recurring</div>
@@ -1618,6 +1647,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-trail" onclick="showReportTab('trail')">Case trail</button>
 <button class="phase-btn" id="rep-tab-data" onclick="showReportTab('data')">Task data</button>
 <button class="phase-btn" id="rep-tab-times" onclick="showReportTab('times')">Task times</button>
+<button class="phase-btn rep-tab-late" id="rep-tab-late" onclick="showReportTab('late')">&#9888; Late</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -1712,6 +1742,10 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="report-times" class="hidden">
 <div class="report-bar"><input type="text" id="times-q" class="report-search" placeholder="Search task or person" oninput="renderTaskTimes()"><button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById('times-table')], 'Tasks and allowed time'))">Copy picture</button></div>
 <div class="report-wrap"><table class="report-table" id="times-table"></table></div>
+</div>
+<div id="report-late" class="hidden">
+<div class="report-bar"><select id="late-project" onchange="loadLate()"></select><span id="late-bar"></span><button class="btn btn-small" onclick="loadLate(true)">Refresh</button><span id="late-meta" class="report-meta"></span></div>
+<div id="late-body"></div>
 </div>
 <div id="report-trail" class="hidden">
 <div class="report-bar">
@@ -1873,7 +1907,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 </div>
 <div id="imp-chips" class="imp-chips"></div>
 <div class="imp-row">
-<div class="fbox"><button class="phase-btn" id="imp-v-sup" onclick="setImpView('sup')">By supplier</button><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button><button class="phase-btn" id="imp-v-diff" onclick="setImpView('diff')">Taskando vs C MSTR</button></div>
+<div class="fbox"><button class="phase-btn" id="imp-v-sup" onclick="setImpView('sup')">By supplier</button><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button><button class="phase-btn" id="imp-v-diff" onclick="setImpView('diff')">Taskando vs C MSTR</button><button class="phase-btn imp-v-late" id="imp-v-late" onclick="setImpView('late')">&#9888; Late</button></div>
 <button class="btn btn-small" onclick="impCollapseAll()">Collapse all</button>
 <button class="btn btn-small" onclick="clearImpFilters()">Clear</button>
 </div>
@@ -2548,7 +2582,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R33";
+const APP_VERSION = "R35";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3256,14 +3290,14 @@ function impProgress(g) {
   return out;
 }
 
-function impBuild() {
+function impBuild(showAll) {
   const d = impData;
   const C = impCols(), NUM = impNumCols();
   const norm = (r, j) => impTitle(r[j]).trim();
   const fb = valOf('imp-bm'), fs = valOf('imp-status');
   const q = String(valOf('imp-q') || '').trim().toLowerCase();
   const states = d.states || {};
-  const show = valOf('imp-show') || 'open';
+  const show = showAll ? 'all' : (valOf('imp-show') || 'open');
   const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
   const groups = {}, order = [];
   const into = impMergeMap();
@@ -3311,7 +3345,7 @@ function renderImports() {
     document.getElementById('imp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
     if (!d.linkSet) adm.open = true;
   }
-  ['sup', 'group', 'rows', 'diff'].forEach(v => document.getElementById('imp-v-' + v).classList.toggle('active', impView === v));
+  ['sup', 'group', 'rows', 'diff', 'late'].forEach(v => document.getElementById('imp-v-' + v).classList.toggle('active', impView === v));
   const body = document.getElementById('imp-body');
   if (!d.rows.length) { body.innerHTML = `<div class="report-meta">${d.isAdmin ? 'No data yet. Paste the Dropbox link above.' : 'No data yet. Jawad needs to add the Dropbox link.'}</div>`; document.getElementById('imp-chips').innerHTML = ''; return; }
   const C0 = impCols();
@@ -3327,7 +3361,8 @@ function renderImports() {
     return `<button class="imp-chip ${impStatusClass(s)}${fs === s ? ' on' : ''}" onclick="impPickStatus('${escapeHtml(s).replace(/'/g, "\\'")}')">${escapeHtml(s)} <b>${n}</b></button>`;
   }).join('') + `<span class="report-meta">${B.shown.length} consignments · ${B.shown.reduce((a, g) => a + g.list.length, 0)} items</span>`;
   impFlat = [];
-  if (impView === 'rows') body.innerHTML = impRowsHtml(B);
+  if (impView === 'late') body.innerHTML = impLateHtml();
+  else if (impView === 'rows') body.innerHTML = impRowsHtml(B);
   else if (impView === 'diff') body.innerHTML = impDiffHtml(B);
   else if (impView === 'group') body.innerHTML = B.shown.map(g => impLineHtml(g, B)).join('') || '<div class="report-meta">Nothing matches.</div>';
   else {
@@ -3462,6 +3497,106 @@ function impLineHtml(g, B) {
   </div>`;
 }
 
+let lateMode = 'open';
+let lateFrom = '';
+let lateTo = '';
+
+function lateDefaults() {
+  if (!lateFrom) { const d = new Date(); lateFrom = ymdLocal(new Date(d.getFullYear(), d.getMonth(), 1)); lateTo = ymdLocal(d); }
+}
+
+function ymdLocal(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function lateBarHtml(onchange) {
+  lateDefaults();
+  return `<div class="late-bar"><div class="fbox"><button class="phase-btn${lateMode === 'open' ? ' active' : ''}" onclick="lateMode = 'open'; ${onchange}">Open: late &amp; about to be late</button><button class="phase-btn${lateMode === 'closed' ? ' active' : ''}" onclick="lateMode = 'closed'; ${onchange}">Closed late</button></div>${lateMode === 'closed' ? `<label class="inline-label">From <input type="date" value="${lateFrom}" onchange="lateFrom = this.value; ${onchange}"></label><label class="inline-label">To <input type="date" value="${lateTo}" onchange="lateTo = this.value; ${onchange}"></label>` : ''}</div>`;
+}
+
+function lateLineHtml(x, click) {
+  const late = x.state === 'late';
+  const right = lateMode === 'closed' ? `<span class="late-badge">Late ${escapeHtml(x.lateBy || '')}</span>` : late ? `<span class="late-badge">Late ${escapeHtml(x.lateBy || '')}</span>` : `<span class="left-badge soon">${x.leftMs === 0 || !x.left ? 'Due now' : escapeHtml(x.left) + ' left'}</span>`;
+  const sub = [x.who, lateMode === 'closed' ? 'closed ' + shortWhen(x.done) : 'since ' + shortWhen(x.arrived), x.took ? 'took ' + String(x.took).replace(' so far', '') + (x.allowed ? ' of ' + x.allowed : '') : ''].filter(Boolean).join(' · ');
+  return `<div class="late-line ${late || lateMode === 'closed' ? 'st-late' : 'st-soon'}" onclick="${click}"><div class="late-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</div><div class="late-task"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(x.task)}</b><div class="late-sub">${escapeHtml(sub)}</div></div><div class="late-right">${right}</div></div>`;
+}
+
+function lateListHtml(lines, click) {
+  const late = lines.filter(x => x.state === 'late'), soon = lines.filter(x => x.state !== 'late');
+  late.sort((a, b) => (b.lateMs || 0) - (a.lateMs || 0));
+  soon.sort((a, b) => (a.leftMs || 0) - (b.leftMs || 0));
+  if (!lines.length) return `<div class="late-none">${lateMode === 'closed' ? '&#10003; Nothing was closed late in these dates.' : '&#10003; Nothing is late or about to be late right now.'}</div>`;
+  const sec = (title, list, cls) => list.length ? `<div class="late-head ${cls}">${title} <b>${list.length}</b></div>${list.map(x => lateLineHtml(x, click(x))).join('')}` : '';
+  return lateMode === 'closed' ? sec('Closed late', late, 'st-late') : sec('&#128308; Late now', late, 'st-late') + sec('&#128992; About to be late (less than 1 hour left)', soon, 'st-soon');
+}
+
+function impLateHtml() {
+  lateDefaults();
+  const B = impBuild(true);
+  const lines = [];
+  const f = new Date(lateFrom + 'T00:00:00').getTime(), t = new Date(lateTo + 'T23:59:59').getTime();
+  B.shown.forEach(g => {
+    if (lateMode === 'open') g.prog.open.forEach(x => { const c = impLateCls(x); if (c === 'ok') return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.who, state: c, lateBy: x.lateBy, left: x.left, leftMs: x.leftMs, lateMs: x.late ? 1 : 0, arrived: x.arrived, took: x.took, allowed: x.allowed }); });
+    else g.prog.done.forEach(x => { if (x.state !== 'late' || !x.doneMs || x.doneMs < f || x.doneMs > t) return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.by, state: 'late', lateBy: String(x.stateTxt || '').replace(/^Late /, ''), done: x.done, took: x.took, allowed: x.allowed }); });
+  });
+  return lateBarHtml('renderImports()') + `<div class="late-list">${lateListHtml(lines, x => `impOpenFromLate('${impJs(x.g.name)}')`)}</div>`;
+}
+
+let lateData = null;
+let lateSeq = 0;
+
+function lateKeyNow() {
+  return 'tk_late_' + lateMode + '|' + valOf('late-project') + (lateMode === 'closed' ? '|' + lateFrom + '|' + lateTo : '');
+}
+
+async function loadLate(fresh) {
+  lateDefaults();
+  const sel = document.getElementById('late-project');
+  if (sel && !sel.options.length) sel.innerHTML = '<option value="">All projects</option>' + PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+  document.getElementById('late-bar').innerHTML = lateBarHtml('loadLate()');
+  const box = document.getElementById('late-body');
+  const key = lateKeyNow();
+  const seq = ++lateSeq;
+  let c = null;
+  try { c = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
+  if (c && c.ok && !fresh) renderLate(c, true);
+  else box.innerHTML = '<div class="report-meta">Loading…</div>';
+  try {
+    const r = await apiCall('lateList', { mode: lateMode, from: lateFrom, to: lateTo, project: valOf('late-project'), fresh: !!fresh });
+    if (seq !== lateSeq) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    try { localStorage.setItem(key, JSON.stringify(r)); } catch (e) {}
+    renderLate(r, !!r.stale);
+    if (r.stale && !fresh) loadLate(true);
+  } catch (e) { if (!c) box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderLate(r, old) {
+  lateData = r;
+  document.getElementById('late-meta').innerText = (old ? 'refreshing… · ' : '') + 'as of ' + shortWhen(r.at || '');
+  const multi = !valOf('late-project') && PROJECTS.length > 1;
+  document.getElementById('late-body').innerHTML = `<div class="late-list">${lateListHtml(r.lines.map(x => Object.assign({}, x, { name: [multi ? x.projectName : '', x.name].filter(Boolean).join(' · ') })), x => `lateOpenTrail('${escapeHtml(String(x.key || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')`)}</div>`;
+}
+
+function lateOpenTrail(key) {
+  if (!key || key === 'Recurring') return;
+  document.getElementById('us-overlay').classList.remove('hidden');
+  document.getElementById('us-q').value = key;
+  usLast = null;
+  uniTrailExtra = '';
+  uniTrail(key, true);
+}
+
+function impOpenFromLate(name) {
+  impView = 'sup';
+  const g = impBuild(true).shown.filter(x => x.name === name)[0];
+  if (g && (g.state === 'Closed') && valOf('imp-show') === 'open') document.getElementById('imp-show').value = 'all';
+  if (g) impSupOpen[g.supplier] = true;
+  impSel = name;
+  renderImports();
+  setTimeout(() => { const el = document.querySelector('.imp-line.sel'); if (el) el.scrollIntoView({ block: 'center' }); }, 50);
+}
+
 function impGraceTxt(x, g) {
   const list = ((g && g.prog && g.prog.reqs) || []).filter(r => r.pendingId && r.pendingId === x.id && r.status === 'Approved' && r.added);
   return list.length ? list.map(r => '+' + r.added).join(' ') : '';
@@ -3492,7 +3627,7 @@ function impLateCls(o) {
 
 function impLateTxt(o) {
   if (o.late) return 'Late ' + (o.lateBy || '');
-  if (o.left) return o.left + ' left';
+  if (o.left) return o.leftMs === 0 ? 'Due now' : o.left + ' left';
   return o.days ? o.days + 'd' : '';
 }
 
@@ -4215,7 +4350,7 @@ function taskListFor(staffName, all) {
   const covering = coveredBy(staffName);
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
-  if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t));
+  if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t) || pendingItems.some(p => p.taskName === t.name));
   return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
@@ -6345,6 +6480,7 @@ function renderChainEditor() {
     : `<span class="report-meta">Every task is in a chain or in Recurring.</span>`;
 
   renderJumpRules(c);
+  renderOffRules(c);
   renderChainPreview();
 }
 
@@ -6382,6 +6518,67 @@ function renderJumpRules(c) {
       <button class="chain-btn" onclick="removeJump(${i})" title="Remove rule">&times;</button>
     </div>`;
   }).join('') : '<div class="chain-empty">No skip rules. Every case goes step by step.</div>';
+}
+
+function renderOffRules(c) {
+  const box = document.getElementById('off-list');
+  if (!box) return;
+  const rules = (c.key && c.key.offRules) || [];
+  const tasks = c.tasks || [];
+  const opt = (list, cur, first) => (first !== undefined ? `<option value="">${first}</option>` : '') + list.map(x => `<option value="${escapeHtml(x)}"${x === cur ? ' selected' : ''}>${escapeHtml(x)}</option>`).join('');
+  box.innerHTML = rules.length ? rules.map((r, i) => {
+    const vals = jumpValueChoices(r.task, r.field);
+    const fields = r.task ? jumpFieldChoices(r.task) : uniqueSorted([].concat.apply([], tasks.map(t => jumpFieldChoices(t))));
+    const offN = (r.off || []).filter(t => tasks.indexOf(t) !== -1).length;
+    return `<div class="off-rule">
+      <div class="jump-rule" style="margin-top:0;">
+        <span>If</span><input type="text" list="of-${i}" value="${escapeHtml(r.field || '')}" placeholder="Field, e.g. Manager" onchange="setOff(${i}, 'field', this.value)" style="width:150px;">
+        <datalist id="of-${i}">${fields.map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>
+        <span>from</span><select onchange="setOff(${i}, 'task', this.value)">${opt(tasks, r.task, 'any task')}</select>
+        <select onchange="setOff(${i}, 'mode', this.value)"><option value="values"${r.mode !== 'filled' ? ' selected' : ''}>is one of</option><option value="filled"${r.mode === 'filled' ? ' selected' : ''}>is filled in</option></select>
+        ${r.mode !== 'filled' ? `<input type="text" list="ov-${i}" value="${escapeHtml((r.values || []).join(', '))}" placeholder="Values, e.g. BB" onchange="setOff(${i}, 'values', this.value)" style="width:160px;"><datalist id="ov-${i}">${vals.map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>` : ''}
+        <button class="chain-btn" onclick="removeOff(${i})" title="Remove rule">&times;</button>
+      </div>
+      <div class="off-steps">${tasks.map((t, k) => { const isOff = (r.off || []).indexOf(t) !== -1; return `<button class="off-step${isOff ? ' is-off' : ''}" onclick="toggleOffStep(${i}, ${k})" title="${isOff ? 'Skipped for these cases. Click to switch on' : 'Runs for these cases. Click to switch off'}"><span class="off-sw"></span>${k + 1}. ${escapeHtml(t)}</button>`; }).join('')}</div>
+      <div class="chain-col-note" style="margin:4px 0 0;">${offN ? offN + ' step' + (offN === 1 ? '' : 's') + ' skipped when this matches.' : 'All steps are on. Click a step to switch it off.'}</div>
+    </div>`;
+  }).join('') : '<div class="chain-empty">No on / off rules. Every case runs the full chain.</div>';
+}
+
+function chainOffRules() {
+  const c = chains[activeChain];
+  c.key = Object.assign({ type: 'ref', label: 'Ref No', start: 1 }, c.key || {});
+  c.key.offRules = (c.key.offRules || []).map(r => Object.assign({}, r, { values: (r.values || []).slice(), off: (r.off || []).slice() }));
+  return c.key.offRules;
+}
+
+function addOffRule() {
+  const c = chains[activeChain];
+  if (!c.tasks.length) return toast('Add tasks to this chain first.', true);
+  chainOffRules().push({ task: '', field: '', mode: 'values', values: [], off: [] });
+  renderChainEditor();
+}
+
+function setOff(i, prop, v) {
+  const r = chainOffRules()[i];
+  if (!r) return;
+  if (prop === 'values') r.values = String(v || '').split(',').map(x => x.trim()).filter(Boolean);
+  else r[prop] = String(v || '').trim();
+  renderChainEditor();
+}
+
+function toggleOffStep(i, k) {
+  const r = chainOffRules()[i];
+  const t = chains[activeChain].tasks[k];
+  if (!r || !t) return;
+  const at = r.off.indexOf(t);
+  if (at === -1) r.off.push(t); else r.off.splice(at, 1);
+  renderChainEditor();
+}
+
+function removeOff(i) {
+  chainOffRules().splice(i, 1);
+  renderChainEditor();
 }
 
 function chainJumps() {
@@ -7930,7 +8127,7 @@ function staffReportsOnly() {
   return !isAdminPanel();
 }
 
-const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times'];
+const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late'];
 
 function showReportTab(tab) {
   const allowed = REPORT_TABS.filter(k => can('rep:' + k));
@@ -7941,11 +8138,12 @@ function showReportTab(tab) {
   document.getElementById('report-project-wrap').classList.toggle('hidden', !(tab === 'timing' || tab === 'employee') || PROJECTS.length < 2);
   REPORT_TABS.forEach(k => document.getElementById('rep-tab-' + k).classList.toggle('hidden', allowed.indexOf(k) === -1));
   reportTab = tab;
-  ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times'].forEach(k => {
+  REPORT_TABS.forEach(k => {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
-  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times');
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late');
+  if (tab === 'late') { document.getElementById('report-meta').innerText = ''; loadLate(); return; }
   if (tab === 'trail') { document.getElementById('report-meta').innerText = ''; return; }
   if (tab === 'times') { document.getElementById('report-meta').innerText = ''; loadTaskTimes(); return; }
   if (tab === 'data') fillDataTasks();
