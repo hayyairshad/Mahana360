@@ -977,7 +977,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-toggle button { border: none; background: none; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; color: #5c6b60; cursor: pointer; }
 .dsh-toggle button.on { background: #fff; color: #14584f; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
 .dsh-team { display: flex; flex-direction: column; }
-.dsh-team-row { display: grid; grid-template-columns: 2fr 0.8fr 0.7fr 1.1fr 0.9fr 0.9fr 0.9fr 1.1fr; gap: 8px; align-items: center; padding: 9px 4px; border-bottom: 1px solid #f1f5ec; font-size: 0.86rem; }
+.dsh-team-row { display: grid; grid-template-columns: 2fr 0.8fr 0.9fr 0.9fr 0.8fr 0.9fr 1.1fr; gap: 8px; align-items: center; padding: 9px 4px; border-bottom: 1px solid #f1f5ec; font-size: 0.86rem; }
 .dsh-team-row:hover:not(.dsh-team-head) { background: #f8fbf5; border-radius: 10px; }
 .dsh-team-head { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: #8a968d; font-weight: 800; border-bottom: 2px solid #eef2ea; }
 .dsh-team-p { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -1024,6 +1024,82 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
   .dsh-podium { gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .dsh-anim * { animation: none !important; } }
+.dsh-hero { padding: 14px 20px; border-radius: 18px; gap: 16px; align-items: center; }
+.dsh-hello { font-size: 0.9rem; }
+.dsh-title { font-size: clamp(1.25rem, 2.2vw, 1.7rem); margin: 2px 0 4px; }
+.dsh-sub { font-size: 0.78rem; }
+.dsh-projs { margin-top: 8px; }
+.dsh-projs button, .dsh-ranges button, .dsh-custom button { padding: 4px 11px; font-size: 0.74rem; }
+.dsh-hero-r { gap: 6px; }
+.dsh-hero-gauge { min-width: 0; padding: 4px 10px 2px; border-radius: 14px; }
+.dsh-gauge { width: 96px; }
+.dsh-gauge-lbl { font-size: 0.62rem; }
+.dsh-hero.dsh-both { background: linear-gradient(110deg, #14584f 0%, #14584f 45%, #1d3f66 55%, #1d3f66 100%); }
+.dsh-hero-l { flex: 1 1 220px; min-width: 0; }
+.dsh-hero-r { flex: 0 0 auto; }
+.dsh-top3 { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 4px; flex: 0 1 260px; min-width: 200px; max-width: 280px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 14px; padding: 8px 12px; }
+.dsh-top3-h { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.7); font-weight: 800; }
+.dsh-top3-row { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+.dsh-top3-row .dsh-av { box-shadow: 0 0 0 2px rgba(255,255,255,0.6); font-size: 0.7rem; }
+.dsh-top3-row b { flex: 1; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-top3-m { font-size: 1.05rem; }
+.dsh-top3-p { font-family: 'Fraunces', serif; font-weight: 800; color: #f5c46e; }
+.dsh-top3-none { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+.dsh-kpis { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin: 12px 0; }
+.dsh-kpi { padding: 9px 12px 7px; border-radius: 14px; }
+.dsh-kpi-ico { width: 24px; height: 24px; border-radius: 8px; }
+.dsh-kpi-ico svg { width: 14px; height: 14px; }
+.dsh-kpi-lbl { font-size: 0.66rem; }
+.dsh-kpi-val { font-size: 1.5rem; margin-top: 3px; }
+.dsh-kpi-sub { font-size: 0.7rem; }
+.dsh-kpi-spark { margin: 2px -12px -7px; height: 22px; }
+.dsh-kpi-spark .dsh-spark { height: 22px; }
+.dsh-card { padding: 12px 14px 10px; border-radius: 16px; margin-bottom: 12px; }
+.dsh-card-h { margin-bottom: 6px; }
+.dsh-card-h h3 { font-size: 0.98rem; }
+.dsh-card-h > span { font-size: 0.66rem; }
+.dsh-grid2, .dsh-grid3 { gap: 12px; margin-bottom: 12px; }
+.dsh-grid2.dsh-even { grid-template-columns: 1fr 1fr; }
+.dsh-grid2 { align-items: start; }
+#stmt-person { width: auto; min-width: 200px; margin: 0; }
+.dsh-area { max-height: 200px; }
+.dsh-legend { font-size: 0.74rem; margin-top: 2px; }
+.dsh-bars { gap: 7px; }
+.dsh-bar-top { font-size: 0.8rem; }
+.dsh-track { height: 7px; margin-top: 3px; }
+.dsh-team-row { padding: 6px 4px; font-size: 0.8rem; }
+.dsh-rest { margin-top: 0; border-top: none; padding-top: 0; gap: 5px; }
+.dsh-rest-row small { color: #8a968d; font-size: 0.72rem; }
+.dsh-li { padding: 6px 10px; border-radius: 12px; }
+.dsh-latebox { display: flex; flex-direction: column; }
+.dsh-late-counts { display: inline-flex; gap: 8px; text-transform: none !important; letter-spacing: 0 !important; }
+.dsh-late-counts b { font-size: 0.74rem; padding: 2px 8px; border-radius: 999px; }
+.dsh-late-counts b.r { background: #fdeceb; color: #b42318; }
+.dsh-late-counts b.a { background: #fff4dc; color: #8a5300; }
+.dsh-late-list { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.dsh-late-li { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 10px; border-left: 4px solid #d92d20; background: #fdeceb; font-size: 0.8rem; }
+.dsh-late-li.soon { border-left-color: #e8a317; background: #fff4dc; }
+.dsh-late-li .tev-ph { font-size: 0.6rem; padding: 1px 6px; flex: none; }
+.dsh-late-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.dsh-late-main b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-late-main small { color: #7a877e; font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-late-li .late-badge, .dsh-late-li .left-badge { flex: none; }
+.dsh-more { margin-top: 8px; align-self: flex-end; border: none; background: none; color: #14584f; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
+.dsh-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+.dsh-col { min-width: 0; }
+.dsh-col-h { font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.05rem; color: #fff; padding: 6px 14px; border-radius: 12px; background: #14584f; }
+.dsh-col-h.dsh-col-import { background: #1d3f66; }
+.dsh-sbs .dsh-grid2, .dsh-sbs .dsh-grid3, .dsh-sbs .dsh-grid2.dsh-even { grid-template-columns: 1fr; }
+.dsh-sbs .dsh-kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.dsh-sbs .dsh-kpi { padding: 7px 8px 6px; }
+.dsh-sbs .dsh-kpi-ico { display: none; }
+.dsh-sbs .dsh-kpi-lbl { font-size: 0.6rem; line-height: 1.2; }
+.dsh-sbs .dsh-kpi-val { font-size: 1.25rem; }
+.dsh-sbs .dsh-kpi-sub { font-size: 0.62rem; }
+.dsh-sbs .dsh-kpi-spark { display: none; }
+.dsh-sbs .dsh-team-row { grid-template-columns: 2fr 0.8fr 0.8fr 0.9fr; }
+.dsh-sbs .dsh-team-row > span:nth-child(4), .dsh-sbs .dsh-team-row > span:nth-child(5), .dsh-sbs .dsh-team-row > span:nth-child(7) { display: none; }
+@media (max-width: 1000px) { .dsh-sbs { grid-template-columns: 1fr; } .dsh-top3 { order: 3; width: 100%; } }
 
 .trail-sug-wrap { position: relative; flex: 1; min-width: 220px; }
 .trail-sug-wrap .report-search { width: 100%; }
@@ -1035,6 +1111,15 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .imp-trail-msgs { border: 1px solid #f2d79c; background: #fffaf0; border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
 .imp-trail-msgs > b { display: block; margin-bottom: 6px; font-family: 'Fraunces', serif; }
 .stab-right { margin-left: auto; }
+.rem-drawer { position: fixed; top: 64px; right: 0; bottom: 0; width: 400px; max-width: 100vw; z-index: 60; background: var(--panel-color, #fff); border-left: 1px solid var(--border-color); box-shadow: -12px 0 30px -18px rgba(0,0,0,0.35); display: flex; flex-direction: column; }
+.rem-drawer-h { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border-color); }
+#rem-drawer-body { flex: 1; overflow: auto; padding: 10px 12px 20px; }
+#rem-drawer-body .report-bar { flex-wrap: wrap; }
+#rem-drawer-body .report-search { min-width: 0; }
+#rem-drawer-body #rem-q { width: 100%; }
+body.rem-open .container, body.rem-open #scr-entry { margin-right: 400px; }
+#btn-rem.on { background: rgba(255,255,255,0.22); }
+@media (max-width: 1100px) { body.rem-open .container, body.rem-open #scr-entry { margin-right: 0; } }
 .acc-table th, .acc-table td { text-align: center; }
 .acc-head { font-size: 0.75rem; white-space: normal; min-width: 70px; }
 .acc-group { background: var(--surface-2); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -1127,6 +1212,22 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .late-sub { flex-basis: 100%; color: var(--text-dim); font-size: 0.76rem; }
 .late-right { flex: none; }
 .late-right .late-badge, .late-right .left-badge { font-size: 0.8rem; padding: 2px 10px; }
+.stmt-sum { display: flex; gap: 12px; flex-wrap: wrap; margin: 6px 0 12px; }
+.stmt-sum > div { border: 1px solid var(--border-color); border-radius: 12px; padding: 8px 16px; min-width: 140px; background: var(--panel-color, #fff); }
+.stmt-sum small { display: block; color: var(--text-dim); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.stmt-sum b { font-size: 1.4rem; }
+.stmt-table .num { text-align: right; }
+.stmt-table b.pos, .stmt-sum b.pos { color: #1e6b2c; }
+.stmt-table b.neg, .stmt-sum b.neg { color: #b42318; }
+.stmt-table tr.neg-row td { background: #fdf3f2; }
+.pts-check { border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; background: var(--panel-color, #fff); }
+.pts-check-h { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+.pts-check-h .btn { margin-left: auto; }
+.pts-check-r { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.pts-reason { font-size: 0.8rem; padding: 2px 10px; border-radius: 999px; background: #fdeceb; color: #9e2f27; }
+.late-filter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 8px; }
+.late-filter select, .late-filter input { width: auto; margin: 0; }
+.late-filter input { min-width: 240px; flex: 1; max-width: 360px; }
 .late-none { padding: 18px; border-radius: 12px; background: #ecf8ef; color: #1e6b2c; font-weight: 700; text-align: center; }
 .imp-v-late, .rep-tab-late { color: #b42318; font-weight: 700; }
 @media (max-width: 720px) { .late-line { flex-wrap: wrap; } .late-key { width: auto; } }
@@ -1412,6 +1513,10 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 <button id="btn-search" class="icon-action hidden" onclick="openUniSearch()" title="Search any Ref No, Case No, consignment, name or mobile" aria-label="Search">
 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
 </button>
+<button id="btn-rem" class="icon-action hidden" onclick="remPanelToggle()" title="My reminders" aria-label="My reminders">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M5 3L2 6M19 3l3 3"/></svg>
+<span id="rem-count" class="notif-dot hidden">0</span>
+</button>
 <button id="btn-notifications" class="icon-action hidden" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
 <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
 <span id="notif-count" class="notif-dot hidden">0</span>
@@ -1648,6 +1753,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-data" onclick="showReportTab('data')">Task data</button>
 <button class="phase-btn" id="rep-tab-times" onclick="showReportTab('times')">Task times</button>
 <button class="phase-btn rep-tab-late" id="rep-tab-late" onclick="showReportTab('late')">&#9888; Late</button>
+<button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -1742,6 +1848,10 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="report-times" class="hidden">
 <div class="report-bar"><input type="text" id="times-q" class="report-search" placeholder="Search task or person" oninput="renderTaskTimes()"><button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById('times-table')], 'Tasks and allowed time'))">Copy picture</button></div>
 <div class="report-wrap"><table class="report-table" id="times-table"></table></div>
+</div>
+<div id="report-stmt" class="hidden">
+<div class="report-bar"><select id="stmt-person" onchange="loadStmt()"><option value="">Pick a person</option></select><label class="inline-label">From <input type="date" id="stmt-from" onchange="loadStmt()"></label><label class="inline-label">To <input type="date" id="stmt-to" onchange="loadStmt()"></label><span id="stmt-meta" class="report-meta"></span></div>
+<div id="stmt-body"><div class="report-meta">Pick a person to see every task that added or took away points, with the running total.</div></div>
 </div>
 <div id="report-late" class="hidden">
 <div class="report-bar"><select id="late-project" onchange="loadLate()"></select><span id="late-bar"></span><button class="btn btn-small" onclick="loadLate(true)">Refresh</button><span id="late-meta" class="report-meta"></span></div>
@@ -1854,8 +1964,17 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <label class="inline-label">Points count from <input type="date" id="points-from-day"></label>
 <button class="btn btn-small btn-primary" onclick="savePointsFrom()">Set start date</button>
 <button class="btn btn-small" onclick="savePointsFrom('tomorrow')">Start fresh from tomorrow</button>
-<span class="report-meta">Work that arrived before this date gets no points. Reports also start on the 1st of each month by default.</span>
+<span class="report-meta">Work closed before this date gets no points. Reports also start on the 1st of each month by default.</span>
 </div>
+<div class="report-bar" style="margin-bottom:10px;">
+<label class="inline-label">Manual tasks get <input type="number" id="points-manual-pct" min="0" max="100" style="width:70px"> % of On points</label>
+<button class="btn btn-small btn-primary" onclick="savePointsPct()">Save %</button>
+<span class="report-meta">Manual = My Assigned tasks and Mahana cases that did not come from the Google Form. They never get Before points or minus. Extra time approved = the new time counts, but no Before points.</span>
+</div>
+<div class="report-bar" style="margin-bottom:10px;">
+<button class="btn btn-small" onclick="pointsCheck()">&#128269; Points check: who got 0 and why</button>
+</div>
+<div id="points-check" class="hidden"></div>
 <div class="report-meta" id="points-meta" style="margin-bottom:10px;"></div>
 <div class="report-wrap"><table class="report-table" id="points-table"></table></div>
 <div class="builder-actions" style="margin-top:16px;">
@@ -1918,6 +2037,8 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="imp-body"><div class="report-meta">Loading...</div></div>
 </div>
 
+<div id="rem-drawer" class="rem-drawer hidden"><div class="rem-drawer-h"><b>&#9200; My reminders</b><button class="btn btn-small" onclick="remPanelToggle(false)" title="Close">&times;</button></div><div id="rem-drawer-body"></div></div>
+<div id="rem-home" class="hidden"></div>
 <div id="form-reminders" class="hidden">
 <div class="report-bar">
 <button class="btn btn-primary btn-small" onclick="remEdit('')">+ New reminder</button>
@@ -2582,7 +2703,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R35";
+const APP_VERSION = "R36";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2805,7 +2926,7 @@ function dashSpark(vals, color) {
 }
 
 function dashArea(days, series, label) {
-  const W = 640, H = 230, L = 34, B = 26, T = 14, R = 10;
+  const W = 900, H = 170, L = 34, B = 24, T = 10, R = 10;
   const iw = W - L - R, ih = H - T - B;
   const max = Math.max(1, ...series.reduce((a, s) => a.concat(s.values), []));
   const nice = max <= 4 ? 4 : Math.ceil(max / 4) * 4;
@@ -2879,6 +3000,104 @@ function dashIcon(k) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${DASH_ICONS[k] || ''}</svg>`;
 }
 
+function dashLateBox(P) {
+  const items = P.lateItems || [];
+  const n = (P.lateOpen || 0), m = (P.soonOpen || 0);
+  return `<div class="dsh-card dsh-latebox"><div class="dsh-card-h"><h3>Late</h3><span class="dsh-late-counts"><b class="r">&#128308; ${n} late now</b><b class="a">&#128992; ${m} about to be late</b></span></div>
+    ${items.length ? `<div class="dsh-late-list">${items.slice(0, 6).map(x => `<div class="dsh-late-li ${x.late ? 'late' : 'soon'}"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><div class="dsh-late-main"><b>${escapeHtml(x.task)}</b><small>${escapeHtml([x.key, x.who].filter(Boolean).join(' · '))}</small></div><span class="${x.late ? 'late-badge' : 'left-badge soon'}">${x.late ? 'Late ' + escapeHtml(x.lateBy) : (x.leftMs === 0 ? 'Due now' : escapeHtml(x.left) + ' left')}</span></div>`).join('')}</div>` : '<div class="dsh-empty">&#10003; Nothing is late right now.</div>'}
+    ${!dashScreenMode ? `<button class="dsh-more" onclick="dashOpenLate('${escapeHtml(P.id)}', '${escapeHtml(P.kind)}')">See the full Late list &rarr;</button>` : ''}
+  </div>`;
+}
+
+let lateWantProject = null;
+
+function dashOpenLate(pid, kind) {
+  lateMode = 'open';
+  if (kind === 'import' && canSeeImports(profile ? profile.name : user.name)) { impView = 'late'; openImports(); return; }
+  if (can('rep:late')) { lateWantProject = pid; reportTab = 'late'; window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/Reports'; return; }
+  if (canSeeImports(user.name)) { impView = 'late'; openImports(); }
+}
+
+function dashProjBody(P, sbs, rangeTxt) {
+  const days = P.daily.map(x => x.d);
+  const closedSeries = P.daily.map(x => x.closed);
+  const lateSeries = P.daily.map(x => x.late);
+  let html = '';
+  if (P.kind === 'mahana' && P.mahana) {
+    const M = P.mahana;
+    html += `<section class="dsh-kpis">
+      ${dashKpi('inbox', '#0f8b8d', M.refs, 'Cases arrived', 'new Ref Nos', dashSpark(M.daily.map(x => x.refs), '#0f8b8d'))}
+      ${dashKpi('building', '#6c5ce7', M.corp, 'Corporate', dashPct(M.corp, M.refs) + '% of cases', '')}
+      ${dashKpi('smile', '#f2a541', M.satisfied, 'Satisfied', dashPct(M.satisfied, M.refs) + '% of cases', '')}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
+    </section>
+    <section class="dsh-grid2">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases per day')}</div>
+      ${dashLateBox(P)}
+    </section>`;
+  } else if (P.kind === 'import' && P.imports) {
+    const I = P.imports;
+    html += `<section class="dsh-kpis">
+      ${dashKpi('box', '#0f8b8d', I.open, 'Open consignments', 'not received yet', '')}
+      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', 'in Imports', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting ? dashPct(P.lateOpen, P.waiting) + '% of waiting' : 'nothing waiting', '')}
+      ${dashKpi('chat', '#f2a541', I.messages, 'Messages', 'in these dates', '')}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
+    </section>
+    <section class="dsh-grid2">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashBars(I.status.slice(0, 8).map(s => ({ name: s.name, n: s.n })), i => DASH_COLORS[i % DASH_COLORS.length], '', '')}</div>
+      ${dashLateBox(P)}
+    </section>`;
+  } else {
+    html += `<section class="dsh-kpis">
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
+      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', '', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', '', '')}
+      ${dashKpi('star', '#f2a541', P.points, 'Points earned', 'whole team', '')}
+    </section>
+    <section class="dsh-grid2">${dashLateBox(P)}<div></div></section>`;
+  }
+  html += `<section class="dsh-card dsh-flow"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green all closed · red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: closedSeries }, { name: 'Late', color: '#e4572e', values: lateSeries }], 'Tasks closed per day')}</section>`;
+  const ranked = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
+  html += `<section class="dsh-grid2 dsh-even">
+    <div class="dsh-card"><div class="dsh-card-h"><h3>Points ranking</h3><span>${escapeHtml(rangeTxt)}</span></div>
+      ${ranked.length ? `<div class="dsh-rest">${ranked.slice(0, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i < 3 ? ['&#129351;', '&#129352;', '&#129353;'][i] : i + 1}</span>${dashAvatar(p.name, 24)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><small>${p.closed} closed</small><b class="${p.points < 0 ? 'neg' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : '<div class="dsh-empty">No points yet in these dates.</div>'}
+    </div>
+    <div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>
+  </section>`;
+  if (P.kind === 'mahana' && P.mahana) {
+    const M = P.mahana;
+    const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
+    html += `<section class="dsh-grid3">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashBars(M.branches, 'linear-gradient(90deg,#6c5ce7,#a29bfe)', '', '') : '<div class="dsh-empty">No branch on the forms in these dates.</div>'}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashBars(M.salesmen, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '')}</div>
+    </section>
+    <section class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashBars(M.riders, i => DASH_COLORS[i % DASH_COLORS.length], '&#128757;', 'visits')}</section>`;
+  }
+  if (P.kind === 'import' && P.imports) {
+    const I = P.imports;
+    html += `<section class="dsh-grid2 dsh-even">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Busiest suppliers</h3><span>open consignments</span></div>${dashBars(I.suppliers, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${dashBars(I.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '')}</div>
+    </section>`;
+  }
+  html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
+    <div class="dsh-team-row dsh-team-head"><span>Person</span><span>Points</span><span>Closed</span><span>Avg speed</span><span>Extra time</span><span>Waiting</span><span>Last seen</span></div>
+    ${P.people.map(p => { const live = p.lastMs && Date.now() - p.lastMs < 3600000; return `<div class="dsh-team-row">
+      <span class="dsh-team-p">${dashAvatar(p.name, 26)}<b>${escapeHtml(p.name)}</b></span>
+      <span><b class="dsh-pts ${p.points < 0 ? 'neg' : p.points > 0 ? 'pos' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></span>
+      <span data-l="Closed">${p.closed}${p.late ? ` <small class="dsh-late">${p.late} late</small>` : ''}</span>
+      <span data-l="Avg speed">${escapeHtml(p.avg || '–')}</span>
+      <span data-l="Extra time">${p.grace || 0}</span>
+      <span data-l="Waiting">${p.waiting || 0}${p.lateOpen ? ` <small class="dsh-late">${p.lateOpen} late</small>` : ''}</span>
+      <span data-l="Last seen"><i class="dsh-live${live ? ' on' : ''}"></i>${escapeHtml(dashAgo(p.lastMs))}</span>
+    </div>`; }).join('') || '<div class="dsh-empty">No one has worked in these dates yet.</div>'}
+  </div></section>`;
+  return html;
+}
+
 function dashKpi(icon, color, value, label, sub, spark) {
   return `<div class="dsh-kpi" style="--kc:${color}">
     <div class="dsh-kpi-top"><span class="dsh-kpi-ico">${dashIcon(icon)}</span><span class="dsh-kpi-lbl">${escapeHtml(label)}</span></div>
@@ -2899,112 +3118,46 @@ function renderDash(animate, stale) {
   const D = dashData;
   const projs = D.projects || [];
   if (!projs.length) { root.innerHTML = '<div class="dsh-empty">Jawad has not turned on the dashboard for you yet.</div>'; return; }
-  if (!projs.some(p => p.id === dashProjId)) dashProjId = (projs.filter(p => p.kind === 'mahana')[0] || projs[0]).id;
-  const P = projs.filter(p => p.id === dashProjId)[0];
-  const days = P.daily.map(x => x.d);
+  const canSbs = projs.some(p => p.kind === 'mahana') && projs.some(p => p.kind === 'import');
+  if (dashProjId === '__sbs' && !canSbs) dashProjId = '';
+  if (dashProjId !== '__sbs' && !projs.some(p => p.id === dashProjId)) dashProjId = (projs.filter(p => p.kind === 'mahana')[0] || projs[0]).id;
+  const sbs = dashProjId === '__sbs';
+  const P = sbs ? null : projs.filter(p => p.id === dashProjId)[0];
+  const shown = sbs ? [projs.filter(p => p.kind === 'mahana')[0], projs.filter(p => p.kind === 'import')[0]] : [P];
   const ranges = [['today', 'Today'], ['week', 'This week'], ['month', 'This month'], ['lastmonth', 'Last month'], ['custom', 'Pick dates']];
   const me = D.me || (user && user.name) || '';
   const first = dashScreenMode ? '' : String(me).split(' ')[0];
   const rangeTxt = D.from === D.to ? dashFmtDay(D.from) : dashFmtDay(D.from) + ' – ' + dashFmtDay(D.to);
-  const onPct = dashPct(P.onTime, P.onTime + P.late);
-  let html = `<section class="dsh-hero dsh-${P.kind}">
+  const sumOn = shown.reduce((a, x) => a + x.onTime, 0), sumLate = shown.reduce((a, x) => a + x.late, 0);
+  const onPct = dashPct(sumOn, sumOn + sumLate);
+  const ptsBy = {};
+  shown.forEach(x => x.people.forEach(p => { ptsBy[p.name] = (ptsBy[p.name] || 0) + (Number(p.points) || 0); }));
+  const top3 = Object.keys(ptsBy).filter(n => ptsBy[n] > 0).sort((a, b) => ptsBy[b] - ptsBy[a]).slice(0, 3);
+  let html = `<section class="dsh-hero dsh-${sbs ? 'both' : P.kind}">
     <div class="dsh-hero-bg"><span></span><span></span><span></span></div>
     <div class="dsh-hero-l">
       <div class="dsh-hello">${escapeHtml(dashGreeting())}${first ? ', ' + escapeHtml(first) : ''}</div>
-      <h1 class="dsh-title">${escapeHtml(P.name)} <em>at a glance</em></h1>
+      <h1 class="dsh-title">${sbs ? 'Mahana &amp; Imports' : escapeHtml(P.name)} <em>at a glance</em></h1>
       <div class="dsh-sub">${escapeHtml(rangeTxt)} · <span id="dsh-upd"></span></div>
-      ${projs.length > 1 ? `<div class="dsh-projs">${projs.map(p => `<button class="${p.id === dashProjId ? 'on' : ''}" onclick="dashProjId='${escapeHtml(p.id)}'; renderDash(true)">${p.kind === 'import' ? '&#128230; ' : p.kind === 'mahana' ? '&#127968; ' : ''}${escapeHtml(p.name)}</button>`).join('')}</div>` : ''}
+      ${projs.length > 1 ? `<div class="dsh-projs">${projs.map(p => `<button class="${p.id === dashProjId ? 'on' : ''}" onclick="dashProjId='${escapeHtml(p.id)}'; renderDash(true)">${p.kind === 'import' ? '&#128230; ' : p.kind === 'mahana' ? '&#127968; ' : ''}${escapeHtml(p.name)}</button>`).join('')}${canSbs ? `<button class="${sbs ? 'on' : ''}" onclick="dashProjId='__sbs'; renderDash(true)">&#9707; Side by side</button>` : ''}</div>` : ''}
     </div>
+    <div class="dsh-top3">${top3.length ? `<div class="dsh-top3-h">Top performers</div>${top3.map((n, i) => `<div class="dsh-top3-row"><span class="dsh-top3-m">${['&#129351;', '&#129352;', '&#129353;'][i]}</span>${dashAvatar(n, 28)}<b>${escapeHtml(n)}</b><span class="dsh-top3-p">+${ptsBy[n]}</span></div>`).join('')}` : '<div class="dsh-top3-h">Top performers</div><div class="dsh-top3-none">No points yet in these dates</div>'}</div>
     <div class="dsh-hero-r">
       <div class="dsh-ranges">${ranges.map(r => `<button class="${dashRange === r[0] ? 'on' : ''}" onclick="${r[0] === 'custom' ? "document.getElementById('dash-custom').classList.toggle('hidden')" : "dashSetRange('" + r[0] + "')"}">${r[1]}</button>`).join('')}</div>
       <div id="dash-custom" class="dsh-custom${dashRange === 'custom' ? '' : ' hidden'}"><input type="date" id="dash-from" value="${escapeHtml(dashFrom)}"><span>to</span><input type="date" id="dash-to" value="${escapeHtml(dashTo)}"><button onclick="dashCustom()">Show</button></div>
       <div class="dsh-hero-gauge">${dashGauge(onPct, 'closed on time')}</div>
     </div>
   </section>`;
-  const closedSeries = P.daily.map(x => x.closed);
-  const lateSeries = P.daily.map(x => x.late);
-  if (P.kind === 'mahana' && P.mahana) {
-    const M = P.mahana;
-    html += `<section class="dsh-kpis">
-      ${dashKpi('inbox', '#0f8b8d', M.refs, 'Cases arrived', 'new Ref Nos', dashSpark(M.daily.map(x => x.refs), '#0f8b8d'))}
-      ${dashKpi('building', '#6c5ce7', M.corp, 'Corporate', dashPct(M.corp, M.refs) + '% of cases', '')}
-      ${dashKpi('smile', '#f2a541', M.satisfied, 'Satisfied', dashPct(M.satisfied, M.refs) + '% of cases', dashSpark(M.daily.map(x => x.satisfied), '#f2a541'))}
-      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
-      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
-    </section>
-    <section class="dsh-grid2">
-      <div class="dsh-card dsh-wide"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases per day')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>On time vs late</h3><span>tasks closed</span></div>${dashDonut([{ name: 'On time', n: P.onTime, color: '#2a9d8f' }, { name: 'Late', n: P.late, color: '#e4572e' }], onPct + '%', 'on time')}</div>
-    </section>`;
-  } else if (P.kind === 'import' && P.imports) {
-    const I = P.imports;
-    html += `<section class="dsh-kpis">
-      ${dashKpi('box', '#0f8b8d', I.open, 'Open consignments', 'not received yet', '')}
-      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', 'in Imports', '')}
-      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting ? dashPct(P.lateOpen, P.waiting) + '% of waiting' : 'nothing waiting', '')}
-      ${dashKpi('chat', '#f2a541', I.messages, 'Messages written', 'in these dates', '')}
-      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
-    </section>
-    <section class="dsh-grid2">
-      <div class="dsh-card dsh-wide"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashDonut(I.status.slice(0, 8).map((s, i) => ({ name: s.name, n: s.n, color: DASH_COLORS[i % DASH_COLORS.length] })), String(I.status.reduce((a, s) => a + s.n, 0)), 'consignments')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>On time vs late</h3><span>tasks closed</span></div>${dashDonut([{ name: 'On time', n: P.onTime, color: '#2a9d8f' }, { name: 'Late', n: P.late, color: '#e4572e' }], onPct + '%', 'on time')}</div>
-    </section>`;
-  } else {
-    html += `<section class="dsh-kpis">
-      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', dashSpark(closedSeries, '#2a9d8f'))}
-      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', '', '')}
-      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', '', '')}
-      ${dashKpi('star', '#f2a541', P.points, 'Points earned', 'whole team', '')}
-    </section>`;
-  }
-  html += `<section class="dsh-card dsh-flow"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green on time · red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: closedSeries }, { name: 'Late', color: '#e4572e', values: lateSeries }], 'Tasks closed per day')}</section>`;
-  const ppl = P.people.filter(p => p.closed || p.points || p.waiting);
-  const podium = ppl.slice().sort((a, b) => b.points - a.points).slice(0, 3);
-  const order = [podium[1], podium[0], podium[2]].filter(Boolean);
-  html += `<section class="dsh-grid2">
-    <div class="dsh-card dsh-podium-card"><div class="dsh-card-h"><h3>Top performers</h3><span>by points</span></div>
-      ${podium.length ? `<div class="dsh-podium">${order.map(p => { const place = podium.indexOf(p); return `<div class="dsh-pod dsh-pod-${place + 1}"><div class="dsh-medal">${['&#129351;', '&#129352;', '&#129353;'][place]}</div>${dashAvatar(p.name, place === 0 ? 64 : 52)}<div class="dsh-pod-name">${escapeHtml(p.name)}</div><div class="dsh-pod-pts">${p.points > 0 ? '+' : ''}${p.points} <small>pts</small></div><div class="dsh-pod-step">${place + 1}</div></div>`; }).join('')}</div>` : '<div class="dsh-empty">No points yet in these dates.</div>'}
-      ${ppl.length > 3 ? `<div class="dsh-rest">${ppl.slice().sort((a, b) => b.points - a.points).slice(3, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i + 4}</span>${dashAvatar(p.name, 26)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><b class="${p.points < 0 ? 'neg' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : ''}
-    </div>
-    <div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>
-  </section>`;
-  if (P.kind === 'mahana' && P.mahana) {
-    const M = P.mahana;
-    const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
-    html += `<section class="dsh-grid3">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${dashBars(M.branches, 'linear-gradient(90deg,#6c5ce7,#a29bfe)', '', '')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashBars(M.salesmen, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '')}</div>
-    </section>
-    <section class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashBars(M.riders, i => DASH_COLORS[i % DASH_COLORS.length], '&#128757;', 'visits')}</section>`;
-  }
-  if (P.kind === 'import' && P.imports) {
-    const I = P.imports;
-    html += `<section class="dsh-grid2">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Busiest suppliers</h3><span>open consignments</span></div>${dashBars(I.suppliers, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${dashBars(I.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '')}</div>
-    </section>`;
-  }
-  html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
-    <div class="dsh-team-row dsh-team-head"><span>Person</span><span>Points</span><span>Closed</span><span>On time</span><span>Avg speed</span><span>Extra time asked</span><span>Waiting</span><span>Last seen</span></div>
-    ${P.people.map(p => { const pc = dashPct(p.onTime, p.onTime + p.late); const live = p.lastMs && Date.now() - p.lastMs < 3600000; return `<div class="dsh-team-row">
-      <span class="dsh-team-p">${dashAvatar(p.name, 32)}<b>${escapeHtml(p.name)}</b></span>
-      <span><b class="dsh-pts ${p.points < 0 ? 'neg' : p.points > 0 ? 'pos' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></span>
-      <span data-l="Closed">${p.closed}</span>
-      <span data-l="On time"><span class="dsh-mini"><i style="width:${pc}%;background:${pc >= 80 ? '#2a9d8f' : pc >= 60 ? '#f2a541' : '#e4572e'}"></i></span>${p.closed ? pc + '%' : '–'}</span>
-      <span data-l="Avg speed">${escapeHtml(p.avg || '–')}</span>
-      <span data-l="Extra time">${p.grace || 0}</span>
-      <span data-l="Waiting">${p.waiting || 0}${p.lateOpen ? ` <small class="dsh-late">${p.lateOpen} late</small>` : ''}</span>
-      <span data-l="Last seen"><i class="dsh-live${live ? ' on' : ''}"></i>${escapeHtml(dashAgo(p.lastMs))}</span>
-    </div>`; }).join('') || '<div class="dsh-empty">No one has worked in these dates yet.</div>'}
-  </div></section>`;
+  if (sbs) html += `<div class="dsh-sbs">${shown.map(x => `<div class="dsh-col"><div class="dsh-col-h dsh-col-${x.kind}">${x.kind === 'import' ? '&#128230;' : '&#127968;'} ${escapeHtml(x.name)}</div>${dashProjBody(x, true, rangeTxt)}</div>`).join('')}</div>`;
+  else html += dashProjBody(P, false, rangeTxt);
   const remItems = !dashScreenMode && remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 6) : [];
-  html += `<section class="dsh-grid2">
-    <div class="dsh-card"><div class="dsh-card-h"><h3>Assigned tasks open</h3><span>${P.assigned.length}</span></div>
-      ${P.assigned.length ? `<div class="dsh-list">${P.assigned.slice(0, 10).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-chip late">late ${escapeHtml(a.lateBy)}</span>` : '<span class="dsh-chip ok">on track</span>'}</div>`).join('')}</div>` : '<div class="dsh-empty">No assigned task is open. &#127881;</div>'}
+  const assigned = [].concat.apply([], shown.map(x => x.assigned || []));
+  html += `<section class="dsh-grid2 dsh-even">
+    <div class="dsh-card"><div class="dsh-card-h"><h3>Assigned tasks open</h3><span>${assigned.length}</span></div>
+      ${assigned.length ? `<div class="dsh-list">${assigned.slice(0, 8).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-chip late">late ${escapeHtml(a.lateBy)}</span>` : '<span class="dsh-chip ok">on track</span>'}</div>`).join('')}</div>` : '<div class="dsh-empty">No assigned task is open. &#127881;</div>'}
     </div>
     <div class="dsh-card"><div class="dsh-card-h"><h3>My reminders</h3><span>coming up</span></div>
-      ${remItems.length ? `<div class="dsh-list">${remItems.map(x => { const late = x.dueMs < Date.now(); return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || new Date(x.dueMs).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }))}</small></div></div>`; }).join('')}</div>` : `<div class="dsh-empty">No reminders coming up. <a href="javascript:void(0)" onclick="openReminders()">Add one</a></div>`}
+      ${remItems.length ? `<div class="dsh-list">${remItems.map(x => { const late = x.dueMs < Date.now(); return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || new Date(x.dueMs).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }))}</small></div></div>`; }).join('')}</div>` : `<div class="dsh-empty">No reminders coming up. <a href="javascript:void(0)" onclick="remPanelToggle(true)">Add one</a></div>`}
     </div>
   </section>
   <div class="dsh-foot">Live · refreshes every 2 minutes · Taskando</div>`;
@@ -3521,13 +3674,30 @@ function lateLineHtml(x, click) {
   return `<div class="late-line ${late || lateMode === 'closed' ? 'st-late' : 'st-soon'}" onclick="${click}"><div class="late-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</div><div class="late-task"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(x.task)}</b><div class="late-sub">${escapeHtml(sub)}</div></div><div class="late-right">${right}</div></div>`;
 }
 
-function lateListHtml(lines, click) {
+let lateWho = '';
+let lateQ = '';
+let lateRerender = '';
+
+function lateFilterSet(k, v) {
+  if (k === 'who') lateWho = v; else lateQ = v;
+  const typing = k === 'q';
+  new Function(lateRerender)();
+  if (typing) { const i = document.getElementById('late-q'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+}
+
+function lateListHtml(allLines, click, rerender) {
+  lateRerender = rerender || '';
+  const people = uniqueSorted([].concat.apply([], allLines.map(x => String(x.who || '').split(',').map(y => y.trim()).filter(Boolean))));
+  if (lateWho && people.indexOf(lateWho) === -1) lateWho = '';
+  const q = lateQ.trim().toLowerCase();
+  const lines = allLines.filter(x => (!lateWho || String(x.who || '').split(',').map(y => y.trim()).indexOf(lateWho) !== -1) && (!q || [x.task, x.phase, x.key, x.name, x.who, x.projectName].join(' ').toLowerCase().indexOf(q) !== -1));
+  const filt = rerender ? `<div class="late-filter"><select onchange="lateFilterSet('who', this.value)"><option value="">Everyone (${allLines.length})</option>${people.map(n => `<option value="${escapeHtml(n)}"${n === lateWho ? ' selected' : ''}>${escapeHtml(n)} (${allLines.filter(x => String(x.who || '').split(',').map(y => y.trim()).indexOf(n) !== -1).length})</option>`).join('')}</select><input type="text" id="late-q" placeholder="Filter by task, phase, case or name" value="${escapeHtml(lateQ)}" oninput="lateFilterSet('q', this.value)">${lateWho || lateQ ? `<button class="btn btn-small" onclick="lateWho = ''; lateQ = ''; lateFilterSet('who', '')">Clear</button>` : ''}</div>` : '';
   const late = lines.filter(x => x.state === 'late'), soon = lines.filter(x => x.state !== 'late');
   late.sort((a, b) => (b.lateMs || 0) - (a.lateMs || 0));
   soon.sort((a, b) => (a.leftMs || 0) - (b.leftMs || 0));
-  if (!lines.length) return `<div class="late-none">${lateMode === 'closed' ? '&#10003; Nothing was closed late in these dates.' : '&#10003; Nothing is late or about to be late right now.'}</div>`;
+  if (!lines.length) return filt + `<div class="late-none">${lateWho || q ? 'Nothing matches this filter.' : lateMode === 'closed' ? '&#10003; Nothing was closed late in these dates.' : '&#10003; Nothing is late or about to be late right now.'}</div>`;
   const sec = (title, list, cls) => list.length ? `<div class="late-head ${cls}">${title} <b>${list.length}</b></div>${list.map(x => lateLineHtml(x, click(x))).join('')}` : '';
-  return lateMode === 'closed' ? sec('Closed late', late, 'st-late') : sec('&#128308; Late now', late, 'st-late') + sec('&#128992; About to be late (less than 1 hour left)', soon, 'st-soon');
+  return filt + (lateMode === 'closed' ? sec('Closed late', late, 'st-late') : sec('&#128308; Late now', late, 'st-late') + sec('&#128992; About to be late (less than 1 hour left)', soon, 'st-soon'));
 }
 
 function impLateHtml() {
@@ -3539,7 +3709,30 @@ function impLateHtml() {
     if (lateMode === 'open') g.prog.open.forEach(x => { const c = impLateCls(x); if (c === 'ok') return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.who, state: c, lateBy: x.lateBy, left: x.left, leftMs: x.leftMs, lateMs: x.late ? 1 : 0, arrived: x.arrived, took: x.took, allowed: x.allowed }); });
     else g.prog.done.forEach(x => { if (x.state !== 'late' || !x.doneMs || x.doneMs < f || x.doneMs > t) return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.by, state: 'late', lateBy: String(x.stateTxt || '').replace(/^Late /, ''), done: x.done, took: x.took, allowed: x.allowed }); });
   });
-  return lateBarHtml('renderImports()') + `<div class="late-list">${lateListHtml(lines, x => `impOpenFromLate('${impJs(x.g.name)}')`)}</div>`;
+  return lateBarHtml('renderImports()') + `<div class="late-list">${lateListHtml(lines, x => `impOpenFromLate('${impJs(x.g.name)}')`, 'renderImports()')}</div>`;
+}
+
+const STMT_BAND = { before: 'Before time', on: 'On time', after: 'Late (after)', late: 'Late (after that)' };
+let stmtSeq = 0;
+
+async function loadStmt() {
+  const sel = document.getElementById('stmt-person');
+  const f = document.getElementById('stmt-from'), t = document.getElementById('stmt-to');
+  if (!f.value) { const d = new Date(); f.value = ymdLocal(new Date(d.getFullYear(), d.getMonth(), 1)); t.value = ymdLocal(d); }
+  const person = sel.value;
+  const seq = ++stmtSeq;
+  const box = document.getElementById('stmt-body');
+  if (person) box.innerHTML = '<div class="report-meta">Loading…</div>';
+  try {
+    const r = await apiCall('pointsStatement', { person: person, from: f.value, to: t.value });
+    if (seq !== stmtSeq) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    if (sel.options.length <= 1) sel.innerHTML = '<option value="">Pick a person</option>' + (r.people || []).map(n => `<option value="${escapeHtml(n)}"${n === person ? ' selected' : ''}>${escapeHtml(n)}</option>`).join('');
+    if (!person) return;
+    document.getElementById('stmt-meta').innerText = r.lines.length + ' entries';
+    box.innerHTML = `<div class="stmt-sum"><div><small>Points added</small><b class="pos">+${r.plus}</b></div><div><small>Points taken away</small><b class="neg">${r.minus}</b></div><div><small>Balance</small><b class="${r.balance < 0 ? 'neg' : 'pos'}">${r.balance > 0 ? '+' : ''}${r.balance}</b></div></div>
+      ${r.lines.length ? `<div class="table-wrap"><table class="report-table stmt-table"><thead><tr><th>Date</th><th>Project</th><th>Task</th><th>Case</th><th>Result</th><th class="num">Points</th><th class="num">Balance</th></tr></thead><tbody>${r.lines.slice().reverse().map(x => `<tr class="${x.points < 0 ? 'neg-row' : ''}"><td class="nowrap">${escapeHtml(shortWhen(x.when))}</td><td>${escapeHtml(x.project)}</td><td>${x.phase ? `<span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span> ` : ''}${escapeHtml(x.task)}${x.assigned ? ' <small class="report-meta">(assigned)</small>' : ''}</td><td>${escapeHtml(x.key)}</td><td>${escapeHtml(STMT_BAND[x.band] || x.band)}${x.lateBy ? ' · ' + escapeHtml(x.lateBy) : ''}${x.manual ? ' · manual' : ''}${x.grace ? ' · extra time ' + escapeHtml(x.grace) : ''}${x.edited ? ' · edited by ' + escapeHtml(x.edited) : ''}<div class="report-meta">took ${escapeHtml(x.took || '-')}${x.allowed ? ' of ' + escapeHtml(x.allowed) : ''}</div></td><td class="num"><b class="${x.points < 0 ? 'neg' : 'pos'}">${x.points > 0 ? '+' : ''}${x.points}</b></td><td class="num">${x.balance}</td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No points in these dates.</div>'}`;
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
 let lateData = null;
@@ -3553,6 +3746,7 @@ async function loadLate(fresh) {
   lateDefaults();
   const sel = document.getElementById('late-project');
   if (sel && !sel.options.length) sel.innerHTML = '<option value="">All projects</option>' + PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+  if (sel && lateWantProject !== null) { sel.value = lateWantProject; lateWantProject = null; }
   document.getElementById('late-bar').innerHTML = lateBarHtml('loadLate()');
   const box = document.getElementById('late-body');
   const key = lateKeyNow();
@@ -3575,7 +3769,7 @@ function renderLate(r, old) {
   lateData = r;
   document.getElementById('late-meta').innerText = (old ? 'refreshing… · ' : '') + 'as of ' + shortWhen(r.at || '');
   const multi = !valOf('late-project') && PROJECTS.length > 1;
-  document.getElementById('late-body').innerHTML = `<div class="late-list">${lateListHtml(r.lines.map(x => Object.assign({}, x, { name: [multi ? x.projectName : '', x.name].filter(Boolean).join(' · ') })), x => `lateOpenTrail('${escapeHtml(String(x.key || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')`)}</div>`;
+  document.getElementById('late-body').innerHTML = `<div class="late-list">${lateListHtml(r.lines.map(x => Object.assign({}, x, { name: [multi ? x.projectName : '', x.name].filter(Boolean).join(' · ') })), x => `lateOpenTrail('${escapeHtml(String(x.key || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')`, 'renderLate(lateData)')}</div>`;
 }
 
 function lateOpenTrail(key) {
@@ -3978,6 +4172,51 @@ async function importSaveLink() {
   b.disabled = false;
 }
 
+let remDrawerOpen = false;
+let remHomeParent = null;
+
+function remPanelToggle(open, keepPref) {
+  const want = open === undefined ? !remDrawerOpen : !!open;
+  const form = document.getElementById('form-reminders');
+  const drawer = document.getElementById('rem-drawer');
+  if (!form || !drawer) return;
+  if (drawer.parentNode !== document.body) document.body.appendChild(drawer);
+  if (want && !remDrawerOpen) {
+    if (currentTask === MY_REMINDERS) { toast('You are already on My reminders.'); return; }
+    remHomeParent = form.parentNode;
+    const mark = document.getElementById('rem-home');
+    if (mark && mark.parentNode !== remHomeParent) remHomeParent.insertBefore(mark, form);
+    document.getElementById('rem-drawer-body').appendChild(form);
+    form.classList.remove('hidden');
+    const hd = document.querySelector('header');
+    drawer.style.top = (hd ? hd.offsetHeight : 64) + 'px';
+    drawer.classList.remove('hidden');
+    document.body.classList.add('rem-open');
+    document.getElementById('btn-rem').classList.add('on');
+    remDrawerOpen = true;
+    renderRemEditor();
+    if (remData) renderReminders();
+    loadReminders();
+  } else if (!want && remDrawerOpen) {
+    const mark = document.getElementById('rem-home');
+    if (mark && mark.parentNode) mark.parentNode.insertBefore(form, mark.nextSibling);
+    form.classList.add('hidden');
+    drawer.classList.add('hidden');
+    document.body.classList.remove('rem-open');
+    document.getElementById('btn-rem').classList.remove('on');
+    remDrawerOpen = false;
+  }
+  if (!keepPref) { try { localStorage.setItem('tk_rem_open', remDrawerOpen ? '1' : '0'); } catch (e) {} }
+}
+
+function remCountUpdate() {
+  const el = document.getElementById('rem-count');
+  if (!el) return;
+  const n = remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs && x.dueMs <= Date.now()).length : 0;
+  el.innerText = n > 99 ? '99+' : String(n);
+  el.classList.toggle('hidden', !n);
+}
+
 function openReminders() {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(MY_REMINDERS);
 }
@@ -3989,6 +4228,7 @@ async function loadReminders() {
     const r = await apiCall('remList');
     if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     remData = r;
+    remCountUpdate();
     renderReminders();
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
@@ -4692,6 +4932,9 @@ async function completeLogin() {
     document.querySelectorAll('#plus-menu .lvl1').forEach(b => b.classList.toggle('hidden', user.level > 1));
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('btn-search').classList.remove('hidden');
+    document.getElementById('btn-rem').classList.remove('hidden');
+    if (localStorage.getItem('tk_rem_open') === '1') setTimeout(() => remPanelToggle(true), 300);
+    else setTimeout(() => { if (!remData) apiCallRaw('remList', {}).then(r => { if (r && r.ok && !remData) { remData = r; remCountUpdate(); } }).catch(() => {}); }, 2500);
     document.getElementById('active-user-display').classList.remove('hidden');
     document.getElementById('active-user-display').innerText = user.name;
 
@@ -4728,6 +4971,8 @@ function doLogout() {
   localStorage.removeItem('mahana_idToken');
   try { localStorage.removeItem(PENDING_CACHE_KEY); } catch (e) {}
   document.getElementById('btn-daily').classList.add('hidden'); closeDaily();
+  remPanelToggle(false, true);
+  document.getElementById('btn-rem').classList.add('hidden');
   user = null; profile = null; currentTask = null; currentPhase = null;
   templates = {}; templatesLoaded = false;
   chainList = []; recurringList = []; chains = []; chainLoaded = false; allChains = []; allRecurring = []; PROJECTS = []; currentProject = null; currentChain = null;
@@ -6507,17 +6752,19 @@ function renderJumpRules(c) {
   const opt = (list, cur, first) => (first ? `<option value="">${first}</option>` : '') + list.map(x => `<option value="${escapeHtml(x)}"${x === cur ? ' selected' : ''}>${escapeHtml(x)}</option>`).join('');
   box.innerHTML = jumps.length ? jumps.map((j, i) => {
     const later = tasks.slice(tasks.indexOf(j.after) + 1);
-    const vals = jumpValueChoices(j.after, j.field);
+    const upTo = tasks.slice(0, tasks.indexOf(j.after) + 1);
+    const vals = uniqueSorted([].concat.apply([], upTo.map(t => jumpValueChoices(t, j.field))));
+    const fieldsUpTo = uniqueSorted([].concat.apply([], upTo.map(t => jumpFieldChoices(t))));
     return `<div class="jump-rule">
       <span>After</span><select onchange="setJump(${i}, 'after', this.value)">${opt(tasks, j.after, 'Pick a task')}</select>
       <span>if</span><input type="text" list="jf-${i}" value="${escapeHtml(j.field || '')}" placeholder="Field" onchange="setJump(${i}, 'field', this.value)" style="width:150px;">
-      <datalist id="jf-${i}">${jumpFieldChoices(j.after).map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>
+      <datalist id="jf-${i}">${fieldsUpTo.map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>
       <select onchange="setJump(${i}, 'mode', this.value)"><option value="values"${j.mode !== 'filled' ? ' selected' : ''}>is one of</option><option value="filled"${j.mode === 'filled' ? ' selected' : ''}>is filled in</option></select>
       ${j.mode !== 'filled' ? `<input type="text" list="jv-${i}" value="${escapeHtml((j.values || []).join(', '))}" placeholder="Values, comma separated" onchange="setJump(${i}, 'values', this.value)" style="width:200px;"><datalist id="jv-${i}">${vals.map(x => `<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>` : ''}
       <span>go to</span><select onchange="setJump(${i}, 'to', this.value)">${opt(later, j.to, 'Pick a later task')}</select>
       <button class="chain-btn" onclick="removeJump(${i})" title="Remove rule">&times;</button>
     </div>`;
-  }).join('') : '<div class="chain-empty">No skip rules. Every case goes step by step.</div>';
+  }).join('') + '<div class="chain-col-note" style="margin-top:6px;">Add as many rules as you need, at different places in the chain. A rule can use a field filled in this task or in any earlier task of the same case.</div>' : '<div class="chain-empty">No skip rules. Every case goes step by step.</div>';
 }
 
 function renderOffRules(c) {
@@ -7330,7 +7577,7 @@ function hideAllForms() {
   document.body.classList.remove('fs-mode');
   closeColFilter();
   ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'partial-section', 'recent-section']
-    .forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+    .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen)) el.classList.add('hidden'); });
   document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => el.classList.add('hidden'));
 }
 
@@ -7394,6 +7641,7 @@ function renderFormInterface() {
     return;
   }
   if (t.panel === "reminders") {
+    if (remDrawerOpen) remPanelToggle(false);
     document.getElementById('form-reminders').classList.remove('hidden');
     renderRemEditor();
     if (remData) renderReminders();
@@ -8127,7 +8375,7 @@ function staffReportsOnly() {
   return !isAdminPanel();
 }
 
-const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late'];
+const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt'];
 
 function showReportTab(tab) {
   const allowed = REPORT_TABS.filter(k => can('rep:' + k));
@@ -8142,7 +8390,8 @@ function showReportTab(tab) {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
-  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late');
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt');
+  if (tab === 'stmt') { document.getElementById('report-meta').innerText = ''; loadStmt(); return; }
   if (tab === 'late') { document.getElementById('report-meta').innerText = ''; loadLate(); return; }
   if (tab === 'trail') { document.getElementById('report-meta').innerText = ''; return; }
   if (tab === 'times') { document.getElementById('report-meta').innerText = ''; loadTaskTimes(); return; }
@@ -9225,6 +9474,30 @@ let pointsFrom = '';
 const PT_KEYS = ['bd', 'bh', 'bp', 'op', 'ad', 'ah', 'ap', 'lp'];
 const BAND_NAME = { before: 'Before', on: 'On', after: 'After', late: 'After that' };
 
+async function savePointsPct() {
+  const v = Number(valOf('points-manual-pct'));
+  if (!(v >= 0 && v <= 100)) return toast('Use a number from 0 to 100', true);
+  try {
+    const r = await apiCall('pointsPct', { pct: v });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast('Manual tasks now get ' + r.pct + '% of On points.');
+  } catch (e) { toast('Network error', true); }
+}
+
+async function pointsCheck() {
+  const box = document.getElementById('points-check');
+  box.classList.remove('hidden');
+  box.innerHTML = '<div class="report-meta">Checking every closed task since points started…</div>';
+  try {
+    const r = await apiCall('pointsCheck');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not check')}</div>`; return; }
+    const reasons = Object.keys(r.reasons || {}).sort((a, b) => r.reasons[b] - r.reasons[a]);
+    box.innerHTML = `<div class="pts-check"><div class="pts-check-h"><b>Since ${escapeHtml(r.from || '')}:</b> <span class="ok-badge">${r.given} tasks got points (${r.points > 0 ? '+' : ''}${r.points})</span> <span class="late-badge">${r.zero} got 0</span> <button class="btn btn-small" onclick="document.getElementById('points-check').classList.add('hidden')">Close</button></div>
+      ${reasons.length ? `<div class="pts-check-r">${reasons.map(k => `<span class="pts-reason">${escapeHtml(k)}: <b>${r.reasons[k]}</b></span>`).join('')}</div>` : ''}
+      ${(r.rows || []).length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Closed</th><th>Project</th><th>Task</th><th>By</th><th>Case</th><th>Why 0</th><th>What to do</th></tr></thead><tbody>${r.rows.map(x => `<tr><td class="nowrap">${escapeHtml(shortWhen(x.done))}</td><td>${escapeHtml(x.project)}</td><td>${escapeHtml(x.task)}</td><td>${escapeHtml(x.by)}</td><td>${escapeHtml(x.key)}</td><td>${escapeHtml(x.why)}</td><td class="report-meta">${escapeHtml(x.hint || '')}</td></tr>`).join('')}</tbody></table></div>` : '<div class="late-none">&#10003; Every closed task got its points.</div>'}</div>`;
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
 async function loadPoints() {
   document.getElementById('points-table').innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
   try {
@@ -9234,6 +9507,8 @@ async function loadPoints() {
     (result.rows || []).forEach(r => { pointsRows[r.person + '|' + r.task] = r; });
     pointsDirty = {};
     pointsFrom = result.pointsFrom || '';
+    const pctEl = document.getElementById('points-manual-pct');
+    if (pctEl) pctEl.value = result.manualPct === undefined ? 30 : result.manualPct;
     const people = pointsPeople();
     if (!pointsPerson || people.indexOf(pointsPerson) === -1) pointsPerson = people[0] || null;
     renderPoints();
