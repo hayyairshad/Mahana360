@@ -1046,6 +1046,50 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-top3-p { font-family: 'Fraunces', serif; font-weight: 800; color: #f5c46e; }
 .dsh-top3-none { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
 .dsh-kpis { grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin: 12px 0; }
+.dsh-kpis-tight { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.dsh-kpis-tight .dsh-kpi { padding: 7px 10px 5px; border-radius: 12px; }
+.dsh-kpis-tight .dsh-kpi-val { font-size: 1.25rem; }
+.dsh-kpis-tight .dsh-kpi-sub { font-size: 0.66rem; }
+.dsh-kpis-tight .dsh-kpi-lbl { font-size: 0.6rem; }
+.dsh-kpis-tight .dsh-kpi-spark { height: 16px; margin: 2px -10px -5px; }
+.dsh-kpis-tight .dsh-kpi-spark .dsh-spark { height: 16px; }
+@media (max-width: 860px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
+.dsh-scroll { max-height: 340px; overflow-y: auto; }
+.dsh-late-list.full { max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.dsh-latebox .dsh-late-list { max-height: 260px; overflow-y: auto; padding-right: 4px; }
+.dsh-latebox .dsh-late-li { cursor: pointer; }
+.dsh-latebox .dsh-late-li:hover { filter: brightness(0.97); }
+.dsh-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 7px; }
+.dsh-tabs button { border: 1px solid #dfe6da; background: #fff; border-radius: 999px; padding: 2px 10px; font-size: 0.74rem; font-weight: 600; cursor: pointer; color: var(--text-dim); }
+.dsh-tabs button.on { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
+.dsh-remg { margin-bottom: 8px; }
+.dsh-remg-h { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin: 4px 0 3px; }
+.dsh-remg-h span { color: var(--accent-dark); }
+.dsh-podium { background: linear-gradient(140deg, #14532d, #1d6b3f); color: #fff; }
+.dsh-podium .dsh-card-h h3, .dsh-podium .dsh-card-h > span { color: rgba(255,255,255,0.85); }
+.dsh-pod-row { display: flex; align-items: center; gap: 10px; padding: 7px 4px; }
+.dsh-pod-row b { flex: 1; font-size: 1.05rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dsh-pod-m { font-size: 1.3rem; }
+.dsh-pod-p { font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.25rem; color: #f5c46e; }
+.dsh-pod-none { color: rgba(255,255,255,0.75); font-size: 0.85rem; padding: 10px 2px; }
+.dsh-how-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+.dsh-how { flex: 1 1 220px; }
+.dsh-how-h { font-size: 0.78rem; font-weight: 800; color: var(--text-dim); margin-bottom: 2px; }
+.dsh-how-h small { font-weight: 500; }
+.dsh-vbars { display: flex; align-items: flex-end; gap: 8px; height: 190px; padding-top: 6px; }
+.dsh-vcol { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; height: 100%; }
+.dsh-vcol b { font-size: 0.9rem; }
+.dsh-vcol small { font-size: 0.64rem; color: var(--text-dim); text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dsh-vtrack { flex: 1; width: 100%; display: flex; align-items: flex-end; background: #eef2ea; border-radius: 8px; overflow: hidden; }
+.dsh-vtrack i { display: block; width: 100%; border-radius: 8px 8px 0 0; }
+.dsh-pie-wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.dsh-pie { width: 140px; height: 140px; flex: none; }
+.dsh-pie-legend { flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 4px; font-size: 0.8rem; }
+.dsh-pie-legend div { display: flex; align-items: center; gap: 6px; }
+.dsh-pie-legend i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.dsh-pie-legend span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dsh-pie-legend small { color: var(--text-dim); }
+.dsh-bar-sub { color: var(--text-dim); font-size: 0.7rem; }
 .dsh-kpi { padding: 9px 12px 7px; border-radius: 14px; }
 .dsh-kpi-ico { width: 24px; height: 24px; border-radius: 8px; }
 .dsh-kpi-ico svg { width: 14px; height: 14px; }
@@ -1513,12 +1557,19 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rem-sug-btn { border: 1px solid var(--border-color); background: var(--info-soft); color: var(--info); border-radius: 999px; padding: 2px 9px; margin: 2px 4px 2px 0; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
 .grace-badge { display: inline-block; background: var(--info-soft); color: var(--info); border: 1px solid #bcd7ef; border-radius: 999px; padding: 0 7px; font-size: 0.68rem; font-weight: 800; margin-left: 4px; cursor: help; }
 .case-chip { position: relative; }
+.pts4 { display: inline-flex; align-items: center; gap: 3px; font-size: 0.74rem; font-weight: 700; white-space: nowrap; }
+.pts4 i { font-style: normal; color: var(--text-dim); font-weight: 600; padding: 1px 5px; border-radius: 999px; border: 1px solid transparent; }
+.pts4 i.on { border-color: currentColor; background: #fff; }
+.pts4 i.b { color: #05603a; } .pts4 i.o { color: #166534; } .pts4 i.a { color: #b45309; } .pts4 i.at { color: #b42318; }
+.pts4 i.b.on { background: #e7f6ee; } .pts4 i.o.on { background: #e7f6ee; } .pts4 i.a.on { background: #fff4e5; } .pts4 i.at.on { background: #fdeceb; }
 .rd { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid; }
 .rd.ok { color: #05603a; background: #e7f6ee; border-color: #a6e0c3; }
 .rd.bad { color: #b42318; background: #fdeceb; border-color: #f1b8b3; }
 .rd-right { margin-left: auto; }
 .imp-line-head { position: relative; }
-.imp-rd { position: absolute; right: 10px; top: 10px; }
+.imp-cnt { display: inline-block; font-size: 0.78rem; color: var(--text-dim); margin-right: 8px; white-space: nowrap; }
+.imp-cnt b { color: var(--text-main); }
+.imp-icons { align-items: center; }
 .task-band { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: -4px 0 10px; font-size: 0.85rem; color: var(--text-dim); }
 .task-band b { color: var(--text-main); }
 .tb-pts { color: #05603a; font-weight: 700; }
@@ -2795,7 +2846,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R39";
+const APP_VERSION = "R40";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2884,17 +2935,21 @@ let dashFreshNext = false;
 function dashStartPrefetch() {
   const r = dashRangeDates(dashRange);
   dashFrom = r[0]; dashTo = r[1];
-  dashPrefetch = { key: dashCacheKeyFor(), p: apiCall('dashboard', { from: dashFrom, to: dashTo }).catch(() => ({ ok: false })) };
+  dashPrefetch = { key: dashCacheKeyFor(), p: apiCall('dashboard', { from: dashFrom, to: dashTo, person: dashPerson() }).catch(() => ({ ok: false })) };
 }
 
 function dashCacheKeyFor() {
-  return 'tk_dash_' + ((user && user.name) || (function () { try { return localStorage.getItem('tk_last_name') || ''; } catch (e) { return ''; } })()) + '_' + dashRange + '_' + dashFrom + '_' + dashTo;
+  return 'tk_dash_' + (dashPerson() || (user && user.name) || (function () { try { return localStorage.getItem('tk_last_name') || ''; } catch (e) { return ''; } })()) + '_' + dashRange + '_' + dashFrom + '_' + dashTo;
 }
 const DASH_COLORS = ['#0f8b8d', '#f2a541', '#e4572e', '#6c5ce7', '#2a9d8f', '#3a86ff', '#c44569', '#8ab17d'];
 
 function openDashboard() {
   if (!profile) return;
-  window.location.hash = '#/staff/' + encodeURIComponent(user ? user.name : profile.name) + '/' + encodeURIComponent(DASH_NAME);
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(DASH_NAME);
+}
+
+function dashPerson() {
+  return profile && user && profile.name !== user.name ? profile.name : '';
 }
 
 function dashYmd(d) {
@@ -2941,7 +2996,7 @@ async function loadDash(showNow) {
   try {
     const pf = dashPrefetch && dashPrefetch.key === key ? dashPrefetch.p : null;
     dashPrefetch = null;
-    const r = await (pf || apiCall('dashboard', { from: dashFrom, to: dashTo, fresh: !!dashFreshNext }));
+    const r = await (pf || apiCall('dashboard', { from: dashFrom, to: dashTo, fresh: !!dashFreshNext, person: dashPerson() }));
     dashFreshNext = false;
     dashLoading = false;
     if (r && r.ok && r.stale) { dashFreshNext = true; dashLoading = true; setTimeout(() => loadDash(false), 50); }
@@ -3095,11 +3150,14 @@ function dashIcon(k) {
 function dashLateBox(P) {
   const items = P.lateItems || [];
   const n = (P.lateOpen || 0), m = (P.soonOpen || 0);
-  return `<div class="dsh-card dsh-latebox"><div class="dsh-card-h"><h3>Late</h3><span class="dsh-late-counts"><b class="r">&#128308; ${n} late now</b><b class="a">&#128992; ${m} about to be late</b></span></div>
-    ${items.length ? `<div class="dsh-late-list">${items.slice(0, 6).map(x => `<div class="dsh-late-li ${x.late ? 'late' : 'soon'}"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><div class="dsh-late-main"><b>${escapeHtml(x.task)}</b><small>${escapeHtml([x.key, x.who].filter(Boolean).join(' · '))}</small></div><span class="${x.late ? 'late-badge' : 'left-badge soon'}">${x.late ? 'Late ' + escapeHtml(x.lateBy) : (x.leftMs === 0 ? 'Due now' : escapeHtml(x.left) + ' left')}</span></div>`).join('')}</div>` : '<div class="dsh-empty">&#10003; Nothing is late right now.</div>'}
+  const full = dashLateFull;
+  return `<section class="dsh-card dsh-latebox"><div class="dsh-card-h"><h3>Late</h3><span class="dsh-late-counts"><b class="r">&#128308; ${n} late now</b><b class="a">&#128992; ${m} about to be late</b>${!dashScreenMode ? `<span class="dsh-toggle"><button class="${full ? '' : 'on'}" onclick="dashLateFull=false; renderDash(false)">Short</button><button class="${full ? 'on' : ''}" onclick="dashLateFull=true; renderDash(false)">Full list</button></span>` : ''}</span></div>
+    ${items.length ? `<div class="dsh-late-list${full ? ' full' : ''}">${(full ? items : items.slice(0, 6)).map(x => `<div class="dsh-late-li ${x.late ? 'late' : 'soon'}"${!dashScreenMode ? ` onclick="dashOpenLate('${escapeHtml(P.id)}', '${escapeHtml(P.kind)}')"` : ''}><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><div class="dsh-late-main"><b>${escapeHtml(x.task)}</b><small>${escapeHtml([x.key, x.who].filter(Boolean).join(' · '))}</small></div>${x.rdays ? rdHtml(x.rdays) : ''}<span class="${x.late ? 'late-badge' : 'left-badge soon'}">${x.late ? 'Late ' + escapeHtml(x.lateBy || '') : (x.left ? escapeHtml(x.left) + ' left' : 'Due now')}</span></div>`).join('')}</div>` : '<div class="dsh-empty">&#10003; Nothing is late right now.</div>'}
     ${!dashScreenMode ? `<button class="dsh-more" onclick="dashOpenLate('${escapeHtml(P.id)}', '${escapeHtml(P.kind)}')">See the full Late list &rarr;</button>` : ''}
-  </div>`;
+  </section>`;
 }
+
+let dashLateFull = false;
 
 let lateWantProject = null;
 
@@ -3114,65 +3172,68 @@ function dashProjBody(P, sbs, rangeTxt) {
   const days = P.daily.map(x => x.d);
   const closedSeries = P.daily.map(x => x.closed);
   const lateSeries = P.daily.map(x => x.late);
+  const flow = `<div class="dsh-card"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green all closed &middot; red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: closedSeries }, { name: 'Late', color: '#e4572e', values: lateSeries }], 'Tasks closed every day')}</div>`;
   let html = '';
   if (P.kind === 'mahana' && P.mahana) {
     const M = P.mahana;
-    html += `<section class="dsh-kpis">
+    html += `<section class="dsh-kpis dsh-kpis-tight">
       ${dashKpi('inbox', '#0f8b8d', M.refs, 'Cases arrived', 'new Ref Nos', dashSpark(M.daily.map(x => x.refs), '#0f8b8d'))}
       ${dashKpi('building', '#6c5ce7', M.corp, 'Corporate', dashPct(M.corp, M.refs) + '% of cases', '')}
       ${dashKpi('smile', '#f2a541', M.satisfied, 'Satisfied', dashPct(M.satisfied, M.refs) + '% of cases', '')}
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
       ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
     </section>
-    <section class="dsh-grid2">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases per day')}</div>
-      ${dashLateBox(P)}
+    <section class="dsh-grid2 dsh-even">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases arriving and satisfied')}</div>
+      ${flow}
     </section>`;
   } else if (P.kind === 'import' && P.imports) {
     const I = P.imports;
-    html += `<section class="dsh-kpis">
+    html += `<section class="dsh-kpis dsh-kpis-tight">
       ${dashKpi('box', '#0f8b8d', I.open, 'Open consignments', 'not received yet', '')}
       ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', 'in Imports', '')}
       ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting ? dashPct(P.lateOpen, P.waiting) + '% of waiting' : 'nothing waiting', '')}
       ${dashKpi('chat', '#f2a541', I.messages, 'Messages', 'in these dates', '')}
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
     </section>
-    <section class="dsh-grid2">
+    <section class="dsh-grid2 dsh-even">
       <div class="dsh-card"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashBars(I.status.slice(0, 8).map(s => ({ name: s.name, n: s.n })), i => DASH_COLORS[i % DASH_COLORS.length], '', '')}</div>
-      ${dashLateBox(P)}
+      ${flow}
     </section>`;
   } else {
-    html += `<section class="dsh-kpis">
+    html += `<section class="dsh-kpis dsh-kpis-tight">
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
       ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', '', '')}
       ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', '', '')}
       ${dashKpi('star', '#f2a541', P.points, 'Points earned', 'whole team', '')}
     </section>
-    <section class="dsh-grid2">${dashLateBox(P)}<div></div></section>`;
+    <section class="dsh-grid2 dsh-even">${flow}<div></div></section>`;
   }
-  html += `<section class="dsh-card dsh-flow"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green all closed · red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: closedSeries }, { name: 'Late', color: '#e4572e', values: lateSeries }], 'Tasks closed per day')}</section>`;
+  html += `<section class="dsh-grid2 dsh-even">${dashHowBox(P, rangeTxt)}<div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>average time</span></div>${dashSlow(P.slow || [])}</div></section>`;
+  html += dashLateBox(P);
   const ranked = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
+  if (P.kind === 'mahana' && P.mahana) {
+    const M = P.mahana;
+    html += `<section class="dsh-grid3">
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashVBars(M.salesmen, '#0f8b8d')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashVBars(M.branches, '#6c5ce7') : '<div class="dsh-empty">No branch on the forms in these dates.</div>'}</div>
+      ${dashPodium(ranked)}
+    </section>`;
+  } else {
+    html += `<section class="dsh-grid2 dsh-even">${dashPodium(ranked)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
+  }
   html += `<section class="dsh-grid2 dsh-even">
     <div class="dsh-card"><div class="dsh-card-h"><h3>Points ranking</h3><span>${escapeHtml(rangeTxt)}</span></div>
-      ${ranked.length ? `<div class="dsh-rest">${ranked.slice(0, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i < 3 ? ['&#129351;', '&#129352;', '&#129353;'][i] : i + 1}</span>${dashAvatar(p.name, 24)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><small>${p.closed} closed</small><b class="${p.points < 0 ? 'neg' : ''}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : '<div class="dsh-empty">No points yet in these dates.</div>'}
+      ${ranked.length ? `<div class="dsh-rest">${ranked.slice(0, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i < 3 ? ['&#129351;', '&#129352;', '&#129353;'][i] : i + 1}</span>${dashAvatar(p.name, 24)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><small>${p.closed} closed</small><b class="dsh-pts ${p.points < 0 ? 'neg' : 'pos'}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : '<div class="dsh-empty">No points in these dates.</div>'}
     </div>
-    <div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>
+    ${P.kind === 'mahana' ? `<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>` : `<div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${P.imports ? dashBars(P.imports.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '') : ''}</div>`}
   </section>`;
   if (P.kind === 'mahana' && P.mahana) {
     const M = P.mahana;
     const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
-    html += `<section class="dsh-grid3">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashBars(M.branches, 'linear-gradient(90deg,#6c5ce7,#a29bfe)', '', '') : '<div class="dsh-empty">No branch on the forms in these dates.</div>'}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashBars(M.salesmen, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '')}</div>
-    </section>
-    <section class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashBars(M.riders, i => DASH_COLORS[i % DASH_COLORS.length], '&#128757;', 'visits')}</section>`;
-  }
-  if (P.kind === 'import' && P.imports) {
-    const I = P.imports;
     html += `<section class="dsh-grid2 dsh-even">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Busiest suppliers</h3><span>open consignments</span></div>${dashBars(I.suppliers, 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', '')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${dashBars(I.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${(sat || []).length ? dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '') : '<div class="dsh-empty">Nothing yet in these dates.</div>'}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashPie((M.riders || []).slice(0, 6), M.visits)}</div>
     </section>`;
   }
   html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
@@ -3188,6 +3249,84 @@ function dashProjBody(P, sbs, rangeTxt) {
     </div>`; }).join('') || '<div class="dsh-empty">No one has worked in these dates yet.</div>'}
   </div></section>`;
   return html;
+}
+
+let dashAssignWho = '';
+let dashRemShow = true;
+let dashRemBy = '';
+
+function dashAssignTabs(list) {
+  const people = uniqueSorted([].concat.apply([], list.map(a => String(a.people || '').split(',').map(x => x.trim()).filter(Boolean))));
+  if (people.length < 2) return '';
+  if (dashAssignWho && people.indexOf(dashAssignWho) === -1) dashAssignWho = '';
+  return `<div class="dsh-tabs"><button class="${dashAssignWho ? '' : 'on'}" onclick="dashAssignWho=''; renderDash(false)">Everyone</button>${people.map(n => `<button class="${dashAssignWho === n ? 'on' : ''}" onclick="dashAssignWho='${escapeHtml(n).replace(/'/g, "\\'")}'; renderDash(false)">${escapeHtml(n)}</button>`).join('')}</div>`;
+}
+
+function dashRemHtml(items) {
+  if (!items.length) return '<div class="dsh-empty">Nothing coming up.</div>';
+  if (!dashRemBy) return `<div class="dsh-list dsh-scroll">${items.map(dashRemLi).join('')}</div>`;
+  const groups = {};
+  items.forEach(x => {
+    const keys = dashRemBy === 'group' ? [x.group || 'No group'] : ((x.tags || []).length ? x.tags : ['No tag']);
+    keys.forEach(k => { (groups[k] = groups[k] || []).push(x); });
+  });
+  return `<div class="dsh-scroll">${Object.keys(groups).sort().map(k => `<div class="dsh-remg"><div class="dsh-remg-h">${escapeHtml(k)} <span>${groups[k].length}</span></div><div class="dsh-list">${groups[k].map(dashRemLi).join('')}</div></div>`).join('')}</div>`;
+}
+
+function dashRemLi(x) {
+  const late = x.dueMs < Date.now();
+  return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || '')}</small></div></div>`;
+}
+
+function dashPodium(ranked) {
+  const top = (ranked || []).filter(p => p.points > 0).slice(0, 3);
+  return `<div class="dsh-card dsh-podium"><div class="dsh-card-h"><h3>Top performers</h3><span>points</span></div>
+    ${top.length ? top.map((p, i) => `<div class="dsh-pod-row"><span class="dsh-pod-m">${['&#129351;', '&#129352;', '&#129353;'][i]}</span>${dashAvatar(p.name, 34)}<b>${escapeHtml(p.name)}</b><span class="dsh-pod-p">+${p.points}</span></div>`).join('') : '<div class="dsh-pod-none">No points in these dates yet.</div>'}
+  </div>`;
+}
+
+function dashHowBox(P, rangeTxt) {
+  const t = P.today || null;
+  const box = (title, sub, x) => {
+    const parts = [
+      { name: 'On time', n: Number(x.onTime) || 0, color: '#2a9d8f' },
+      { name: 'With extra time', n: Number(x.grace) || 0, color: '#3a86ff' },
+      { name: 'Late', n: Number(x.late) || 0, color: '#e4572e' }
+    ];
+    return `<div class="dsh-how"><div class="dsh-how-h">${escapeHtml(title)} <small>${escapeHtml(sub)}</small></div>${dashDonut(parts, String(Number(x.closed) || 0), 'closed')}</div>`;
+  };
+  return `<div class="dsh-card"><div class="dsh-card-h"><h3>How tasks closed</h3><span>on time &middot; extra time &middot; late</span></div>
+    <div class="dsh-how-wrap">${box('These dates', rangeTxt, P)}${P.todayIn && t ? box('Today', '', t) : ''}</div></div>`;
+}
+
+function dashSlow(list) {
+  if (!list || !list.length) return '<div class="dsh-empty">Not enough closed tasks in these dates.</div>';
+  const max = Math.max(1, ...list.map(x => x.ms));
+  return `<div class="dsh-bars">${list.map((x, i) => `<div class="dsh-bar-row"><span class="dsh-rank">${i + 1}</span><div class="dsh-bar-main"><div class="dsh-bar-top"><span class="dsh-bar-name">${escapeHtml(x.name)}</span><b>${escapeHtml(x.avg)}</b></div><div class="dsh-track"><i style="width:${Math.round(x.ms * 100 / max)}%;background:linear-gradient(90deg,#e4572e,#f2a541)"></i></div><small class="dsh-bar-sub">${x.n} closed${x.late ? ' · ' + x.late + ' late' : ''}</small></div></div>`).join('')}</div>`;
+}
+
+function dashVBars(list, color) {
+  if (!list || !list.length) return '<div class="dsh-empty">Nothing yet in these dates.</div>';
+  const top = list.slice(0, 5);
+  const max = Math.max(1, ...top.map(x => x.n));
+  return `<div class="dsh-vbars">${top.map((x, i) => `<div class="dsh-vcol" title="${escapeHtml(x.name + ': ' + x.n)}">
+    <b>${x.n}</b><div class="dsh-vtrack"><i style="height:${Math.max(6, Math.round(x.n * 100 / max))}%;background:linear-gradient(180deg,${color},${color}66)"></i></div><small>${escapeHtml(String(x.name).split(/[+,]/)[0].trim())}</small></div>`).join('')}</div>`;
+}
+
+function dashPie(list, total) {
+  if (!list || !list.length) return '<div class="dsh-empty">No visits in these dates.</div>';
+  const sum = list.reduce((a, x) => a + x.n, 0) || 1;
+  const R = 52, CX = 60, CY = 60;
+  let a0 = -Math.PI / 2;
+  const seg = list.map((x, i) => {
+    const a1 = a0 + (x.n / sum) * Math.PI * 2;
+    const big = a1 - a0 > Math.PI ? 1 : 0;
+    const p = `M${CX} ${CY} L${(CX + R * Math.cos(a0)).toFixed(1)} ${(CY + R * Math.sin(a0)).toFixed(1)} A${R} ${R} 0 ${big} 1 ${(CX + R * Math.cos(a1)).toFixed(1)} ${(CY + R * Math.sin(a1)).toFixed(1)} Z`;
+    a0 = a1;
+    return `<path d="${p}" fill="${DASH_COLORS[i % DASH_COLORS.length]}" class="dsh-seg"><title>${escapeHtml(x.name + ': ' + x.n)}</title></path>`;
+  }).join('');
+  return `<div class="dsh-pie-wrap"><svg viewBox="0 0 120 120" class="dsh-pie">${seg}</svg>
+    <div class="dsh-pie-legend">${list.map((x, i) => `<div><i style="background:${DASH_COLORS[i % DASH_COLORS.length]}"></i><span>${escapeHtml(x.name)}</span><b>${x.n}</b><small>${Math.round(x.n * 100 / sum)}%</small></div>`).join('')}</div></div>`;
 }
 
 function dashKpi(icon, color, value, label, sub, spark) {
@@ -3222,9 +3361,6 @@ function renderDash(animate, stale) {
   const rangeTxt = D.from === D.to ? dashFmtDay(D.from) : dashFmtDay(D.from) + ' – ' + dashFmtDay(D.to);
   const sumOn = shown.reduce((a, x) => a + x.onTime, 0), sumLate = shown.reduce((a, x) => a + x.late, 0);
   const onPct = dashPct(sumOn, sumOn + sumLate);
-  const ptsBy = {};
-  shown.forEach(x => x.people.forEach(p => { ptsBy[p.name] = (ptsBy[p.name] || 0) + (Number(p.points) || 0); }));
-  const top3 = Object.keys(ptsBy).filter(n => ptsBy[n] > 0).sort((a, b) => ptsBy[b] - ptsBy[a]).slice(0, 3);
   let html = `<section class="dsh-hero dsh-${sbs ? 'both' : P.kind}">
     <div class="dsh-hero-bg"><span></span><span></span><span></span></div>
     <div class="dsh-hero-l">
@@ -3233,7 +3369,6 @@ function renderDash(animate, stale) {
       <div class="dsh-sub">${escapeHtml(rangeTxt)} · <span id="dsh-upd"></span></div>
       ${projs.length > 1 ? `<div class="dsh-projs">${projs.map(p => `<button class="${p.id === dashProjId ? 'on' : ''}" onclick="dashProjId='${escapeHtml(p.id)}'; renderDash(true)">${p.kind === 'import' ? '&#128230; ' : p.kind === 'mahana' ? '&#127968; ' : ''}${escapeHtml(p.name)}</button>`).join('')}${canSbs ? `<button class="${sbs ? 'on' : ''}" onclick="dashProjId='__sbs'; renderDash(true)">&#9707; Side by side</button>` : ''}</div>` : ''}
     </div>
-    <div class="dsh-top3">${top3.length ? `<div class="dsh-top3-h">Top performers</div>${top3.map((n, i) => `<div class="dsh-top3-row"><span class="dsh-top3-m">${['&#129351;', '&#129352;', '&#129353;'][i]}</span>${dashAvatar(n, 28)}<b>${escapeHtml(n)}</b><span class="dsh-top3-p">+${ptsBy[n]}</span></div>`).join('')}` : '<div class="dsh-top3-h">Top performers</div><div class="dsh-top3-none">No points yet in these dates</div>'}</div>
     <div class="dsh-hero-r">
       <div class="dsh-ranges">${ranges.map(r => `<button class="${dashRange === r[0] ? 'on' : ''}" onclick="${r[0] === 'custom' ? "document.getElementById('dash-custom').classList.toggle('hidden')" : "dashSetRange('" + r[0] + "')"}">${r[1]}</button>`).join('')}</div>
       <div id="dash-custom" class="dsh-custom${dashRange === 'custom' ? '' : ' hidden'}"><input type="date" id="dash-from" value="${escapeHtml(dashFrom)}"><span>to</span><input type="date" id="dash-to" value="${escapeHtml(dashTo)}"><button onclick="dashCustom()">Show</button></div>
@@ -3242,14 +3377,16 @@ function renderDash(animate, stale) {
   </section>`;
   if (sbs) html += `<div class="dsh-sbs">${shown.map(x => `<div class="dsh-col"><div class="dsh-col-h dsh-col-${x.kind}">${x.kind === 'import' ? '&#128230;' : '&#127968;'} ${escapeHtml(x.name)}</div>${dashProjBody(x, true, rangeTxt)}</div>`).join('')}</div>`;
   else html += dashProjBody(P, false, rangeTxt);
-  const remItems = !dashScreenMode && remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 6) : [];
+  const remItems = !dashScreenMode && remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 20) : [];
   const assigned = [].concat.apply([], shown.map(x => x.assigned || []));
   html += `<section class="dsh-grid2 dsh-even">
     <div class="dsh-card"><div class="dsh-card-h"><h3>Assigned tasks open</h3><span>${assigned.length}</span></div>
-      ${assigned.length ? `<div class="dsh-list">${assigned.slice(0, 8).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-chip late">late ${escapeHtml(a.lateBy)}</span>` : '<span class="dsh-chip ok">on track</span>'}</div>`).join('')}</div>` : '<div class="dsh-empty">No assigned task is open. &#127881;</div>'}
+      ${dashAssignTabs(assigned)}
+      ${(() => { const list = dashAssignWho ? assigned.filter(a => String(a.people || '').split(',').map(x => x.trim()).indexOf(dashAssignWho) !== -1) : assigned;
+        return list.length ? `<div class="dsh-list dsh-scroll">${list.slice(0, 20).map(a => `<div class="dsh-li${a.late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(a.title)}</b><small>${escapeHtml(a.people || '')} · ${escapeHtml(a.due || '')}</small></div>${a.late ? `<span class="dsh-li-tag">late ${escapeHtml(a.lateBy || '')}</span>` : ''}</div>`).join('')}</div>` : '<div class="dsh-empty">Nothing assigned right now.</div>'; })()}
     </div>
-    <div class="dsh-card"><div class="dsh-card-h"><h3>My reminders</h3><span>coming up</span></div>
-      ${remItems.length ? `<div class="dsh-list">${remItems.map(x => { const late = x.dueMs < Date.now(); return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || new Date(x.dueMs).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }))}</small></div></div>`; }).join('')}</div>` : `<div class="dsh-empty">No reminders coming up. <a href="javascript:void(0)" onclick="remPanelToggle(true)">Add one</a></div>`}
+    <div class="dsh-card"><div class="dsh-card-h"><h3>My reminders</h3><span class="dsh-toggle"><button class="${dashRemShow ? 'on' : ''}" onclick="dashRemShow=!dashRemShow; renderDash(false)">${dashRemShow ? 'Hide' : 'Show'}</button><button class="${dashRemBy === 'group' ? 'on' : ''}" onclick="dashRemBy = dashRemBy === 'group' ? '' : 'group'; renderDash(false)">Group</button><button class="${dashRemBy === 'tag' ? 'on' : ''}" onclick="dashRemBy = dashRemBy === 'tag' ? '' : 'tag'; renderDash(false)">Tags</button></span></div>
+      ${!dashRemShow ? '<div class="dsh-empty">Hidden. Press Show.</div>' : dashRemHtml(remItems)}
     </div>
   </section>
   <div class="dsh-foot">Live · refreshes every 2 minutes · Taskando</div>`;
@@ -3506,6 +3643,18 @@ function impRefs(g) {
   return Object.keys(P).filter(k => g.keys.indexOf(k) !== -1 && ((P[k].open || []).length || (P[k].done || []).length)).map(k => P[k].name).filter(Boolean);
 }
 
+function impCount(kind, n, title) {
+  if (!n) return '';
+  const ico = kind === 'box' ? '&#128230;' : '&#9203;';
+  return `<span class="imp-cnt" title="${escapeHtml(title)}">${ico} <b>${n}</b></span>`;
+}
+
+function pts4Html(p, label) {
+  if (!p) return '';
+  const cell = (k, v) => `<i class="${k}${p.band === (k === 'at' ? 'late' : k === 'b' ? 'before' : k === 'o' ? 'on' : 'after') ? ' on' : ''}" title="${k === 'b' ? 'Before time' : k === 'o' ? 'On time' : k === 'a' ? 'Late (after)' : 'Late (after that)'}">${v > 0 ? '+' : ''}${v}</i>`;
+  return `<span class="pts4" title="Points: Before / On time / After / After that — the circled one is what you get right now">${label ? '<small>Points</small> ' : ''}${cell('b', p.b)}${cell('o', p.o)}${cell('a', p.a)}${cell('at', p.at)}</span>`;
+}
+
 function rdHtml(rd, cls) {
   if (!rd) return '';
   const bad = rd.over;
@@ -3581,7 +3730,12 @@ function impBuild(showAll) {
   const groups = {}, order = [];
   const into = impMergeMap();
   const fz = v => { v = String(v === undefined || v === null ? '' : v).trim(); return v && v !== '0' ? v : ''; };
-  d.rows.forEach(r => { const k0 = fz(r[C.group]) || fz(r[C.main]) || fz(r[C.each]) || '(no name)'; const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const pick = r => {
+    const cands = [fz(r[C.group]), fz(r[C.main]), fz(r[C.each])].filter(Boolean);
+    for (const c of cands) { const t = into(c); if (impKey(t) !== impKey(c)) return t; }
+    return cands[0] || '(no name)';
+  };
+  d.rows.forEach(r => { const k0 = pick(r); const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
   const noteText = {};
   (d.notes || []).forEach(n => { noteText[n.key] = (noteText[n.key] || '') + ' ' + String(n.text || '').toLowerCase(); });
   const all = order.map(k => {
@@ -3659,7 +3813,7 @@ function renderImports() {
       const msgs = list.reduce((a, g) => a + g.notes.length, 0);
       const waiting = list.filter(g => g.prog.open.length).length;
       const mine = list.some(g => impMine(g));
-      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span>${mine ? '<span class="imp-dot" title="Has a task waiting on you"></span>' : ''}<b>${escapeHtml(sname)}</b> <span class="report-meta">${list.length} consignment${list.length === 1 ? '' : 's'}${waiting ? ' · ' + waiting + ' in tasks' : ''}</span>${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</div>
+      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span>${mine ? '<span class="imp-dot" title="Has a task waiting on you"></span>' : ''}<b>${escapeHtml(sname)}</b> ${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${(() => { const r = list.map(gRdays).filter(Boolean).sort((a, b) => (b.over - a.over) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</div>
         ${open ? `<div class="imp-sup-body">${list.map(g => impLineHtml(g, B)).join('')}</div>` : ''}</div>`;
     }).join('') || '<div class="report-meta">Nothing matches.</div>';
   }
@@ -3768,12 +3922,12 @@ function impLineHtml(g, B) {
     <div class="imp-line-head" onclick="impSelect(${i})">
       ${impMine(g) ? '<span class="imp-dot" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
-      ${impTkPill(g)}${gRdays(g) ? '<span class="imp-rd">' + rdHtml(gRdays(g)) + '</span>' : ''}
+      ${impTkPill(g)}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
-      <span class="imp-icons">${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      <span class="imp-icons">${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
-      <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
+      <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${escapeHtml(numSums.join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
     </div>
@@ -3940,9 +4094,9 @@ function impTileHtml(x, g, kind, click) {
   const cls = impLateCls(x);
   const badge = cls === 'late' ? `<span class="late-badge">${escapeHtml(impLateTxt(x))}</span>` : `<span class="left-badge${cls === 'soon' ? ' soon' : ''}">${escapeHtml(impLateTxt(x) || 'Waiting')}</span>`;
   const sub = [x.took ? 'took ' + x.took.replace(' so far', '') + (x.allowed ? ' of ' + x.allowed : '') : '', 'since ' + shortWhenImp(x.arrived), x.who || ''].filter(Boolean).join(' · ');
-  const inner = `<b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}<small>${escapeHtml(sub)}</small>`;
+  const inner = `<b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}${pts4Html(x.pts)}<small>${escapeHtml(sub)}</small>`;
   if (click) return `<button class="case-chip imp-tile${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" title="${escapeHtml(sub)}" onclick="${click}">${inner}</button>`;
-  return `<a class="case-chip imp-tile imp-open-task${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab"><b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}<span class="imp-go">&#8599;</span><small>${escapeHtml(sub)}</small></a>`;
+  return `<a class="case-chip imp-tile imp-open-task${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab"><b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}${pts4Html(x.pts)}<span class="imp-go">&#8599;</span><small>${escapeHtml(sub)}</small></a>`;
 }
 
 function impLateCls(o) {
@@ -4878,7 +5032,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t) || pendingItems.some(p => p.taskName === t.name));
-  return list.map(t => t.name).concat([MY_ASSIGNED, BOARD_NAME]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED, BOARD_NAME]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : (user && user.level <= 1 ? [DASH_NAME] : [])).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -5076,7 +5230,7 @@ function renderProjectNav() {
         <strong>${escapeHtml(n)}</strong>
         <small>${n === 'Reports' ? 'Presentation, employee and cheque reports' : 'Give someone a task'}</small>
       </a>`).join('');
-    tiles.innerHTML = (profile && user && profile.name === user.name && canDash() ? `<a class="dashboard-item project-tile dash-tile" href="javascript:void(0)" onclick="openDashboard()"><strong>&#10024; Dashboard</strong><small>Live numbers for your project</small></a>` : '') + projs.map(p => {
+    tiles.innerHTML = (profile && user && (profile.name === user.name ? canDash() : user.level <= 1) ? `<a class="dashboard-item project-tile dash-tile" href="javascript:void(0)" onclick="openDashboard()"><strong>&#10024; Dashboard</strong><small>Live numbers for your project</small></a>` : '') + projs.map(p => {
       const n = pendingCountForProject(p.id);
       return `<a class="dashboard-item project-tile" href="javascript:void(0)" onclick="setProject('${escapeHtml(p.id)}')">
         <strong>${escapeHtml(p.name)}</strong>
@@ -5098,7 +5252,7 @@ function renderProjectNav() {
   const chPid = inImp ? importPid() : currentProject;
   const ch = inImp ? projectChains(chPid) : (isPanelProject(currentProject) ? [] : projectChains(currentProject));
   const impStab = chPid === importPid() && canSeeImports(profile.name) && projs.some(p => p.id === importPid()) ? `<button class="stab stab-right${inImp ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '';
-  nav.innerHTML = `<div class="ftabs">${(profile && user && profile.name === user.name && canDash() ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
+  nav.innerHTML = `<div class="ftabs">${(profile && user && (profile.name === user.name ? canDash() : user.level <= 1) ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
     ${ch.length || impStab ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       const cid = escapeHtml(c.id).replace(/'/g, "\\'");
@@ -6559,7 +6713,7 @@ function renderPendingStrip() {
 
   list.innerHTML = items.map((p, i) => `
     <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
-      ${chipTools(p)}${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
+      ${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${pts4Html(p.pts)}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
 
@@ -6617,10 +6771,9 @@ let caseInfoItem = null;
 
 function chipTools(p) {
   const id = escapeHtml(p.pendingId || '');
-  const mine = user && profile && profile.name === user.name && (!p.assignedTo || p.assignedTo === user.name);
   let h = '';
-  if (mine && id) h += `<span class="chip-rem" title="Remind me about this one" onclick="event.stopPropagation(); taskRemOpen('${id}', this)">&#128276;</span>`;
-  if (user && user.level === 0 && !p.recurring && !p.assigned && (p.refNo || p.caseNo) && id) h += `<span class="chip-ed" title="Edit Ref No / Case No" onclick="event.stopPropagation(); keyEditChip('${id}', this)">&#9998;</span>`;
+  if (id) h += `<button class="btn btn-small" onclick="taskRemOpen('${id}', this)">&#128276; Remind me</button>`;
+  if (user && user.level === 0 && !p.recurring && !p.assigned && (p.refNo || p.caseNo) && id) h += `<button class="btn btn-small" onclick="keyEditChip('${id}', this)">&#9998; Edit Ref / Case No</button>`;
   return h;
 }
 
@@ -6630,12 +6783,14 @@ function caseTimeHtml(p) {
   if (p.grace && p.grace.oldAllowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.grace.newAllowed) + ' <small>(was ' + escapeHtml(p.grace.oldAllowed) + ', more time approved)</small></span>');
   else if (p.allowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.allowed) + '</span>');
   if (p.due) bits.push('<span><b>Due:</b> ' + escapeHtml(p.due) + '</span>');
-  if (p.taken) bits.push('<span><b>Took:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + (p.allowed ? ' of ' + escapeHtml(p.allowed) : '') + '</span>');
+  const durAllow = p.allowed && !/^by |,/.test(String(p.allowed)) ? p.allowed : '';
+  if (p.taken) bits.push('<span><b>Took:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + (durAllow ? ' of ' + escapeHtml(durAllow) : '') + '</span>');
   if (p.late) bits.push('<span class="bad">Late by ' + escapeHtml(p.lateBy || '') + '</span>');
   else if (p.left) bits.push('<span class="good">' + (p.leftMs === 0 ? 'Due now' : escapeHtml(p.left) + ' left') + '</span>');
   else if (!p.allowed && !p.due) bits.push('<span>No time limit set on this task</span>');
   if (p.rdays) bits.push('<span>' + rdHtml(p.rdays) + '</span>');
-  if (p.onPoints) bits.push('<span class="tb-pts">On time: +' + p.onPoints + ' points</span>');
+  if (p.pts) bits.push('<span>' + pts4Html(p.pts, true) + '</span>');
+  else if (p.onPoints) bits.push('<span class="tb-pts">On time: +' + p.onPoints + ' points</span>');
   return bits.length ? '<div class="ci-time">' + bits.join('') + '</div>' : '';
 }
 
@@ -6763,6 +6918,7 @@ function showCaseInfo(p) {
     `<div class="case-info-actions">
       ${canStar ? `<button class="btn btn-small" onclick="toggleImportant('${escapeHtml(p.pendingId || '')}')">${p.important ? '&#9733; Remove important' : '&#9734; Mark important'}</button>` : ''}
       <button class="btn btn-small" onclick="openGraceForm()">Ask for more time</button>
+      ${chipTools(p)}
       <span id="grace-form" class="grace-form hidden">
         <select id="grace-hours" onchange="graceKindChanged()">${['1', '2', '3', '4', '6', 'd1', 'd2', 'd3', 'd5'].map(h => `<option value="${h}">${h[0] === 'd' ? h.slice(1) + ' working day' + (h === 'd1' ? '' : 's') : h + ' hour' + (h === '1' ? '' : 's')}</option>`).join('')}<option value="cal">Pick a date…</option></select>
         <input type="date" id="grace-date" class="hidden" min="${addDaysYmd(todayYmd(), 1)}" onchange="graceKindChanged()"><small id="grace-date-n" class="report-meta"></small>
@@ -10175,7 +10331,7 @@ function renderAssignForm() {
   document.getElementById('assign-form').innerHTML = `
     <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
     <label>Title</label>
-    <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asTitleTyped(this.value)" onchange="asApplySlash(true)">
+    <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asTitleTyped(this.value)" onchange="asApplySlash(true)" onkeydown="if (event.key === 'Enter') { event.preventDefault(); asApplySlash(true); saveAssign(); }">
     <div id="as-parse" class="as-parse"></div>
     <label>Notes (optional)</label>
     <textarea id="as-notes" placeholder="Details, links, what done looks like" oninput="asSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
