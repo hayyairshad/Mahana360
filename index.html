@@ -1198,6 +1198,21 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .left-badge, .ok-badge { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; vertical-align: middle; background: #d3f0dc; color: #1e6b2c; }
 .left-badge.soon { background: #ffd27a; color: #5c3a00; }
 .ok-badge.st-early { background: #dbe7ff; color: #1d4ed8; }
+.ph-card { border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; background: var(--panel-color, #fff); }
+.ph-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ph-head input[type=text] { width: 220px; margin: 0; font-weight: 700; }
+.ph-head input[type=number] { margin: 0 0 0 4px; }
+.ph-tasks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.ph-task { display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px 3px 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-2, #fafafa); font-size: 0.82rem; }
+.ph-task select { width: auto; margin: 0; padding: 2px 4px; font-size: 0.74rem; }
+.rola-row { cursor: pointer; }
+.key-edit { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--surface-2, #fafafa); }
+.key-edit input { width: 160px; margin: 0 0 0 4px; }
+.key-edit .report-meta { flex-basis: 100%; }
+.imp-purch { width: 84px; margin: 0; padding: 3px 6px; text-align: right; }
+.imp-purch-h { background: #fff4dc !important; color: #6b4500; }
+.imp-bal.neg b { color: #b42318; }
+.imp-bal.zero b { color: #1e6b2c; }
 .late-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 4px 0 10px; }
 .late-bar input[type=date] { width: auto; margin: 0 0 0 4px; }
 .late-head { margin: 12px 0 6px; font-weight: 800; font-size: 0.95rem; }
@@ -1423,6 +1438,13 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rem-item { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; background: var(--surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; margin-bottom: 6px; }
 .rem-item.late { border-left: 4px solid var(--danger); }
 .rem-item.done .rem-title { text-decoration: line-through; color: var(--text-dim); }
+.rem-item.done { opacity: 0.75; }
+.rem-item { position: relative; }
+.rem-main { order: 1; }
+.rem-more { order: 3; }
+.rem-del { order: 2; margin-left: auto; border: 1px solid transparent; background: none; cursor: pointer; font-size: 0.9rem; padding: 2px 6px; border-radius: 8px; color: var(--text-dim); }
+.rem-del:hover { border-color: var(--border-color); }
+.rem-del.arm { background: #fdecea; border-color: #e48a80; color: #b42318; font-weight: 700; font-size: 0.75rem; }
 .rem-item.as { background: var(--info-soft); }
 .rem-check { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-strong); background: #fff; color: var(--ok); font-weight: 900; cursor: pointer; padding: 0; line-height: 20px; text-align: center; }
 .rem-check.as { border: none; background: transparent; color: var(--info); cursor: default; }
@@ -2047,7 +2069,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div class="report-bar">
 <button class="btn btn-small" id="rem-view-list" onclick="remView='list'; renderReminders()">List</button>
 <button class="btn btn-small" id="rem-view-cal" onclick="remView='cal'; renderReminders()">Calendar</button>
-<select id="rem-show" class="report-search" style="width:auto" onchange="renderReminders()"><option value="open">To do</option><option value="all">Everything</option><option value="done">Done</option></select>
+<select id="rem-show" class="report-search" style="width:auto" onchange="renderReminders()"><option value="open">To do + done</option><option value="todo">To do only</option><option value="done">Done only</option></select>
 <select id="rem-group" class="report-search" style="width:auto" onchange="renderReminders()"></select>
 <select id="rem-tag" class="report-search" style="width:auto" onchange="renderReminders()"></select>
 <input type="text" id="rem-q" class="report-search" placeholder="Search reminders" oninput="renderReminders()">
@@ -2080,6 +2102,25 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <p class="report-meta">Jawad decides everything here. Tick who can see each thing. <b>Everyone</b> gives it to all staff, including people added later. Nobody else sees a tab unless it is ticked here. Changes apply when they refresh.</p>
 <div id="access-wrap" class="report-wrap" style="max-height:none;"><div class="report-meta">Loading...</div></div>
 <div class="report-bar" style="margin-top:10px;"><button class="btn btn-primary" id="access-save" onclick="saveAccess()">Save</button><span id="access-msg" class="report-meta"></span></div>
+</div>
+
+<div id="form-phases" class="hidden">
+<p class="report-meta">Rename a phase, move it up or down, move a task to another phase, and set the most days a case or consignment may stay in a phase. Empty days = no limit. Anything over the limit shows in Admin → Rola Days. Press Save when done.</p>
+<div class="report-bar"><select id="ph-proj" class="report-search" style="width:auto" onchange="phBuild(); renderPhases()"></select><button class="btn btn-small" onclick="phAdd()">+ New phase</button></div>
+<div id="ph-wrap"><div class="report-meta">Loading...</div></div>
+<div class="report-bar" style="margin-top:10px;"><button class="btn btn-primary" onclick="phSave()">Save</button><span id="ph-msg" class="report-meta"></span></div>
+</div>
+
+<div id="form-rola" class="hidden">
+<p class="report-meta">Everything still open that has stayed in one phase longer than the days set in Admin → Phases. Most overdue first. Only Jawad sees this.</p>
+<div class="report-bar"><input type="text" id="rola-q" class="report-search" placeholder="Filter by case, phase, task or person" oninput="renderRola()"><button class="btn btn-small" onclick="loadRola()">Refresh</button><span id="rola-meta" class="report-meta"></span></div>
+<div id="rola-wrap"><div class="report-meta">Loading...</div></div>
+</div>
+
+<div id="form-hpold" class="hidden">
+<p class="report-meta">The dashboard takes Salesman and Branch from the <b>Save Contacts</b> task. For old cases that do not have them there, load the HP Master Excel file once: the app reads its <b>Data</b> tab (Case No, Ref No, Branch, Salesman) and keeps a copy. The cheque report is not changed. You can load the file again any time; the new copy replaces the old one.</p>
+<div class="report-bar"><input type="file" id="hp-file" accept=".xlsx" style="width:auto"><button class="btn btn-primary" onclick="hpLoad()">Load from this file</button></div>
+<div id="hp-msg" class="report-meta"></div>
 </div>
 
 <div id="form-devices" class="hidden">
@@ -2411,6 +2452,12 @@ const ADMIN_TASKS = [
   { name: "Devices", phase: "Admin", panel: "devices", description: "Signed-in devices and dashboard screens",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Who sees what", phase: "Admin", panel: "access", description: "Choose who sees the dashboard, each report and Import Data",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Phases", phase: "Admin", panel: "phases", description: "Rename phases, change their order, move tasks and set the most days allowed",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Rola Days", phase: "Admin", panel: "rola", description: "Cases and consignments that stayed in a phase longer than allowed",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Old Salesman / Branch", phase: "Admin", panel: "hpold", description: "Load salesman and branch of old cases from the HP Master Excel file",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -2703,7 +2750,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R36";
+const APP_VERSION = "R37";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3729,9 +3776,9 @@ async function loadStmt() {
     if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     if (sel.options.length <= 1) sel.innerHTML = '<option value="">Pick a person</option>' + (r.people || []).map(n => `<option value="${escapeHtml(n)}"${n === person ? ' selected' : ''}>${escapeHtml(n)}</option>`).join('');
     if (!person) return;
-    document.getElementById('stmt-meta').innerText = r.lines.length + ' entries';
+    document.getElementById('stmt-meta').innerText = r.lines.length + ' entries' + (r.zero ? ' · ' + r.zero + ' got no points (reason shown on each line)' : '');
     box.innerHTML = `<div class="stmt-sum"><div><small>Points added</small><b class="pos">+${r.plus}</b></div><div><small>Points taken away</small><b class="neg">${r.minus}</b></div><div><small>Balance</small><b class="${r.balance < 0 ? 'neg' : 'pos'}">${r.balance > 0 ? '+' : ''}${r.balance}</b></div></div>
-      ${r.lines.length ? `<div class="table-wrap"><table class="report-table stmt-table"><thead><tr><th>Date</th><th>Project</th><th>Task</th><th>Case</th><th>Result</th><th class="num">Points</th><th class="num">Balance</th></tr></thead><tbody>${r.lines.slice().reverse().map(x => `<tr class="${x.points < 0 ? 'neg-row' : ''}"><td class="nowrap">${escapeHtml(shortWhen(x.when))}</td><td>${escapeHtml(x.project)}</td><td>${x.phase ? `<span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span> ` : ''}${escapeHtml(x.task)}${x.assigned ? ' <small class="report-meta">(assigned)</small>' : ''}</td><td>${escapeHtml(x.key)}</td><td>${escapeHtml(STMT_BAND[x.band] || x.band)}${x.lateBy ? ' · ' + escapeHtml(x.lateBy) : ''}${x.manual ? ' · manual' : ''}${x.grace ? ' · extra time ' + escapeHtml(x.grace) : ''}${x.edited ? ' · edited by ' + escapeHtml(x.edited) : ''}<div class="report-meta">took ${escapeHtml(x.took || '-')}${x.allowed ? ' of ' + escapeHtml(x.allowed) : ''}</div></td><td class="num"><b class="${x.points < 0 ? 'neg' : 'pos'}">${x.points > 0 ? '+' : ''}${x.points}</b></td><td class="num">${x.balance}</td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No points in these dates.</div>'}`;
+      ${r.lines.length ? `<div class="table-wrap"><table class="report-table stmt-table"><thead><tr><th>Date</th><th>Project</th><th>Task</th><th>Case</th><th>Result</th><th class="num">Points</th><th class="num">Balance</th></tr></thead><tbody>${r.lines.slice().reverse().map(x => `<tr class="${x.points < 0 ? 'neg-row' : ''}"><td class="nowrap">${escapeHtml(shortWhen(x.when))}</td><td>${escapeHtml(x.project)}</td><td>${x.phase ? `<span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span> ` : ''}${escapeHtml(x.task)}${x.assigned ? ' <small class="report-meta">(assigned)</small>' : ''}</td><td>${escapeHtml(x.key)}</td><td>${x.band ? escapeHtml(STMT_BAND[x.band] || x.band) : '<b class="neg">No points: ' + escapeHtml(x.why || 'not worked out') + '</b>'}${x.lateBy ? ' · ' + escapeHtml(x.lateBy) : ''}${x.manual ? ' · manual' : ''}${x.grace ? ' · extra time ' + escapeHtml(x.grace) : ''}${x.edited ? ' · edited by ' + escapeHtml(x.edited) : ''}<div class="report-meta">took ${escapeHtml(x.took || '-')}${x.allowed ? ' of ' + escapeHtml(x.allowed) : ''}</div></td><td class="num"><b class="${x.points < 0 ? 'neg' : 'pos'}">${x.points > 0 ? '+' : ''}${x.points}</b></td><td class="num">${x.balance}</td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No points in these dates.</div>'}`;
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
@@ -3857,9 +3904,9 @@ function impTrailHtml(g, i, B) {
     </div>
     ${lead && impMergeOpen === g.name ? `<div class="imp-del imp-merge imp-noprint"><span class="report-meta">Running tasks under</span><select id="imp-mfrom-${i}">${(fromNames.length ? fromNames : g.names).map(n => `<option>${escapeHtml(n)}</option>`).join('')}</select><span class="report-meta">become</span><input type="text" id="imp-mto-${i}" placeholder="New name · for a split: Name A, Name B"><button class="btn btn-small btn-primary" onclick="impBunch(${i}, this)">Apply</button><span class="report-meta">Same new name as another consignment = merge. Commas = split (history is copied).</span></div>` : ''}
     ${isAdm ? `<div id="imp-del-${i}" class="imp-del hidden imp-noprint"><span class="report-meta">This hides the consignment and deletes all its messages. Excel is not touched. Type <b>${escapeHtml(g.name)}</b> to confirm:</span><input type="text" id="imp-del-in-${i}" autocomplete="off"><button class="btn btn-small icon-cross" onclick="impSetState(${i}, 'Deleted', this)">Delete</button></div>` : ''}
-    ${impDetail[g.name] ? `<div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${cols.map(j => `<th>${escapeHtml(d.headers[j])}</th>`).join('')}</tr></thead><tbody>${
-      g.list.map(r => `<tr>${cols.map(j => j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`).join('')}</tr>`).join('')
-    }</tbody><tfoot><tr class="section-row">${cols.map((j, x) => `<td class="${x ? '' : 'left'}">${x === 0 ? '<b>Total</b>' : B.NUM[j] ? '<b>' + g.list.reduce((a, r) => a + (Number(r[j]) || 0), 0) + '</b>' : ''}</td>`).join('')}</tr></tfoot></table></div>` : ''}
+    ${impDetail[g.name] ? `<div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr>${impHeadThs(cols, B)}</tr></thead><tbody>${
+      g.list.map(r => `<tr>${impRowTds(r, cols, B)}</tr>`).join('')
+    }</tbody><tfoot><tr class="section-row">${impFootTds(g.list, cols, B)}</tr></tfoot></table></div>` : ''}
   </div>`;
 }
 
@@ -3928,6 +3975,76 @@ function impTaskUrl(x) {
   let who = user ? user.name : '';
   if (user && user.level !== 0 && taskListFor(user.name).indexOf(x.task) === -1) who = accessibleStaffNames().filter(n => taskListFor(n).indexOf(x.task) !== -1)[0] || user.name;
   return window.location.pathname + '#/staff/' + encodeURIComponent(who) + '/' + encodeURIComponent(x.task) + '/@' + encodeURIComponent(x.id || '');
+}
+
+function impOmerCol() {
+  return (impData.headers || []).findIndex(h => /^\s*omer/i.test(String(h)));
+}
+
+function impPurchAfter(cols, B) {
+  if (impOmerCol() === -1) return -2;
+  return cols.indexOf(B.C.status) !== -1 ? B.C.status : cols[cols.length - 1];
+}
+
+function impPurchKey(r, B) {
+  return [impKey(r[B.C.each] || r[B.C.group] || r[B.C.main]), String(r[B.C.product] || '').trim().toLowerCase(), String(r[B.C.model] || '').trim().toLowerCase()].join('|').replace(/\s+/g, ' ');
+}
+
+function impPurchOf(r, B) {
+  const v = (impData.purchases || {})[impPurchKey(r, B)];
+  return v === undefined ? null : Number(v) || 0;
+}
+
+function impHeadThs(cols, B) {
+  const after = impPurchAfter(cols, B);
+  return cols.map(j => `<th>${escapeHtml(impData.headers[j])}</th>` + (j === after ? '<th class="imp-purch-h">Purchases</th><th class="imp-purch-h">Balance</th>' : '')).join('');
+}
+
+function impRowTds(r, cols, B) {
+  const after = impPurchAfter(cols, B);
+  const oc = impOmerCol();
+  return cols.map(j => {
+    let td = j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`;
+    if (j === after) {
+      const p = impPurchOf(r, B), omer = Number(r[oc]) || 0;
+      const k = escapeHtml(impPurchKey(r, B));
+      const bal = omer - (p || 0);
+      td += `<td class="imp-purch-c">${impData.canPurchase ? `<input type="number" min="0" class="imp-purch" value="${p === null ? '' : p}" placeholder="0" data-k="${k}" onchange="impPurchSave(this)" onkeydown="if (event.key === 'Enter') this.blur()">` : (p === null ? '' : p)}</td><td class="imp-bal${bal < 0 ? ' neg' : bal === 0 && omer ? ' zero' : ''}"><b>${omer || p !== null ? bal : ''}</b></td>`;
+    }
+    return td;
+  }).join('');
+}
+
+function impFootTds(list, cols, B) {
+  const after = impPurchAfter(cols, B);
+  const oc = impOmerCol();
+  return cols.map((j, x) => {
+    let td = `<td class="${x ? '' : 'left'}">${x === 0 ? '<b>Total</b>' : B.NUM[j] ? '<b>' + list.reduce((a, r) => a + (Number(r[j]) || 0), 0) + '</b>' : ''}</td>`;
+    if (j === after) {
+      const seen = {};
+      let pt = 0, ot = 0;
+      list.forEach(r => { ot += Number(r[oc]) || 0; const k = impPurchKey(r, B); if (!seen[k]) { seen[k] = true; pt += impPurchOf(r, B) || 0; } });
+      td += `<td><b>${pt}</b></td><td><b>${ot - pt}</b></td>`;
+    }
+    return td;
+  }).join('');
+}
+
+async function impPurchSave(el) {
+  const key = el.getAttribute('data-k');
+  const raw = String(el.value).trim();
+  const qty = raw === '' ? 0 : Number(raw);
+  if (!(qty >= 0)) { el.value = ''; return toast('Type a number, 0 or more', true); }
+  impData.purchases = impData.purchases || {};
+  const before = impData.purchases[key];
+  if ((before === undefined ? 0 : Number(before)) === qty && !(before === undefined && raw !== '')) return;
+  impData.purchases[key] = qty;
+  renderImports();
+  try {
+    const r = await apiCallRaw('importPurchase', { key: key, qty: qty });
+    if (!r.ok) { if (before === undefined) delete impData.purchases[key]; else impData.purchases[key] = before; renderImports(); return toast(r.error || 'Could not save', true); }
+    toast('Purchase saved.');
+  } catch (e) { if (before === undefined) delete impData.purchases[key]; else impData.purchases[key] = before; renderImports(); toast('Network error', true); }
 }
 
 function impToggleDetail(i) {
@@ -4088,8 +4205,9 @@ async function impBunch(i, btn) {
 function impRowsHtml(B) {
   const d = impData, H = d.headers;
   const rows = B.shown.reduce((a, g) => a.concat(g.list), []);
-  return `<div class="report-wrap"><table class="report-table"><thead><tr>${H.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead><tbody>${
-    rows.map(r => `<tr>${H.map((h, j) => j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${H.length}" class="report-meta">Nothing matches.</td></tr>`
+  const cols = H.map((h, j) => j);
+  return `<div class="report-wrap"><table class="report-table"><thead><tr>${impHeadThs(cols, B)}</tr></thead><tbody>${
+    rows.map(r => `<tr>${impRowTds(r, cols, B)}</tr>`).join('') || `<tr><td colspan="${H.length + 2}" class="report-meta">Nothing matches.</td></tr>`
   }</tbody></table></div>`;
 }
 
@@ -4427,6 +4545,14 @@ async function saveRem() {
   } catch (e) { btn.disabled = false; toast('Network error', true); }
 }
 
+let remDelArm = '';
+
+function remDelete(id) {
+  if (remDelArm !== id) { remDelArm = id; renderReminders(); setTimeout(() => { if (remDelArm === id) { remDelArm = ''; renderReminders(); } }, 4000); return; }
+  remDelArm = '';
+  remAct(id, 'delete');
+}
+
 async function remAct(id, what, extra) {
   try {
     const r = await apiCall('remAct', Object.assign({ id: id, what: what }, extra || {}));
@@ -4476,7 +4602,7 @@ function remFiltered() {
   return (remData.items || []).filter(x => {
     if (g && x.group !== g) return false;
     if (tag && x.tags.indexOf(tag) === -1) return false;
-    if (show === 'open' && x.status !== 'Open') return false;
+    if (show === 'todo' && x.status !== 'Open') return false;
     if (show === 'done' && x.status === 'Open') return false;
     if (remDayPick && x.dueDay !== remDayPick) return false;
     if (q && [x.title, x.notes, x.group, x.tags.join(' ')].join(' ').toLowerCase().indexOf(q) === -1) return false;
@@ -4491,6 +4617,7 @@ function remItemHtml(x) {
   const comments = (x.comments || []).filter(c => !c.done);
   return `<div class="rem-item${x.late ? ' late' : ''}${x.status !== 'Open' ? ' done' : ''}">
     <button class="rem-check" title="${x.status === 'Open' ? 'Mark done' : 'Open again'}" onclick="remAct('${id}', '${x.status === 'Open' ? 'done' : 'undo'}')">${x.status === 'Open' ? '' : '&#10003;'}</button>
+    <button class="rem-del${remDelArm === x.id ? ' arm' : ''}" title="Delete for good" onclick="remDelete('${id}')">${remDelArm === x.id ? 'Delete?' : '&#128465;'}</button>
     <div class="rem-main" onclick="remOpen['${id}'] = !remOpen['${id}']; renderReminders()">
       <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)}</div>
       <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group' + (valOf('rem-group') === x.group ? ' on' : '') + '" data-remf="group" data-remv="' + escapeHtml(x.group) + '" title="Click to show only this group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag' + (valOf('rem-tag') === t ? ' on' : '') + '" data-remf="tag" data-remv="' + escapeHtml(t) + '" title="Click to show only this tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
@@ -7576,7 +7703,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'partial-section', 'recent-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-access', 'partial-section', 'recent-section']
     .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen)) el.classList.add('hidden'); });
   document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => el.classList.add('hidden'));
 }
@@ -7670,6 +7797,9 @@ function renderFormInterface() {
     loadMyAssigned();
     return;
   }
+  if (t.panel === "phases") { document.getElementById('form-phases').classList.remove('hidden'); loadPhases(); return; }
+  if (t.panel === "rola") { document.getElementById('form-rola').classList.remove('hidden'); loadRola(); return; }
+  if (t.panel === "hpold") { document.getElementById('form-hpold').classList.remove('hidden'); hpInfo(); return; }
   if (t.panel === "access") {
     document.getElementById('form-access').classList.remove('hidden');
     loadAccess();
@@ -11023,11 +11153,254 @@ function renderTrailHtml(r, go) {
     <div class="nav-spacer"></div>${r.next ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.next).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">${escapeHtml(r.next)} &#9654;</button>` : '<button class="btn btn-small" disabled>Last &#9654;</button>'}</div>`;
   const chains = (r.chains || []).length ? `<label>Where it is in each chain</label><div class="trail-chains">${r.chains.map(c => `<div class="trail-chain"><div class="trail-chain-name">${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</div><div class="trail-steps">${c.tasks.map(t => { const S = TRAIL_SYM[t.sym] || TRAIL_SYM['']; return `<div class="trail-step${t.late ? ' late' : ''}${!t.sym || t.sym === 'skip' ? ' dim' : ''}" title="${escapeHtml(S[2])}"><b class="${S[1]}">${S[0] || '&nbsp;'}</b>${escapeHtml(t.task)}${t.took ? `<small>${escapeHtml(t.took)} / ${escapeHtml(t.allowed || '-')}</small>` : ''}</div>`; }).join('')}</div></div>`).join('')}</div>` : '';
   const cheques = (r.cheques || []).map(c => `<div class="trail-cheque">${chequeLine(c)}</div>`).join('');
-  return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div></div>
+  return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}${r.canEditKey && (r.refNo || r.caseNo) ? ` <button class="btn btn-small imp-noprint" onclick="keyEditOpen('${go}')" title="Change the Ref No or Case No everywhere">&#9998; Edit Ref / Case No</button>` : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div><div id="key-edit" class="key-edit hidden"></div></div>
     ${cheques}${chains}
     ${trailTablesHtml(r)}
     <label style="margin-top:16px;">Everything that happened <small class="report-meta">newest first</small></label>
     ${trailFeedHtml(r.events || [])}`;
+}
+
+let phLimits = {};
+let phList = [];
+
+async function loadPhases() {
+  const sel = document.getElementById('ph-proj');
+  if (!sel.options.length || sel.options.length !== PROJECTS.length) sel.innerHTML = PROJECTS.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('') || `<option value="${escapeHtml(DEFAULT_PROJECT)}">Mahana</option>`;
+  try {
+    const r = await apiCall('phaseGet');
+    if (!r.ok) { document.getElementById('ph-wrap').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    phLimits = r.limits || {};
+    phBuild();
+    renderPhases();
+  } catch (e) { document.getElementById('ph-wrap').innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function phBuild() {
+  const pid = valOf('ph-proj') || DEFAULT_PROJECT;
+  phList = [];
+  TASKS.filter(t => (t.project || DEFAULT_PROJECT) === pid).forEach(t => {
+    const name = String(t.phase || 'Other');
+    let p = phList.filter(x => x.name === name)[0];
+    if (!p) { p = { name: name, limit: phLimits[pid + '|' + name] || '', tasks: [] }; phList.push(p); }
+    p.tasks.push(t.name);
+  });
+  document.getElementById('ph-msg').innerText = '';
+}
+
+function renderPhases() {
+  const box = document.getElementById('ph-wrap');
+  if (!phList.length) { box.innerHTML = '<div class="report-meta">This project has no tasks yet.</div>'; return; }
+  box.innerHTML = phList.map((p, i) => `<div class="ph-card">
+    <div class="ph-head"><span class="tev-ph" style="--ph:${phaseColor(p.name)}">${i + 1}</span><input type="text" value="${escapeHtml(p.name)}" onchange="phList[${i}].name = this.value.trim() || phList[${i}].name; renderPhases()" title="Phase name">
+      <label class="inline-label">Most days <input type="number" min="0" step="0.5" value="${escapeHtml(String(p.limit || ''))}" placeholder="no limit" onchange="phList[${i}].limit = this.value" style="width:90px"></label>
+      <button class="chain-btn" title="Move up" onclick="phMove(${i}, -1)"${i ? '' : ' disabled'}>&uarr;</button><button class="chain-btn" title="Move down" onclick="phMove(${i}, 1)"${i < phList.length - 1 ? '' : ' disabled'}>&darr;</button>
+      ${p.tasks.length ? '' : `<button class="chain-btn" title="Remove this empty phase" onclick="phList.splice(${i}, 1); renderPhases()">&times;</button>`}
+    </div>
+    <div class="ph-tasks">${p.tasks.map((t, k) => `<span class="ph-task"><b>${escapeHtml(t)}</b><button class="chain-btn" title="Up" onclick="phTaskMove(${i}, ${k}, -1)"${k ? '' : ' disabled'}>&uarr;</button><button class="chain-btn" title="Down" onclick="phTaskMove(${i}, ${k}, 1)"${k < p.tasks.length - 1 ? '' : ' disabled'}>&darr;</button><select onchange="phTaskTo(${i}, ${k}, this.value)" title="Move to another phase"><option value="">move to…</option>${phList.map((q, j) => j === i ? '' : `<option value="${j}">${escapeHtml(q.name)}</option>`).join('')}</select></span>`).join('') || '<span class="report-meta">No tasks here. Move a task in, or remove this phase.</span>'}</div>
+  </div>`).join('');
+}
+
+function phAdd() {
+  let n = 'New phase', k = 2;
+  while (phList.some(p => p.name.toLowerCase() === n.toLowerCase())) n = 'New phase ' + (k++);
+  phList.push({ name: n, limit: '', tasks: [] });
+  renderPhases();
+}
+
+function phMove(i, d) {
+  const j = i + d;
+  if (j < 0 || j >= phList.length) return;
+  const x = phList[i]; phList[i] = phList[j]; phList[j] = x;
+  renderPhases();
+}
+
+function phTaskMove(i, k, d) {
+  const a = phList[i].tasks, j = k + d;
+  if (j < 0 || j >= a.length) return;
+  const x = a[k]; a[k] = a[j]; a[j] = x;
+  renderPhases();
+}
+
+function phTaskTo(i, k, j) {
+  if (j === '') return;
+  const t = phList[i].tasks.splice(k, 1)[0];
+  phList[Number(j)].tasks.push(t);
+  renderPhases();
+}
+
+async function phSave() {
+  const pid = valOf('ph-proj') || DEFAULT_PROJECT;
+  const send = phList.filter(p => p.tasks.length || Number(p.limit) > 0);
+  if (send.some(p => !p.tasks.length)) return toast('A phase with no tasks cannot be saved. Move a task into it or remove it.', true);
+  try {
+    const r = await apiCall('phaseSave', { project: pid, phases: send.map(p => ({ name: p.name, limit: Number(p.limit) || 0, tasks: p.tasks })) });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast('Phases saved.');
+    await loadTasks();
+    const g = await apiCall('phaseGet');
+    if (g.ok) phLimits = g.limits || {};
+    phBuild();
+    renderPhases();
+    document.getElementById('ph-msg').innerText = 'Saved';
+  } catch (e) { toast('Network error', true); }
+}
+
+let rolaData = null;
+
+async function loadRola() {
+  const box = document.getElementById('rola-wrap');
+  box.innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('rolaList');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    rolaData = r;
+    renderRola();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderRola() {
+  const r = rolaData;
+  const box = document.getElementById('rola-wrap');
+  if (!r) return;
+  if (r.noLimits) { box.innerHTML = '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has a days limit yet. Set "Most days" in Admin → Phases first.</div>'; document.getElementById('rola-meta').innerText = ''; return; }
+  const q = valOf('rola-q').toLowerCase();
+  const lines = r.lines.filter(x => !q || [x.key, x.name, x.project, x.phase, x.tasks.join(' '), x.who].join(' ').toLowerCase().indexOf(q) !== -1);
+  document.getElementById('rola-meta').innerText = lines.length + ' in Rola Days · as of ' + shortWhen(r.at || '');
+  box.innerHTML = lines.length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Case / consignment</th><th>Project</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>In this phase since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => `<tr class="rola-row" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="left"><b>${escapeHtml(x.key)}</b>${x.name ? '<br><small class="report-meta">' + escapeHtml(x.name) + '</small>' : ''}</td><td>${escapeHtml(x.project)}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${escapeHtml(x.tasks.join(', '))}</td><td>${escapeHtml(x.who)}</td><td class="nowrap">${escapeHtml(shortWhen(x.since))}</td><td>${x.days}</td><td>${x.limit}</td><td><span class="late-badge">${x.over} days</span></td></tr>`).join('')}</tbody></table></div>` : '<div class="late-none">&#10003; Nothing is over its phase limit.</div>';
+}
+
+async function hpInfo() {
+  try { const r = await apiCallRaw('hpOldInfo', {}); if (r && r.ok) document.getElementById('hp-msg').innerText = r.info ? 'Last loaded: ' + r.info : 'Nothing loaded yet.'; } catch (e) {}
+}
+
+async function zipEntries(buf) {
+  const dv = new DataView(buf);
+  let e = buf.byteLength - 22;
+  while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+  if (e < 0) throw new Error('This is not an Excel .xlsx file');
+  const n = dv.getUint16(e + 10, true);
+  let p = dv.getUint32(e + 16, true);
+  const out = {};
+  const td = new TextDecoder();
+  for (let i = 0; i < n; i++) {
+    if (dv.getUint32(p, true) !== 0x02014b50) break;
+    const method = dv.getUint16(p + 10, true), csize = dv.getUint32(p + 20, true), nl = dv.getUint16(p + 28, true), el = dv.getUint16(p + 30, true), cl = dv.getUint16(p + 32, true), off = dv.getUint32(p + 42, true);
+    out[td.decode(new Uint8Array(buf, p + 46, nl))] = { method: method, csize: csize, off: off };
+    p += 46 + nl + el + cl;
+  }
+  return {
+    names: Object.keys(out),
+    text: async function (name) {
+      const x = out[name];
+      if (!x) return '';
+      const start = x.off + 30 + dv.getUint16(x.off + 26, true) + dv.getUint16(x.off + 28, true);
+      const raw = new Uint8Array(buf, start, x.csize);
+      if (x.method === 0) return td.decode(raw);
+      const ds = new DecompressionStream('deflate-raw');
+      const stream = new Blob([raw]).stream().pipeThrough(ds);
+      return await new Response(stream).text();
+    }
+  };
+}
+
+function xmlText(s) {
+  return String(s).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#(\d+);/g, (m, d) => String.fromCharCode(Number(d))).replace(/&amp;/g, '&');
+}
+
+async function xlsxSheetRows(buf, wantName, maxCol) {
+  const z = await zipEntries(buf);
+  const wb = await z.text('xl/workbook.xml');
+  const rels = await z.text('xl/_rels/workbook.xml.rels');
+  let rid = '';
+  const names = [];
+  wb.replace(/<sheet\b[^>]*>/g, m => { const nm = xmlText((m.match(/\bname="([^"]*)"/) || [])[1] || ''); names.push(nm); if (nm.trim().toLowerCase() === wantName.toLowerCase()) rid = (m.match(/\br:id="([^"]*)"/) || [])[1] || ''; return m; });
+  if (!rid) throw new Error('This file has no "' + wantName + '" tab. Tabs found: ' + names.join(', '));
+  let target = '';
+  rels.replace(/<Relationship\b[^>]*>/g, m => { if ((m.match(/\bId="([^"]*)"/) || [])[1] === rid) target = (m.match(/\bTarget="([^"]*)"/) || [])[1] || ''; return m; });
+  const path = target.charAt(0) === '/' ? target.slice(1) : 'xl/' + target;
+  const shared = [];
+  const sst = await z.text('xl/sharedStrings.xml');
+  sst.replace(/<si\b[^>]*>([\s\S]*?)<\/si>/g, (m, inner) => { let t = ''; inner.replace(/<rPh\b[\s\S]*?<\/rPh>/g, '').replace(/<t\b[^>]*>([\s\S]*?)<\/t>/g, (a, b) => { t += b; return a; }); shared.push(xmlText(t)); return m; });
+  const xml = await z.text(path);
+  const rows = [];
+  const colIdx = ref => { let n = 0; for (const ch of ref) { const c = ch.charCodeAt(0); if (c < 65 || c > 90) break; n = n * 26 + (c - 64); } return n - 1; };
+  xml.replace(/<row\b[^>]*>([\s\S]*?)<\/row>/g, (m, inner) => {
+    const row = [];
+    inner.replace(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g, (a, attrs, body) => {
+      const ref = (attrs.match(/\br="([A-Z]+)\d+"/) || [])[1] || '';
+      const j = colIdx(ref);
+      if (j < 0 || j >= maxCol || body === undefined) return a;
+      const t = (attrs.match(/\bt="([^"]*)"/) || [])[1] || '';
+      let v = '';
+      if (t === 'inlineStr') body.replace(/<t\b[^>]*>([\s\S]*?)<\/t>/g, (x, y) => { v += xmlText(y); return x; });
+      else { const mv = body.match(/<v\b[^>]*>([\s\S]*?)<\/v>/); v = mv ? xmlText(mv[1]) : ''; if (t === 's') v = shared[Number(v)] || ''; }
+      row[j] = v;
+      return a;
+    });
+    rows.push(row);
+    return m;
+  });
+  return rows;
+}
+
+async function hpLoad() {
+  const f = document.getElementById('hp-file').files[0];
+  const msg = document.getElementById('hp-msg');
+  if (!f) return toast('Pick the HP Master Excel file first', true);
+  msg.innerText = 'Reading the file…';
+  try {
+    const rows = await xlsxSheetRows(await f.arrayBuffer(), 'Data', 8);
+    const norm = x => String(x === undefined || x === null ? '' : x).replace(/\s+/g, ' ').trim();
+    const h = rows.findIndex(r => r.some(c => /^case\s*no$/i.test(norm(c))) && r.some(c => /^salesman$/i.test(norm(c))));
+    if (h === -1) { msg.innerText = 'Could not find the header row (Case No, Ref No, Branch, Salesman) in the Data tab.'; return; }
+    const col = re => rows[h].findIndex(c => re.test(norm(c)));
+    const cC = col(/^case\s*no$/i), rC = col(/^ref\s*no$/i), bC = col(/^branch$/i), sC = col(/^salesman$/i);
+    if (bC === -1 || sC === -1) { msg.innerText = 'The Data tab has no Branch or Salesman column.'; return; }
+    const num = v => { const t = norm(v); return /^\d+(\.0+)?$/.test(t) ? String(parseInt(t, 10)) : t; };
+    const out = [], seen = {};
+    rows.slice(h + 1).forEach(r => {
+      const cs = cC >= 0 ? num(r[cC]) : '', ref = rC >= 0 ? num(r[rC]) : '', b = norm(r[bC]), sm = norm(r[sC]);
+      if ((!cs && !ref) || (!b && !sm)) return;
+      const k = cs + '|' + ref;
+      if (seen[k]) return;
+      seen[k] = true;
+      out.push([cs, ref, b, sm]);
+    });
+    if (!out.length) { msg.innerText = 'No usable rows were found in the Data tab.'; return; }
+    msg.innerText = 'Found ' + out.length + ' cases. Saving…';
+    const r = await apiCall('hpOldSave', { rows: out });
+    if (!r.ok) { msg.innerText = r.error || 'Could not save'; return; }
+    msg.innerText = 'Loaded ' + r.saved + ' old cases. The dashboard uses them from now on.';
+    toast('Loaded ' + r.saved + ' old cases.');
+  } catch (e) { msg.innerText = 'Could not read this file: ' + (e && e.message ? e.message : e); }
+}
+
+let keyEditFn = '';
+let keyEditMerge = false;
+
+function keyEditOpen(fn) {
+  const r = trailData;
+  const box = document.getElementById('key-edit');
+  if (!r || !box) return;
+  keyEditFn = fn;
+  keyEditMerge = false;
+  box.classList.toggle('hidden');
+  box.innerHTML = `<label class="inline-label">Ref No <input type="text" id="ke-ref" value="${escapeHtml(r.refNo || '')}" ${r.refNo ? '' : 'placeholder="none"'}></label><label class="inline-label">Case No <input type="text" id="ke-case" value="${escapeHtml(r.caseNo || '')}" placeholder="none"></label><button class="btn btn-small btn-primary" onclick="keyEditSave()">Change everywhere</button><button class="btn btn-small" onclick="document.getElementById('key-edit').classList.add('hidden')">Cancel</button><div class="report-meta" id="ke-msg">This changes it in every task, saved data, cheques, time requests and the trail. The Google Form sheet is not touched.</div>`;
+}
+
+async function keyEditSave() {
+  const r = trailData;
+  const newRef = valOf('ke-ref'), newCase = valOf('ke-case');
+  try {
+    const x = await apiCall('keyEdit', { oldRef: r.refNo || '', oldCase: r.caseNo || '', newRef: newRef, newCase: newCase, merge: keyEditMerge });
+    if (!x.ok) { if (x.clash) keyEditMerge = true; document.getElementById('ke-msg').innerHTML = '<b class="band-late">' + escapeHtml(x.error || 'Could not change') + '</b>'; return; }
+    toast('Changed in ' + x.changed + ' places.');
+    Object.keys(trailMem).forEach(k => { delete trailMem[k]; });
+    try { JSON.parse(localStorage.getItem('tk_trail_idx') || '[]').forEach(k => localStorage.removeItem('tk_trail_' + k)); localStorage.removeItem('tk_trail_idx'); } catch (e) {}
+    if (keyEditFn === 'trailGo') { document.getElementById('trail-q').value = x.q; trailGo(x.q); }
+    else uniTrail(x.q, true);
+    try { loadPending(); } catch (e) {}
+  } catch (e) { toast('Network error', true); }
 }
 
 const PHASE_PAL = ['#2563eb', '#059669', '#9333ea', '#d97706', '#0891b2', '#db2777', '#4d7c0f', '#7c3aed', '#b45309', '#0f766e', '#be123c', '#1d4ed8', '#a16207', '#475569'];
