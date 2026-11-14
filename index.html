@@ -1567,6 +1567,9 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rd.bad { color: #b42318; background: #fdeceb; border-color: #f1b8b3; }
 .rd-right { margin-left: auto; }
 .imp-line-head { position: relative; }
+.imp-sup-right { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: none; }
+.imp-sup-right .imp-cnt { margin-right: 0; }
+.imp-sup-right .imp-bubble { float: none; margin: 0; }
 .imp-cnt { display: inline-block; font-size: 0.78rem; color: var(--text-dim); margin-right: 8px; white-space: nowrap; }
 .imp-cnt b { color: var(--text-main); }
 .imp-icons { align-items: center; }
@@ -3813,7 +3816,7 @@ function renderImports() {
       const msgs = list.reduce((a, g) => a + g.notes.length, 0);
       const waiting = list.filter(g => g.prog.open.length).length;
       const mine = list.some(g => impMine(g));
-      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span>${mine ? '<span class="imp-dot" title="Has a task waiting on you"></span>' : ''}<b>${escapeHtml(sname)}</b> ${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${(() => { const r = list.map(gRdays).filter(Boolean).sort((a, b) => (b.over - a.over) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</div>
+      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span>${mine ? '<span class="imp-dot" title="Has a task waiting on you"></span>' : ''}<b>${escapeHtml(sname)}</b><span class="imp-sup-right">${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${(() => { const r = list.map(gRdays).filter(Boolean).sort((a, b) => (b.over - a.over) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</span></div>
         ${open ? `<div class="imp-sup-body">${list.map(g => impLineHtml(g, B)).join('')}</div>` : ''}</div>`;
     }).join('') || '<div class="report-meta">Nothing matches.</div>';
   }
