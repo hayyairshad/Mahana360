@@ -1007,7 +1007,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-anim .dsh-kpi:nth-child(2) { animation-delay: .05s; } .dsh-anim .dsh-kpi:nth-child(3) { animation-delay: .1s; } .dsh-anim .dsh-kpi:nth-child(4) { animation-delay: .15s; } .dsh-anim .dsh-kpi:nth-child(5) { animation-delay: .2s; }
 @keyframes dshup { from { opacity: 0; transform: translateY(12px); } }
 .dash-tab { font-weight: 800 !important; }
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .dsh-grid2, .dsh-grid3 { grid-template-columns: 1fr; }
   .dsh-hero-r { align-items: flex-start; width: 100%; }
   .dsh-ranges { justify-content: flex-start; }
@@ -1060,7 +1060,7 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-kpis-today .dsh-kpi-sub { display: none; }
 .dsh-kpis-today .dsh-kpi-ico { width: 20px; height: 20px; border-radius: 6px; }
 .dsh-kpis-today .dsh-kpi-ico svg { width: 12px; height: 12px; }
-@media (max-width: 860px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
 .dsh-scroll { max-height: 340px; overflow-y: auto; }
 .dsh-rcol { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .dsh-rcol > .dsh-card { margin-bottom: 0; }
@@ -1072,7 +1072,8 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-3mid > .dsh-card { display: flex; flex-direction: column; }
 .dsh-3mid .dsh-pie-wrap { flex: 1; }
 .dsh-3mid > .dsh-card { margin-bottom: 0; }
-@media (max-width: 1000px) { .dsh-3mid { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .dsh-3mid { grid-template-columns: 1fr 1fr; } .dsh-3mid > .dsh-card:nth-child(2) { order: 3; grid-column: 1 / -1; } }
+@media (max-width: 700px) { .dsh-3mid { grid-template-columns: 1fr; } .dsh-3mid > .dsh-card:nth-child(2) { order: 0; grid-column: auto; } }
 .dsh-late-list.full { max-height: 420px; overflow-y: auto; padding-right: 4px; }
 .dsh-latebox .dsh-late-list { max-height: 260px; overflow-y: auto; padding-right: 4px; }
 .dsh-latebox .dsh-late-li { cursor: pointer; }
