@@ -1062,6 +1062,9 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-kpis-today .dsh-kpi-ico svg { width: 12px; height: 12px; }
 @media (max-width: 860px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
 .dsh-scroll { max-height: 340px; overflow-y: auto; }
+.dsh-rcol { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.dsh-rcol > .dsh-card { margin-bottom: 0; }
+.dsh-rcol .dsh-area { max-height: 150px; }
 .dsh-flow-sm { margin-bottom: 12px; }
 .dsh-flow-sm .dsh-card { margin-bottom: 0; }
 .dsh-flow-sm .dsh-area { max-height: 130px; }
@@ -3218,8 +3221,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
     </section>
     ${dashTodayRow(P, null, days)}`;
-    html += `<section class="dsh-grid2">${dashLateBox(P)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
-    html += `<section class="dsh-flow-sm">${flow}</section>`;
+    html += `<section class="dsh-grid2">${dashLateBox(P)}<div class="dsh-rcol"><div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>top 4 &middot; right now</span></div>${dashBars(P.tasks.slice(0, 4).map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>${flow}</div></section>`;
     const rankedI = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
     html += `<section class="dsh-grid2 dsh-even">${dashPodium(rankedI)}<div class="dsh-card"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashBars(I.status.filter(s => !/already\s*rec/i.test(String(s.name))).slice(0, 8).map(s => ({ name: s.name, n: s.n })), i => DASH_COLORS[i % DASH_COLORS.length], '', '')}</div></section>`;
     html += `<section class="dsh-grid2 dsh-even"><div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>top 5 &middot; average time</span></div>${dashSlow(P.slow || [])}</div>${dashHowBox(P, rangeTxt)}</section>`;
