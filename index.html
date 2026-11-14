@@ -3204,7 +3204,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       <div class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashPie((M.riders || []).slice(0, 6), M.visits)}</div>
       ${flow}
     </section>`;
-    html += dashLateBox(P);
+    html += `<section class="dsh-grid2">${dashLateBox(P)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
   } else if (P.kind === 'import' && P.imports) {
     const I = P.imports;
     html += `<section class="dsh-kpis dsh-kpis-tight">
@@ -3219,7 +3219,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       <div class="dsh-card"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashBars(I.status.slice(0, 8).map(s => ({ name: s.name, n: s.n })), i => DASH_COLORS[i % DASH_COLORS.length], '', '')}</div>
       ${flow}
     </section>`;
-    html += dashLateBox(P);
+    html += `<section class="dsh-grid2">${dashLateBox(P)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
   } else {
     html += `<section class="dsh-kpis dsh-kpis-tight">
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
@@ -3228,7 +3228,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       ${dashKpi('star', '#f2a541', P.points, 'Points earned', 'whole team', '')}
     </section>
     <section class="dsh-grid2 dsh-even">${flow}<div></div></section>`;
-    html += dashLateBox(P);
+    html += `<section class="dsh-grid2">${dashLateBox(P)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
   }
   const ranked = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
   if (P.kind === 'mahana' && P.mahana) {
@@ -3239,23 +3239,20 @@ function dashProjBody(P, sbs, rangeTxt) {
       <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashVBars(M.branches, '#6c5ce7') : '<div class="dsh-empty">No branch in Save Contacts or HP Master in these dates.</div>'}</div>
     </section>`;
   } else {
-    html += `<section class="dsh-grid2 dsh-even">${dashPodium(ranked)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
+    html += `<section class="dsh-grid2 dsh-even">${dashPodium(ranked)}${P.kind === 'import' && P.imports ? `<div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${dashBars(P.imports.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '')}</div>` : '<div></div>'}</section>`;
   }
   html += `<section class="dsh-grid2 dsh-even">
     <div class="dsh-card"><div class="dsh-card-h"><h3>Points ranking</h3><span>${escapeHtml(rangeTxt)}</span></div>
       ${ranked.length ? `<div class="dsh-rest">${ranked.slice(0, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i < 3 ? ['&#129351;', '&#129352;', '&#129353;'][i] : i + 1}</span>${dashAvatar(p.name, 24)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><small>${p.closed} closed</small><b class="dsh-pts ${p.points < 0 ? 'neg' : 'pos'}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : '<div class="dsh-empty">No points in these dates.</div>'}
     </div>
-    ${P.kind === 'mahana' ? `<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>` : `<div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${P.imports ? dashBars(P.imports.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '') : ''}</div>`}
+    ${dashHowBox(P, rangeTxt)}
   </section>`;
-  html += `<section class="dsh-grid2 dsh-even">${dashHowBox(P, rangeTxt)}<div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>top 5 &middot; average time</span></div>${dashSlow(P.slow || [])}</div></section>`;
-  if (P.kind === 'mahana' && P.mahana) {
-    const M = P.mahana;
-    const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
-    html += `<section class="dsh-grid2 dsh-even">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${(sat || []).length ? dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '') : '<div class="dsh-empty">Nothing yet in these dates.</div>'}</div>
-      <div></div>
-    </section>`;
-  }
+  const satCard = (() => {
+    if (P.kind !== 'mahana' || !P.mahana) return '<div></div>';
+    const sat = dashSatBy === 'branch' ? P.mahana.satByBranch : P.mahana.satBySalesman;
+    return `<div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${(sat || []).length ? dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '') : '<div class="dsh-empty">Nothing yet in these dates.</div>'}</div>`;
+  })();
+  html += `<section class="dsh-grid2 dsh-even"><div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>top 5 &middot; average time</span></div>${dashSlow(P.slow || [])}</div>${satCard}</section>`;
   html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
     <div class="dsh-team-row dsh-team-head"><span>Person</span><span>Points</span><span>Closed</span><span>Avg speed</span><span>Extra time</span><span>Waiting</span><span>Last seen</span></div>
     ${P.people.map(p => { const live = p.lastMs && Date.now() - p.lastMs < 3600000; return `<div class="dsh-team-row">
