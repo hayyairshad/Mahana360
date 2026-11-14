@@ -1053,6 +1053,13 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-kpis-tight .dsh-kpi-lbl { font-size: 0.6rem; }
 .dsh-kpis-tight .dsh-kpi-spark { height: 16px; margin: 2px -10px -5px; }
 .dsh-kpis-tight .dsh-kpi-spark .dsh-spark { height: 16px; }
+.dsh-today-h { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin: -4px 0 4px 2px; }
+.dsh-kpis-today { margin-top: 0; }
+.dsh-kpis-today .dsh-kpi { padding: 5px 9px 4px; border-radius: 10px; }
+.dsh-kpis-today .dsh-kpi-val { font-size: 1.05rem; margin-top: 1px; }
+.dsh-kpis-today .dsh-kpi-sub { display: none; }
+.dsh-kpis-today .dsh-kpi-ico { width: 20px; height: 20px; border-radius: 6px; }
+.dsh-kpis-today .dsh-kpi-ico svg { width: 12px; height: 12px; }
 @media (max-width: 860px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
 .dsh-scroll { max-height: 340px; overflow-y: auto; }
 .dsh-3mid { display: grid; grid-template-columns: 1.1fr 0.8fr 1.1fr; gap: 12px; margin-bottom: 12px; align-items: stretch; }
@@ -1462,6 +1469,8 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .fab-plus { position: fixed; right: 18px; bottom: 18px; z-index: 1200; width: 56px; height: 56px; border-radius: 50%; border: none; background: var(--pine, #24533a); color: #fff; font-size: 2rem; line-height: 1; box-shadow: 0 8px 22px rgba(20,50,35,0.35); cursor: pointer; }
 .fab-plus:hover { transform: scale(1.05); }
 .dash-mode .fab-plus { display: none !important; }
+.fab-rem { right: 84px; width: 46px; height: 46px; bottom: 23px; font-size: 1.25rem; background: #fff; color: var(--pine, #24533a); border: 2px solid var(--pine, #24533a); }
+.fab-rem.on { background: var(--pine, #24533a); color: #fff; }
 .collab-badge { position: fixed; left: 14px; bottom: 12px; z-index: 50; display: flex; align-items: center; gap: 8px; background: #24533a; border: 1px solid #24533a; border-radius: 999px; padding: 5px 12px 5px 14px; box-shadow: var(--shadow-md); font-size: 0.72rem; color: rgba(255,255,255,0.88); font-weight: 600; pointer-events: none; }
 .collab-badge img { height: 22px; width: auto; }
 @media (max-width: 720px) { .collab-badge { position: static; margin: 18px auto 14px; width: max-content; } }
@@ -2347,6 +2356,7 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 <button onclick="closePlusMenu(); openLeaveForm()">&#127796; Apply for leave</button>
 <button class="lvl1" onclick="closePlusMenu(); openAddCase()">&#10133; Add a case (tile) to a task</button>
 </div>
+<button id="fab-rem" class="fab-plus fab-rem hidden" onclick="remPanelToggle()" title="My reminders — stays open until you press this again" aria-label="My reminders">&#9200;</button>
 <button id="fab-plus" class="fab-plus hidden" onclick="togglePlusMenu(event, 'fab-plus')" title="Add a reminder, assign, leave or a case" aria-label="Add">+</button>
 <div id="addcase-overlay" class="pic-overlay hidden" onclick="if(event.target===this)closeAddCase()">
 <div class="pic-panel addcase-panel">
@@ -3185,6 +3195,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
       ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
     </section>
+    ${dashTodayRow(P, M, days)}
     <section class="dsh-3mid">
       <div class="dsh-card"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases arriving and satisfied')}</div>
       <div class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashPie((M.riders || []).slice(0, 6), M.visits)}</div>
@@ -3199,6 +3210,7 @@ function dashProjBody(P, sbs, rangeTxt) {
       ${dashKpi('chat', '#f2a541', I.messages, 'Messages', 'in these dates', '')}
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
     </section>
+    ${dashTodayRow(P, null, days)}
     <section class="dsh-grid2 dsh-even">
       <div class="dsh-card"><div class="dsh-card-h"><h3>Consignments by stage</h3><span>from C MSTR</span></div>${dashBars(I.status.slice(0, 8).map(s => ({ name: s.name, n: s.n })), i => DASH_COLORS[i % DASH_COLORS.length], '', '')}</div>
       ${flow}
@@ -3279,6 +3291,25 @@ function dashRemHtml(items) {
 function dashRemLi(x) {
   const late = x.dueMs < Date.now();
   return `<div class="dsh-li${late ? ' late' : ''}"><span class="dsh-li-dot"></span><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.due || '')}</small></div></div>`;
+}
+
+function dashTodayRow(P, M, days) {
+  if (dashRange === 'today' || !P.todayIn || !P.today) return '';
+  const t = P.today;
+  const ymd = (d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'))(new Date());
+  const ti = days.indexOf(ymd);
+  const tiles = [];
+  if (M) {
+    tiles.push(dashKpi('inbox', '#0f8b8d', ti >= 0 && M.daily[ti] ? M.daily[ti].refs : 0, 'Cases arrived', 'today', ''));
+    tiles.push(dashKpi('smile', '#f2a541', ti >= 0 && M.daily[ti] ? M.daily[ti].satisfied : 0, 'Satisfied', 'today', ''));
+  }
+  tiles.push(dashKpi('check', '#2a9d8f', t.closed, 'Tasks closed', 'today', ''));
+  tiles.push(dashKpi('star', '#1d7a46', t.onTime, 'On time', 'today', ''));
+  tiles.push(dashKpi('clock', '#3a86ff', t.grace, 'With extra time', 'today', ''));
+  if (!M) tiles.push(dashKpi('alert', '#e4572e', t.late, 'Closed late', 'today', ''));
+  else tiles.push(dashKpi('alert', '#e4572e', t.late, 'Closed late', 'today', ''));
+  const tl = tiles.slice(0, 6);
+  return `<div class="dsh-today-h">Today</div><section class="dsh-kpis dsh-kpis-tight dsh-kpis-today" style="grid-template-columns: repeat(${tl.length}, minmax(0, 1fr))">${tl.join('')}</section>`;
 }
 
 function dashPodium(ranked) {
@@ -4563,6 +4594,7 @@ function remPanelToggle(open, keepPref) {
     drawer.classList.remove('hidden');
     document.body.classList.add('rem-open');
     document.getElementById('btn-rem').classList.add('on');
+    const fr = document.getElementById('fab-rem'); if (fr) fr.classList.add('on');
     remDrawerOpen = true;
     renderRemEditor();
     if (remData) renderReminders();
@@ -4574,6 +4606,7 @@ function remPanelToggle(open, keepPref) {
     drawer.classList.add('hidden');
     document.body.classList.remove('rem-open');
     document.getElementById('btn-rem').classList.remove('on');
+    const fr2 = document.getElementById('fab-rem'); if (fr2) fr2.classList.remove('on');
     remDrawerOpen = false;
   }
   if (!keepPref) { try { localStorage.setItem('tk_rem_open', remDrawerOpen ? '1' : '0'); } catch (e) {} }
@@ -5409,6 +5442,7 @@ async function completeLogin() {
     document.getElementById('btn-logout').classList.remove('hidden');
     document.getElementById('btn-refresh').classList.remove('hidden');
     document.getElementById('fab-plus').classList.remove('hidden');
+    if (user && user.level === 0) document.getElementById('fab-rem').classList.remove('hidden');
     document.querySelectorAll('#plus-menu .lvl1').forEach(b => b.classList.toggle('hidden', user.level > 1));
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('btn-search').classList.remove('hidden');
