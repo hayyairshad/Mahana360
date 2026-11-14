@@ -1513,6 +1513,27 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rem-sug-btn { border: 1px solid var(--border-color); background: var(--info-soft); color: var(--info); border-radius: 999px; padding: 2px 9px; margin: 2px 4px 2px 0; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
 .grace-badge { display: inline-block; background: var(--info-soft); color: var(--info); border: 1px solid #bcd7ef; border-radius: 999px; padding: 0 7px; font-size: 0.68rem; font-weight: 800; margin-left: 4px; cursor: help; }
 .case-chip { position: relative; }
+.rd { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid; }
+.rd.ok { color: #05603a; background: #e7f6ee; border-color: #a6e0c3; }
+.rd.bad { color: #b42318; background: #fdeceb; border-color: #f1b8b3; }
+.rd-right { margin-left: auto; }
+.imp-line-head { position: relative; }
+.imp-rd { position: absolute; right: 10px; top: 10px; }
+.task-band { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin: -4px 0 10px; font-size: 0.85rem; color: var(--text-dim); }
+.task-band b { color: var(--text-main); }
+.tb-pts { color: #05603a; font-weight: 700; }
+#board-person, #board-project { width: auto; min-width: 150px; margin: 0; }
+#board-q { width: 240px; margin: 0; }
+.board-g { border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 10px; background: #fff; overflow: hidden; }
+.board-h { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 9px 12px; background: var(--accent-softer); font-weight: 700; }
+.board-h small { font-weight: 500; color: var(--text-dim); }
+.board-g.st-late { border-color: #f1b8b3; }
+.board-g.st-rdays { border-color: #f1b8b3; }
+.board-g.st-soon { border-color: #f3cf8a; }
+.board-l { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 12px; border-top: 1px solid var(--border-color); cursor: pointer; }
+.board-l:hover { background: var(--accent-softer); }
+.board-l .board-sub { flex-basis: 100%; font-size: 0.78rem; color: var(--text-dim); }
+.board-l.st-late { background: #fff8f7; }
 .imp-tk { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: var(--pc, #475569); border: 1px solid var(--pc, #475569); background: #fff; white-space: nowrap; }
 .imp-tk-h { background: #e8f1ff !important; color: #1e3a8a; }
 .chip-rem, .chip-ed { display: inline-block; margin-right: 5px; cursor: pointer; font-size: 0.8rem; opacity: 0.6; }
@@ -1660,6 +1681,7 @@ oninput="runSearch('workspace')" onfocus="runSearch('workspace')">
 <div id="task-sidebar" class="task-sidebar"></div>
 <div>
 <h2 id="bold-task-header" style="font-weight: 600;"></h2>
+<div id="task-band" class="task-band hidden"></div>
 
 <div id="empty-tile" class="empty-tile hidden"></div>
 
@@ -2038,6 +2060,12 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 </div>
 
 <div id="form-dash" class="hidden"><div id="dash-root" class="dsh"><div class="dsh-empty">Loading your dashboard…</div></div></div>
+
+<div id="form-board" class="hidden">
+<div class="report-bar"><b>Task Board</b><span class="report-meta" id="board-meta"></span><select id="board-person" onchange="loadBoard(true)"></select><select id="board-project" onchange="loadBoard(true)"></select><input type="text" id="board-q" class="report-search" placeholder="Filter by ref, task or person" oninput="renderBoard()"><button class="btn btn-small" onclick="loadBoard(true)">Refresh</button></div>
+<div class="fbox" id="board-tabs"><button class="phase-btn active" id="bd-t-all" onclick="setBoardTab('all')">Everything</button><button class="phase-btn" id="bd-t-late" onclick="setBoardTab('late')">Late</button><button class="phase-btn" id="bd-t-soon" onclick="setBoardTab('soon')">About to be late</button><button class="phase-btn" id="bd-t-rdays" onclick="setBoardTab('rdays')">R-DAYS over</button></div>
+<div id="board-body" style="margin-top:10px;"></div>
+</div>
 
 <div id="form-imports" class="hidden">
 <div class="imp-head"><div><b>Import Data</b> <small class="report-meta" id="imp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="imp-sync-btn" onclick="importSyncNow()">Sync now</button></div>
@@ -2767,7 +2795,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R38";
+const APP_VERSION = "R39";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3478,6 +3506,19 @@ function impRefs(g) {
   return Object.keys(P).filter(k => g.keys.indexOf(k) !== -1 && ((P[k].open || []).length || (P[k].done || []).length)).map(k => P[k].name).filter(Boolean);
 }
 
+function rdHtml(rd, cls) {
+  if (!rd) return '';
+  const bad = rd.over;
+  const txt = bad ? 'R-DAYS ' + rd.days + '/' + rd.limit : 'R-DAYS ' + rd.days + '/' + rd.limit;
+  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + rd.by : ' · ' + rd.left + ' left'))}">&#9201; ${escapeHtml(txt)}</span>`;
+}
+
+function gRdays(g) {
+  let best = null;
+  (g.prog ? g.prog.open.concat(g.prog.done) : []).forEach(x => { if (x.rdays && (!best || (x.rdays.over && !best.over) || x.rdays.days > best.days)) best = x.rdays; });
+  return best;
+}
+
 function impTkPill(g) {
   const t = impTk(g);
   if (!t) return '';
@@ -3727,7 +3768,7 @@ function impLineHtml(g, B) {
     <div class="imp-line-head" onclick="impSelect(${i})">
       ${impMine(g) ? '<span class="imp-dot" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
-      ${impTkPill(g)}
+      ${impTkPill(g)}${gRdays(g) ? '<span class="imp-rd">' + rdHtml(gRdays(g)) + '</span>' : ''}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
       <span class="imp-icons">${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
@@ -3754,14 +3795,15 @@ function ymdLocal(d) {
 
 function lateBarHtml(onchange) {
   lateDefaults();
-  return `<div class="late-bar"><div class="fbox"><button class="phase-btn${lateMode === 'open' ? ' active' : ''}" onclick="lateMode = 'open'; ${onchange}">Open: late &amp; about to be late</button><button class="phase-btn${lateMode === 'closed' ? ' active' : ''}" onclick="lateMode = 'closed'; ${onchange}">Closed late</button></div>${lateMode === 'closed' ? `<label class="inline-label">From <input type="date" value="${lateFrom}" onchange="lateFrom = this.value; ${onchange}"></label><label class="inline-label">To <input type="date" value="${lateTo}" onchange="lateTo = this.value; ${onchange}"></label>` : ''}</div>`;
+  return `<div class="late-bar"><div class="fbox"><button class="phase-btn${lateMode === 'open' ? ' active' : ''}" onclick="lateMode = 'open'; ${onchange}">Open: late &amp; about to be late</button><button class="phase-btn${lateMode === 'rdays' ? ' active' : ''}" onclick="lateMode = 'rdays'; ${onchange}">R-DAYS over</button><button class="phase-btn${lateMode === 'closed' ? ' active' : ''}" onclick="lateMode = 'closed'; ${onchange}">Closed late</button></div>${lateMode === 'closed' ? `<label class="inline-label">From <input type="date" value="${lateFrom}" onchange="lateFrom = this.value; ${onchange}"></label><label class="inline-label">To <input type="date" value="${lateTo}" onchange="lateTo = this.value; ${onchange}"></label>` : ''}</div>`;
 }
 
 function lateLineHtml(x, click) {
   const late = x.state === 'late';
+  if (x.state === 'rdays') return `<div class="late-line st-late" onclick="${click}"><div class="late-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</div><div class="late-task"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(x.task)}</b><div class="late-sub">${escapeHtml([x.who, 'since ' + shortWhen(x.arrived), x.took ? 'took ' + String(x.took).replace(' so far', '') : ''].filter(Boolean).join(' · '))}</div></div><div class="late-right">${rdHtml(x.rdays)}</div></div>`;
   const right = lateMode === 'closed' ? `<span class="late-badge">Late ${escapeHtml(x.lateBy || '')}</span>` : late ? `<span class="late-badge">Late ${escapeHtml(x.lateBy || '')}</span>` : `<span class="left-badge soon">${x.leftMs === 0 || !x.left ? 'Due now' : escapeHtml(x.left) + ' left'}</span>`;
   const sub = [x.who, lateMode === 'closed' ? 'closed ' + shortWhen(x.done) : 'since ' + shortWhen(x.arrived), x.took ? 'took ' + String(x.took).replace(' so far', '') + (x.allowed ? ' of ' + x.allowed : '') : ''].filter(Boolean).join(' · ');
-  return `<div class="late-line ${late || lateMode === 'closed' ? 'st-late' : 'st-soon'}" onclick="${click}"><div class="late-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</div><div class="late-task"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(x.task)}</b><div class="late-sub">${escapeHtml(sub)}</div></div><div class="late-right">${right}</div></div>`;
+  return `<div class="late-line ${late || lateMode === 'closed' ? 'st-late' : 'st-soon'}" onclick="${click}"><div class="late-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</div><div class="late-task"><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(x.task)}</b><div class="late-sub">${escapeHtml(sub)}</div></div><div class="late-right">${rdHtml(x.rdays)}${right}</div></div>`;
 }
 
 let lateWho = '';
@@ -3782,12 +3824,12 @@ function lateListHtml(allLines, click, rerender) {
   const q = lateQ.trim().toLowerCase();
   const lines = allLines.filter(x => (!lateWho || String(x.who || '').split(',').map(y => y.trim()).indexOf(lateWho) !== -1) && (!q || [x.task, x.phase, x.key, x.name, x.who, x.projectName].join(' ').toLowerCase().indexOf(q) !== -1));
   const filt = rerender ? `<div class="late-filter"><select onchange="lateFilterSet('who', this.value)"><option value="">Everyone (${allLines.length})</option>${people.map(n => `<option value="${escapeHtml(n)}"${n === lateWho ? ' selected' : ''}>${escapeHtml(n)} (${allLines.filter(x => String(x.who || '').split(',').map(y => y.trim()).indexOf(n) !== -1).length})</option>`).join('')}</select><input type="text" id="late-q" placeholder="Filter by task, phase, case or name" value="${escapeHtml(lateQ)}" oninput="lateFilterSet('q', this.value)">${lateWho || lateQ ? `<button class="btn btn-small" onclick="lateWho = ''; lateQ = ''; lateFilterSet('who', '')">Clear</button>` : ''}</div>` : '';
-  const late = lines.filter(x => x.state === 'late'), soon = lines.filter(x => x.state !== 'late');
+  const late = lines.filter(x => x.state === 'late'), rdl = lines.filter(x => x.state === 'rdays'), soon = lines.filter(x => x.state === 'soon');
   late.sort((a, b) => (b.lateMs || 0) - (a.lateMs || 0));
   soon.sort((a, b) => (a.leftMs || 0) - (b.leftMs || 0));
   if (!lines.length) return filt + `<div class="late-none">${lateWho || q ? 'Nothing matches this filter.' : lateMode === 'closed' ? '&#10003; Nothing was closed late in these dates.' : '&#10003; Nothing is late or about to be late right now.'}</div>`;
   const sec = (title, list, cls) => list.length ? `<div class="late-head ${cls}">${title} <b>${list.length}</b></div>${list.map(x => lateLineHtml(x, click(x))).join('')}` : '';
-  return filt + (lateMode === 'closed' ? sec('Closed late', late, 'st-late') : sec('&#128308; Late now', late, 'st-late') + sec('&#128992; About to be late (less than 1 hour left)', soon, 'st-soon'));
+  return filt + (lateMode === 'closed' ? sec('Closed late', late, 'st-late') : lateMode === 'rdays' ? sec('&#9201; Over its R-DAYS', rdl, 'st-late') : sec('&#128308; Late now', late, 'st-late') + sec('&#9201; Over its R-DAYS', rdl, 'st-late') + sec('&#128992; About to be late (less than 1 hour left)', soon, 'st-soon'));
 }
 
 function impLateHtml() {
@@ -3796,7 +3838,7 @@ function impLateHtml() {
   const lines = [];
   const f = new Date(lateFrom + 'T00:00:00').getTime(), t = new Date(lateTo + 'T23:59:59').getTime();
   B.shown.forEach(g => {
-    if (lateMode === 'open') g.prog.open.forEach(x => { const c = impLateCls(x); if (c === 'ok') return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.who, state: c, lateBy: x.lateBy, left: x.left, leftMs: x.leftMs, lateMs: x.late ? 1 : 0, arrived: x.arrived, took: x.took, allowed: x.allowed }); });
+    if (lateMode !== 'closed') g.prog.open.forEach(x => { let c = impLateCls(x); if (c !== 'late' && x.rdays && x.rdays.over) c = 'rdays'; if (c === 'ok' || (lateMode === 'rdays' && c !== 'rdays')) return; lines.push({ g: g, key: g.title || g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.who, state: c, lateBy: x.lateBy, left: x.left, leftMs: x.leftMs, lateMs: x.late ? 1 : 0, arrived: x.arrived, took: x.took, allowed: x.allowed, rdays: x.rdays }); });
     else g.prog.done.forEach(x => { if (x.state !== 'late' || !x.doneMs || x.doneMs < f || x.doneMs > t) return; lines.push({ g: g, key: g.name, name: g.supplier, task: x.task, phase: x.phase || taskPhaseOf(x.task), who: x.by, state: 'late', lateBy: String(x.stateTxt || '').replace(/^Late /, ''), done: x.done, took: x.took, allowed: x.allowed }); });
   });
   return lateBarHtml('renderImports()') + `<div class="late-list">${lateListHtml(lines, x => `impOpenFromLate('${impJs(x.g.name)}')`, 'renderImports()')}</div>`;
@@ -3893,14 +3935,14 @@ function impTileHtml(x, g, kind, click) {
     const late = x.state === 'late';
     const badge = late ? `<span class="late-badge">${escapeHtml(x.stateTxt)}</span>` : x.stateTxt ? `<span class="ok-badge st-${escapeHtml(x.state || 'ok')}">${escapeHtml(x.stateTxt)}</span>` : '<span class="ok-badge">Closed</span>';
     const sub = ['closed ' + shortWhenImp(x.done), x.by ? 'by ' + x.by : '', x.took ? 'took ' + x.took + (x.allowed ? ' of ' + x.allowed : '') : ''].filter(Boolean).join(' · ');
-    return `<span class="case-chip imp-tile done${late ? ' late' : ''}" title="${escapeHtml(sub)}"><b>&#10003; ${escapeHtml(x.task)}</b>${badge}${gb}<small>${escapeHtml(sub)}</small></span>`;
+    return `<span class="case-chip imp-tile done${late ? ' late' : ''}" title="${escapeHtml(sub)}"><b>&#10003; ${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}<small>${escapeHtml(sub)}</small></span>`;
   }
   const cls = impLateCls(x);
   const badge = cls === 'late' ? `<span class="late-badge">${escapeHtml(impLateTxt(x))}</span>` : `<span class="left-badge${cls === 'soon' ? ' soon' : ''}">${escapeHtml(impLateTxt(x) || 'Waiting')}</span>`;
   const sub = [x.took ? 'took ' + x.took.replace(' so far', '') + (x.allowed ? ' of ' + x.allowed : '') : '', 'since ' + shortWhenImp(x.arrived), x.who || ''].filter(Boolean).join(' · ');
-  const inner = `<b>${escapeHtml(x.task)}</b>${badge}${gb}<small>${escapeHtml(sub)}</small>`;
+  const inner = `<b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}<small>${escapeHtml(sub)}</small>`;
   if (click) return `<button class="case-chip imp-tile${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" title="${escapeHtml(sub)}" onclick="${click}">${inner}</button>`;
-  return `<a class="case-chip imp-tile imp-open-task${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab"><b>${escapeHtml(x.task)}</b>${badge}${gb}<span class="imp-go">&#8599;</span><small>${escapeHtml(sub)}</small></a>`;
+  return `<a class="case-chip imp-tile imp-open-task${cls === 'late' ? ' late' : cls === 'soon' ? ' soon' : ''}" href="${escapeHtml(impTaskUrl(x))}" target="_blank" rel="noopener" title="Open this task in a new tab"><b>${escapeHtml(x.task)}</b>${badge}${gb}${rdHtml(x.rdays)}<span class="imp-go">&#8599;</span><small>${escapeHtml(sub)}</small></a>`;
 }
 
 function impLateCls(o) {
@@ -4726,12 +4768,85 @@ function renderReminders() {
   document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
 }
 
+const BOARD_NAME = "Task Board";
+const BOARD_PROJECT = "__board";
+const BOARD_TASK = { name: BOARD_NAME, phase: "Task Board", panel: "board", description: "Every Ref No you are working on, and where it stands",
+  temp: false, fields: [], owners: [], slots: [], active: true };
+let boardData = null;
+let boardTab = 'all';
+let boardSeq = 0;
+
+function openBoard() {
+  window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(BOARD_NAME);
+}
+
+function setBoardTab(t) {
+  boardTab = t;
+  ['all', 'late', 'soon', 'rdays'].forEach(k => document.getElementById('bd-t-' + k).classList.toggle('active', k === t));
+  renderBoard();
+}
+
+async function loadBoard(fresh) {
+  const box = document.getElementById('board-body');
+  const psel = document.getElementById('board-person');
+  const lead = user && user.level <= 1;
+  if (psel && !psel.options.length) {
+    psel.classList.toggle('hidden', !lead);
+    psel.innerHTML = lead ? '<option value="">Everyone</option>' + Object.keys(STAFF).sort().map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('') : '';
+  }
+  const jsel = document.getElementById('board-project');
+  if (jsel && !jsel.options.length) jsel.innerHTML = '<option value="">All projects</option>' + PROJECTS.filter(p => p.active !== false && p.id !== ADMIN_PROJECT).map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+  if (!boardData) box.innerHTML = '<div class="report-meta">Loading…</div>';
+  const seq = ++boardSeq;
+  try {
+    const r = await apiCall('boardList', { person: lead ? (psel ? psel.value : '') : profile.name, project: jsel ? jsel.value : '', fresh: !!fresh });
+    if (seq !== boardSeq) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    boardData = r;
+    renderBoard();
+    if (r.stale && !fresh) loadBoard(true);
+  } catch (e) { if (!boardData) box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function boardOpen(task, ref, cs) {
+  openPendingItem(task, ref, cs, '', '');
+}
+
+function renderBoard() {
+  const box = document.getElementById('board-body');
+  if (!box || !boardData) return;
+  const q = String(valOf('board-q') || '').trim().toLowerCase();
+  const meta = document.getElementById('board-meta');
+  const groups = (boardData.groups || []).map(g => {
+    const lines = g.lines.filter(l => boardTab === 'all' || l.state === boardTab);
+    return Object.assign({}, g, { lines: lines });
+  }).filter(g => g.lines.length)
+    .filter(g => !q || [g.key, g.name, g.projectName].concat(g.lines.map(l => l.task + ' ' + l.who)).join(' ').toLowerCase().indexOf(q) !== -1);
+  const nLate = (boardData.groups || []).reduce((a, g) => a + g.lines.filter(l => l.state === 'late').length, 0);
+  const nSoon = (boardData.groups || []).reduce((a, g) => a + g.lines.filter(l => l.state === 'soon').length, 0);
+  const nRd = (boardData.groups || []).reduce((a, g) => a + g.lines.filter(l => l.state === 'rdays').length, 0);
+  if (meta) meta.innerText = (boardData.groups || []).length + ' ref nos · ' + nLate + ' late · ' + nSoon + ' about to be late · ' + nRd + ' over R-DAYS · updated ' + (boardData.at || '');
+  const stCls = s => s === 'late' ? 'st-late' : s === 'rdays' ? 'st-rdays' : s === 'soon' ? 'st-soon' : '';
+  box.innerHTML = groups.map(g => {
+    const worst = g.lines.some(l => l.state === 'late') ? 'late' : g.lines.some(l => l.state === 'rdays') ? 'rdays' : g.lines.some(l => l.state === 'soon') ? 'soon' : '';
+    return `<div class="board-g ${stCls(worst)}">
+      <div class="board-h"><span>${escapeHtml(g.key)}</span>${g.name ? '<small>' + escapeHtml(g.name) + '</small>' : ''}<small>${escapeHtml(g.projectName || '')}</small>${rdHtml(g.rdays, 'rd-right')}</div>
+      ${g.lines.map(l => `<div class="board-l ${stCls(l.state)}" onclick="boardOpen('${escapeHtml(l.task).replace(/'/g, "\\'")}', '${escapeHtml(g.refNo || '')}', '${escapeHtml(g.caseNo || '')}')">
+        <span class="tev-ph" style="--ph:${phaseColor(l.phase)}">${escapeHtml(l.phase || 'Other')}</span><span class="tev-arrow">&rarr;</span><b>${escapeHtml(l.task)}</b>
+        ${l.state === 'late' ? `<span class="late-badge">Late ${escapeHtml(l.lateBy || '')}</span>` : l.state === 'soon' ? `<span class="left-badge soon">${l.leftMs === 0 || !l.left ? 'Due now' : escapeHtml(l.left) + ' left'}</span>` : l.left ? `<span class="left-badge">${escapeHtml(l.left)} left</span>` : ''}
+        ${rdHtml(l.rdays)}
+        <div class="board-sub">${escapeHtml([l.who, 'since ' + shortWhen(l.arrived), l.took ? 'took ' + String(l.took).replace(' so far', '') + (l.allowed ? ' of ' + l.allowed : '') : ''].filter(Boolean).join(' · '))}</div>
+      </div>`).join('')}
+    </div>`;
+  }).join('') || `<div class="empty-tile" style="padding:30px 20px;">${q || boardTab !== 'all' ? 'Nothing matches.' : 'Nothing is open right now.'}</div>`;
+}
+
 const MY_ASSIGNED = "My Assigned";
 const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassigned", description: "Tasks Assigned to You",
   temp: false, fields: [], owners: [], slots: [], active: true };
 
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK, DASH_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK, DASH_TASK, BOARD_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
 }
 
 function taskByName(name) {
@@ -4763,7 +4878,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t) || pendingItems.some(p => p.taskName === t.name));
-  return list.map(t => t.name).concat([MY_ASSIGNED]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat([MY_ASSIGNED, BOARD_NAME]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : []).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -4777,7 +4892,7 @@ function extraPanelsFor(staffName) {
 }
 
 function isPanelProject(pid) {
-  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || pid === IMPORTS_PROJECT || pid === DASH_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
+  return pid === ASSIGNED_PROJECT || pid === REMINDERS_PROJECT || pid === IMPORTS_PROJECT || pid === DASH_PROJECT || pid === BOARD_PROJECT || String(pid || '').indexOf(PANEL_PREFIX) === 0;
 }
 
 function recurringHidden(t) {
@@ -4802,6 +4917,7 @@ function projOfTask(name) {
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
   if (t.name === MY_REMINDERS) return REMINDERS_PROJECT;
   if (t.name === IMPORTS_NAME) return IMPORTS_PROJECT;
+  if (t.name === BOARD_NAME) return BOARD_PROJECT;
   if (t.name === DASH_NAME) return DASH_PROJECT;
   return t.project || DEFAULT_PROJECT;
 }
@@ -4811,6 +4927,7 @@ function projectName(pid) {
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
   if (pid === REMINDERS_PROJECT) return MY_REMINDERS;
   if (pid === IMPORTS_PROJECT) return IMPORTS_NAME;
+  if (pid === BOARD_PROJECT) return BOARD_NAME;
   if (pid === DASH_PROJECT) return DASH_NAME;
   if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
   const p = PROJECTS.filter(x => x.id === pid)[0];
@@ -4975,7 +5092,7 @@ function renderProjectNav() {
     const n = pendingCountForProject(p.id);
     const on = p.id === currentProject || (currentProject === IMPORTS_PROJECT && p.id === importPid());
     return `<button class="ftab${on ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
-  }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '');
+  }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '') + `<button class="ftab${currentProject === BOARD_PROJECT ? ' active' : ''}" onclick="openBoard()">&#128203; ${BOARD_NAME}</button>`;
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const inImp = currentProject === IMPORTS_PROJECT && importPid() && projs.some(p => p.id === importPid());
   const chPid = inImp ? importPid() : currentProject;
@@ -4987,6 +5104,32 @@ function renderProjectNav() {
       const cid = escapeHtml(c.id).replace(/'/g, "\\'");
       return `<button class="stab${!inImp && c.id === currentChain ? ' active' : ''}" onclick="${inImp ? `leaveImportsTo('${escapeHtml(chPid)}', '${cid}')` : `setChain('${cid}')`}"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
     }).join('')}${impStab}</div>` : ''}`;
+}
+
+function taskLimitTxt(t) {
+  if (!t || !t.sla) return '';
+  const d = Number(t.sla.days) || 0, h = Number(t.sla.hours) || 0;
+  return [d ? d + ' working day' + (d === 1 ? '' : 's') : '', h ? h + ' hour' + (h === 1 ? '' : 's') : ''].filter(Boolean).join(' ');
+}
+
+function taskOnPoints(t) {
+  if (!t) return 0;
+  const list = pendingForTask(t.name).filter(p => p.onPoints);
+  if (list.length) return list[0].onPoints;
+  return 0;
+}
+
+function renderTaskBand(t) {
+  const band = document.getElementById('task-band');
+  if (!band) return;
+  const lim = taskLimitTxt(t);
+  const pts = taskOnPoints(t);
+  const bits = [];
+  if (lim) bits.push('<span>&#9201; <b>Time limit:</b> ' + escapeHtml(lim) + '</span>');
+  else if (t && !t.panel && !t.schedule) bits.push('<span>&#9201; No time limit</span>');
+  if (pts) bits.push('<span class="tb-pts">&#9733; On time: +' + pts + ' points</span>');
+  band.innerHTML = bits.join('');
+  band.classList.toggle('hidden', !bits.length);
 }
 
 function pendBubble(list) {
@@ -6487,10 +6630,12 @@ function caseTimeHtml(p) {
   if (p.grace && p.grace.oldAllowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.grace.newAllowed) + ' <small>(was ' + escapeHtml(p.grace.oldAllowed) + ', more time approved)</small></span>');
   else if (p.allowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.allowed) + '</span>');
   if (p.due) bits.push('<span><b>Due:</b> ' + escapeHtml(p.due) + '</span>');
-  if (p.taken) bits.push('<span><b>Used:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + '</span>');
+  if (p.taken) bits.push('<span><b>Took:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + (p.allowed ? ' of ' + escapeHtml(p.allowed) : '') + '</span>');
   if (p.late) bits.push('<span class="bad">Late by ' + escapeHtml(p.lateBy || '') + '</span>');
   else if (p.left) bits.push('<span class="good">' + (p.leftMs === 0 ? 'Due now' : escapeHtml(p.left) + ' left') + '</span>');
   else if (!p.allowed && !p.due) bits.push('<span>No time limit set on this task</span>');
+  if (p.rdays) bits.push('<span>' + rdHtml(p.rdays) + '</span>');
+  if (p.onPoints) bits.push('<span class="tb-pts">On time: +' + p.onPoints + ' points</span>');
   return bits.length ? '<div class="ci-time">' + bits.join('') + '</div>' : '';
 }
 
@@ -7704,8 +7849,10 @@ async function renderEntryScreen() {
   const currentT = taskByName(currentTask);
   header.innerText = (currentT && currentT.description) ? currentT.description : currentTask;
   header.classList.toggle('desc-head', !!(currentT && currentT.description));
+  renderTaskBand(currentT);
   renderFormInterface();
   renderPendingStrip();
+  renderTaskBand(currentT);
 
   if (pendingKeysToFill) {
     const k = pendingKeysToFill;
@@ -7876,7 +8023,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-access', 'partial-section', 'recent-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-access', 'form-board', 'partial-section', 'recent-section']
     .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen)) el.classList.add('hidden'); });
   document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => el.classList.add('hidden'));
 }
@@ -7955,6 +8102,13 @@ function renderFormInterface() {
     if (dashData) renderDash(false); else { try { const c = JSON.parse(localStorage.getItem(dashCacheKey()) || 'null'); if (c && c.ok) { dashData = c; renderDash(true); } } catch (e) {} }
     loadDash(false);
     dashStartTimer();
+    return;
+  }
+  if (t.panel === "board") {
+    document.getElementById('form-board').classList.remove('hidden');
+    document.getElementById('entry-layout').classList.add('dash-full');
+    if (boardData) renderBoard();
+    loadBoard();
     return;
   }
   if (t.panel === "imports") {
