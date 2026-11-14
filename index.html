@@ -1055,6 +1055,9 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-kpis-tight .dsh-kpi-spark .dsh-spark { height: 16px; }
 @media (max-width: 860px) { .dsh-kpis-tight { grid-template-columns: repeat(2, 1fr); } }
 .dsh-scroll { max-height: 340px; overflow-y: auto; }
+.dsh-3mid { display: grid; grid-template-columns: 1.1fr 0.8fr 1.1fr; gap: 12px; margin-bottom: 12px; align-items: start; }
+.dsh-3mid > .dsh-card { margin-bottom: 0; }
+@media (max-width: 1000px) { .dsh-3mid { grid-template-columns: 1fr; } }
 .dsh-late-list.full { max-height: 420px; overflow-y: auto; padding-right: 4px; }
 .dsh-latebox .dsh-late-list { max-height: 260px; overflow-y: auto; padding-right: 4px; }
 .dsh-latebox .dsh-late-li { cursor: pointer; }
@@ -1065,13 +1068,6 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-remg { margin-bottom: 8px; }
 .dsh-remg-h { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin: 4px 0 3px; }
 .dsh-remg-h span { color: var(--accent-dark); }
-.dsh-podium { background: linear-gradient(140deg, #14532d, #1d6b3f); color: #fff; }
-.dsh-podium .dsh-card-h h3, .dsh-podium .dsh-card-h > span { color: rgba(255,255,255,0.85); }
-.dsh-pod-row { display: flex; align-items: center; gap: 10px; padding: 7px 4px; }
-.dsh-pod-row b { flex: 1; font-size: 1.05rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dsh-pod-m { font-size: 1.3rem; }
-.dsh-pod-p { font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.25rem; color: #f5c46e; }
-.dsh-pod-none { color: rgba(255,255,255,0.75); font-size: 0.85rem; padding: 10px 2px; }
 .dsh-how-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
 .dsh-how { flex: 1 1 220px; }
 .dsh-how-h { font-size: 0.78rem; font-weight: 800; color: var(--text-dim); margin-bottom: 2px; }
@@ -2850,7 +2846,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R40";
+const APP_VERSION = "R41";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3161,7 +3157,7 @@ function dashLateBox(P) {
   </section>`;
 }
 
-let dashLateFull = false;
+let dashLateFull = true;
 
 let lateWantProject = null;
 
@@ -3187,8 +3183,9 @@ function dashProjBody(P, sbs, rangeTxt) {
       ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
       ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
     </section>
-    <section class="dsh-grid2 dsh-even">
+    <section class="dsh-3mid">
       <div class="dsh-card"><div class="dsh-card-h"><h3>Cases arriving &amp; satisfied</h3><span>per day</span></div>${dashArea(days, [{ name: 'Cases arrived', color: '#0f8b8d', values: M.daily.map(x => x.refs) }, { name: 'Satisfied', color: '#f2a541', values: M.daily.map(x => x.satisfied) }], 'Cases arriving and satisfied')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashPie((M.riders || []).slice(0, 6), M.visits)}</div>
       ${flow}
     </section>`;
   } else if (P.kind === 'import' && P.imports) {
@@ -3213,31 +3210,31 @@ function dashProjBody(P, sbs, rangeTxt) {
     </section>
     <section class="dsh-grid2 dsh-even">${flow}<div></div></section>`;
   }
-  html += `<section class="dsh-grid2 dsh-even">${dashHowBox(P, rangeTxt)}<div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>average time</span></div>${dashSlow(P.slow || [])}</div></section>`;
-  html += dashLateBox(P);
   const ranked = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
   if (P.kind === 'mahana' && P.mahana) {
     const M = P.mahana;
     html += `<section class="dsh-grid3">
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashVBars(M.salesmen, '#0f8b8d')}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashVBars(M.branches, '#6c5ce7') : '<div class="dsh-empty">No branch on the forms in these dates.</div>'}</div>
       ${dashPodium(ranked)}
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 salesmen</h3><span>cases</span></div>${dashVBars(M.salesmen, '#0f8b8d')}</div>
+      <div class="dsh-card"><div class="dsh-card-h"><h3>Top 5 branches</h3><span>cases</span></div>${(M.branches || []).length ? dashVBars(M.branches, '#6c5ce7') : '<div class="dsh-empty">No branch in Save Contacts or HP Master in these dates.</div>'}</div>
     </section>`;
   } else {
     html += `<section class="dsh-grid2 dsh-even">${dashPodium(ranked)}<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div></section>`;
   }
+  html += dashLateBox(P);
   html += `<section class="dsh-grid2 dsh-even">
     <div class="dsh-card"><div class="dsh-card-h"><h3>Points ranking</h3><span>${escapeHtml(rangeTxt)}</span></div>
       ${ranked.length ? `<div class="dsh-rest">${ranked.slice(0, 10).map((p, i) => `<div class="dsh-rest-row"><span class="dsh-rank">${i < 3 ? ['&#129351;', '&#129352;', '&#129353;'][i] : i + 1}</span>${dashAvatar(p.name, 24)}<span class="dsh-rest-n">${escapeHtml(p.name)}</span><small>${p.closed} closed</small><b class="dsh-pts ${p.points < 0 ? 'neg' : 'pos'}">${p.points > 0 ? '+' : ''}${p.points}</b></div>`).join('')}</div>` : '<div class="dsh-empty">No points in these dates.</div>'}
     </div>
     ${P.kind === 'mahana' ? `<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>right now</span></div>${dashBars(P.tasks.map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>` : `<div class="dsh-card"><div class="dsh-card-h"><h3>Most active writers</h3><span>messages</span></div>${P.imports ? dashBars(P.imports.writers, 'linear-gradient(90deg,#f2a541,#f7d08a)', '&#128172;', '') : ''}</div>`}
   </section>`;
+  html += `<section class="dsh-grid2 dsh-even">${dashHowBox(P, rangeTxt)}<div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>top 5 &middot; average time</span></div>${dashSlow(P.slow || [])}</div></section>`;
   if (P.kind === 'mahana' && P.mahana) {
     const M = P.mahana;
     const sat = dashSatBy === 'branch' ? M.satByBranch : M.satBySalesman;
     html += `<section class="dsh-grid2 dsh-even">
       <div class="dsh-card"><div class="dsh-card-h"><h3>Most satisfied</h3><span class="dsh-toggle"><button class="${dashSatBy === 'salesman' ? 'on' : ''}" onclick="dashSatBy='salesman'; renderDash(false)">Salesman</button><button class="${dashSatBy === 'branch' ? 'on' : ''}" onclick="dashSatBy='branch'; renderDash(false)">Branch</button></span></div>${(sat || []).length ? dashBars(sat, 'linear-gradient(90deg,#f2a541,#f7d08a)', '', '') : '<div class="dsh-empty">Nothing yet in these dates.</div>'}</div>
-      <div class="dsh-card"><div class="dsh-card-h"><h3>Rider visits</h3><span>${M.visits} visits</span></div>${dashPie((M.riders || []).slice(0, 6), M.visits)}</div>
+      <div></div>
     </section>`;
   }
   html += `<section class="dsh-card"><div class="dsh-card-h"><h3>The team</h3><span>${escapeHtml(rangeTxt)}</span></div><div class="dsh-team">
@@ -3284,8 +3281,16 @@ function dashRemLi(x) {
 
 function dashPodium(ranked) {
   const top = (ranked || []).filter(p => p.points > 0).slice(0, 3);
-  return `<div class="dsh-card dsh-podium"><div class="dsh-card-h"><h3>Top performers</h3><span>points</span></div>
-    ${top.length ? top.map((p, i) => `<div class="dsh-pod-row"><span class="dsh-pod-m">${['&#129351;', '&#129352;', '&#129353;'][i]}</span>${dashAvatar(p.name, 34)}<b>${escapeHtml(p.name)}</b><span class="dsh-pod-p">+${p.points}</span></div>`).join('') : '<div class="dsh-pod-none">No points in these dates yet.</div>'}
+  const medal = ['&#129351;', '&#129352;', '&#129353;'];
+  const pod = i => top[i] ? `<div class="dsh-pod dsh-pod-${i + 1}">
+      <span class="dsh-medal">${medal[i]}</span>
+      ${dashAvatar(top[i].name, i === 0 ? 46 : 38)}
+      <div class="dsh-pod-name">${escapeHtml(top[i].name)}</div>
+      <div class="dsh-pod-pts">+${top[i].points}<small> pts</small></div>
+      <div class="dsh-pod-step">${i + 1}</div>
+    </div>` : '';
+  return `<div class="dsh-card"><div class="dsh-card-h"><h3>Top performers</h3><span>points</span></div>
+    ${top.length ? `<div class="dsh-podium">${pod(1)}${pod(0)}${pod(2)}</div>` : '<div class="dsh-empty">No points in these dates yet.</div>'}
   </div>`;
 }
 
