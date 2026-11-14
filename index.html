@@ -3471,7 +3471,7 @@ function renderDash(animate, stale) {
   </section>`;
   if (sbs) {
     const SA = dashColSections(shown[0], rangeTxt), SB = dashColSections(shown[1], rangeTxt);
-    const keys = ['head', 'kpis', 'today', 'late', 'ww', 'flow', 'podium', 'how', 'slow'];
+    const keys = ['head', 'kpis', 'today', 'flow', 'late', 'ww', 'podium', 'how', 'slow'];
     html += `<div class="dsh-sbs2">${keys.map(k => `<div class="dsh-cell">${SA[k] || ''}</div><div class="dsh-cell">${SB[k] || ''}</div>`).join('')}</div>`;
   }
   else html += dashProjBody(P, false, rangeTxt);
