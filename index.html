@@ -3662,8 +3662,8 @@ function pts4Html(p, label) {
 function rdHtml(rd, cls) {
   if (!rd) return '';
   const bad = rd.over;
-  const txt = bad ? 'R-DAYS ' + rd.days + '/' + rd.limit : 'R-DAYS ' + rd.days + '/' + rd.limit;
-  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + rd.by : ' · ' + rd.left + ' left'))}">&#9201; ${escapeHtml(txt)}</span>`;
+  const txt = 'R-DAYS ' + Math.ceil(rd.days) + '/' + rd.limit;
+  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + Math.ceil(rd.by) + ' day' + (Math.ceil(rd.by) === 1 ? '' : 's') : ' · ' + Math.floor(rd.left) + ' day' + (Math.floor(rd.left) === 1 ? '' : 's') + ' left'))}">&#9201; ${escapeHtml(txt)}</span>`;
 }
 
 function gRdays(g) {
