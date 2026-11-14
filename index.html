@@ -1513,6 +1513,23 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rem-sug-btn { border: 1px solid var(--border-color); background: var(--info-soft); color: var(--info); border-radius: 999px; padding: 2px 9px; margin: 2px 4px 2px 0; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
 .grace-badge { display: inline-block; background: var(--info-soft); color: var(--info); border: 1px solid #bcd7ef; border-radius: 999px; padding: 0 7px; font-size: 0.68rem; font-weight: 800; margin-left: 4px; cursor: help; }
 .case-chip { position: relative; }
+.imp-tk { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; color: var(--pc, #475569); border: 1px solid var(--pc, #475569); background: #fff; white-space: nowrap; }
+.imp-tk-h { background: #e8f1ff !important; color: #1e3a8a; }
+.chip-rem, .chip-ed { display: inline-block; margin-right: 5px; cursor: pointer; font-size: 0.8rem; opacity: 0.6; }
+.chip-rem:hover, .chip-ed:hover { opacity: 1; }
+.card-rem { cursor: pointer; margin-right: 6px; opacity: 0.65; font-size: 0.95rem; }
+.card-rem:hover { opacity: 1; }
+.as-more { margin: 4px 0 8px; padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,0.04); font-size: 0.85rem; display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.assign-card h3.clicky { cursor: pointer; }
+.ci-desc { font-size: 0.95rem; font-weight: 600; margin: 2px 0 6px; }
+.ci-time { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 8px; padding: 7px 10px; border-radius: 8px; background: rgba(0,0,0,0.045); font-size: 0.85rem; }
+.ci-time .bad { color: #b42318; font-weight: 700; }
+.ci-time .good { color: #05603a; font-weight: 700; }
+#mini-pop { position: fixed; z-index: 9000; width: 320px; max-width: calc(100vw - 16px); background: #fff; color: #1f2937; border: 1px solid #d0d5dd; border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,0.22); padding: 12px; font-size: 0.88rem; }
+#mini-pop input[type=text], #mini-pop select { width: 100%; margin: 6px 0; box-sizing: border-box; }
+#mini-pop .mp-act { display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px; }
+.as-parse { margin: -2px 0 8px; font-size: 0.82rem; }
+.as-parse .rem-when { margin-right: 6px; }
 .chip-x { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1px solid #f1b8b3; color: var(--danger); font-size: 0.6rem; line-height: 16px; text-align: center; cursor: pointer; display: none; }
 .case-chip:hover .chip-x { display: block; }
 @media (hover: none) { .chip-x { display: block; } }
@@ -2750,7 +2767,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R37";
+const APP_VERSION = "R38";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3445,6 +3462,27 @@ let impSel = '';
 let impBmInit = false;
 let impFlat = [];
 let impMergeOpen = '';
+let impRowG = new WeakMap();
+
+function impTk(g) {
+  if (!g || !g.prog) return null;
+  const o = g.prog.open.slice().sort((a, b) => (b.arrivedMs || 0) - (a.arrivedMs || 0))[0];
+  const x = o || g.prog.done[g.prog.done.length - 1];
+  if (!x) return null;
+  const ph = taskPhaseOf(x.task) || x.task;
+  return { phase: ph, task: x.task, open: !!o };
+}
+
+function impRefs(g) {
+  const P = (impData && impData.progress) || {};
+  return Object.keys(P).filter(k => g.keys.indexOf(k) !== -1 && ((P[k].open || []).length || (P[k].done || []).length)).map(k => P[k].name).filter(Boolean);
+}
+
+function impTkPill(g) {
+  const t = impTk(g);
+  if (!t) return '';
+  return `<span class="imp-tk" style="--pc:${phaseColor(t.phase)}" title="${escapeHtml((t.open ? 'Standing at: ' : 'Last done: ') + t.task)}">${escapeHtml(t.phase)}${t.open ? '' : ' &#10003;'}</span>`;
+}
 
 function impKey(s) {
   return String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
@@ -3501,7 +3539,8 @@ function impBuild(showAll) {
   const stateOf = k => (states[impKey(k)] || {}).state || 'Open';
   const groups = {}, order = [];
   const into = impMergeMap();
-  d.rows.forEach(r => { const k0 = r[C.group] || r[C.each] || '(no name)'; const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const fz = v => { v = String(v === undefined || v === null ? '' : v).trim(); return v && v !== '0' ? v : ''; };
+  d.rows.forEach(r => { const k0 = fz(r[C.group]) || fz(r[C.main]) || fz(r[C.each]) || '(no name)'; const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
   const noteText = {};
   (d.notes || []).forEach(n => { noteText[n.key] = (noteText[n.key] || '') + ' ' + String(n.text || '').toLowerCase(); });
   const all = order.map(k => {
@@ -3512,6 +3551,9 @@ function impBuild(showAll) {
     const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
     const st = Array.from(new Set(list.map(r => norm(r, C.status)).filter(v => v && v !== '0')));
     const g = { name: k, list: list, names: names, keys: keys, sup: sup, supplier: sup[0] || '(no supplier)', bm: bm, st: st, state: stateOf(k) };
+    const finals = Array.from(new Set(list.map(r => fz(r[C.group])).filter(Boolean)));
+    g.title = finals.length === 1 ? finals[0] : k;
+    list.forEach(r => impRowG.set(r, g));
     g.notes = (d.notes || []).filter(n => keys.indexOf(n.key) !== -1);
     g.prog = impProgress(g);
     g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ')).toLowerCase();
@@ -3683,11 +3725,12 @@ function impLineHtml(g, B) {
   const nOpen = g.prog.open.length;
   return `<div class="imp-line${sel ? ' sel' : ''}" id="imp-line-${i}">
     <div class="imp-line-head" onclick="impSelect(${i})">
-      ${impMine(g) ? '<span class="imp-dot" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.name)}</span>
+      ${impMine(g) ? '<span class="imp-dot" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
+      ${impTkPill(g)}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
-      <span class="imp-icons">${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      <span class="imp-icons">${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
       <div class="imp-sub">${escapeHtml([sums].concat(numSums).join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
@@ -3997,7 +4040,7 @@ function impPurchOf(r, B) {
 
 function impHeadThs(cols, B) {
   const after = impPurchAfter(cols, B);
-  return cols.map(j => `<th>${escapeHtml(impData.headers[j])}</th>` + (j === after ? '<th class="imp-purch-h">Purchases</th><th class="imp-purch-h">Balance</th>' : '')).join('');
+  return cols.map(j => `<th>${escapeHtml(impData.headers[j])}</th>` + (j === B.C.status ? '<th class="imp-tk-h">Taskando Status</th>' : '') + (j === after ? '<th class="imp-purch-h">Purchases</th><th class="imp-purch-h">Balance</th>' : '')).join('');
 }
 
 function impRowTds(r, cols, B) {
@@ -4005,6 +4048,7 @@ function impRowTds(r, cols, B) {
   const oc = impOmerCol();
   return cols.map(j => {
     let td = j === B.C.status ? `<td><span class="imp-pill ${impStatusClass(r[j])}">${escapeHtml(impTitle(r[j]))}</span></td>` : `<td class="${B.NUM[j] ? '' : 'left'}">${escapeHtml(impVal(r[j], B.NUM[j]))}</td>`;
+    if (j === B.C.status) td += `<td class="left">${impTkPill(impRowG.get(r))}</td>`;
     if (j === after) {
       const p = impPurchOf(r, B), omer = Number(r[oc]) || 0;
       const k = escapeHtml(impPurchKey(r, B));
@@ -4020,6 +4064,7 @@ function impFootTds(list, cols, B) {
   const oc = impOmerCol();
   return cols.map((j, x) => {
     let td = `<td class="${x ? '' : 'left'}">${x === 0 ? '<b>Total</b>' : B.NUM[j] ? '<b>' + list.reduce((a, r) => a + (Number(r[j]) || 0), 0) + '</b>' : ''}</td>`;
+    if (j === B.C.status) td += '<td></td>';
     if (j === after) {
       const seen = {};
       let pt = 0, ot = 0;
@@ -4077,7 +4122,7 @@ function impUpdateMsgBox() {
   const to = document.getElementById('imp-msg-to');
   const box = document.getElementById('imp-msg');
   box.classList.toggle('on', !!g);
-  to.innerHTML = g ? `Writing on <b>${escapeHtml(g.name)}</b> <span class="report-meta">${escapeHtml(g.supplier)}</span>` : 'Click a consignment to write about it.';
+  to.innerHTML = g ? `Writing on <b>${escapeHtml(g.title || g.name)}</b> <span class="report-meta">${escapeHtml(g.supplier)}</span>` : 'Click a consignment to write about it.';
   const sel = document.getElementById('imp-msg-task');
   const tasks = impData.tasks || [];
   const def = g ? (g.prog.open.length ? g.prog.open[0].task : (g.prog.done.length ? g.prog.done[g.prog.done.length - 1].task : '')) : '';
@@ -4207,7 +4252,7 @@ function impRowsHtml(B) {
   const rows = B.shown.reduce((a, g) => a.concat(g.list), []);
   const cols = H.map((h, j) => j);
   return `<div class="report-wrap"><table class="report-table"><thead><tr>${impHeadThs(cols, B)}</tr></thead><tbody>${
-    rows.map(r => `<tr>${impRowTds(r, cols, B)}</tr>`).join('') || `<tr><td colspan="${H.length + 2}" class="report-meta">Nothing matches.</td></tr>`
+    rows.map(r => `<tr>${impRowTds(r, cols, B)}</tr>`).join('') || `<tr><td colspan="${H.length + 3}" class="report-meta">Nothing matches.</td></tr>`
   }</tbody></table></div>`;
 }
 
@@ -4226,7 +4271,7 @@ function impDiffHtml(B) {
     }</tbody></table></div>
     <label style="margin-top:14px;">In C MSTR (not received yet), not in any Taskando task (${onlyExcel.length})</label>
     <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Consignment</th><th>Supplier</th><th>Status</th><th>Manager</th></tr></thead><tbody>${
-      onlyExcel.map(g => `<tr><td class="left"><b>${escapeHtml(g.name)}</b></td><td class="left">${escapeHtml(g.sup.join(', '))}</td><td>${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}</td><td>${escapeHtml(g.bm.join(', '))}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Every open consignment has a task.</td></tr>'
+      onlyExcel.map(g => `<tr><td class="left"><b>${escapeHtml(g.title || g.name)}</b></td><td class="left">${escapeHtml(g.sup.join(', '))}</td><td>${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}</td><td>${escapeHtml(g.bm.join(', '))}</td></tr>`).join('') || '<tr><td colspan="4" class="report-meta">Every open consignment has a task.</td></tr>'
     }</tbody></table></div></div>`;
 }
 
@@ -4382,7 +4427,7 @@ function parseRemDay(core, d0) {
   core = core.trim();
   let x;
   if (core === 'today') return d0;
-  if (core === 'tomorrow' || core === 'tmrw' || core === 'tom') return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 1);
+  if (core === 'tomorrow' || core === 'tmrw' || core === 'tmr' || core === 'tmw' || core === 'tom' || core === 'kal') return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 1);
   if (core === 'day after tomorrow') return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 2);
   if ((x = core.match(/^in (\d+) (day|days|week|weeks)$/))) return new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + Number(x[1]) * (/week/.test(x[2]) ? 7 : 1));
   if ((x = core.match(/^(next |this )?([a-z]+)$/)) && WEEKDAYS.indexOf(x[2].slice(0, 3)) !== -1 && x[2].length >= 3) {
@@ -6371,7 +6416,7 @@ function renderPendingStrip() {
 
   list.innerHTML = items.map((p, i) => `
     <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
-      ${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
+      ${chipTools(p)}${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
 
@@ -6427,6 +6472,133 @@ function fillKeysFromPendingId(id, i) {
 
 let caseInfoItem = null;
 
+function chipTools(p) {
+  const id = escapeHtml(p.pendingId || '');
+  const mine = user && profile && profile.name === user.name && (!p.assignedTo || p.assignedTo === user.name);
+  let h = '';
+  if (mine && id) h += `<span class="chip-rem" title="Remind me about this one" onclick="event.stopPropagation(); taskRemOpen('${id}', this)">&#128276;</span>`;
+  if (user && user.level === 0 && !p.recurring && !p.assigned && (p.refNo || p.caseNo) && id) h += `<span class="chip-ed" title="Edit Ref No / Case No" onclick="event.stopPropagation(); keyEditChip('${id}', this)">&#9998;</span>`;
+  return h;
+}
+
+function caseTimeHtml(p) {
+  const bits = [];
+  if (p.arrived) bits.push('<span><b>Live since:</b> ' + escapeHtml(p.arrived) + '</span>');
+  if (p.grace && p.grace.oldAllowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.grace.newAllowed) + ' <small>(was ' + escapeHtml(p.grace.oldAllowed) + ', more time approved)</small></span>');
+  else if (p.allowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.allowed) + '</span>');
+  if (p.due) bits.push('<span><b>Due:</b> ' + escapeHtml(p.due) + '</span>');
+  if (p.taken) bits.push('<span><b>Used:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + '</span>');
+  if (p.late) bits.push('<span class="bad">Late by ' + escapeHtml(p.lateBy || '') + '</span>');
+  else if (p.left) bits.push('<span class="good">' + (p.leftMs === 0 ? 'Due now' : escapeHtml(p.left) + ' left') + '</span>');
+  else if (!p.allowed && !p.due) bits.push('<span>No time limit set on this task</span>');
+  return bits.length ? '<div class="ci-time">' + bits.join('') + '</div>' : '';
+}
+
+let miniPopOff = null;
+
+function miniPop(anchor, html) {
+  miniPopClose();
+  const box = document.createElement('div');
+  box.id = 'mini-pop';
+  box.innerHTML = html;
+  document.body.appendChild(box);
+  const r = anchor && anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : { left: 20, bottom: 80, top: 60 };
+  const w = box.offsetWidth, h = box.offsetHeight;
+  let left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+  let top = r.bottom + 6;
+  if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 6);
+  box.style.left = left + 'px';
+  box.style.top = top + 'px';
+  box.addEventListener('click', e => e.stopPropagation());
+  miniPopOff = e => { if (e.type === 'keydown' ? e.key === 'Escape' : !box.contains(e.target)) miniPopClose(); };
+  setTimeout(() => { if (miniPopOff) { document.addEventListener('click', miniPopOff); document.addEventListener('keydown', miniPopOff); } }, 0);
+  const inp = box.querySelector('input[type=text]');
+  if (inp) inp.focus();
+  return box;
+}
+
+function miniPopClose() {
+  const box = document.getElementById('mini-pop');
+  if (box) box.remove();
+  if (miniPopOff) { document.removeEventListener('click', miniPopOff); document.removeEventListener('keydown', miniPopOff); miniPopOff = null; }
+}
+
+let taskRemLabel = '', taskRemNote = '', taskRemTag = '';
+
+function taskRemOpen(id, el) {
+  const p = pendingItems.concat(assignedMine).filter(x => x.pendingId === id)[0];
+  if (!p) return;
+  taskRemStart(keyLabel(p) + ' · ' + p.taskName, 'From task: ' + p.taskName, String(p.refNo || p.caseNo || ''), el);
+}
+
+function taskRemStart(label, note, tag, el) {
+  taskRemLabel = label; taskRemNote = note; taskRemTag = tag;
+  miniPop(el, `<b>&#128276; Remind me</b><div class="report-meta">${escapeHtml(label)}</div>
+    <input type="text" id="tr-text" placeholder="e.g. Call customer /tmr 10am" oninput="taskRemTyped()" onkeydown="if (event.key === 'Enter') taskRemSave()">
+    <div id="tr-parse" class="report-meta">Type / and a day: /tmr, /sunday, /12 nov, /tmr 4pm</div>
+    <div class="mp-act"><button class="btn btn-small" onclick="miniPopClose()">Cancel</button><button class="btn btn-small btn-primary" id="tr-save" onclick="taskRemSave()">Add reminder</button></div>`);
+}
+
+function taskRemTyped() {
+  const p = parseRemWhen(valOf('tr-text'));
+  const el = document.getElementById('tr-parse');
+  if (el) el.innerHTML = p ? `<span class="rem-when">&#128197; ${escapeHtml(p.label)}</span>` : 'Type / and a day: /tmr, /sunday, /12 nov, /tmr 4pm';
+}
+
+async function taskRemSave() {
+  const raw = String(valOf('tr-text') || '').trim();
+  const p = parseRemWhen(raw);
+  const what = (p ? p.title : raw) || 'Follow up';
+  const dueMs = p ? localMs(p.date, p.time || '12:00 AM') : 0;
+  const btn = document.getElementById('tr-save');
+  if (btn) btn.disabled = true;
+  try {
+    const r = await apiCall('remSave', { id: '', title: what + ' · ' + taskRemLabel, notes: taskRemNote, group: 'Tasks', tags: taskRemTag, priority: 'Normal', dueMs: dueMs, allDay: !!(p && !p.time), repeat: null, remindMins: p ? '0' : '' });
+    if (!r.ok) { if (btn) btn.disabled = false; return toast(r.error || 'Could not save', true); }
+    miniPopClose();
+    toast(p ? 'Reminder set for ' + p.label + '.' : 'Reminder added (no date).');
+    if (remData && r.item) { remData.items.push(r.item); try { renderReminders(); } catch (e) {} }
+  } catch (e) { if (btn) btn.disabled = false; toast('Network error', true); }
+}
+
+let keyPop = null;
+
+function keyEditChip(id, el) {
+  const p = pendingItems.filter(x => x.pendingId === id)[0];
+  if (!p) return;
+  keyEditPop([{ ref: p.refNo || '', cs: p.caseNo || '' }], el, false);
+}
+
+function keyEditPop(list, el, noCase) {
+  if (!user || user.level !== 0 || !list.length) return;
+  keyPop = { list: list, i: 0, merge: false, noCase: !!noCase };
+  miniPop(el, `<b>&#9998; ${noCase ? 'Edit name' : 'Edit Ref No / Case No'}</b>
+    ${list.length > 1 ? `<select id="kp-pick" onchange="keyPop.i = Number(this.value); keyPop.merge = false; document.getElementById('kp-ref').value = keyPop.list[keyPop.i].ref">${list.map((x, i) => `<option value="${i}">${escapeHtml(x.ref)}</option>`).join('')}</select>` : ''}
+    <label class="report-meta">${noCase ? 'Name in tasks' : 'Ref No'}</label><input type="text" id="kp-ref" value="${escapeHtml(list[0].ref)}">
+    ${noCase ? '' : `<label class="report-meta">Case No</label><input type="text" id="kp-case" value="${escapeHtml(list[0].cs)}" placeholder="none">`}
+    <div id="kp-msg" class="report-meta">Changes it everywhere. The Google Form sheet is not touched.</div>
+    <div class="mp-act"><button class="btn btn-small" onclick="miniPopClose()">Cancel</button><button class="btn btn-small btn-primary" id="kp-save" onclick="keyPopSave()">Change everywhere</button></div>`);
+}
+
+async function keyPopSave() {
+  if (!keyPop) return;
+  const cur = keyPop.list[keyPop.i];
+  const newRef = valOf('kp-ref'), newCase = keyPop.noCase ? cur.cs : valOf('kp-case');
+  const btn = document.getElementById('kp-save');
+  btn.disabled = true;
+  try {
+    const x = await apiCall('keyEdit', { oldRef: cur.ref, oldCase: cur.cs, newRef: newRef, newCase: newCase, merge: keyPop.merge });
+    btn.disabled = false;
+    if (!x.ok) { if (x.clash) keyPop.merge = true; document.getElementById('kp-msg').innerHTML = '<b class="band-late">' + escapeHtml(x.error || 'Could not change') + '</b>'; return; }
+    miniPopClose();
+    toast('Changed in ' + x.changed + ' places.');
+    Object.keys(trailMem).forEach(k => { delete trailMem[k]; });
+    try { JSON.parse(localStorage.getItem('tk_trail_idx') || '[]').forEach(k => localStorage.removeItem('tk_trail_' + k)); localStorage.removeItem('tk_trail_idx'); } catch (e) {}
+    try { loadPending(); } catch (e) {}
+    if (keyPop.noCase) { try { loadImports(); } catch (e) {} }
+  } catch (e) { btn.disabled = false; toast('Network error', true); }
+}
+
 function showCaseInfo(p) {
   const box = document.getElementById('case-info');
   if (!box) return;
@@ -6441,7 +6613,8 @@ function showCaseInfo(p) {
   }
   if (!p) { box.classList.add('hidden'); box.innerHTML = ''; return; }
   const canStar = user && user.level <= 1 && !p.recurring;
-  box.innerHTML = `<div class="case-info-head">${escapeHtml(keyLabel(p))}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}</div>` + rows.map(r => `<span class="case-info-item">${r[0] ? '<b>' + r[0] + ':</b> ' : ''}${r[1]}</span>`).join('') +
+  const ciT = taskByName(p.taskName);
+  box.innerHTML = `<div class="ci-desc">${escapeHtml(ciT && ciT.description ? ciT.description : p.taskName)}${ciT && ciT.description && ciT.description !== p.taskName ? ' <small class="report-meta">' + escapeHtml(p.taskName) + '</small>' : ''}</div><div class="case-info-head">${escapeHtml(keyLabel(p))}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}</div>` + caseTimeHtml(p) + rows.map(r => `<span class="case-info-item">${r[0] ? '<b>' + r[0] + ':</b> ' : ''}${r[1]}</span>`).join('') +
     `<div class="case-info-actions">
       ${canStar ? `<button class="btn btn-small" onclick="toggleImportant('${escapeHtml(p.pendingId || '')}')">${p.important ? '&#9733; Remove important' : '&#9734; Mark important'}</button>` : ''}
       <button class="btn btn-small" onclick="openGraceForm()">Ask for more time</button>
@@ -9814,7 +9987,7 @@ function newAssignDraft() {
   return {
     id: '', title: '', notes: '', people: [], mode: 'each', dueDate: todayYmd(), dueTime: '1:00 AM', repeat: false,
     schedule: { on: true, freq: 'weekly', every: 1, days: [new Date().getDay()], time: RECUR_DEFAULT_TIME, start: todayYmd(), end: 'never', until: '', count: 5 }, important: false,
-    priority: 'Normal', dueKind: 'date', allowD: 1, allowH: 0, remind: '', remindDate: todayYmd(), remindTime: '10:00 AM',
+    project: '', priority: 'Normal', dueKind: 'date', allowD: 1, allowH: 0, remind: '', remindDate: todayYmd(), remindTime: '10:00 AM',
     pointsOn: false, points: { bd: 0, bh: 0, bp: 0, op: 0, ad: 0, ah: 0, ap: 0, lp: 0 }
   };
 }
@@ -9848,7 +10021,8 @@ function renderAssignForm() {
   document.getElementById('assign-form').innerHTML = `
     <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
     <label>Title</label>
-    <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asSet('title', this.value)">
+    <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asTitleTyped(this.value)" onchange="asApplySlash(true)">
+    <div id="as-parse" class="as-parse"></div>
     <label>Notes (optional)</label>
     <textarea id="as-notes" placeholder="Details, links, what done looks like" oninput="asSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
     <label>Assign to</label>
@@ -9858,7 +10032,7 @@ function renderAssignForm() {
       <option value="shared"${d.mode === 'shared' ? ' selected' : ''}>One person finishing closes it for everyone</option>
     </select></div>` : ''}
     <div class="report-bar"><label class="inline-label">Priority <select onchange="asSet('priority', this.value)">${ASSIGN_PRIORITIES.map(p => `<option${d.priority === p ? ' selected' : ''}>${p}</option>`).join('')}</select></label>
-      ${PROJECTS.length > 1 ? `<label class="inline-label">Project <select onchange="asSet('project', this.value)">${PROJECTS.filter(p => p.active !== false).map(p => `<option value="${escapeHtml(p.id)}"${(d.project || DEFAULT_PROJECT) === p.id ? ' selected' : ''}>${escapeHtml(p.name)}</option>`).join('')}</select></label>` : ''}</div>
+      ${PROJECTS.length > 1 ? `<label class="inline-label">Project <select onchange="asSet('project', this.value)"><option value=""${d.project ? '' : ' selected'}>Pick a project</option>${PROJECTS.filter(p => p.active !== false || p.id === d.project).map(p => `<option value="${escapeHtml(p.id)}"${d.project === p.id ? ' selected' : ''}>${escapeHtml(p.name)}</option>`).join('')}</select></label>` : ''}</div>
     <div class="owner-grid" style="margin-top:6px;"><label class="owner-pick${d.repeat ? ' on' : ''}"><input type="checkbox"${d.repeat ? ' checked' : ''} onchange="assignDraft.repeat = this.checked; renderAssignForm()"> Repeat on a schedule</label></div>
     ${d.repeat ? `<div class="schedule-box">
       <div class="report-bar">
@@ -9905,6 +10079,7 @@ function renderAssignForm() {
     <div class="builder-actions" style="margin-top:14px;">
       <button class="btn btn-primary" id="btn-assign-save" onclick="saveAssign()">${d.id ? 'Save changes' : 'Assign'}</button>
     </div>`;
+  asTitleTyped(d.title);
 }
 
 const ASSIGN_PRIORITIES = ['Urgent', 'High', 'Normal', 'Low'];
@@ -9936,10 +10111,78 @@ function localMs(ymd, clock) {
   return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), h, Number(c[2])).getTime();
 }
 
+function asStaffList() {
+  return Object.keys(STAFF).filter(n => !(user && user.level === 1 && n === 'Jawad'));
+}
+
+function parseSlashes(text) {
+  const parts = String(text || '').split(/(?:^|\s)\/(?=\S)/);
+  if (parts.length < 2) return null;
+  const out = { title: parts[0].trim(), people: [], project: '', projectName: '', when: null, found: false };
+  const staff = asStaffList();
+  const projs = PROJECTS.filter(p => p.active !== false);
+  const one = a => (a.length === 1 ? a[0] : null);
+  const person = (w, loose) => staff.filter(n => n.toLowerCase() === w)[0] || (loose && w.length >= 2 ? one(staff.filter(n => n.toLowerCase().indexOf(w) === 0)) : null);
+  const proj = (w, loose) => projs.filter(p => String(p.name).toLowerCase() === w)[0] || (loose && w.length >= 2 ? one(projs.filter(p => String(p.name).toLowerCase().indexOf(w) === 0)) : null);
+  const when = w => parseRemWhen('x /' + w);
+  const take = (w, loose) => {
+    let x;
+    if ((x = person(w, false))) { if (out.people.indexOf(x) === -1) out.people.push(x); return true; }
+    if ((x = proj(w, false))) { out.project = x.id; out.projectName = x.name; return true; }
+    if ((x = when(w))) { out.when = x; return true; }
+    if (!loose) return false;
+    if ((x = person(w, true))) { if (out.people.indexOf(x) === -1) out.people.push(x); return true; }
+    if ((x = proj(w, true))) { out.project = x.id; out.projectName = x.name; return true; }
+    return false;
+  };
+  parts.slice(1).forEach(seg => {
+    const raw = seg.replace(/\s+/g, ' ').trim();
+    const low = raw.toLowerCase();
+    if (!low) return;
+    if (take(low, true)) { out.found = true; return; }
+    const words = low.split(' ');
+    const rest = [];
+    let hit = false;
+    words.forEach(w => { if (person(w, false) || proj(w, false)) { take(w, false); hit = true; } else rest.push(w); });
+    if (rest.length) { const x = when(rest.join(' ')); if (x) { out.when = x; hit = true; rest.length = 0; } }
+    if (hit && !rest.length) { out.found = true; return; }
+    if (hit) { out.found = true; out.title += ' ' + rest.join(' '); return; }
+    out.title += ' /' + raw;
+  });
+  out.title = out.title.trim();
+  return out.found ? out : null;
+}
+
+function asTitleTyped(v) {
+  assignDraft.title = v;
+  const p = parseSlashes(v);
+  const el = document.getElementById('as-parse');
+  if (!el) return;
+  if (!p) { el.innerHTML = '<small class="report-meta">Tip: type / to pick things, like "Send report /tmr /Ahmed /Imports".</small>'; return; }
+  el.innerHTML = (p.when ? `<span class="rem-when">&#128197; ${escapeHtml(p.when.label)}</span>` : '') + p.people.map(n => `<span class="rem-when">&#128100; ${escapeHtml(n)}</span>`).join('') + (p.project ? `<span class="rem-when">&#128193; ${escapeHtml(p.projectName)}</span>` : '');
+}
+
+function asApplySlash(redraw) {
+  const d = assignDraft;
+  const p = parseSlashes(d.title);
+  if (!p) return false;
+  d.title = p.title;
+  p.people.forEach(n => { if (d.people.indexOf(n) === -1) d.people.push(n); });
+  if (p.project) d.project = p.project;
+  if (p.when) {
+    d.repeat = false; d.dueKind = 'date'; d.dueDate = p.when.date;
+    if (p.when.time) d.dueTime = p.when.time;
+  }
+  if (redraw) renderAssignForm();
+  return true;
+}
+
 async function saveAssign() {
   const d = assignDraft;
+  asApplySlash(false);
   if (!d.title.trim()) return toast("Give the task a title.", true);
   if (!d.people.length) return toast("Pick at least one person.", true);
+  if (PROJECTS.length > 1 && !d.project) { renderAssignForm(); return toast("Pick a project, or type / and its name in the title.", true); }
   if (d.repeat && d.schedule.freq === 'weekly' && !(d.schedule.days || []).length) return toast("Pick at least one day.", true);
   const payload = {
     id: d.id, title: d.title.trim(), notes: d.notes, people: d.people, mode: d.people.length > 1 ? d.mode : 'each',
@@ -10207,7 +10450,8 @@ async function loadMyAssigned() {
     const done = items.filter(x => x.status === 'Done');
     list.innerHTML = open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
-        <h3>${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''} ${priorityBadge(x.priority)}${x.late ? '<span class="late-badge">Late</span>' : ''}</h3>
+        <h3 class="clicky" title="Click for details" onclick="document.getElementById('am-${escapeHtml(x.id)}').classList.toggle('hidden')">${user.name === profile.name ? `<span class="card-rem" title="Remind me about this one" data-t="${escapeHtml(x.title)}" onclick="event.stopPropagation(); taskRemStart(this.getAttribute('data-t'), 'From My Assigned', '', this)">&#128276;</span>` : ''}${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''} ${priorityBadge(x.priority)}${x.late ? '<span class="late-badge">Late' + (x.lateBy ? ' ' + escapeHtml(x.lateBy) : '') + '</span>' : ''}</h3>
+        <div class="as-more hidden" id="am-${escapeHtml(x.id)}">${x.created ? '<span><b>Live since:</b> ' + escapeHtml(x.created) + '</span>' : ''}<span><b>Due:</b> ${escapeHtml(x.due)}</span>${x.late ? '<span class="band-late"><b>Late by ' + escapeHtml(x.lateBy || '') + '</b></span>' : x.left ? '<span><b>Working time left:</b> ' + escapeHtml(x.left) + '</span>' : ''}${x.by ? '<span><b>Given by:</b> ' + escapeHtml(x.by) + '</span>' : ''}${x.notes ? '<span style="flex-basis:100%"><b>Details:</b> ' + escapeHtml(x.notes) + '</span>' : ''}</div>
         <div class="report-meta">${x.by ? 'Assigned by <b>' + escapeHtml(x.by) + '</b> to <b>' + escapeHtml((x.people || []).join(', ')) + '</b> · ' : ''}${x.repeat ? '&#8635; ' + escapeHtml(scheduleSummary(x.repeat)) + ' · ' : ''}Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
         ${canDo ? `<div class="report-bar">
