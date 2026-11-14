@@ -1143,6 +1143,16 @@ a.daily-item.daily-link:hover b { text-decoration: underline; }
 .dsh-late-li .late-badge, .dsh-late-li .left-badge { flex: none; }
 .dsh-more { margin-top: 8px; align-self: flex-end; border: none; background: none; color: #14584f; font-weight: 800; font-size: 0.8rem; cursor: pointer; }
 .dsh-sbs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+.dsh-sbs2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; margin-top: 12px; align-items: stretch; }
+.dsh-sbs2 .dsh-cell { min-width: 0; margin-bottom: 12px; display: flex; flex-direction: column; }
+.dsh-sbs2 .dsh-cell > .dsh-card, .dsh-sbs2 .dsh-cell > section.dsh-card { flex: 1; margin-bottom: 0; box-sizing: border-box; }
+.dsh-sbs2 .dsh-kpis { margin: 0; }
+.dsh-sbs2 .dsh-kpis-tight:not(.dsh-kpis-today) { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 6px; }
+.dsh-sbs2 .dsh-kpis-today { gap: 6px; }
+.dsh-sbs2 .dsh-kpi-ico { display: none; }
+.dsh-sbs2 .dsh-area { max-height: 150px; }
+.dsh-sbs2 .dsh-how-wrap { gap: 6px; }
+@media (max-width: 700px) { .dsh-sbs2 { grid-template-columns: 1fr; } }
 .dsh-col { min-width: 0; }
 .dsh-col-h { font-family: 'Fraunces', serif; font-weight: 800; font-size: 1.05rem; color: #fff; padding: 6px 14px; border-radius: 12px; background: #14584f; }
 .dsh-col-h.dsh-col-import { background: #1d3f66; }
@@ -3326,6 +3336,34 @@ function dashTodayRow(P, M, days) {
   return `<div class="dsh-today-h">Today</div><section class="dsh-kpis dsh-kpis-tight dsh-kpis-today" style="grid-template-columns: repeat(${tl.length}, minmax(0, 1fr))">${tl.join('')}</section>`;
 }
 
+function dashColSections(P, rangeTxt) {
+  const days = P.daily.map(x => x.d);
+  const M = P.kind === 'mahana' ? P.mahana : null;
+  const I = P.kind === 'import' ? P.imports : null;
+  const ranked = P.people.filter(p => p.closed || p.points).slice().sort((a, b) => b.points - a.points);
+  const out = {};
+  out.head = `<div class="dsh-col-h dsh-col-${P.kind}">${P.kind === 'import' ? '&#128230;' : '&#127968;'} ${escapeHtml(P.name)}</div>`;
+  out.kpis = M ? `<section class="dsh-kpis dsh-kpis-tight">
+      ${dashKpi('inbox', '#0f8b8d', M.refs, 'Cases arrived', 'new Ref Nos', '')}
+      ${dashKpi('smile', '#f2a541', M.satisfied, 'Satisfied', dashPct(M.satisfied, M.refs) + '% of cases', '')}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting + ' waiting', '')}
+    </section>` : `<section class="dsh-kpis dsh-kpis-tight">
+      ${dashKpi('box', '#0f8b8d', I ? I.open : 0, 'Open consignments', 'not received yet', '')}
+      ${dashKpi('clock', '#3a86ff', P.waiting, 'Tasks waiting', 'in Imports', '')}
+      ${dashKpi('check', '#2a9d8f', P.closed, 'Tasks closed', P.late ? P.late + ' late' : 'all on time', '')}
+      ${dashKpi('alert', '#e4572e', P.lateOpen, 'Late right now', P.waiting ? dashPct(P.lateOpen, P.waiting) + '% of waiting' : 'nothing waiting', '')}
+    </section>`;
+  out.today = dashTodayRow(P, M, days);
+  out.late = dashLateBox(P);
+  out.ww = `<div class="dsh-card"><div class="dsh-card-h"><h3>Where work is waiting</h3><span>top 4</span></div>${dashBars(P.tasks.slice(0, 4).map(t => ({ name: t.task, n: t.waiting, late: t.late })), i => i === 0 ? 'linear-gradient(90deg,#e4572e,#f2a541)' : 'linear-gradient(90deg,#0f8b8d,#3fd3bd)', '', 'waiting')}</div>`;
+  out.flow = `<div class="dsh-card"><div class="dsh-card-h"><h3>Tasks closed every day</h3><span>green all &middot; red late</span></div>${dashArea(days, [{ name: 'Closed', color: '#2a9d8f', values: P.daily.map(x => x.closed) }, { name: 'Late', color: '#e4572e', values: P.daily.map(x => x.late) }], 'Tasks closed every day')}</div>`;
+  out.podium = dashPodium(ranked);
+  out.how = dashHowBox(P, rangeTxt);
+  out.slow = `<div class="dsh-card"><div class="dsh-card-h"><h3>Slowest tasks to close</h3><span>top 5</span></div>${dashSlow(P.slow || [])}</div>`;
+  return out;
+}
+
 function dashPodium(ranked) {
   const top = (ranked || []).filter(p => p.points > 0).slice(0, 3);
   const medal = ['&#129351;', '&#129352;', '&#129353;'];
@@ -3431,7 +3469,11 @@ function renderDash(animate, stale) {
       <div class="dsh-hero-gauge">${dashGauge(onPct, 'closed on time')}</div>
     </div>
   </section>`;
-  if (sbs) html += `<div class="dsh-sbs">${shown.map(x => `<div class="dsh-col"><div class="dsh-col-h dsh-col-${x.kind}">${x.kind === 'import' ? '&#128230;' : '&#127968;'} ${escapeHtml(x.name)}</div>${dashProjBody(x, true, rangeTxt)}</div>`).join('')}</div>`;
+  if (sbs) {
+    const SA = dashColSections(shown[0], rangeTxt), SB = dashColSections(shown[1], rangeTxt);
+    const keys = ['head', 'kpis', 'today', 'late', 'ww', 'flow', 'podium', 'how', 'slow'];
+    html += `<div class="dsh-sbs2">${keys.map(k => `<div class="dsh-cell">${SA[k] || ''}</div><div class="dsh-cell">${SB[k] || ''}</div>`).join('')}</div>`;
+  }
   else html += dashProjBody(P, false, rangeTxt);
   const remItems = !dashScreenMode && remData && remData.items ? remData.items.filter(x => x.status === 'Open' && x.dueMs).sort((a, b) => a.dueMs - b.dueMs).slice(0, 20) : [];
   const assigned = [].concat.apply([], shown.map(x => x.assigned || []));
