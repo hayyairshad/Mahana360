@@ -1229,6 +1229,10 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 .imp-merge input { min-width: 240px; }
 @media (max-width: 600px) { .imp-msg { top: 110px; } .imp-msg-row { flex-wrap: wrap; } .imp-msg-row select { max-width: none; flex: 1 1 100%; } .imp-sub { white-space: normal; } .imp-sup-body { padding-left: 8px; } }
 .imp-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #e0592a; margin-right: 6px; vertical-align: middle; }
+.imp-dot-late { background: #d92d20; }
+.imp-dot-me { background: #f2a541; }
+.imp-pinned { margin-left: 4px; animation: pinblink 1.6s ease-in-out infinite; display: inline-block; }
+@keyframes pinblink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.18); } }
 .imp-bubble { margin-left: auto; border: 1px solid var(--border-color); background: var(--surface-2); border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; cursor: pointer; }
 .imp-bubble:hover, .imp-ico:hover { border-color: var(--accent-color); }
 .imp-icons { float: right; display: inline-flex; gap: 4px; }
@@ -2841,6 +2845,14 @@ function can(f) {
   return !!user && (user.level === 0 || !!ACCESS[f]);
 }
 
+function canAssigned() {
+  return !user || user.level === 0 || !!ACCESS.assigned;
+}
+
+function canRem() {
+  return !user || user.level === 0 || !!ACCESS.reminders;
+}
+
 function canDash() {
   return !!user && (user.level === 0 || Object.keys(ACCESS).some(k => k.indexOf('dash:') === 0));
 }
@@ -2876,7 +2888,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R41";
+const APP_VERSION = "R42";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3756,14 +3768,28 @@ function pts4Html(p, label) {
 function rdHtml(rd, cls) {
   if (!rd) return '';
   const bad = rd.over;
-  const txt = 'R-DAYS ' + Math.ceil(rd.days) + '/' + rd.limit;
-  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + Math.ceil(rd.by) + ' day' + (Math.ceil(rd.by) === 1 ? '' : 's') : ' · ' + Math.floor(rd.left) + ' day' + (Math.floor(rd.left) === 1 ? '' : 's') + ' left'))}">&#9201; ${escapeHtml(txt)}</span>`;
+  const txt = bad ? '&#10071;' + Math.ceil(rd.by) : 'R-' + Math.floor(rd.left);
+  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + Math.ceil(rd.by) + ' day' + (Math.ceil(rd.by) === 1 ? '' : 's') : ' · ' + Math.floor(rd.left) + ' day' + (Math.floor(rd.left) === 1 ? '' : 's') + ' left') + ' · in this phase ' + Math.ceil(rd.days) + ' of ' + rd.limit + ' days')}">${txt}</span>`;
 }
 
 function gRdays(g) {
   let best = null;
   (g.prog ? g.prog.open.concat(g.prog.done) : []).forEach(x => { if (x.rdays && (!best || (x.rdays.over && !best.over) || x.rdays.days > best.days)) best = x.rdays; });
   return best;
+}
+
+function importPinned(g) {
+  const pins = (impData && impData.pins) || {};
+  return g.keys.some(k => pins[k]);
+}
+
+async function impPinToggle(g) {
+  const on = !importPinned(g);
+  const r = await apiCall('importPin', { key: g.name, on: on });
+  if (!r.ok) return toast(r.error || 'Could not pin', true);
+  impData.pins = r.pins || {};
+  toast(on ? 'Pinned on top.' : 'Unpinned.');
+  renderImports();
 }
 
 function impTkPill(g) {
@@ -3855,9 +3881,10 @@ function impBuild(showAll) {
     .filter(g => !fb || g.bm.indexOf(fb) !== -1)
     .filter(g => !g.st.length || g.st.some(x => impHidden.indexOf(x.toLowerCase()) === -1))
     .filter(g => !q || g.hay.indexOf(q) !== -1);
+  all.sort((a, b) => (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0));
   const base = all;
   const shown = base.filter(g => !fs || g.st.indexOf(fs) !== -1);
-  shown.sort((a, b) => Math.min(...a.st.map(impStatusRank), 99) - Math.min(...b.st.map(impStatusRank), 99) || a.name.localeCompare(b.name));
+  shown.sort((a, b) => (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0) || Math.min(...a.st.map(impStatusRank), 99) - Math.min(...b.st.map(impStatusRank), 99) || a.name.localeCompare(b.name));
   return { C: C, NUM: NUM, base: base, shown: shown, q: q, fs: fs };
 }
 
@@ -4018,12 +4045,12 @@ function impLineHtml(g, B) {
   const nOpen = g.prog.open.length;
   return `<div class="imp-line${sel ? ' sel' : ''}" id="imp-line-${i}">
     <div class="imp-line-head" onclick="impSelect(${i})">
-      ${impMine(g) ? '<span class="imp-dot" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>
+      ${g.prog.open.some(x => x.late) ? '<span class="imp-dot imp-dot-late" title="A task here is late"></span>' : ''}${impMine(g) ? '<span class="imp-dot imp-dot-me" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>${importPinned(g) ? '<span class="imp-pinned" title="Pinned on top">&#128204;</span>' : ''}
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
       ${impTkPill(g)}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
-      <span class="imp-icons">${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      <span class="imp-icons">${impData.canPin ? `<button class="imp-ico" title="${importPinned(g) ? 'Unpin' : 'Pin on top'}" onclick="event.stopPropagation(); impPinToggle(impFlat[${i}])">${importPinned(g) ? '&#128204;' : '<span style=\'opacity:0.45\'>&#128204;</span>'}</button>` : ''}${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
       <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${escapeHtml(numSums.join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
@@ -4777,14 +4804,143 @@ function remYear(dd, mm, y, d0) {
   return d;
 }
 
+let tplCache = { reminder: null, assign: null };
+
+function tplBar(kind) {
+  const list = tplCache[kind];
+  return `<span class="tpl-bar"><select id="tpl-${kind}" style="width:auto;min-width:130px;margin:0" onfocus="tplLoad('${kind}')" onchange="tplApply('${kind}', this.value)">
+    <option value="">${list === null ? 'Templates…' : 'Templates (' + list.length + ')'}</option>
+    ${(list || []).map(t => `<option value="${escapeHtml(t.id)}">${escapeHtml(t.name)}</option>`).join('')}
+  </select><button class="btn btn-small" onclick="tplSaveCur('${kind}')">Save as template</button>${(list || []).length ? `<button class="btn btn-small" onclick="tplDeleteSel('${kind}')" title="Delete the picked template">&#128465;</button>` : ''}</span>`;
+}
+
+async function tplLoad(kind, force) {
+  if (tplCache[kind] !== null && !force) return;
+  try {
+    const r = await apiCall('tplList', { kind: kind });
+    if (r.ok) {
+      tplCache[kind] = r.items || [];
+      const sel = document.getElementById('tpl-' + kind);
+      if (sel) {
+        const keep = sel.value;
+        if (kind === 'reminder') { if (remDraft) renderRemEditor(); } else renderAssignForm();
+        const s2 = document.getElementById('tpl-' + kind);
+        if (s2) s2.value = keep;
+      }
+    }
+  } catch (e) {}
+}
+
+function tplApply(kind, id) {
+  if (!id) return;
+  const t = (tplCache[kind] || []).filter(x => x.id === id)[0];
+  if (!t) return;
+  if (kind === 'reminder') {
+    const keep = remDraft && remDraft.id;
+    remDraft = Object.assign(newRemDraft(), t.data, { id: keep || '', date: remDraft && remDraft.date || '' });
+    renderRemEditor();
+  } else {
+    assignDraft = Object.assign(newAssignDraft(), t.data, { id: assignDraft && assignDraft.id || '' });
+    renderAssignForm();
+  }
+  toast('Template "' + t.name + '" filled in.');
+}
+
+async function tplSaveCur(kind) {
+  const d = kind === 'reminder' ? remDraft : assignDraft;
+  if (!d || !String(d.title || '').trim()) return toast('Fill the form first, then save it as a template.', true);
+  tplNamePop(kind);
+}
+
+let tplKindPending = '';
+
+function tplNamePop(kind) {
+  tplKindPending = kind;
+  miniPop(document.getElementById('tpl-' + kind), `<b>Save as template</b>
+    <input type="text" id="tpl-name" placeholder="Template name, e.g. Weekly salary" onkeydown="if (event.key === 'Enter') tplNameSave()">
+    <div class="mp-act"><button class="btn btn-small" onclick="miniPopClose()">Cancel</button><button class="btn btn-small btn-primary" onclick="tplNameSave()">Save</button></div>`);
+}
+
+async function tplNameSave() {
+  const kind = tplKindPending;
+  const name = String(valOf('tpl-name') || '').trim();
+  if (!name) return toast('Give it a name.', true);
+  const d = kind === 'reminder' ? remDraft : assignDraft;
+  const data = Object.assign({}, d);
+  delete data.id;
+  if (kind === 'reminder') delete data.date;
+  else { delete data.dueDate; delete data.dueTime; }
+  const r = await apiCall('tplSave', { kind: kind, name: name, data: data });
+  if (!r.ok) return toast(r.error || 'Could not save', true);
+  miniPopClose();
+  toast('Template saved.');
+  tplLoad(kind, true);
+}
+
+async function tplDeleteSel(kind) {
+  const sel = document.getElementById('tpl-' + kind);
+  const id = sel && sel.value;
+  if (!id) return toast('Pick a template first, then press delete.', true);
+  const r = await apiCall('tplDelete', { id: id });
+  if (!r.ok) return toast(r.error || 'Could not delete', true);
+  toast('Template deleted.');
+  tplLoad(kind, true);
+}
+
+function remGroupsAll() {
+  const out = [];
+  ((remData && remData.items) || []).forEach(x => { if (x.group && out.indexOf(x.group) === -1) out.push(x.group); });
+  return out;
+}
+
+function remParseAll(v) {
+  const parts = String(v || '').split(/(?:^|\s)\/(?=\S)/);
+  if (parts.length < 2) return null;
+  const out = { title: parts[0].trim(), when: null, group: '', tags: [], found: false };
+  const groups = remGroupsAll();
+  parts.slice(1).forEach(seg => {
+    const raw = seg.replace(/\s+/g, ' ').trim();
+    if (!raw) return;
+    const w = parseRemWhen('x /' + raw.toLowerCase());
+    if (w) { out.when = w; out.found = true; return; }
+    const low = raw.toLowerCase();
+    const g = groups.filter(x => x.toLowerCase() === low)[0] || (low.length >= 2 ? (a => a.length === 1 ? a[0] : null)(groups.filter(x => x.toLowerCase().indexOf(low) === 0)) : null);
+    if (g && !out.group) { out.group = g; out.found = true; return; }
+    out.tags.push(raw.replace(/^#/, ''));
+    out.found = true;
+  });
+  return out.found ? out : null;
+}
+
 function remTitleTyped(v) {
   remDraft.title = v;
+  const all = remParseAll(v);
+  const elx = document.getElementById('rem-parse');
+  if (elx && all) {
+    elx.innerHTML = (all.when ? `<span class="rem-when">&#128197; ${escapeHtml(all.when.label)}</span>` : '') + (all.group ? `<span class="rem-when">&#128193; ${escapeHtml(all.group)}</span>` : '') + all.tags.map(t => `<span class="rem-when">&#127991; ${escapeHtml(t)}</span>`).join('');
+    return;
+  }
   const p = parseRemWhen(v);
   const el = document.getElementById('rem-parse');
   if (el) el.innerHTML = p ? `<span class="rem-when">&#128197; ${escapeHtml(p.label)}</span> <small class="report-meta">from what you typed after /</small>` : '<small class="report-meta">Tip: type / and a date, like "Pay bill /12th Nov 16" or "/tomorrow 9am" or "/next sunday".</small>';
 }
 
 function applyRemWhen() {
+  const all = remParseAll(remDraft.title);
+  if (all) {
+    remDraft.title = all.title || remDraft.title;
+    if (all.when) {
+      remDraft.date = all.when.date;
+      if (all.when.time) { remDraft.allDay = false; remDraft.time = all.when.time; } else remDraft.allDay = true;
+    }
+    if (all.group && !remDraft.group) remDraft.group = all.group;
+    if (all.tags.length) {
+      const have = String(remDraft.tags || '').split(',').map(x => x.trim()).filter(Boolean);
+      all.tags.forEach(t => { if (have.map(x => x.toLowerCase()).indexOf(t.toLowerCase()) === -1) have.push(t); });
+      remDraft.tags = have.join(', ');
+    }
+    return;
+  }
   const p = parseRemWhen(remDraft.title);
   if (!p) return;
   remDraft.title = p.title || remDraft.title;
@@ -4831,7 +4987,7 @@ function renderRemEditor() {
   ed.classList.remove('hidden');
   const groups = remData ? remData.groups : [];
   const rp = d.repeat;
-  ed.innerHTML = `<div class="report-bar" style="margin-bottom:8px;"><b>${d.id ? 'Edit reminder' : 'New reminder'}</b></div>
+  ed.innerHTML = `<div class="report-bar" style="margin-bottom:8px;"><b>${d.id ? 'Edit reminder' : 'New reminder'}</b><span style="flex:1"></span>${tplBar('reminder')}</div>
     <input type="text" id="rem-title" value="${escapeHtml(d.title)}" placeholder="What to remember, e.g. Order Homa /12th Nov 16" oninput="remTitleTyped(this.value)" onkeydown="if(event.key==='Enter')saveRem()">
     <div id="rem-parse" class="rem-parse"></div>
     <textarea placeholder="Notes (optional)" oninput="remSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
@@ -5132,7 +5288,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t) || pendingItems.some(p => p.taskName === t.name));
-  return list.map(t => t.name).concat([MY_ASSIGNED, BOARD_NAME]).concat(user && staffName === user.name ? [MY_REMINDERS].concat(canDash() ? [DASH_NAME] : []) : (user && user.level <= 1 ? [DASH_NAME] : [])).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat(canAssigned() ? [MY_ASSIGNED] : []).concat([BOARD_NAME]).concat(user && staffName === user.name ? (canRem() ? [MY_REMINDERS] : []).concat(canDash() ? [DASH_NAME] : []) : (user && user.level <= 1 ? [DASH_NAME] : [])).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -5498,11 +5654,11 @@ async function completeLogin() {
     document.getElementById('btn-logout').classList.remove('hidden');
     document.getElementById('btn-refresh').classList.remove('hidden');
     document.getElementById('fab-plus').classList.remove('hidden');
-    if (user && user.level === 0) document.getElementById('fab-rem').classList.remove('hidden');
+    if (user && user.level === 0) { document.getElementById('fab-rem').classList.remove('hidden'); const hr = document.getElementById('btn-rem'); if (hr) hr.classList.add('hidden'); }
     document.querySelectorAll('#plus-menu .lvl1').forEach(b => b.classList.toggle('hidden', user.level > 1));
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('btn-search').classList.remove('hidden');
-    document.getElementById('btn-rem').classList.remove('hidden');
+    if (!(user && user.level === 0)) document.getElementById('btn-rem').classList.remove('hidden');
     if (localStorage.getItem('tk_rem_open') === '1') setTimeout(() => remPanelToggle(true), 300);
     else setTimeout(() => { if (!remData) apiCallRaw('remList', {}).then(r => { if (r && r.ok && !remData) { remData = r; remCountUpdate(); } }).catch(() => {}); }, 2500);
     document.getElementById('active-user-display').classList.remove('hidden');
@@ -10432,6 +10588,7 @@ function renderAssignForm() {
   document.getElementById('assign-form').innerHTML = `
     <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
     <label>Title</label>
+    ${user && user.level === 0 ? `<div class="report-bar" style="margin-bottom:6px;">${tplBar('assign')}</div>` : ''}
     <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asTitleTyped(this.value)" onchange="asApplySlash(true)" onkeydown="if (event.key === 'Enter') { event.preventDefault(); asApplySlash(true); saveAssign(); }">
     <div id="as-parse" class="as-parse"></div>
     <label>Notes (optional)</label>
