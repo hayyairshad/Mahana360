@@ -1230,6 +1230,9 @@ a.imp-open-task:hover { border-color: var(--accent-color); }
 @media (max-width: 600px) { .imp-msg { top: 110px; } .imp-msg-row { flex-wrap: wrap; } .imp-msg-row select { max-width: none; flex: 1 1 100%; } .imp-sub { white-space: normal; } .imp-sup-body { padding-left: 8px; } }
 .imp-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #e0592a; margin-right: 6px; vertical-align: middle; }
 .imp-dot-late { background: #d92d20; }
+.imp-dot-after { margin: 0 0 0 7px; }
+.trail-later td { background: #f2f4f7 !important; color: var(--text-dim); }
+.imp-extra { color: #475467; }
 .imp-dot-me { background: #f2a541; }
 .imp-pinned { margin-left: 4px; animation: pinblink 1.6s ease-in-out infinite; display: inline-block; }
 @keyframes pinblink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.18); } }
@@ -1491,7 +1494,18 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .fab-plus { position: fixed; right: 18px; bottom: 18px; z-index: 1200; width: 56px; height: 56px; border-radius: 50%; border: none; background: var(--pine, #24533a); color: #fff; font-size: 2rem; line-height: 1; box-shadow: 0 8px 22px rgba(20,50,35,0.35); cursor: pointer; }
 .fab-plus:hover { transform: scale(1.05); }
 .dash-mode .fab-plus { display: none !important; }
-.fab-rem { right: 84px; width: 46px; height: 46px; bottom: 23px; font-size: 1.25rem; background: #fff; color: var(--pine, #24533a); border: 2px solid var(--pine, #24533a); }
+.fab-rem { right: 28px; width: 50px; height: 50px; bottom: 96px; font-size: 1.3rem; background: #fff; color: var(--pine, #24533a); border: 2px solid var(--pine, #24533a); overflow: visible; }
+.fab-rem-lbl { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 0.82rem; font-weight: 800; color: var(--pine, #24533a); background: rgba(255,255,255,0.92); padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); pointer-events: none; }
+.fab-stack { position: fixed; right: 28px; bottom: 158px; z-index: 900; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.fab-pill { display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 0; cursor: pointer; }
+.fab-lbl { font-size: 0.82rem; font-weight: 800; color: var(--pine, #24533a); background: rgba(255,255,255,0.92); padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.fab-ico { position: relative; width: 50px; height: 50px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.35rem; background: #fff; border: 2px solid var(--pine, #24533a); box-shadow: 0 6px 16px rgba(0,0,0,0.18); transition: transform 0.15s; }
+.fab-ico-red { background: #c8102e; border-color: #c8102e; color: #fff; }
+.fab-pill:hover .fab-ico { transform: scale(1.07); }
+.fab-pill.on .fab-ico { background: var(--pine, #24533a); }
+.fab-badge { position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px; background: #f2a541; color: #1f2937; font-size: 0.68rem; line-height: 18px; text-align: center; }
+.dash-mode .fab-stack { display: none !important; }
+@media (max-width: 600px) { .fab-lbl, .fab-rem-lbl { display: none; } }
 .fab-rem.on { background: var(--pine, #24533a); color: #fff; }
 .collab-badge { position: fixed; left: 14px; bottom: 12px; z-index: 50; display: flex; align-items: center; gap: 8px; background: #24533a; border: 1px solid #24533a; border-radius: 999px; padding: 5px 12px 5px 14px; box-shadow: var(--shadow-md); font-size: 0.72rem; color: rgba(255,255,255,0.88); font-weight: 600; pointer-events: none; }
 .collab-badge img { height: 22px; width: auto; }
@@ -1594,6 +1608,13 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .rd { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid; }
 .rd.ok { color: #05603a; background: #e7f6ee; border-color: #a6e0c3; }
 .rd.bad { color: #b42318; background: #fdeceb; border-color: #f1b8b3; }
+.rd.miss { color: #667085; background: #f2f4f7; border-color: #d0d5dd; }
+.rd-miss { font-style: normal; color: #b54708; }
+.ph-rules { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 4px; padding: 8px 10px; background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 0.85rem; }
+.ph-rule { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ph-rule > b { min-width: 104px; }
+.ph-rule select, .ph-rule input { width: auto; margin: 0; padding: 4px 6px; }
+.ph-rule input[type=number] { width: 74px; }
 .rd-right { margin-left: auto; }
 .imp-line-head { position: relative; }
 .imp-sup-right { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; flex: none; }
@@ -2168,10 +2189,12 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="imp-detcols" class="imp-viewers"></div>
 <button class="btn btn-small" id="imp-detcols-btn" onclick="importSaveDetailCols()">Save details</button>
 </details>
-<input type="text" id="imp-q" class="report-search imp-search" placeholder="Search supplier, consignment, model or message" oninput="impSearchSoon()" autocomplete="off">
+<input type="text" id="imp-q" class="report-search imp-search" placeholder="Search supplier, consignment, model, message, BL No, CTN or container" oninput="impSearchSoon()" autocomplete="off">
 <div class="imp-row">
 <select id="imp-show" onchange="renderImports()"><option value="open">Open consignments</option><option value="closed">Closed</option><option value="all">All</option><option value="deleted" class="imp-adm-only">Deleted</option></select>
 <select id="imp-bm" onchange="renderImports()" title="Manager"></select>
+<select id="imp-fwd" onchange="renderImports()" title="Forwarder agent" class="hidden"></select>
+<select id="imp-cca" onchange="renderImports()" title="CCA agent" class="hidden"></select>
 <details class="imp-hide"><summary id="imp-hide-sum">Hide statuses</summary><div id="imp-hide-list" class="imp-viewers"></div></details>
 <input type="hidden" id="imp-status" value="">
 </div>
@@ -2234,7 +2257,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 </div>
 
 <div id="form-phases" class="hidden">
-<p class="report-meta">Rename a phase, move it up or down, move a task to another phase, and set the most days a case or consignment may stay in a phase. Empty days = no limit. Anything over the limit shows in Admin → Rola Days. Press Save when done.</p>
+<p class="report-meta">Rename a phase, move it up or down and move tasks between phases. R-DAYS checks per phase: <b>Own days</b> = time inside the phase; <b>Running total</b> = time since an earlier phase, against the own days of every phase in between; <b>Date check</b> = a date typed in any task plus (or minus) days. If any check is broken it shows red, and in Admin → Rola Days. Press Save when done.</p>
 <div class="report-bar"><select id="ph-proj" class="report-search" style="width:auto" onchange="phBuild(); renderPhases()"></select><button class="btn btn-small" onclick="phAdd()">+ New phase</button></div>
 <div id="ph-wrap"><div class="report-meta">Loading...</div></div>
 <div class="report-bar" style="margin-top:10px;"><button class="btn btn-primary" onclick="phSave()">Save</button><span id="ph-msg" class="report-meta"></span></div>
@@ -2378,7 +2401,8 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 <button onclick="closePlusMenu(); openLeaveForm()">&#127796; Apply for leave</button>
 <button class="lvl1" onclick="closePlusMenu(); openAddCase()">&#10133; Add a case (tile) to a task</button>
 </div>
-<button id="fab-rem" class="fab-plus fab-rem hidden" onclick="remPanelToggle()" title="My reminders — stays open until you press this again" aria-label="My reminders">&#9200;</button>
+<div id="fab-stack" class="fab-stack hidden"></div>
+<button id="fab-rem" class="fab-plus fab-rem hidden" onclick="remPanelToggle()" title="Reminders and assignments — stays open until you press this again" aria-label="Reminders and assignments">&#9200;<span class="fab-rem-lbl">Reminders &amp; Assignments</span></button>
 <button id="fab-plus" class="fab-plus hidden" onclick="togglePlusMenu(event, 'fab-plus')" title="Add a reminder, assign, leave or a case" aria-label="Add">+</button>
 <div id="addcase-overlay" class="pic-overlay hidden" onclick="if(event.target===this)closeAddCase()">
 <div class="pic-panel addcase-panel">
@@ -2888,7 +2912,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R42";
+const APP_VERSION = "R43";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3765,17 +3789,48 @@ function pts4Html(p, label) {
   return `<span class="pts4" title="Points: Before / On time / After / After that — the circled one is what you get right now">${label ? '<small>Points</small> ' : ''}${cell('b', p.b)}${cell('o', p.o)}${cell('a', p.a)}${cell('at', p.at)}</span>`;
 }
 
+function rdTip(rd) {
+  const unit = c => c.work ? 'working day' : 'day';
+  const pl = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+  const name = c => c.kind === 'own' ? 'In this phase' : c.kind === 'cum' ? 'Running total' : c.label + ' + ' + c.limit;
+  const lines = (rd.checks || []).map(c => (c.over ? '✖ ' : '✔ ') + name(c) + ': ' + (c.kind === 'date' ? (c.days >= 0 ? pl(c.days, unit(c)) + ' since ' + shortWhen(c.since) : pl(-c.days, unit(c)) + ' before ' + shortWhen(c.since)) : pl(c.days, unit(c)) + ' of ' + c.limit) + (c.over ? ' · over by ' + pl(c.by, unit(c)) : ' · ' + pl(c.left, unit(c)) + ' left'));
+  (rd.missing || []).forEach(m => lines.push('? ' + m + ' not filled yet'));
+  return lines.join('\n');
+}
+
 function rdHtml(rd, cls) {
   if (!rd) return '';
-  const bad = rd.over;
-  const txt = bad ? '&#10071;' + Math.ceil(rd.by) : 'R-' + Math.floor(rd.left);
-  return `<span class="rd ${bad ? 'bad' : 'ok'}${cls ? ' ' + cls : ''}" title="${escapeHtml('In this phase since ' + (rd.since || '') + ' · allowed ' + rd.limit + ' day' + (rd.limit === 1 ? '' : 's') + (bad ? ' · over by ' + Math.ceil(rd.by) + ' day' + (Math.ceil(rd.by) === 1 ? '' : 's') : ' · ' + Math.floor(rd.left) + ' day' + (Math.floor(rd.left) === 1 ? '' : 's') + ' left') + ' · in this phase ' + Math.ceil(rd.days) + ' of ' + rd.limit + ' days')}">${txt}</span>`;
+  const tag = rd.kind === 'date' ? ' ' + rd.label : rd.kind === 'cum' ? ' Σ' : '';
+  let txt, kind;
+  if (rd.noCheck) { txt = '? ' + (rd.missing || [])[0]; kind = 'miss'; }
+  else if (rd.over) { txt = '&#10071;' + Math.ceil(rd.by) + escapeHtml(tag); kind = 'bad'; }
+  else { txt = 'R-' + Math.floor(rd.left) + escapeHtml(tag); kind = 'ok'; }
+  const tip = rd.checks ? rdTip(rd) : (rd.over ? 'Over by ' + rd.by + ' days' : rd.left + ' days left');
+  return `<span class="rd ${kind}${cls ? ' ' + cls : ''}" title="${escapeHtml(tip)}">${txt}${(rd.missing || []).length && !rd.noCheck ? ' <i class="rd-miss">?</i>' : ''}</span>`;
 }
 
 function gRdays(g) {
   let best = null;
   (g.prog ? g.prog.open.concat(g.prog.done) : []).forEach(x => { if (x.rdays && (!best || (x.rdays.over && !best.over) || x.rdays.days > best.days)) best = x.rdays; });
   return best;
+}
+
+function impExtraOf(g) {
+  const E = (impData && impData.extra) || {};
+  const o = { bl: [], ctn: [], cont: [], fwd: [], cca: [] };
+  (g.keys || []).forEach(k => { const x = E[k]; if (!x) return; Object.keys(o).forEach(f => (x[f] || []).forEach(v => { if (o[f].indexOf(v) === -1) o[f].push(v); })); });
+  return o;
+}
+
+function impExtraLine(g) {
+  const x = impExtraOf(g);
+  const bits = [];
+  if (x.bl.length) bits.push('BL ' + x.bl.join(', '));
+  if (x.cont.length) bits.push('Cont ' + x.cont.join(', '));
+  if (x.ctn.length) bits.push('CTN ' + x.ctn.join(', '));
+  if (x.fwd.length) bits.push('Fwd ' + x.fwd.join(', '));
+  if (x.cca.length) bits.push('CCA ' + x.cca.join(', '));
+  return bits.length ? ' · <span class="imp-extra">' + escapeHtml(bits.join(' · ')) + '</span>' : '';
 }
 
 function importPinned(g) {
@@ -3846,7 +3901,7 @@ function impBuild(showAll) {
   const d = impData;
   const C = impCols(), NUM = impNumCols();
   const norm = (r, j) => impTitle(r[j]).trim();
-  const fb = valOf('imp-bm'), fs = valOf('imp-status');
+  const fb = valOf('imp-bm'), fs = valOf('imp-status'), ffw = valOf('imp-fwd'), fcc = valOf('imp-cca');
   const q = String(valOf('imp-q') || '').trim().toLowerCase();
   const states = d.states || {};
   const show = showAll ? 'all' : (valOf('imp-show') || 'open');
@@ -3860,11 +3915,23 @@ function impBuild(showAll) {
     return cands[0] || '(no name)';
   };
   d.rows.forEach(r => { const k0 = pick(r); const k = into(k0); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  const eachIn = {};
+  order.forEach(k => groups[k].forEach(r => { const e = fz(r[C.each]); if (e && impKey(e) !== impKey(k)) eachIn[impKey(e)] = k; }));
+  const absorbed = {};
+  const hiddenG = {};
+  order.forEach(k => {
+    const tgt = eachIn[impKey(k)];
+    if (!tgt || tgt === k) return;
+    const rowsAllIn = groups[k].every(r => { const e = fz(r[C.each]) || fz(r[C.group]) || k; return eachIn[impKey(e)] === tgt; });
+    if (!rowsAllIn) return;
+    hiddenG[k] = tgt;
+    (absorbed[tgt] = absorbed[tgt] || []).push(k);
+  });
   const noteText = {};
   (d.notes || []).forEach(n => { noteText[n.key] = (noteText[n.key] || '') + ' ' + String(n.text || '').toLowerCase(); });
-  const all = order.map(k => {
+  const all = order.filter(k => !hiddenG[k]).map(k => {
     const list = groups[k];
-    const names = Array.from(new Set([k].concat(list.map(r => r[C.group]), list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
+    const names = Array.from(new Set([k].concat(absorbed[k] || [], list.map(r => r[C.group]), list.map(r => r[C.each]), list.map(r => r[C.main])).map(x => String(x || '').trim()).filter(x => x && x !== '0' && x.toLowerCase() !== 'order')));
     const keys = impAliasKeys(names.map(impKey));
     const sup = Array.from(new Set(list.map(r => String(r[C.supplier] || '').trim()).filter(v => v && v !== '0')));
     const bm = Array.from(new Set(list.map(r => String(r[C.bm] || '').trim()).filter(v => v && v !== '0')));
@@ -3875,10 +3942,13 @@ function impBuild(showAll) {
     list.forEach(r => impRowG.set(r, g));
     g.notes = (d.notes || []).filter(n => keys.indexOf(n.key) !== -1);
     g.prog = impProgress(g);
-    g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ')).toLowerCase();
+    g.extra = impExtraOf(g);
+    g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ') + ' ' + [].concat(g.extra.bl, g.extra.ctn, g.extra.cont, g.extra.fwd, g.extra.cca).join(' ')).toLowerCase();
     return g;
   }).filter(g => { const st = g.state; return show === 'all' ? st !== 'Deleted' : show === 'closed' ? st === 'Closed' : show === 'deleted' ? st === 'Deleted' : st !== 'Closed' && st !== 'Deleted'; })
     .filter(g => !fb || g.bm.indexOf(fb) !== -1)
+    .filter(g => !ffw || g.extra.fwd.indexOf(ffw) !== -1)
+    .filter(g => !fcc || g.extra.cca.indexOf(fcc) !== -1)
     .filter(g => !g.st.length || g.st.some(x => impHidden.indexOf(x.toLowerCase()) === -1))
     .filter(g => !q || g.hay.indexOf(q) !== -1);
   all.sort((a, b) => (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0));
@@ -3913,6 +3983,13 @@ function renderImports() {
   const C0 = impCols();
   const bms = Array.from(new Set(d.rows.map(r => String(r[C0.bm] || '').trim()).filter(v => v && v !== '0'))).sort();
   impFill('imp-bm', 'All managers', bms, impBmInit ? undefined : (bms.indexOf('FR') !== -1 ? 'FR' : ''));
+  const EX = d.extra || {};
+  const fwds = Array.from(new Set([].concat.apply([], Object.keys(EX).map(k => EX[k].fwd || [])))).sort();
+  const ccas = Array.from(new Set([].concat.apply([], Object.keys(EX).map(k => EX[k].cca || [])))).sort();
+  impFill('imp-fwd', 'All forwarders', fwds);
+  impFill('imp-cca', 'All CCA agents', ccas);
+  document.getElementById('imp-fwd').classList.toggle('hidden', !fwds.length);
+  document.getElementById('imp-cca').classList.toggle('hidden', !ccas.length);
   impBmInit = true;
   const B = impBuild();
   const fs = B.fs;
@@ -3938,7 +4015,7 @@ function renderImports() {
       const msgs = list.reduce((a, g) => a + g.notes.length, 0);
       const waiting = list.filter(g => g.prog.open.length).length;
       const mine = list.some(g => impMine(g));
-      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span>${mine ? '<span class="imp-dot" title="Has a task waiting on you"></span>' : ''}<b>${escapeHtml(sname)}</b><span class="imp-sup-right">${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</span><span class="imp-sup-rd">${(() => { const r = list.map(gRdays).filter(Boolean).sort((a, b) => (b.over - a.over) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}</span></div>
+      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span><b>${escapeHtml(sname)}</b>${list.some(g => g.prog.open.some(x => x.late)) ? '<span class="imp-dot imp-dot-late imp-dot-after" title="A task here is late"></span>' : ''}${mine ? '<span class="imp-dot imp-dot-me imp-dot-after" title="Has a task waiting on you"></span>' : ''}<span class="imp-sup-right">${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</span><span class="imp-sup-rd">${(() => { const r = list.map(gRdays).filter(Boolean).sort((a, b) => (b.over - a.over) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}</span></div>
         ${open ? `<div class="imp-sup-body">${list.map(g => impLineHtml(g, B)).join('')}</div>` : ''}</div>`;
     }).join('') || '<div class="report-meta">Nothing matches.</div>';
   }
@@ -4045,14 +4122,14 @@ function impLineHtml(g, B) {
   const nOpen = g.prog.open.length;
   return `<div class="imp-line${sel ? ' sel' : ''}" id="imp-line-${i}">
     <div class="imp-line-head" onclick="impSelect(${i})">
-      ${g.prog.open.some(x => x.late) ? '<span class="imp-dot imp-dot-late" title="A task here is late"></span>' : ''}${impMine(g) ? '<span class="imp-dot imp-dot-me" title="A task here is waiting on you"></span>' : ''}<span class="imp-name">${escapeHtml(g.title || g.name)}</span>${importPinned(g) ? '<span class="imp-pinned" title="Pinned on top">&#128204;</span>' : ''}
+      <span class="imp-name">${escapeHtml(g.title || g.name)}</span>${g.prog.open.some(x => x.late) ? '<span class="imp-dot imp-dot-late imp-dot-after" title="A task here is late"></span>' : ''}${impMine(g) ? '<span class="imp-dot imp-dot-me imp-dot-after" title="A task here is waiting on you"></span>' : ''}${importPinned(g) ? '<span class="imp-pinned" title="Pinned on top">&#128204;</span>' : ''}
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
       ${impTkPill(g)}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
       <span class="imp-icons">${impData.canPin ? `<button class="imp-ico" title="${importPinned(g) ? 'Unpin' : 'Pin on top'}" onclick="event.stopPropagation(); impPinToggle(impFlat[${i}])">${importPinned(g) ? '&#128204;' : '<span style=\'opacity:0.45\'>&#128204;</span>'}</button>` : ''}${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
-      <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${escapeHtml(numSums.join(' · '))}${hl.length ? ' · ' + escapeHtml(hl.join(' | ')) : ''}</div>
+      <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${hl.length ? escapeHtml(hl.join(' | ')) : ''}${impExtraLine(g)}</div>
       ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
     </div>
@@ -4805,6 +4882,14 @@ function remYear(dd, mm, y, d0) {
 }
 
 let tplCache = { reminder: null, assign: null };
+let fabApprLoaded = false;
+
+async function fabApprCount() {
+  try {
+    const r = await apiCall('timeReqList');
+    if (r.ok) { approvalItems = r.items || []; fabStackRender(); }
+  } catch (e) {}
+}
 
 function tplBar(kind) {
   const list = tplCache[kind];
@@ -5457,6 +5542,34 @@ function openPanelTask(name) {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(name);
 }
 
+function jawadOwn() {
+  return !!(user && profile && user.level === 0 && profile.name === user.name);
+}
+
+function fabGo(kind) {
+  if (kind === 'approvals') return openPanelTask('Time Requests');
+  if (kind === 'board') return openBoard();
+  if (kind === 'late') {
+    lateMode = 'open';
+    if (can('rep:late')) { reportTab = 'late'; window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/Reports'; return; }
+    if (canSeeImports(user.name)) { impView = 'late'; openImports(); }
+  }
+}
+
+function fabStackRender() {
+  const box = document.getElementById('fab-stack');
+  if (!box) return;
+  const on = !!(user && user.level === 0);
+  box.classList.toggle('hidden', !on);
+  if (!on) return;
+  const waiting = typeof approvalItems !== 'undefined' && approvalItems ? approvalItems.filter(x => x.status === 'Waiting').length : 0;
+  const cur = currentProject;
+  box.innerHTML = `
+    <button class="fab-pill" onclick="fabGo('approvals')" title="Time requests waiting for you"><span class="fab-lbl">Approvals</span><span class="fab-ico fab-ico-red">&#9989;${waiting ? `<b class="fab-badge">${waiting}</b>` : ''}</span></button>
+    <button class="fab-pill${cur === BOARD_PROJECT ? ' on' : ''}" onclick="fabGo('board')" title="Task Board"><span class="fab-lbl">Taskboard</span><span class="fab-ico">&#128203;</span></button>
+    <button class="fab-pill" onclick="fabGo('late')" title="Late and about to be late"><span class="fab-lbl">Late</span><span class="fab-ico">&#127939;</span></button>`;
+}
+
 function extraTabsHtml(asButtons) {
   const extras = profile ? extraPanelsFor(profile.name) : [];
   return extras.map(n => {
@@ -5498,22 +5611,26 @@ function renderProjectNav() {
   }
   tiles.classList.add('hidden');
   nav.classList.remove('hidden');
-  const projTabs = projs.map(p => {
+  const jw = jawadOwn();
+  const adminP = projs.filter(p => p.id === ADMIN_PROJECT)[0];
+  const adminTab = adminP ? `<button class="ftab${currentProject === ADMIN_PROJECT ? ' active' : ''}" onclick="setProject('${escapeHtml(ADMIN_PROJECT)}')">${escapeHtml(adminP.name)}</button>` : '';
+  const projTabs = projs.filter(p => p.id !== ADMIN_PROJECT).map(p => {
     const n = pendingCountForProject(p.id);
     const on = p.id === currentProject || (currentProject === IMPORTS_PROJECT && p.id === importPid());
     return `<button class="ftab${on ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
-  }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '') + `<button class="ftab${currentProject === BOARD_PROJECT ? ' active' : ''}" onclick="openBoard()">&#128203; ${BOARD_NAME}</button>`;
+  }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '') + (jw ? '' : `<button class="ftab${currentProject === BOARD_PROJECT ? ' active' : ''}" onclick="openBoard()">&#128203; ${BOARD_NAME}</button>`);
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const inImp = currentProject === IMPORTS_PROJECT && importPid() && projs.some(p => p.id === importPid());
   const chPid = inImp ? importPid() : currentProject;
   const ch = inImp ? projectChains(chPid) : (isPanelProject(currentProject) ? [] : projectChains(currentProject));
   const impStab = chPid === importPid() && canSeeImports(profile.name) && projs.some(p => p.id === importPid()) ? `<button class="stab stab-right${inImp ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '';
-  nav.innerHTML = `<div class="ftabs">${(profile && user && (profile.name === user.name ? canDash() : user.level <= 1) ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}<div class="nav-spacer"></div>${remTab}${assignedTab}</div>
+  nav.innerHTML = `<div class="ftabs">${(profile && user && (profile.name === user.name ? canDash() : user.level <= 1) ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}${jw ? adminTab : ''}<div class="nav-spacer"></div>${jw ? '' : adminTab + remTab + assignedTab}</div>
     ${ch.length || impStab ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       const cid = escapeHtml(c.id).replace(/'/g, "\\'");
       return `<button class="stab${!inImp && c.id === currentChain ? ' active' : ''}" onclick="${inImp ? `leaveImportsTo('${escapeHtml(chPid)}', '${cid}')` : `setChain('${cid}')`}"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
     }).join('')}${impStab}</div>` : ''}`;
+  try { fabStackRender(); } catch (e) {}
 }
 
 function taskLimitTxt(t) {
@@ -5654,7 +5771,7 @@ async function completeLogin() {
     document.getElementById('btn-logout').classList.remove('hidden');
     document.getElementById('btn-refresh').classList.remove('hidden');
     document.getElementById('fab-plus').classList.remove('hidden');
-    if (user && user.level === 0) { document.getElementById('fab-rem').classList.remove('hidden'); const hr = document.getElementById('btn-rem'); if (hr) hr.classList.add('hidden'); }
+    if (user && user.level === 0) { document.getElementById('fab-rem').classList.remove('hidden'); const hr = document.getElementById('btn-rem'); if (hr) hr.classList.add('hidden'); fabStackRender(); if (!fabApprLoaded) { fabApprLoaded = true; setTimeout(fabApprCount, 1500); } }
     document.querySelectorAll('#plus-menu .lvl1').forEach(b => b.classList.toggle('hidden', user.level > 1));
     document.getElementById('btn-notifications').classList.remove('hidden');
     document.getElementById('btn-search').classList.remove('hidden');
@@ -5699,6 +5816,7 @@ function doLogout() {
   document.getElementById('btn-daily').classList.add('hidden'); closeDaily();
   remPanelToggle(false, true);
   document.getElementById('btn-rem').classList.add('hidden');
+  ['fab-stack', 'fab-rem'].forEach(id => { const e = document.getElementById(id); if (e) e.classList.add('hidden'); });
   user = null; profile = null; currentTask = null; currentPhase = null;
   templates = {}; templatesLoaded = false;
   chainList = []; recurringList = []; chains = []; chainLoaded = false; allChains = []; allRecurring = []; PROJECTS = []; currentProject = null; currentChain = null;
@@ -11815,6 +11933,7 @@ function timeReqStatus(x) {
 }
 
 function renderApprovals() {
+  try { fabStackRender(); } catch (e) {}
   const f = valOf('tr-filter');
   const rows = approvalItems.filter(x => !f || x.status === f);
   const anyWait = rows.some(x => x.status === 'Waiting');
@@ -11973,6 +12092,8 @@ function renderTrailHtml(r, go) {
 }
 
 let phLimits = {};
+let phRules = {};
+let phDates = [];
 let phList = [];
 
 async function loadPhases() {
@@ -11982,6 +12103,8 @@ async function loadPhases() {
     const r = await apiCall('phaseGet');
     if (!r.ok) { document.getElementById('ph-wrap').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
     phLimits = r.limits || {};
+    phRules = r.rules || {};
+    phDates = r.dateFields || [];
     phBuild();
     renderPhases();
   } catch (e) { document.getElementById('ph-wrap').innerHTML = '<div class="report-meta">Network error</div>'; }
@@ -11993,7 +12116,11 @@ function phBuild() {
   TASKS.filter(t => (t.project || DEFAULT_PROJECT) === pid).forEach(t => {
     const name = String(t.phase || 'Other');
     let p = phList.filter(x => x.name === name)[0];
-    if (!p) { p = { name: name, limit: phLimits[pid + '|' + name] || '', tasks: [] }; phList.push(p); }
+    if (!p) {
+      const R = JSON.parse(JSON.stringify(phRules[pid + '|' + name] || {}));
+      p = { name: name, limit: phLimits[pid + '|' + name] || '', tasks: [], own: R.own || { days: phLimits[pid + '|' + name] || '', work: false }, cum: R.cum || null, dates: R.dates || [] };
+      phList.push(p);
+    }
     p.tasks.push(t.name);
   });
   document.getElementById('ph-msg').innerText = '';
@@ -12004,18 +12131,71 @@ function renderPhases() {
   if (!phList.length) { box.innerHTML = '<div class="report-meta">This project has no tasks yet.</div>'; return; }
   box.innerHTML = phList.map((p, i) => `<div class="ph-card">
     <div class="ph-head"><span class="tev-ph" style="--ph:${phaseColor(p.name)}">${i + 1}</span><input type="text" value="${escapeHtml(p.name)}" onchange="phList[${i}].name = this.value.trim() || phList[${i}].name; renderPhases()" title="Phase name">
-      <label class="inline-label">Most days <input type="number" min="0" step="0.5" value="${escapeHtml(String(p.limit || ''))}" placeholder="no limit" onchange="phList[${i}].limit = this.value" style="width:90px"></label>
+
       <button class="chain-btn" title="Move up" onclick="phMove(${i}, -1)"${i ? '' : ' disabled'}>&uarr;</button><button class="chain-btn" title="Move down" onclick="phMove(${i}, 1)"${i < phList.length - 1 ? '' : ' disabled'}>&darr;</button>
       ${p.tasks.length ? '' : `<button class="chain-btn" title="Remove this empty phase" onclick="phList.splice(${i}, 1); renderPhases()">&times;</button>`}
     </div>
+    ${phRulesHtml(p, i)}
     <div class="ph-tasks">${p.tasks.map((t, k) => `<span class="ph-task"><b>${escapeHtml(t)}</b><button class="chain-btn" title="Up" onclick="phTaskMove(${i}, ${k}, -1)"${k ? '' : ' disabled'}>&uarr;</button><button class="chain-btn" title="Down" onclick="phTaskMove(${i}, ${k}, 1)"${k < p.tasks.length - 1 ? '' : ' disabled'}>&darr;</button><select onchange="phTaskTo(${i}, ${k}, this.value)" title="Move to another phase"><option value="">move to…</option>${phList.map((q, j) => j === i ? '' : `<option value="${j}">${escapeHtml(q.name)}</option>`).join('')}</select></span>`).join('') || '<span class="report-meta">No tasks here. Move a task in, or remove this phase.</span>'}</div>
   </div>`).join('');
+}
+
+function phUnitSel(on, set) {
+  return `<select onchange="${set}">${[['', 'calendar days'], ['1', 'working days']].map(o => `<option value="${o[0]}"${(on ? '1' : '') === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select>`;
+}
+
+function phRulesHtml(p, i) {
+  const own = p.own || { days: '', work: false };
+  const before = phList.slice(0, i + 1).map(x => x.name);
+  const pidNow = valOf('ph-proj') || DEFAULT_PROJECT;
+  const dIdx = phDates.map((d, k) => k).sort((a, b) => (phDates[a].project === pidNow ? 0 : 1) - (phDates[b].project === pidNow ? 0 : 1));
+  const dateOpts = dIdx.map(k => { const d = phDates[k]; const pn = (PROJECTS.filter(p => p.id === d.project)[0] || {}).name || ''; return `<option value="${k}">${escapeHtml(d.task + ' › ' + d.label + (d.project !== pidNow && pn ? ' (' + pn + ')' : ''))}</option>`; }).join('');
+  return `<div class="ph-rules">
+    <div class="ph-rule"><b>Own days</b><input type="number" min="0" step="0.5" value="${escapeHtml(String(own.days || ''))}" placeholder="none" onchange="phSetOwn(${i}, 'days', this.value)"> ${phUnitSel(own.work, `phSetOwn(${i}, 'work', this.value === '1')`)} <small class="report-meta">time spent inside this phase</small></div>
+    <div class="ph-rule"><b>Running total</b><select onchange="phSetCum(${i}, this.value)"><option value="">off</option>${before.map(n => `<option value="${escapeHtml(n)}"${p.cum && p.cum.from === n ? ' selected' : ''}>count from ${escapeHtml(n)}</option>`).join('')}</select>${p.cum ? ' ' + phUnitSel(p.cum.work, `phList[${i}].cum.work = this.value === '1'`) + ` <small class="report-meta">limit = own days of every phase from ${escapeHtml(p.cum.from)} to here (${phCumTotal(i)} days)</small>` : ''}</div>
+    ${(p.dates || []).map((d, k) => `<div class="ph-rule"><b>Date check</b><span class="tev-ph" style="--ph:#3a86ff">${escapeHtml(d.task + ' › ' + d.label)}</span> + <input type="number" step="0.5" value="${escapeHtml(String(d.days))}" onchange="phList[${i}].dates[${k}].days = Number(this.value) || 0" title="Minus to warn before the date"> ${phUnitSel(d.work, `phList[${i}].dates[${k}].work = this.value === '1'`)}
+      if empty <select onchange="phList[${i}].dates[${k}].missing = this.value"><option value="skip"${d.missing !== 'flag' ? ' selected' : ''}>skip it</option><option value="flag"${d.missing === 'flag' ? ' selected' : ''}>show "not filled"</option></select>
+      <button class="chain-btn" title="Remove this check" onclick="phList[${i}].dates.splice(${k}, 1); renderPhases()">&times;</button></div>`).join('')}
+    ${phDates.length ? `<div class="ph-rule"><b>+ Date check</b><select onchange="phAddDate(${i}, this.value)"><option value="">pick a date field…</option>${dateOpts}</select></div>` : '<div class="ph-rule"><small class="report-meta">No date fields in any task yet, so no date checks can be added.</small></div>'}
+  </div>`;
+}
+
+function phCumTotal(i) {
+  const p = phList[i];
+  if (!p || !p.cum) return 0;
+  const a = phList.findIndex(x => x.name === p.cum.from);
+  if (a < 0) return 0;
+  let t = 0;
+  for (let j = a; j <= i; j++) t += Number((phList[j].own || {}).days) || 0;
+  return Math.round(t * 100) / 100;
+}
+
+function phSetOwn(i, k, v) {
+  const p = phList[i];
+  p.own = p.own || { days: '', work: false };
+  p.own[k] = v;
+  if (k === 'days') p.limit = v;
+  renderPhases();
+}
+
+function phSetCum(i, v) {
+  phList[i].cum = v ? { from: v, work: phList[i].cum ? phList[i].cum.work : false } : null;
+  renderPhases();
+}
+
+function phAddDate(i, k) {
+  if (k === '') return;
+  const d = phDates[Number(k)];
+  if (!d) return;
+  phList[i].dates = phList[i].dates || [];
+  phList[i].dates.push({ task: d.task, col: d.col, label: d.label, days: 0, work: false, missing: 'skip' });
+  renderPhases();
 }
 
 function phAdd() {
   let n = 'New phase', k = 2;
   while (phList.some(p => p.name.toLowerCase() === n.toLowerCase())) n = 'New phase ' + (k++);
-  phList.push({ name: n, limit: '', tasks: [] });
+  phList.push({ name: n, limit: '', tasks: [], own: { days: '', work: false }, cum: null, dates: [] });
   renderPhases();
 }
 
@@ -12042,15 +12222,15 @@ function phTaskTo(i, k, j) {
 
 async function phSave() {
   const pid = valOf('ph-proj') || DEFAULT_PROJECT;
-  const send = phList.filter(p => p.tasks.length || Number(p.limit) > 0);
+  const send = phList.filter(p => p.tasks.length || Number((p.own || {}).days) > 0);
   if (send.some(p => !p.tasks.length)) return toast('A phase with no tasks cannot be saved. Move a task into it or remove it.', true);
   try {
-    const r = await apiCall('phaseSave', { project: pid, phases: send.map(p => ({ name: p.name, limit: Number(p.limit) || 0, tasks: p.tasks })) });
+    const r = await apiCall('phaseSave', { project: pid, phases: send.map(p => ({ name: p.name, limit: Number((p.own || {}).days) || 0, tasks: p.tasks, rules: { own: { days: Number((p.own || {}).days) || 0, work: !!(p.own || {}).work }, cum: p.cum, dates: p.dates || [] } })) });
     if (!r.ok) return toast(r.error || 'Could not save', true);
     toast('Phases saved.');
     await loadTasks();
     const g = await apiCall('phaseGet');
-    if (g.ok) phLimits = g.limits || {};
+    if (g.ok) { phLimits = g.limits || {}; phRules = g.rules || {}; phDates = g.dateFields || []; }
     phBuild();
     renderPhases();
     document.getElementById('ph-msg').innerText = 'Saved';
@@ -12074,11 +12254,11 @@ function renderRola() {
   const r = rolaData;
   const box = document.getElementById('rola-wrap');
   if (!r) return;
-  if (r.noLimits) { box.innerHTML = '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has a days limit yet. Set "Most days" in Admin → Phases first.</div>'; document.getElementById('rola-meta').innerText = ''; return; }
+  if (r.noLimits) { box.innerHTML = '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has an R-DAYS check yet. Set them in Admin → Phases first.</div>'; document.getElementById('rola-meta').innerText = ''; return; }
   const q = valOf('rola-q').toLowerCase();
   const lines = r.lines.filter(x => !q || [x.key, x.name, x.project, x.phase, x.tasks.join(' '), x.who].join(' ').toLowerCase().indexOf(q) !== -1);
   document.getElementById('rola-meta').innerText = lines.length + ' in Rola Days · as of ' + shortWhen(r.at || '');
-  box.innerHTML = lines.length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Case / consignment</th><th>Project</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>In this phase since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => `<tr class="rola-row" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="left"><b>${escapeHtml(x.key)}</b>${x.name ? '<br><small class="report-meta">' + escapeHtml(x.name) + '</small>' : ''}</td><td>${escapeHtml(x.project)}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${escapeHtml(x.tasks.join(', '))}</td><td>${escapeHtml(x.who)}</td><td class="nowrap">${escapeHtml(shortWhen(x.since))}</td><td>${x.days}</td><td>${x.limit}</td><td><span class="late-badge">${x.over} days</span></td></tr>`).join('')}</tbody></table></div>` : '<div class="late-none">&#10003; Nothing is over its phase limit.</div>';
+  box.innerHTML = lines.length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Case / consignment</th><th>Project</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>In this phase since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => `<tr class="rola-row" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="left"><b>${escapeHtml(x.key)}</b>${x.name ? '<br><small class="report-meta">' + escapeHtml(x.name) + '</small>' : ''}</td><td>${escapeHtml(x.project)}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${escapeHtml(x.tasks.join(', '))}</td><td>${escapeHtml(x.who)}</td><td class="nowrap">${escapeHtml(shortWhen(x.since))}</td><td>${x.days}${x.label ? ' <small>' + escapeHtml(x.label) + '</small>' : ''}</td><td>${x.limit}</td><td><span class="late-badge" title="${escapeHtml(x.rdays ? rdTip(x.rdays) : '')}">${x.over} days</span></td></tr>`).join('')}</tbody></table></div>` : '<div class="late-none">&#10003; Nothing is over its phase limit.</div>';
 }
 
 async function hpInfo() {
@@ -12301,13 +12481,22 @@ function trailTablesHtml(r) {
   const inChain = {};
   const tables = (r.chains || []).map(c => {
     let lastPhase = null, tb = 0, to = 0, tc = 0;
-    const rows = c.tasks.map(t => {
+    const isReached = t => !!(t.arrived || t.closed || (t.sym && t.sym !== 'skip'));
+    const recentT = c.tasks.filter(isReached).slice().sort((a, b) => (b.recent || 0) - (a.recent || 0));
+    const laterT = c.tasks.filter(t => !isReached(t));
+    let divDone = false;
+    const rows = recentT.concat(laterT).map(t => {
       inChain[t.task] = true;
-      const reached = !!(t.arrived || t.closed || (t.sym && t.sym !== 'skip'));
+      const reached = isReached(t);
       if (reached || t.status) { tb += t.bestPts || 0; to += t.onPts || 0; tc += t.points || 0; }
-      const ph = t.phase !== lastPhase ? `<tr class="phase-row"><td class="left" colspan="11"><b>${escapeHtml(t.phase || 'Other')}</b></td></tr>` : '';
-      lastPhase = t.phase;
-      return ph + `<tr class="${!reached ? 'dim-row' : t.late ? 'overdue' : ''}"><td class="left">${escapeHtml(t.task)}</td><td class="left">${escapeHtml(t.by || (t.owners || []).join(', '))}</td>
+      let ph = '';
+      if (!reached) {
+        if (!divDone && recentT.length) { ph += `<tr class="phase-row trail-later"><td class="left" colspan="11"><b>Not reached yet</b></td></tr>`; divDone = true; }
+        if (t.phase !== lastPhase) ph += `<tr class="phase-row"><td class="left" colspan="11"><b>${escapeHtml(t.phase || 'Other')}</b></td></tr>`;
+        lastPhase = t.phase;
+      }
+      const tag = reached ? `<span class="tev-ph" style="--ph:${phaseColor(t.phase)}">${escapeHtml(t.phase || 'Other')}</span> ` : '';
+      return ph + `<tr class="${!reached ? 'dim-row' : t.late ? 'overdue' : ''}"><td class="left">${tag}${escapeHtml(t.task)}</td><td class="left">${escapeHtml(t.by || (t.owners || []).join(', '))}</td>
         <td>${escapeHtml(shortWhen(t.arrived))}</td><td>${t.status === 'Pending' ? '<span class="status-pill status-open">Open</span>' : escapeHtml(shortWhen(t.closed))}</td>
         <td>${escapeHtml(t.allowed || '')}</td><td>${escapeHtml(t.took || '')}</td><td>${spanText(t)}</td>
         <td>${ptsCell(t.bestPts, 'band-before')}</td><td>${ptsCell(t.onPts, 'band-on')}</td>
