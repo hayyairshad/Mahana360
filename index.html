@@ -1498,7 +1498,16 @@ background: linear-gradient(160deg, #0f7a73 0%, #0c5d63 55%, #0a4a55 100%); box-
 .fab-rem-lbl { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 0.82rem; font-weight: 800; color: var(--pine, #24533a); background: rgba(255,255,255,0.92); padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); pointer-events: none; }
 .fab-stack { position: fixed; right: 28px; bottom: 158px; z-index: 900; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
 .fab-pill { display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 0; cursor: pointer; }
-.fab-lbl { font-size: 0.82rem; font-weight: 800; color: var(--pine, #24533a); background: rgba(255,255,255,0.92); padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.fab-lbl { font-size: 0.82rem; font-weight: 800; color: var(--pine, #24533a); background: rgba(255,255,255,0.95); padding: 3px 9px; border-radius: 999px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); opacity: 0; transform: translateX(8px); transition: opacity 0.15s, transform 0.15s; pointer-events: none; }
+.fab-pill:hover .fab-lbl, .fab-pill:focus-visible .fab-lbl { opacity: 1; transform: none; }
+.fab-rem-lbl { opacity: 0; transition: opacity 0.15s; }
+#fab-rem:hover .fab-rem-lbl { opacity: 1; }
+.fab-win { width: 620px; z-index: 61; }
+#fab-win-body { flex: 1; overflow: auto; padding: 10px 78px 20px 12px; }
+#fab-win-body .report-bar { flex-wrap: wrap; }
+#fab-win-body > div { display: block; }
+body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 620px; }
+@media (max-width: 1100px) { body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 0; } }
 .fab-ico { position: relative; width: 50px; height: 50px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.35rem; background: #fff; border: 2px solid var(--pine, #24533a); box-shadow: 0 6px 16px rgba(0,0,0,0.18); transition: transform 0.15s; }
 .fab-ico-red { background: #c8102e; border-color: #c8102e; color: #fff; }
 .fab-pill:hover .fab-ico { transform: scale(1.07); }
@@ -2402,6 +2411,7 @@ style="margin:0; padding:8px 12px 8px 30px; width:180px; font-size:0.8rem;">
 <button class="lvl1" onclick="closePlusMenu(); openAddCase()">&#10133; Add a case (tile) to a task</button>
 </div>
 <div id="fab-stack" class="fab-stack hidden"></div>
+<div id="fab-win" class="rem-drawer fab-win hidden"><div class="rem-drawer-h"><b id="fab-win-title"></b><button class="btn btn-small" onclick="fabWinClose()" title="Close">&times;</button></div><div id="fab-win-body"></div></div>
 <button id="fab-rem" class="fab-plus fab-rem hidden" onclick="remPanelToggle()" title="Reminders and assignments — stays open until you press this again" aria-label="Reminders and assignments">&#9200;<span class="fab-rem-lbl">Reminders &amp; Assignments</span></button>
 <button id="fab-plus" class="fab-plus hidden" onclick="togglePlusMenu(event, 'fab-plus')" title="Add a reminder, assign, leave or a case" aria-label="Add">+</button>
 <div id="addcase-overlay" class="pic-overlay hidden" onclick="if(event.target===this)closeAddCase()">
@@ -2912,7 +2922,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R43";
+const APP_VERSION = "R44";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -4129,8 +4139,8 @@ function impLineHtml(g, B) {
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
       <span class="imp-icons">${impData.canPin ? `<button class="imp-ico" title="${importPinned(g) ? 'Unpin' : 'Pin on top'}" onclick="event.stopPropagation(); impPinToggle(impFlat[${i}])">${importPinned(g) ? '&#128204;' : '<span style=\'opacity:0.45\'>&#128204;</span>'}</button>` : ''}${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
-      <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${hl.length ? escapeHtml(hl.join(' | ')) : ''}${impExtraLine(g)}</div>
-      ${det.length ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
+      <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${hl.length ? escapeHtml(hl.join(' | ')) : ''}</div>
+      ${det.length && !sel ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
       ${pin ? `<div class="imp-pin-line">&#128204; ${escapeHtml(pin.text)}</div>` : ''}
     </div>
     ${sel ? impTrailHtml(g, i, B) : ''}
@@ -4744,6 +4754,7 @@ function remPanelToggle(open, keepPref) {
   if (drawer.parentNode !== document.body) document.body.appendChild(drawer);
   if (want && !remDrawerOpen) {
     if (currentTask === MY_REMINDERS) { toast('You are already on My reminders.'); return; }
+    if (fabWinKind) fabWinClose();
     remHomeParent = form.parentNode;
     const mark = document.getElementById('rem-home');
     if (mark && mark.parentNode !== remHomeParent) remHomeParent.insertBefore(mark, form);
@@ -5546,6 +5557,52 @@ function jawadOwn() {
   return !!(user && profile && user.level === 0 && profile.name === user.name);
 }
 
+let fabWinKind = '';
+let fabWinHome = null;
+const FAB_WIN = {
+  board: { id: 'form-board', title: '&#128203; Taskboard', load: () => { if (boardData) renderBoard(); loadBoard(); } },
+  late: { id: 'report-late', title: '&#127939; Late', load: () => { lateMode = 'open'; loadLate(); } },
+  approvals: { id: 'form-approvals', title: '&#9989; Approvals', load: () => { try { loadApprovals(); } catch (e) {} } }
+};
+
+function fabWin(kind) {
+  if (fabWinKind === kind) return fabWinClose();
+  fabWinClose();
+  const cfg = FAB_WIN[kind];
+  const el = cfg && document.getElementById(cfg.id);
+  if (!el) return;
+  if (remDrawerOpen) remPanelToggle(false);
+  const win = document.getElementById('fab-win');
+  if (win.parentNode !== document.body) document.body.appendChild(win);
+  fabWinHome = { el: el, parent: el.parentNode, next: el.nextSibling, wasHidden: el.classList.contains('hidden') };
+  document.getElementById('fab-win-body').appendChild(el);
+  el.classList.remove('hidden');
+  document.getElementById('fab-win-title').innerHTML = cfg.title;
+  const hd = document.querySelector('header');
+  win.style.top = (hd ? hd.offsetHeight : 64) + 'px';
+  win.classList.remove('hidden');
+  document.body.classList.add('fabwin-open');
+  fabWinKind = kind;
+  fabStackRender();
+  cfg.load();
+}
+
+function fabWinClose() {
+  if (!fabWinKind) return;
+  const H = fabWinHome;
+  if (H && H.el) {
+    if (H.next && H.next.parentNode === H.parent) H.parent.insertBefore(H.el, H.next);
+    else H.parent.appendChild(H.el);
+    if (H.wasHidden) H.el.classList.add('hidden');
+  }
+  fabWinHome = null;
+  fabWinKind = '';
+  const win = document.getElementById('fab-win');
+  if (win) win.classList.add('hidden');
+  document.body.classList.remove('fabwin-open');
+  fabStackRender();
+}
+
 function fabGo(kind) {
   if (kind === 'approvals') return openPanelTask('Time Requests');
   if (kind === 'board') return openBoard();
@@ -5565,9 +5622,9 @@ function fabStackRender() {
   const waiting = typeof approvalItems !== 'undefined' && approvalItems ? approvalItems.filter(x => x.status === 'Waiting').length : 0;
   const cur = currentProject;
   box.innerHTML = `
-    <button class="fab-pill" onclick="fabGo('approvals')" title="Time requests waiting for you"><span class="fab-lbl">Approvals</span><span class="fab-ico fab-ico-red">&#9989;${waiting ? `<b class="fab-badge">${waiting}</b>` : ''}</span></button>
-    <button class="fab-pill${cur === BOARD_PROJECT ? ' on' : ''}" onclick="fabGo('board')" title="Task Board"><span class="fab-lbl">Taskboard</span><span class="fab-ico">&#128203;</span></button>
-    <button class="fab-pill" onclick="fabGo('late')" title="Late and about to be late"><span class="fab-lbl">Late</span><span class="fab-ico">&#127939;</span></button>`;
+    <button class="fab-pill${fabWinKind === 'approvals' ? ' on' : ''}" onclick="fabWin('approvals')" aria-label="Approvals"><span class="fab-lbl">Approvals</span><span class="fab-ico fab-ico-red">&#9989;${waiting ? `<b class="fab-badge">${waiting}</b>` : ''}</span></button>
+    <button class="fab-pill${fabWinKind === 'board' ? ' on' : ''}" onclick="fabWin('board')" aria-label="Taskboard"><span class="fab-lbl">Taskboard</span><span class="fab-ico">&#128203;</span></button>
+    <button class="fab-pill${fabWinKind === 'late' ? ' on' : ''}" onclick="fabWin('late')" aria-label="Late"><span class="fab-lbl">Late</span><span class="fab-ico">&#127939;</span></button>`;
 }
 
 function extraTabsHtml(asButtons) {
@@ -7158,7 +7215,7 @@ function caseTimeHtml(p) {
   if (p.grace && p.grace.oldAllowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.grace.newAllowed) + ' <small>(was ' + escapeHtml(p.grace.oldAllowed) + ', more time approved)</small></span>');
   else if (p.allowed) bits.push('<span><b>Time given:</b> ' + escapeHtml(p.allowed) + '</span>');
   if (p.due) bits.push('<span><b>Due:</b> ' + escapeHtml(p.due) + '</span>');
-  const durAllow = p.allowed && !/^by |,/.test(String(p.allowed)) ? p.allowed : '';
+  const durAllow = p.grace && p.grace.newAllowed ? p.grace.newAllowed : (p.allowed && !/^by |,/.test(String(p.allowed)) ? p.allowed : '');
   if (p.taken) bits.push('<span><b>Took:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + (durAllow ? ' of ' + escapeHtml(durAllow) : '') + '</span>');
   if (p.late) bits.push('<span class="bad">Late by ' + escapeHtml(p.lateBy || '') + '</span>');
   else if (p.left) bits.push('<span class="good">' + (p.leftMs === 0 ? 'Due now' : escapeHtml(p.left) + ' left') + '</span>');
@@ -8555,11 +8612,13 @@ function hideAllForms() {
   document.body.classList.remove('fs-mode');
   closeColFilter();
   ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-access', 'form-board', 'partial-section', 'recent-section']
-    .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen)) el.classList.add('hidden'); });
-  document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => el.classList.add('hidden'));
+    .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen) && !(el.closest && el.closest('#fab-win'))) el.classList.add('hidden'); });
+  document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => { if (!(el.closest && el.closest('#fab-win'))) el.classList.add('hidden'); });
 }
 
 function renderFormInterface() {
+  const t0 = taskByName(currentTask);
+  if (fabWinKind && t0 && ((fabWinKind === 'board' && t0.panel === 'board') || (fabWinKind === 'approvals' && t0.panel === 'approvals') || (fabWinKind === 'late' && t0.panel === 'reports'))) fabWinClose();
   hideAllForms();
 
   const t = taskByName(currentTask);
