@@ -1617,6 +1617,27 @@ body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 620px; 
 .rd { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid; }
 .rd.ok { color: #05603a; background: #e7f6ee; border-color: #a6e0c3; }
 .rd.bad { color: #b42318; background: #fdeceb; border-color: #f1b8b3; }
+.rdm-wrap { overflow-x: auto; max-width: 100%; }
+.rdm { border-collapse: collapse; font-size: 0.82rem; min-width: 100%; }
+.rdm th, .rdm td { border: 1px solid #d9d9d9; padding: 4px 8px; text-align: center; white-space: nowrap; }
+.rdm .rdm-lbl, .rdm .rdm-key { text-align: left; position: sticky; left: 0; background: inherit; }
+.rdm-h1 th { background: #e9c6ef; } .rdm-h2 th { background: #c9efc9; } .rdm-h3 th { background: #f8dccb; } .rdm-h4 th { background: #c9dcf2; } .rdm-h5 th { background: #f6b93b; color: #1f2937; }
+.rdm-h .rdm-lbl { font-weight: 800; }
+.rdm tbody td { background: #fff; }
+.rdm tbody tr:hover td { filter: brightness(0.96); cursor: pointer; }
+.rdm-key small { display: block; color: var(--text-dim); font-weight: 400; }
+.rdm-none { color: #98a2b3; font-weight: 400; }
+.rdm .rdm-own, .rdm-c.rdm-own { background: #cfe5f6; }
+.rdm .rdm-cum, .rdm-c.rdm-cum { background: #f8cbad; }
+.rdm .rdm-date, .rdm-c.rdm-date { background: #ff2b2b; color: #fff; font-weight: 800; }
+.rdm .rdm-cur, .rdm-c.rdm-cur { box-shadow: inset 0 0 0 2px #24533a; font-weight: 800; }
+.rdm-closed td { opacity: 0.72; }
+.rdm-dpos b { color: #b42318; } .rdm-dneg b { color: #667085; }
+.rdm-legend { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 6px 0 10px; font-size: 0.78rem; }
+.rdm-c { display: inline-block; padding: 2px 9px; border: 1px solid #d9d9d9; border-radius: 6px; background: #fff; }
+.rola-wrap-x { overflow-x: auto; max-width: 100%; }
+.rola-table td, .rola-table th { white-space: normal; }
+.rola-table td.left { max-width: 220px; }
 .rd.miss { color: #667085; background: #f2f4f7; border-color: #d0d5dd; }
 .rd-miss { font-style: normal; color: #b54708; }
 .ph-rules { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 4px; padding: 8px 10px; background: rgba(0,0,0,0.03); border-radius: 8px; font-size: 0.85rem; }
@@ -1928,7 +1949,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-data" onclick="showReportTab('data')">Task data</button>
 <button class="phase-btn" id="rep-tab-times" onclick="showReportTab('times')">Task times</button>
 <button class="phase-btn rep-tab-late" id="rep-tab-late" onclick="showReportTab('late')">&#9888; Late</button>
-<button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button>
+<button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button><button class="phase-btn" id="rep-tab-rdays" onclick="showReportTab('rdays')">&#9201; Rola Days</button>
 <button class="btn btn-small" onclick="refreshReports()">Refresh</button>
 <span id="report-meta" class="report-meta"></span>
 <button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
@@ -2023,6 +2044,11 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div id="report-times" class="hidden">
 <div class="report-bar"><input type="text" id="times-q" class="report-search" placeholder="Search task or person" oninput="renderTaskTimes()"><button class="btn btn-small" onclick="copyPicture(() => nodesToBlob([document.getElementById('times-table')], 'Tasks and allowed time'))">Copy picture</button></div>
 <div class="report-wrap"><table class="report-table" id="times-table"></table></div>
+</div>
+<div id="report-rdays" class="hidden">
+<div class="report-bar"><select id="rdm-proj" onchange="loadRdm()" style="width:auto;min-width:150px;margin:0"></select><span class="phase-tabs"><button class="phase-btn active" id="rdm-v-table" onclick="rdmView('table')">Phase table</button><button class="phase-btn" id="rdm-v-list" onclick="rdmView('list')">Over the limit now</button></span><label class="inline-label"><input type="checkbox" id="rdm-closed" onchange="loadRdm()"> Show closed</label><input type="text" id="rdm-q" class="report-search" placeholder="Filter by consignment or case" oninput="renderRdm()"><button class="btn btn-small" onclick="loadRdm(true)">Refresh</button><span id="rdm-meta" class="report-meta"></span></div>
+<div class="rdm-legend"><span class="rdm-c">inside own days</span><span class="rdm-c rdm-own">over own days</span><span class="rdm-c rdm-cum">over running total</span><span class="rdm-c rdm-date">past a date check</span><span class="rdm-c rdm-cur">phase it is in now</span><span class="report-meta">Days spent in each phase. Hover a cell for details. Click a row for its trail.</span></div>
+<div id="rdm-body" class="rdm-wrap"><div class="report-meta">Loading...</div></div>
 </div>
 <div id="report-stmt" class="hidden">
 <div class="report-bar"><select id="stmt-person" onchange="loadStmt()"><option value="">Pick a person</option></select><label class="inline-label">From <input type="date" id="stmt-from" onchange="loadStmt()"></label><label class="inline-label">To <input type="date" id="stmt-to" onchange="loadStmt()"></label><span id="stmt-meta" class="report-meta"></span></div>
@@ -2922,7 +2948,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R44";
+const APP_VERSION = "R45";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3805,6 +3831,7 @@ function rdTip(rd) {
   const name = c => c.kind === 'own' ? 'In this phase' : c.kind === 'cum' ? 'Running total' : c.label + ' + ' + c.limit;
   const lines = (rd.checks || []).map(c => (c.over ? '✖ ' : '✔ ') + name(c) + ': ' + (c.kind === 'date' ? (c.days >= 0 ? pl(c.days, unit(c)) + ' since ' + shortWhen(c.since) : pl(-c.days, unit(c)) + ' before ' + shortWhen(c.since)) : pl(c.days, unit(c)) + ' of ' + c.limit) + (c.over ? ' · over by ' + pl(c.by, unit(c)) : ' · ' + pl(c.left, unit(c)) + ' left'));
   (rd.missing || []).forEach(m => lines.push('? ' + m + ' not filled yet'));
+  if (rd.frozen) lines.push('Counted until it left this phase on ' + rd.until);
   return lines.join('\n');
 }
 
@@ -3821,7 +3848,7 @@ function rdHtml(rd, cls) {
 
 function gRdays(g) {
   let best = null;
-  (g.prog ? g.prog.open.concat(g.prog.done) : []).forEach(x => { if (x.rdays && (!best || (x.rdays.over && !best.over) || x.rdays.days > best.days)) best = x.rdays; });
+  (g.prog ? g.prog.open : []).forEach(x => { if (x.rdays && (!best || (x.rdays.over && !best.over) || x.rdays.days > best.days)) best = x.rdays; });
   return best;
 }
 
@@ -9422,7 +9449,7 @@ function staffReportsOnly() {
   return !isAdminPanel();
 }
 
-const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt'];
+const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt', 'rdays'];
 
 function showReportTab(tab) {
   const allowed = REPORT_TABS.filter(k => can('rep:' + k));
@@ -9437,7 +9464,8 @@ function showReportTab(tab) {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
-  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt');
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt' || tab === 'rdays');
+  if (tab === 'rdays') { document.getElementById('report-meta').innerText = ''; loadRdm(); return; }
   if (tab === 'stmt') { document.getElementById('report-meta').innerText = ''; loadStmt(); return; }
   if (tab === 'late') { document.getElementById('report-meta').innerText = ''; loadLate(); return; }
   if (tab === 'trail') { document.getElementById('report-meta').innerText = ''; return; }
@@ -12309,15 +12337,99 @@ async function loadRola() {
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
+let rdmData = null, rdmSeq = 0, rdmMode = 'table', rdmList = null;
+
+function rdmView(v) {
+  rdmMode = v;
+  document.getElementById('rdm-v-table').classList.toggle('active', v === 'table');
+  document.getElementById('rdm-v-list').classList.toggle('active', v === 'list');
+  document.getElementById('rdm-closed').parentNode.classList.toggle('hidden', v === 'list');
+  if (v === 'list' && !rdmList) loadRdmList(); else renderRdm();
+}
+
+async function loadRdmList(fresh) {
+  const box = document.getElementById('rdm-body');
+  box.innerHTML = '<div class="report-meta">Loading...</div>';
+  try { const r = await apiCall('rolaList', { fresh: !!fresh }); rdmList = r; renderRdm(); } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+async function loadRdm(fresh) {
+  const sel = document.getElementById('rdm-proj');
+  if (sel && !sel.options.length) {
+    const ps = PROJECTS.filter(p => p.active !== false && p.id !== ADMIN_PROJECT);
+    sel.innerHTML = ps.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+    const ip = importPid();
+    if (ip) sel.value = ip;
+  }
+  if (rdmMode === 'list') { rdmList = null; return loadRdmList(fresh); }
+  const box = document.getElementById('rdm-body');
+  if (!rdmData) box.innerHTML = '<div class="report-meta">Loading...</div>';
+  const seq = ++rdmSeq;
+  try {
+    const r = await apiCall('rdaysMatrix', { project: valOf('rdm-proj'), closed: document.getElementById('rdm-closed').checked, fresh: !!fresh });
+    if (seq !== rdmSeq) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    rdmData = r;
+    renderRdm();
+    if (r.stale && !fresh) loadRdm(true);
+  } catch (e) { if (!rdmData) box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function renderRdm() {
+  const box = document.getElementById('rdm-body');
+  if (!box) return;
+  const q = String(valOf('rdm-q') || '').trim().toLowerCase();
+  if (rdmMode === 'list') {
+    const r = rdmList;
+    if (!r) return;
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    const lines = (r.lines || []).filter(x => !q || [x.key, x.name, x.project, x.phase, x.tasks.join(' '), x.who].join(' ').toLowerCase().indexOf(q) !== -1);
+    document.getElementById('rdm-meta').innerText = lines.length + ' in Rola Days · as of ' + shortWhen(r.at || '');
+    box.innerHTML = rolaTableHtml(lines, r.noLimits);
+    return;
+  }
+  const d = rdmData;
+  if (!d) return;
+  const rows = d.rows.filter(x => !q || (x.key + ' ' + x.name).toLowerCase().indexOf(q) !== -1);
+  const nOver = rows.filter(x => x.worst > 0).length;
+  document.getElementById('rdm-meta').innerText = rows.length + ' consignments · ' + nOver + ' with a breach · as of ' + shortWhen(d.at || '');
+  if (!d.phases.length) { box.innerHTML = '<div class="report-meta">This project has no phases.</div>'; return; }
+  const P = d.phases;
+  const none = '<span class="rdm-none">None</span>';
+  const hdr = (lbl, cls, f) => `<tr class="rdm-h ${cls}"><th class="rdm-lbl">${lbl}</th>${P.map(p => `<th>${f(p)}</th>`).join('')}${d.dateCols.map(() => '<th></th>').join('')}</tr>`;
+  const head = hdr('From date', 'rdm-h1', p => p.dates.length ? p.dates.map(x => escapeHtml(x.label)).join(', ') : '')
+    + hdr('Plus', 'rdm-h2', p => p.dates.length ? p.dates.map(x => (x.days >= 0 ? '+' : '') + x.days).join(', ') : none)
+    + hdr('Running', 'rdm-h3', p => p.cum ? `<span title="from ${escapeHtml(p.cum.from)}">${p.cum.total}</span>` : none)
+    + hdr('Own', 'rdm-h4', p => p.own != null ? p.own : none)
+    + `<tr class="rdm-h rdm-h5"><th class="rdm-lbl">Phase</th>${P.map(p => `<th>${escapeHtml(p.name)}</th>`).join('')}${d.dateCols.map(c => `<th>${escapeHtml(c.label)}</th>`).join('')}</tr>`;
+  const body = rows.map(x => {
+    const cells = P.map(p => {
+      const c = x.cells[p.name];
+      if (!c) return '<td></td>';
+      const cls = (c.state ? 'rdm-' + c.state : '') + (c.open ? ' rdm-cur' : '');
+      const tip = (c.rd ? rdTip(c.rd) + '\n' : '') + 'In ' + p.name + ' since ' + c.since + (c.until ? ' until ' + c.until : ' (still here)');
+      return `<td class="${cls}" title="${escapeHtml(tip)}">${c.days}</td>`;
+    }).join('');
+    const dates = x.dates.map(v => v ? `<td class="${v.diff > 0 ? 'rdm-dpos' : 'rdm-dneg'}" title="${escapeHtml(v.date + (v.plus ? ' + ' + v.plus + ' days' : ''))}">${escapeHtml(v.date.replace(/, \d.*$/, ''))} <b>${v.diff > 0 ? '+' : ''}${v.diff}</b></td>` : '<td></td>').join('');
+    return `<tr class="rdm-row${x.open ? '' : ' rdm-closed'}" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="rdm-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td>${cells}${dates}</tr>`;
+  }).join('');
+  box.innerHTML = rows.length ? `<table class="rdm">${'<thead>' + head + '</thead>'}<tbody>${body}</tbody></table>` : '<div class="report-meta">Nothing to show.</div>';
+}
+
+function rolaTableHtml(lines, noLimits) {
+  if (noLimits) return '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has an R-DAYS check yet. Set them in Admin → Phases first.</div>';
+  if (!lines.length) return '<div class="late-none">&#10003; Nothing is over its R-DAYS right now.</div>';
+  return `<div class="table-wrap rola-wrap-x"><table class="report-table rola-table"><thead><tr><th>Case / consignment</th><th>Project</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>Since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => `<tr class="rola-row" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="left"><b>${escapeHtml(x.key)}</b>${x.name ? '<br><small>' + escapeHtml(x.name) + '</small>' : ''}</td><td>${escapeHtml(x.project)}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${escapeHtml(x.tasks.join(', '))}</td><td>${escapeHtml(x.who)}</td><td>${escapeHtml(shortWhen(x.since))}</td><td>${x.days}${x.label ? ' <small>' + escapeHtml(x.label) + '</small>' : ''}</td><td>${x.limit}</td><td><span class="late-badge" title="${escapeHtml(x.rdays ? rdTip(x.rdays) : '')}">${x.over} days</span></td></tr>`).join('')}</tbody></table></div>`;
+}
+
 function renderRola() {
   const r = rolaData;
   const box = document.getElementById('rola-wrap');
   if (!r) return;
-  if (r.noLimits) { box.innerHTML = '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has an R-DAYS check yet. Set them in Admin → Phases first.</div>'; document.getElementById('rola-meta').innerText = ''; return; }
   const q = valOf('rola-q').toLowerCase();
-  const lines = r.lines.filter(x => !q || [x.key, x.name, x.project, x.phase, x.tasks.join(' '), x.who].join(' ').toLowerCase().indexOf(q) !== -1);
-  document.getElementById('rola-meta').innerText = lines.length + ' in Rola Days · as of ' + shortWhen(r.at || '');
-  box.innerHTML = lines.length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Case / consignment</th><th>Project</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>In this phase since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => `<tr class="rola-row" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')"><td class="left"><b>${escapeHtml(x.key)}</b>${x.name ? '<br><small class="report-meta">' + escapeHtml(x.name) + '</small>' : ''}</td><td>${escapeHtml(x.project)}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${escapeHtml(x.tasks.join(', '))}</td><td>${escapeHtml(x.who)}</td><td class="nowrap">${escapeHtml(shortWhen(x.since))}</td><td>${x.days}${x.label ? ' <small>' + escapeHtml(x.label) + '</small>' : ''}</td><td>${x.limit}</td><td><span class="late-badge" title="${escapeHtml(x.rdays ? rdTip(x.rdays) : '')}">${x.over} days</span></td></tr>`).join('')}</tbody></table></div>` : '<div class="late-none">&#10003; Nothing is over its phase limit.</div>';
+  const lines = (r.lines || []).filter(x => !q || [x.key, x.name, x.project, x.phase, x.tasks.join(' '), x.who].join(' ').toLowerCase().indexOf(q) !== -1);
+  document.getElementById('rola-meta').innerText = r.noLimits ? '' : lines.length + ' in Rola Days · as of ' + shortWhen(r.at || '');
+  box.innerHTML = rolaTableHtml(lines, r.noLimits);
 }
 
 async function hpInfo() {
