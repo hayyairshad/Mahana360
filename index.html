@@ -527,6 +527,16 @@ header { padding: 10px 15px; }
 .partial-fill { color: var(--text-dim); font-size: 0.8rem; }
 
 .report-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.exit-reason-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.exit-reason { background: #fff; border-radius: 14px; padding: 18px; width: 100%; max-width: 460px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); }
+.exit-reason textarea { width: 100%; margin-top: 6px; }
+.rep-title { font: inherit; font-size: 1.15rem; font-weight: 800; color: var(--accent-color); background: none; border: 1px dashed transparent; border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+.rep-title:hover { border-color: var(--accent-color); background: #eef5f0; }
+.rep-picker { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #24533a; padding: 12px 44px 12px 12px; border-radius: 12px; margin-bottom: 16px; position: relative; }
+.rep-picker .phase-btn { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.3); }
+.rep-picker .phase-btn:hover { background: rgba(255,255,255,0.25); }
+.rep-picker .phase-btn.active { background: #fff; color: #24533a; border-color: #fff; }
+.rep-picker-x { position: absolute; right: 10px; top: 10px; background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; line-height: 1; }
 .report-meta { font-size: 0.75rem; color: var(--text-dim); }
 .report-search { margin: 0; padding: 8px 12px; font-size: 0.85rem; width: auto; min-width: 200px; }
 .report-legend { font-size: 0.78rem; color: var(--text-dim); line-height: 1.8; }
@@ -766,6 +776,13 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 .star-btn { border: none; background: transparent; color: var(--text-dim); font-size: 1rem; line-height: 1; padding: 0 4px 0 0; cursor: pointer; }
 .star-btn.on, .star-btn:hover { color: var(--brass); }
 .case-chip.imp { border: 2px solid #d23f31; background: #fff4e5; box-shadow: 0 0 0 3px rgba(210,63,49,0.12); font-weight: 600; }
+.step-star { background: none; border: none; cursor: pointer; font-size: 1.05rem; color: #98a2b3; padding: 0 2px; line-height: 1; }
+.step-star.on { color: #b54708; }
+.sidebar-must { color: #b54708; font-weight: 800; margin-right: 4px; }
+.case-chip.must { border: 2px solid #b54708; background: #fff7e6; }
+.case-chip.hold { opacity: 0.8; border-style: dashed; }
+.imp-tag.must-tag { background: #b54708; }
+.imp-tag.hold-tag { background: #667085; }
 .imp-tag { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 8px; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; background: #d23f31; color: #fff; vertical-align: middle; }
 .task-sidebar-item.imp { background: #fff4e5; border-color: #e7b07a; }
 .task-sidebar-item.imp .imp-star { color: #d23f31; font-size: 1.05em; margin-right: 4px; }
@@ -1623,23 +1640,30 @@ body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 620px; 
 .rdm th, .rdm td { border-right: 1px solid #c4cad3; border-bottom: 1px solid #c4cad3; padding: 5px 9px; text-align: center; white-space: nowrap; }
 .rdm .rdm-lbl, .rdm .rdm-key { text-align: left; position: sticky; left: 0; z-index: 1; }
 .rdm-h th { font-weight: 700; color: #1f2937; }
-.rdm-h1 th { background: #eadcf1; } .rdm-h2 th { background: #f6c3c0; color: #7a1010; } .rdm-h3 th { background: #fbd9c4; color: #7c2d12; } .rdm-h4 th { background: #cfe0f5; color: #1e3a8a; } .rdm-h5 th { background: #f6b93b; color: #1f2937; }
+.rdm-h1 th { background: #eadcf1; color: #3c3489; } .rdm-h2 th { background: #e24b4a; color: #fff; } .rdm-h3 th { background: #ef9f27; color: #412402; } .rdm-h4 th { background: #378add; color: #fff; } .rdm-h5 th { background: #27500a; color: #fff; }
 .rdm-h .rdm-lbl { font-weight: 800; }
 .rdm tbody td { background: #fff; }
 .rdm tbody td.rdm-key { background: #fafbfc; }
 .rdm tbody tr:hover td { filter: brightness(0.96); cursor: pointer; }
 .rdm-key small { display: block; color: var(--text-dim); font-weight: 400; }
 .rdm-none { color: #98a2b3; font-weight: 400; }
-.rdm .rdm-own, .rdm-c.rdm-own { background: #e3efff; color: #1d4ed8; font-weight: 700; box-shadow: inset 3px 0 0 #3b82f6; }
-.rdm .rdm-cum, .rdm-c.rdm-cum { background: #fde4d3; color: #9a3412; font-weight: 700; box-shadow: inset 3px 0 0 #f97316; }
-.rdm .rdm-date, .rdm-c.rdm-date { background: #ef4444; color: #fff; font-weight: 800; }
-.rdm td.rdm-cur, .rdm-c.rdm-cur { outline: 2px solid #24533a; outline-offset: -3px; font-weight: 800; }
+.rdm-c.rdm-own { background: #378add; color: #fff; border-color: #378add; }
+.rdm-c.rdm-cum { background: #ef9f27; color: #412402; border-color: #ef9f27; }
+.rdm-c.rdm-date { background: #e24b4a; color: #fff; border-color: #e24b4a; }
+.rdm td.rdm-late { position: relative; font-weight: 800; padding-bottom: 12px; }
+.rdm-s { position: absolute; left: 4px; right: 4px; height: 4px; }
+.rdm-s.own { background: #378add; } .rdm-s.cum { background: #ef9f27; } .rdm-s.date { background: #e24b4a; }
+.rdm td.rdm-cur, .rdm-c.rdm-cur { outline: 2px solid #27500a; outline-offset: -3px; font-weight: 800; }
+.rdm td.rdm-ed { cursor: pointer; } .rdm td.rdm-ed:hover { background: #f4f0fa; }
+.rdm-edm { color: #534ab7; font-size: 0.7rem; margin-left: 3px; }
+.rdm-edit { display: inline-flex; gap: 4px; align-items: center; } .rdm-edit input { margin: 0; padding: 2px 4px; font-size: 0.78rem; width: 130px; } .rdm-edit button { padding: 2px 8px; font-size: 0.75rem; }
 .rdm-closed td { opacity: 0.72; }
 .rdm-dpos b { color: #b42318; } .rdm-dneg b { color: #667085; }
 .rdm-legend { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 6px 0 10px; font-size: 0.78rem; }
 .rdm-c { display: inline-block; padding: 3px 10px; border: 1px solid #c4cad3; border-radius: 6px; background: #fff; }
 button.rdm-c { cursor: pointer; font: inherit; }
 button.rdm-c.on { outline: 2px solid var(--accent-color); outline-offset: 1px; }
+.ph-show { font-size: 0.8rem; font-weight: 600; color: var(--text-dim); }
 .ph-short { width: 96px !important; flex: 0 0 auto; text-transform: uppercase; }
 .rdm td.rdm-ck, .rdm-ck { text-align: left; white-space: normal; line-height: 1.5; }
 .rdm-ck .bad { color: #b42318; font-weight: 700; } .rdm-ck .ok { color: #05603a; } .rdm-ck .q { color: #b54708; } .rdm-ck .dim { color: var(--text-dim); }
@@ -1947,7 +1971,13 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 
 <!-- REPORTS (Jawad only) -->
 <div id="form-reports" class="hidden">
-<div class="report-bar">
+<div class="report-bar rep-head">
+<button class="rep-title" id="rep-title" onclick="repPicker(true)" title="Pick another report"><span id="rep-title-txt">Presentation Report</span> &#9662;</button>
+<button class="btn btn-small" onclick="refreshReports()">Refresh</button>
+<span id="report-meta" class="report-meta"></span>
+<button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
+</div>
+<div class="rep-picker hidden" id="rep-picker">
 <button class="phase-btn active" id="rep-tab-simple" onclick="showReportTab('simple')">Presentation Report</button>
 <button class="phase-btn" id="rep-tab-timing" onclick="showReportTab('timing')">Timing</button>
 <button class="phase-btn" id="rep-tab-employee" onclick="showReportTab('employee')">Employee Report</button>
@@ -1958,9 +1988,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-times" onclick="showReportTab('times')">Task times</button>
 <button class="phase-btn rep-tab-late" id="rep-tab-late" onclick="showReportTab('late')">&#9888; Late</button>
 <button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button><button class="phase-btn" id="rep-tab-rdays" onclick="showReportTab('rdays')">&#9201; Rola Days</button>
-<button class="btn btn-small" onclick="refreshReports()">Refresh</button>
-<span id="report-meta" class="report-meta"></span>
-<button class="btn btn-small fs-btn" onclick="toggleFullscreen('form-reports')" title="Full screen">&#x26F6;</button>
+<button class="rep-picker-x" onclick="repPicker(false)" title="Close">&times;</button>
 </div>
 <div class="report-bar date-bar">
 <label class="inline-label">From <input type="date" id="report-from" onkeydown="if(event.key==='Enter')applyReportDates()"></label>
@@ -1977,7 +2005,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <label class="inline-label">Chain <select id="report-chain" onchange="onReportChain()"></select></label>
 <input type="text" id="report-search" class="report-search" placeholder="Search ref, name or mobile" oninput="renderSimpleReport()">
 <button class="btn btn-small" id="report-filter-btn" onclick="toggleReportFilters()">Filters</button>
-<input type="hidden" id="rf-done" value="open"><span class="phase-tabs" id="rf-done-tabs"><button class="phase-btn active" data-v="open" onclick="setReportDone('open')">In progress</button><button class="phase-btn" data-v="done" onclick="setReportDone('done')">Completed</button><button class="phase-btn" data-v="" onclick="setReportDone('')">All</button></span>
+<input type="hidden" id="rf-done" value="open"><span class="phase-tabs" id="rf-done-tabs"><button class="phase-btn active" data-v="open" onclick="setReportDone('open')">In progress</button><button class="phase-btn" data-v="done" onclick="setReportDone('done')">Completed</button><button class="phase-btn" data-v="out" onclick="setReportDone('out')">Out of chain</button><button class="phase-btn" data-v="" onclick="setReportDone('')">All</button></span>
 <label class="inline-label">View <select id="report-view" onchange="renderSimpleReport()"><option value="">Symbols</option><option value="time">Time taken / allowed</option></select></label>
 <button class="btn btn-small" onclick="copyReportPicture()" title="Copy the table as a picture for WhatsApp">Copy picture</button>
 <button class="btn btn-small" onclick="copyReportText()" title="Copy a short list for WhatsApp">Copy text</button>
@@ -2076,7 +2104,11 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="report-exits" class="hidden">
 <div class="report-bar">
-<label class="field-req-pick"><input type="checkbox" id="exit-show-back" onchange="renderExits()"> Show cases already put back</label>
+<select id="exit-status" class="report-search" style="width:auto" onchange="renderExits()"><option value="">All</option><option value="Waiting">Waiting for Jawad</option><option value="Out" selected>Out (approved)</option><option value="Rejected">Rejected (kept in chain)</option><option value="Back">Put back</option></select>
+<select id="exit-step" class="report-search" style="width:auto" onchange="renderExits()"><option value="">All steps</option></select>
+<label class="inline-label">From <input type="date" id="exit-from" onchange="renderExits()"></label>
+<label class="inline-label">To <input type="date" id="exit-to" onchange="renderExits()"></label>
+<input type="text" id="exit-q" class="report-search" placeholder="Search case, reason or person" oninput="renderExits()">
 </div>
 <div class="report-wrap"><table class="report-table" id="exit-table"></table></div>
 </div>
@@ -2261,10 +2293,11 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <button class="btn btn-primary btn-small" onclick="remEdit('')">+ New reminder</button>
 </div>
 <div id="rem-editor" class="schedule-box rem-editor hidden"></div>
+<div class="report-bar"><span class="phase-tabs"><button class="phase-btn" id="rem-who-mine" onclick="remWhoSet('mine')">My reminders</button><button class="phase-btn" id="rem-who-assigned" onclick="remWhoSet('assigned')">Assigned</button></span></div>
 <div class="report-bar">
 <button class="btn btn-small" id="rem-view-list" onclick="remView='list'; renderReminders()">List</button>
 <button class="btn btn-small" id="rem-view-cal" onclick="remView='cal'; renderReminders()">Calendar</button>
-<select id="rem-show" class="report-search" style="width:auto" onchange="renderReminders()"><option value="open">To do + done</option><option value="todo">To do only</option><option value="done">Done only</option></select>
+<select id="rem-show" class="report-search" style="width:auto" onchange="renderReminders()"><option value="todo">To do</option><option value="done">Done</option><option value="open">All</option></select>
 <select id="rem-group" class="report-search" style="width:auto" onchange="renderReminders()"></select>
 <select id="rem-tag" class="report-search" style="width:auto" onchange="renderReminders()"></select>
 <input type="text" id="rem-q" class="report-search" placeholder="Search reminders" oninput="renderReminders()">
@@ -2300,7 +2333,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 </div>
 
 <div id="form-phases" class="hidden">
-<p class="report-meta">Rename a phase, move it up or down and move tasks between phases. R-DAYS checks per phase: <b>Own days</b> = time inside the phase; <b>Running total</b> = time since an earlier phase, against the own days of every phase in between; <b>Date check</b> = a date typed in any task plus (or minus) days. If any check is broken it shows red, and in Reports → Rola Days. Press Save when done.</p>
+<p class="report-meta">Rename a phase, move it up or down and move tasks between phases. R-DAYS checks per phase: <b>Own days</b> = time inside the phase; <b>Running total</b> = the days spent in each phase from an earlier phase up to this one, added up, against their own days added up; <b>Date check</b> = a date typed in any task plus (or minus) days. If any check is broken it shows red, and in Reports → Rola Days. Untick <b>Show in Rola Days</b> to leave a phase out of the Rola reports. Press Save when done.</p>
 <div class="report-bar"><select id="ph-proj" class="report-search" style="width:auto" onchange="phBuild(); renderPhases()"></select><button class="btn btn-small" onclick="phAdd()">+ New phase</button></div>
 <div id="ph-wrap"><div class="report-meta">Loading...</div></div>
 <div class="report-bar" style="margin-top:10px;"><button class="btn btn-primary" onclick="phSave()">Save</button><span id="ph-msg" class="report-meta"></span></div>
@@ -2339,7 +2372,7 @@ Staff get these on their phone like any other notification. Each person turns th
 
 <div id="form-approvals" class="hidden">
 <p style="color:var(--text-dim); font-size:0.85rem; margin-top:0; margin-bottom:16px;">
-Staff ask here for more time on a case, or to fix a finish time they saved late. Approving changes their timing and points. Rejecting changes nothing.
+Staff ask here for more time on a case, to fix a finish time they saved late, or to take a case out of the chain. Approving changes their timing and points, or takes the case out. Rejecting changes nothing, and a case stays in the chain.
 </p>
 <div class="report-bar">
 <select id="tr-filter" class="report-search" onchange="renderApprovals()"><option value="Waiting">Waiting</option><option value="">All</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select>
@@ -2954,7 +2987,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R46";
+const APP_VERSION = "R47";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -2979,7 +3012,87 @@ async function apiCall(action, payload = {}) {
   finally { if (b) { b.classList.remove('btn-busy'); b.disabled = false; } }
 }
 
+const REP_CACHE_ACTIONS = { reportBuild: 1, timingReport: 1, chequeList: 1, exitList: 1, lateList: 1, pointsStatement: 1, rdaysMatrix: 1, rolaList: 1, finalList: 1, pointsGet: 1 };
+const repBg = {};
+
+function repCacheKey(action, payload) {
+  const b = {};
+  Object.keys(payload || {}).sort().forEach(k => { if (k !== 'fresh') b[k] = payload[k]; });
+  return 'rc|' + ((user && user.name) || '') + '|' + action + '|' + JSON.stringify(b);
+}
+
+function repCachePut(key, action, payload, txt) {
+  if (txt.length > 1500000) return;
+  const val = Date.now() + '|' + txt;
+  try { localStorage.setItem(key, val); }
+  catch (e) {
+    try { Object.keys(localStorage).filter(k => k.indexOf('rc|') === 0).forEach(k => localStorage.removeItem(k)); localStorage.setItem(key, val); } catch (e2) {}
+  }
+  try {
+    const b = {};
+    Object.keys(payload || {}).forEach(k => { if (k !== 'fresh') b[k] = payload[k]; });
+    const L = JSON.parse(localStorage.getItem('rcp|' + ((user && user.name) || '')) || '{}');
+    L[action + '|' + JSON.stringify(b)] = { a: action, p: b };
+    localStorage.setItem('rcp|' + ((user && user.name) || ''), JSON.stringify(L));
+  } catch (e) {}
+}
+
+async function repFetch(action, payload, key) {
+  const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, idToken, session: sessionToken, version: APP_VERSION, ...payload }) });
+  const txt = await res.text();
+  let out = null;
+  try { out = JSON.parse(txt); } catch (e) { out = null; }
+  if (out && out.ok && !out.stale) repCachePut(key, action, payload, txt);
+  return { out, txt };
+}
+
+function repLiveUpdate() {
+  const f = document.getElementById('form-reports');
+  if (!f || f.classList.contains('hidden')) return;
+  if (reportTab === 'rdays') return loadRdm();
+  if (reportTab === 'stmt') return loadStmt();
+  if (reportTab === 'late') return loadLate();
+  if (reportTab === 'times') return loadTaskTimes();
+  if (reportTab === 'simple') { reportData = null; return showReportTab('simple'); }
+  if (reportTab === 'timing' || reportTab === 'employee') { timingData = null; return showReportTab(reportTab); }
+  if (reportTab === 'data') { dataReport = null; return showReportTab('data'); }
+  if (reportTab === 'exits') return loadExits();
+  if (reportTab === 'cheque') return loadCheques(true);
+}
+
+async function repCached(action, payload) {
+  const key = repCacheKey(action, payload);
+  let hit = null;
+  if (!payload.fresh) { try { hit = localStorage.getItem(key); } catch (e) { hit = null; } }
+  if (hit) {
+    const at = Number(hit.slice(0, hit.indexOf('|'))) || 0;
+    const txt = hit.slice(hit.indexOf('|') + 1);
+    let out = null;
+    try { out = JSON.parse(txt); } catch (e) { out = null; }
+    if (out) {
+      if (Date.now() - at > 20000 && !repBg[key]) {
+        repBg[key] = true;
+        repFetch(action, payload, key).then(r => { repBg[key] = false; if (r.out && r.out.ok && r.txt !== txt) repLiveUpdate(); }).catch(() => { repBg[key] = false; });
+      }
+      return out;
+    }
+  }
+  const r = await repFetch(action, payload, key);
+  return r.out;
+}
+
+async function repPrefetch() {
+  let L = {};
+  try { L = JSON.parse(localStorage.getItem('rcp|' + ((user && user.name) || '')) || '{}'); } catch (e) { L = {}; }
+  for (const k of Object.keys(L)) {
+    const x = L[k];
+    try { await repCached(x.a, x.p); } catch (e) {}
+    await new Promise(r => setTimeout(r, 400));
+  }
+}
+
 async function apiCallRaw(action, payload = {}) {
+  if (REP_CACHE_ACTIONS[action] && user && (action !== 'finalList' || payload.report)) return repCached(action, payload);
   const res = await fetch(APPS_SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -3852,7 +3965,7 @@ function rdTipLines(rd) {
 
 function rdHtml(rd, cls) {
   if (!rd) return '';
-  if (rd.none) return `<span class="rd none${cls ? ' ' + cls : ''}" title="No Taskando task for this consignment yet">&ndash;</span>`;
+  if (rd.none) return `<span class="rd none${cls ? ' ' + cls : ''}" title="No Taskando task for ${rd.sup ? 'any consignment here' : 'this consignment'} yet">No task</span>`;
   if (rd.noRule) return `<span class="rd ok${cls ? ' ' + cls : ''}" title="${escapeHtml(rdTip(rd))}">R &#10003;</span>`;
   const tag = rd.kind === 'date' ? ' ' + rd.label : rd.kind === 'cum' ? ' Σ' : '';
   let txt, kind;
@@ -3864,10 +3977,9 @@ function rdHtml(rd, cls) {
 }
 
 function gRdays(g) {
-  const P = (impData && impData.progress) || {};
   let best = null, tasked = false;
   (g.keys || []).forEach(k => {
-    const p = P[k];
+    const p = impData ? impProgFor(k) : null;
     if (!p) return;
     if ((p.open || []).length || (p.done || []).length) tasked = true;
     const x = p.rdNow;
@@ -3947,12 +4059,21 @@ function impAliasKeys(keys) {
   return out;
 }
 
-function impProgress(g) {
+function impKeyN(k) { return String(k || '').toLowerCase().replace(/[\s\-_]+/g, ' ').trim(); }
+
+function impProgFor(k) {
   const P = (impData && impData.progress) || {};
+  if (P[k]) return P[k];
+  if (!impData.__pn || impData.__pnSrc !== P) { const m = {}; Object.keys(P).forEach(x => { const n = impKeyN(x); if (!m[n]) m[n] = x; }); impData.__pn = m; impData.__pnSrc = P; }
+  const alt = impData.__pn[impKeyN(k)];
+  return alt ? P[alt] : null;
+}
+
+function impProgress(g) {
   const seen = {};
   const out = { open: [], done: [], reqs: [] };
   g.keys.forEach(k => {
-    const p = P[k];
+    const p = impProgFor(k);
     if (!p) return;
     ['open', 'done', 'reqs'].forEach(w => (p[w] || []).forEach(x => { const id = w + '|' + (x.id || x.task + '|' + x.arrivedMs); if (!seen[id]) { seen[id] = true; out[w].push(x); } }));
   });
@@ -4007,7 +4128,7 @@ function impBuild(showAll) {
     g.notes = (d.notes || []).filter(n => keys.indexOf(n.key) !== -1);
     g.prog = impProgress(g);
     g.extra = impExtraOf(g);
-    g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ') + ' ' + [].concat(g.extra.bl, g.extra.ctn, g.extra.cont, g.extra.fwd, g.extra.cca).join(' ')).toLowerCase();
+    g.hay = (list.map(r => r.join(' ')).join(' ') + ' ' + keys.map(x => noteText[x] || '').join(' ') + ' ' + [].concat(g.extra.bl, g.extra.ctn, g.extra.cont, g.extra.fwd, g.extra.cca).join(' ') + ' ' + impDetailText(g).map(d => d.value).join(' ')).toLowerCase();
     return g;
   }).filter(g => { const st = g.state; return show === 'all' ? st !== 'Deleted' : show === 'closed' ? st === 'Closed' : show === 'deleted' ? st === 'Deleted' : st !== 'Closed' && st !== 'Deleted'; })
     .filter(g => !fb || g.bm.indexOf(fb) !== -1)
@@ -4079,7 +4200,7 @@ function renderImports() {
       const msgs = list.reduce((a, g) => a + g.notes.length, 0);
       const waiting = list.filter(g => g.prog.open.length).length;
       const mine = list.some(g => impMine(g));
-      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span><b>${escapeHtml(sname)}</b>${list.some(g => g.prog.open.some(x => x.late)) ? '<span class="imp-dot imp-dot-late imp-dot-after" title="A task here is late"></span>' : ''}${mine ? '<span class="imp-dot imp-dot-me imp-dot-after" title="Has a task waiting on you"></span>' : ''}<span class="imp-sup-right">${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</span><span class="imp-sup-rd">${(() => { const r = list.map(gRdays).filter(x => x && !x.none).sort((a, b) => (b.over - a.over) || ((b.by || 0) - (a.by || 0)) || (b.days - a.days))[0]; return r ? rdHtml(r) : ''; })()}</span></div>
+      return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="impToggleSup('${impJs(sname)}')"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span><b>${escapeHtml(sname)}</b>${list.some(g => g.prog.open.some(x => x.late)) ? '<span class="imp-dot imp-dot-late imp-dot-after" title="A task here is late"></span>' : ''}${mine ? '<span class="imp-dot imp-dot-me imp-dot-after" title="Has a task waiting on you"></span>' : ''}<span class="imp-sup-right">${impCount('box', list.length, 'Consignments')}${impCount('task', list.reduce((a, g) => a + g.prog.open.length, 0), 'Open tasks')}${msgs ? `<button class="imp-bubble" title="Open the latest messages" onclick="event.stopPropagation(); impOpenLatest('${impJs(sname)}')">&#128172; ${msgs}</button>` : ''}</span><span class="imp-sup-rd">${(() => { const all = list.map(gRdays); const r = all.filter(x => x && !x.none).sort((a, b) => (b.over - a.over) || ((b.by || 0) - (a.by || 0)) || (b.days - a.days))[0]; return r ? rdHtml(r) : all.some(x => x && x.none) ? rdHtml({ none: true, sup: true }) : ''; })()}</span></div>
         ${open ? `<div class="imp-sup-body">${list.map(g => impLineHtml(g, B)).join('')}</div>` : ''}</div>`;
     }).join('') || '<div class="report-meta">Nothing matches.</div>';
   }
@@ -5244,6 +5365,14 @@ function remBucket(x) {
   return 'Later';
 }
 
+let remWho = (() => { try { return localStorage.getItem('tk_remWho') || 'mine'; } catch (e) { return 'mine'; } })();
+
+function remWhoSet(w) {
+  remWho = w;
+  try { localStorage.setItem('tk_remWho', w); } catch (e) {}
+  renderReminders();
+}
+
 function remFiltered() {
   const g = valOf('rem-group'), tag = valOf('rem-tag'), q = valOf('rem-q').toLowerCase(), show = valOf('rem-show');
   return (remData.items || []).filter(x => {
@@ -5320,10 +5449,16 @@ function renderReminders() {
   const groups = {};
   list.forEach(x => { const b = remBucket(x); (groups[b] = groups[b] || []).push(x); });
   const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)}</div><div class="rem-meta">${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
-  const cal = remView === 'cal' ? `<div class="rem-cal">${remCalendarHtml(list)}</div>` : '';
+  const cal = remView === 'cal' && remWho === 'mine' ? `<div class="rem-cal">${remCalendarHtml(list)}</div>` : '';
+  ['mine', 'assigned'].forEach(k => { const b = document.getElementById('rem-who-' + k); if (b) { b.classList.toggle('active', remWho === k); if (k === 'assigned') b.innerHTML = 'Assigned' + ((remData.assigned || []).length ? ' <span class="sidebar-count">' + remData.assigned.length + '</span>' : ''); } });
+  if (remWho === 'assigned') {
+    box.innerHTML = assHtml || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned to you right now.</div>';
+    document.getElementById('rem-view-list').classList.toggle('btn-primary', remView === 'list');
+    document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
+    return;
+  }
   box.innerHTML = cal + (remDayPick ? `<div class="report-bar"><span class="report-meta">Showing ${escapeHtml(formatDateDMY(remDayPick))}</span><button class="btn btn-small" onclick="remDayPick=''; renderReminders()">Show all days</button><button class="btn btn-small btn-primary" onclick="remEdit('')">+ Add on this day</button></div>` : '') +
-    order.filter(k => groups[k]).map(k => `<div class="rem-section"><div class="rem-sec-head">${k} <span class="sidebar-count${k === 'Overdue' ? ' late' : ''}">${groups[k].length}</span></div>${groups[k].map(remItemHtml).join('')}</div>`).join('') +
-    assHtml || '<div class="empty-tile" style="padding:30px 20px;">Nothing here. Press + New reminder to add one.</div>';
+    order.filter(k => groups[k]).map(k => `<div class="rem-section"><div class="rem-sec-head">${k} <span class="sidebar-count${k === 'Overdue' ? ' late' : ''}">${groups[k].length}</span></div>${groups[k].map(remItemHtml).join('')}</div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing here. Press + New reminder to add one.</div>';
   document.getElementById('rem-view-list').classList.toggle('btn-primary', remView === 'list');
   document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
 }
@@ -5876,6 +6011,7 @@ async function completeLogin() {
     serverVersion = result.version || 'old';
     showVersionBanner();
     readPendingCache();
+    setTimeout(() => { repPrefetch(); }, 8000);
 
     statusEl.innerText = "";
     document.getElementById('scr-login').classList.add('hidden');
@@ -7053,7 +7189,7 @@ let assignedDone = [];
 function pendingForTask(taskName) {
   if (taskName === MY_ASSIGNED) return (profile && user && profile.name === user.name) ? assignedMine : [];
   const adminView = isAdminPanel();
-  return pendingItems.filter(p => p.taskName === taskName && (adminView || !p.assignedTo || !profile || p.assignedTo === profile.name));
+  return pendingItems.filter(p => p.taskName === taskName && (adminView || !p.assignedTo || !profile || p.assignedTo === profile.name)).sort((a, b) => (!!b.mandatory - !!a.mandatory));
 }
 
 function updateBell() {
@@ -7198,8 +7334,8 @@ function renderPendingStrip() {
     : items.length + ' cases waiting on ' + currentTask;
 
   list.innerHTML = items.map((p, i) => `
-    <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
-      ${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${pts4Html(p.pts)}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
+    <span class="case-chip${caseTagClass(p)}${p.important ? ' imp' : ''}${p.mandatory ? ' must' : ''}${p.hold ? ' hold' : ''}" onclick="fillKeysFromPendingId('${escapeHtml(p.pendingId || '')}', ${i})" data-tip="${escapeHtml(pendingTip(p))}">
+      ${user && user.level === 0 && !p.recurring ? `<span class="chip-x" title="Remove this case" onclick="event.stopPropagation(); openRemoveCase('${escapeHtml(p.pendingId || '')}')">&#10005;</span>` : ''}${p.mandatory ? '<span class="imp-tag must-tag" title="This step was skipped. Do it first.">&#9733; Do this first</span>' : ''}${p.hold ? '<span class="imp-tag hold-tag" title="Out of the chain was asked. Its timer is paused until Jawad decides.">On hold</span>' : ''}${p.important ? '<span class="imp-tag">Important</span>' : ''}${escapeHtml(keyLabel(p))}${corpBadge(p)}${p.assignedTo ? `<span class="for-badge">For ${escapeHtml(p.assignedTo)}</span>` : ''}${p.late ? '<span class="late-badge">Late ' + escapeHtml(p.lateBy || '') + '</span>' : ''}${pts4Html(p.pts)}${p.grace ? `<span class="grace-badge" title="${escapeHtml('More time approved: ' + (p.grace.oldAllowed ? 'old ' + p.grace.oldAllowed + ' → new ' + p.grace.newAllowed : '+' + p.grace.added) + ' · ' + p.grace.approved + ' of ' + p.grace.asked + ' request' + (p.grace.asked === 1 ? '' : 's') + ' approved')}">&#9201; ${escapeHtml(p.grace.oldAllowed ? p.grace.oldAllowed + '→' + p.grace.newAllowed : '+' + p.grace.added)}</span>` : ''}${infoLine(p)}<small>${p.recurring ? '' : escapeHtml(p.createdAt || '')}</small>
     </span>`).join('');
 }
 
@@ -7271,6 +7407,8 @@ function caseTimeHtml(p) {
   if (p.due) bits.push('<span><b>Due:</b> ' + escapeHtml(p.due) + '</span>');
   const durAllow = p.grace && p.grace.newAllowed ? p.grace.newAllowed : (p.allowed && !/^by |,/.test(String(p.allowed)) ? p.allowed : '');
   if (p.taken) bits.push('<span><b>Took:</b> ' + escapeHtml(String(p.taken).replace(' so far', '')) + (durAllow ? ' of ' + escapeHtml(durAllow) : '') + '</span>');
+  if (p.hold) bits.push('<span class="bad">On hold: waiting for Jawad to decide out of chain. The timer is paused.</span>');
+  if (p.mandatory) bits.push('<span class="bad">&#9733; This step was skipped. Do it first.</span>');
   if (p.late) bits.push('<span class="bad">Late by ' + escapeHtml(p.lateBy || '') + '</span>');
   else if (p.left) bits.push('<span class="good">' + (p.leftMs === 0 ? 'Due now' : escapeHtml(p.left) + ' left') + '</span>');
   else if (!p.allowed && !p.due) bits.push('<span>No time limit set on this task</span>');
@@ -7714,7 +7852,7 @@ async function loadChain() {
 }
 
 function copySteps(steps, tasks) {
-  if (Array.isArray(steps) && steps.length) return steps.map(st => st.map(x => ({ task: x.task, optional: !!x.optional })));
+  if (Array.isArray(steps) && steps.length) return steps.map(st => st.map(x => ({ task: x.task, optional: !!x.optional, must: !!x.must })));
   return (tasks || []).map(t => [{ task: t, optional: false }]);
 }
 
@@ -7775,6 +7913,7 @@ function renderChainEditor() {
       <div class="step-tasks">${st.map((x, ti) => `
         <span class="step-task${x.optional ? ' opt' : ''}">
           ${multi ? `<button class="step-dot${x.optional ? ' off' : ''}" onclick="toggleStepOptional(${si},${ti})" title="${x.optional ? 'Optional: click to make it required' : 'Required: click to make it optional'}"></button>` : ''}
+          <button class="step-star${x.must ? ' on' : ''}" onclick="toggleStepMust(${si},${ti})" title="${x.must ? 'Must do: if a later task is done without this one, it goes back to its owner at the top. Click to turn off.' : 'Click to make this a must-do step'}">${x.must ? '&#9733;' : '&#9734;'}</button>
           <span>${escapeHtml(x.task)}</span>
           ${chainsOfTask(x.task).length > 1 ? `<span class="search-kind">also in ${chainsOfTask(x.task).filter(k => k !== activeChain).map(k => escapeHtml(chains[k].name)).join(', ')}</span>` : ''}
           ${multi ? `<button class="chain-btn" onclick="splitStepTask(${si},${ti})" title="Move to its own step below">&#8615;</button>` : ''}
@@ -8103,6 +8242,14 @@ function moveChainItem(si, delta) {
   renderChainEditor();
 }
 
+function toggleStepMust(si, ti) {
+  const st = chains[activeChain].steps[si];
+  if (!st || !st[ti]) return;
+  st[ti].must = !st[ti].must;
+  renderChainEditor();
+  toast(st[ti].must ? st[ti].task + ' is a must-do step. Save the chain to keep it.' : st[ti].task + ' is no longer a must-do step. Save to keep it.');
+}
+
 function toggleStepOptional(si, ti) {
   const st = chains[activeChain].steps[si];
   if (!st || st.length < 2 || !st[ti]) return;
@@ -8170,18 +8317,41 @@ async function loadExits() {
 function renderExits() {
   const table = document.getElementById('exit-table');
   if (!table) return;
-  const showBack = document.getElementById('exit-show-back').checked;
-  const rows = exitItems.filter(x => showBack || x.status === 'Out');
-  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Left at task</th><th>Because</th><th>When</th><th>By</th><th>Status</th><th></th></tr></thead><tbody>${
+  const st = valOf('exit-status'), step = valOf('exit-step'), q = String(valOf('exit-q') || '').toLowerCase();
+  const fr = valOf('exit-from'), to = valOf('exit-to');
+  const frMs = fr ? new Date(fr + 'T00:00:00').getTime() : 0, toMs = to ? new Date(to + 'T23:59:59').getTime() : 0;
+  const sel = document.getElementById('exit-step');
+  const steps = Array.from(new Set(exitItems.map(x => x.task).filter(Boolean))).sort();
+  if (sel && sel.options.length !== steps.length + 1) { const cur = sel.value; sel.innerHTML = '<option value="">All steps</option>' + steps.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join(''); sel.value = cur; }
+  const rows = exitItems.filter(x => (!st || x.status === st) && (!step || x.task === step) && (!frMs || x.exitedMs >= frMs) && (!toMs || x.exitedMs <= toMs) && (!q || [x.refNo, x.caseNo, x.name, x.reason, x.exitedBy, x.decidedBy, x.task].join(' ').toLowerCase().indexOf(q) !== -1));
+  const pill = x => x.status === 'Waiting' ? '<span class="status-pill status-open">Waiting</span>' : x.status === 'Out' ? '<span class="status-pill status-late">Out</span>' : x.status === 'Rejected' ? '<span class="status-pill status-done">Kept in chain</span>' : '<span class="status-pill status-done">Put back ' + escapeHtml(x.backAt) + '</span>';
+  table.innerHTML = `<thead><tr><th>Ref / Case</th><th>Broke at step</th><th>Asked on</th><th>Reason</th><th>Rule</th><th>Asked by</th><th>Decided</th><th>Status</th><th></th></tr></thead><tbody>${
     rows.map(x => `<tr>
-      <td>${escapeHtml(chequeKey(x))}</td><td>${escapeHtml(x.task)}</td>
-      <td>${escapeHtml(x.field)}: <b>${escapeHtml(x.value)}</b></td>
-      <td>${escapeHtml(x.exitedAt)}</td><td>${escapeHtml(x.exitedBy)}</td>
-      <td>${x.status === 'Out' ? '<span class="status-pill status-late">Out</span>' : '<span class="status-pill status-done">Put back ' + escapeHtml(x.backAt) + '</span>'}</td>
-      <td>${x.status === 'Out' ? `<button class="btn btn-small btn-primary" onclick="putBackExit('${escapeHtml(x.id)}')">Put back</button>` : ''}</td>
-    </tr>`).join('') || `<tr><td colspan="7" style="color:var(--text-dim)">No cases are out of the chain.</td></tr>`
+      <td><b>${escapeHtml(chequeKey(x))}</b>${x.name ? '<br><small class="report-meta">' + escapeHtml(x.name) + '</small>' : ''}</td><td class="left">${escapeHtml(x.task)}</td>
+      <td class="nowrap">${escapeHtml(x.exitedAt)}</td>
+      <td class="left">${escapeHtml(x.reason || '')}</td>
+      <td class="left">${escapeHtml(x.field)}: <b>${escapeHtml(x.value)}</b></td>
+      <td>${escapeHtml(x.exitedBy)}</td>
+      <td class="left">${x.decidedBy ? escapeHtml(x.decidedBy) + '<br><small class="report-meta">' + escapeHtml(x.decidedAt) + '</small>' + (x.decideNote ? '<br><small>' + escapeHtml(x.decideNote) + '</small>' : '') : ''}</td>
+      <td>${pill(x)}</td>
+      <td class="nowrap">${x.status === 'Out' ? `<button class="btn btn-small btn-primary" onclick="putBackExit('${escapeHtml(x.id)}')">Put back</button>` : x.status === 'Waiting' && user && user.level === 0 ? `<button class="btn btn-small btn-primary" onclick="exitDecideHere('${escapeHtml(x.id)}', true)">Approve</button> <button class="btn btn-small" onclick="exitDecideHere('${escapeHtml(x.id)}', false)">Reject</button>` : ''}</td>
+    </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-dim)">Nothing here.</td></tr>`
   }</tbody>`;
 }
+
+async function exitDecideHere(id, approve) {
+  if (!approve) { openFabOrApprovals(); return toast('Reject it from Approvals and write why', false); }
+  try {
+    const r = await apiCall('timeReqDecide', { id: 'exit:' + id, approve: true });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast('Approved. The case is out of the chain.');
+    loadExits();
+    loadPending();
+    fabApprCount();
+  } catch (e) { toast('Network error', true); }
+}
+
+function openFabOrApprovals() { try { fabWin('approvals'); } catch (e) {} }
 
 async function putBackExit(id) {
   try {
@@ -8552,7 +8722,7 @@ function renderTaskSidebar() {
     const pend = pendingForTask(t);
     const n = pend.length;
     const anyLate = pend.some(p => p.late);
-    const badge = n > 0 ? `<span class="sidebar-count${anyLate ? ' late' : ''}">${n}</span>` : '';
+    const badge = (pend.some(p => p.mandatory) ? '<span class="sidebar-must" title="A skipped step is waiting. Do it first.">&#9733;</span>' : '') + (n > 0 ? `<span class="sidebar-count${anyLate ? ' late' : ''}">${n}</span>` : '');
     const href = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(t);
     const tk = taskByName(t);
     const idle = !n && tk && tk.schedule && tk.schedule.on;
@@ -8702,7 +8872,8 @@ function renderFormInterface() {
   }
   if (t.panel === "reports") {
     document.getElementById('form-reports').classList.remove('hidden');
-    showReportTab(reportTab);
+    showReportTab(reportTab, true);
+    repPicker(true);
     return;
   }
   if (t.panel === "work") {
@@ -9064,7 +9235,8 @@ async function saveDynamicEntry(type) {
       clearDynamicForm(task);
       toast("Draft saved.");
     } else {
-      const result = await apiCall('finalAdd', payload);
+      const result = await apiWithExitReason('finalAdd', payload);
+      if (result.cancelled) return;
       if (!result.ok) return toast(result.error || "Could not save entry", true);
       clearDynamicForm(task);
       showCaseInfo(null);
@@ -9478,9 +9650,17 @@ function staffReportsOnly() {
 
 const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt', 'rdays'];
 
-function showReportTab(tab) {
+function repPicker(on) {
+  const el = document.getElementById('rep-picker');
+  if (el) el.classList.toggle('hidden', !on);
+}
+
+function showReportTab(tab, keepPicker) {
   const allowed = REPORT_TABS.filter(k => can('rep:' + k));
   if (allowed.indexOf(tab) === -1) tab = allowed[0] || 'simple';
+  if (!keepPicker) repPicker(false);
+  const tb = document.getElementById('rep-tab-' + tab);
+  if (tb) document.getElementById('rep-title-txt').textContent = tb.textContent.replace(/^[^A-Za-z]+/, '').trim();
   ensureReportDates();
   preloadPictureTool();
   fillReportProjects();
@@ -9491,7 +9671,7 @@ function showReportTab(tab) {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
-  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt' || tab === 'rdays');
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt' || tab === 'rdays' || tab === 'exits');
   if (tab === 'rdays') { document.getElementById('report-meta').innerText = ''; loadRdm(); return; }
   if (tab === 'stmt') { document.getElementById('report-meta').innerText = ''; loadStmt(); return; }
   if (tab === 'late') { document.getElementById('report-meta').innerText = ''; loadLate(); return; }
@@ -9937,8 +10117,9 @@ function reportRowsFiltered() {
     const doneF = valOf('rf-done');
     if (doneF) {
       const complete = reportRowComplete(r);
-      if (doneF === 'open' && complete) return false;
+      if (doneF === 'open' && (complete || r.out)) return false;
       if (doneF === 'done' && !complete) return false;
+      if (doneF === 'out' && !r.out) return false;
     }
     for (const key in colFilters) {
       if (colFilters[key].indexOf(reportColValue(r, key)) === -1) return false;
@@ -9948,9 +10129,9 @@ function reportRowsFiltered() {
 }
 
 function reportRowComplete(r) {
+  if (r.done !== undefined) return !!r.done;
   const last = r.cells[r.cells.length - 1];
-  if (r.out || r.cells.indexOf('✕') !== -1) return true;
-  return (last === '●' || last === '≡') && r.cells.indexOf('?') === -1;
+  return !r.out && (last === '●' || last === '≡');
 }
 
 function setReportDone(v) {
@@ -11956,12 +12137,35 @@ async function finalizeEntryWithInputs(tempId) {
   }
 
   try {
-    const result = await apiCall('tempFinalize', { tempId, refNo, caseNo });
+    const result = await apiWithExitReason('tempFinalize', { tempId, refNo, caseNo });
+    if (result.cancelled) return;
     if (!result.ok) return toast(result.error || "Could not finalize", true);
     removeLocalTempEntry(tempId);
     toast(savedMessage(result));
     loadPending();
   } catch (e) { toast("Network error", true); }
+}
+
+function exitReasonAsk(r) {
+  return new Promise(resolve => {
+    let box = document.getElementById('exit-reason-box');
+    if (!box) { box = document.createElement('div'); box.id = 'exit-reason-box'; box.className = 'exit-reason-wrap'; document.body.appendChild(box); }
+    box.innerHTML = `<div class="exit-reason"><b>Out of the chain?</b><p class="report-meta">${escapeHtml(r.exitField || '')}: <b>${escapeHtml(r.exitValue || '')}</b> takes this case out of the chain. Write why. Jawad has to approve it first. Until then the next task stays on hold.</p><textarea id="exit-reason-text" rows="3" placeholder="Reason"></textarea><div class="report-bar" style="justify-content:flex-end;margin:8px 0 0"><button class="btn btn-small" id="exit-reason-no">Cancel</button><button class="btn btn-small btn-primary" id="exit-reason-yes">Send to Jawad</button></div></div>`;
+    box.classList.remove('hidden');
+    const ta = document.getElementById('exit-reason-text');
+    ta.focus();
+    const done = v => { box.classList.add('hidden'); resolve(v); };
+    document.getElementById('exit-reason-no').onclick = () => done('');
+    document.getElementById('exit-reason-yes').onclick = () => { const v = ta.value.trim(); if (!v) { ta.focus(); return toast('Write the reason first', true); } done(v); };
+  });
+}
+
+async function apiWithExitReason(action, payload) {
+  const r = await apiCall(action, payload);
+  if (!r || !r.needReason) return r;
+  const why = await exitReasonAsk(r);
+  if (!why) return { cancelled: true };
+  return apiCall(action, Object.assign({}, payload, { exitReason: why }));
 }
 
 async function removeEntry(tempId) {
@@ -12041,6 +12245,7 @@ async function loadApprovals() {
 }
 
 function timeReqWhat(x) {
+  if (x.type === 'exit') return '<b>Take out of the chain</b><br><small class="report-meta">' + escapeHtml(x.field) + ': ' + escapeHtml(x.value) + '</small>';
   if (x.type === 'done') return 'Finish time: ' + escapeHtml(x.oldDone || '?') + ' → <b>' + escapeHtml(x.newDone) + '</b>';
   if (x.status === 'Waiting' && user && user.level === 0 && document.getElementById('form-approvals') && !document.getElementById('form-approvals').classList.contains('hidden')) {
     const cur = x.days ? 'd' + x.days : String(x.hours);
@@ -12137,7 +12342,7 @@ async function decideTimeReq(id, approve) {
   try {
     const r = await apiCall('timeReqDecide', Object.assign({ id: id, approve: approve }, extra));
     if (!r.ok) { if (it) { it.status = was; renderApprovals(); } return toast(r.error || 'Could not save', true); }
-    toast(approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
+    toast(it && it.type === 'exit' ? (approve ? 'Approved. The case is out of the chain.' : 'Rejected. The case stays in the chain and its timer starts now.') : approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
     loadApprovals();
     loadPending();
   } catch (e) { toast('Network error', true); }
@@ -12219,6 +12424,8 @@ function renderTrailHtml(r, go) {
 let phLimits = {};
 let phRules = {};
 let phShorts = {};
+let phShows = {};
+let phRecur = {};
 let phDates = [];
 let phList = [];
 
@@ -12231,6 +12438,8 @@ async function loadPhases() {
     phLimits = r.limits || {};
     phRules = r.rules || {};
     phShorts = r.shorts || {};
+    phShows = r.shows || {};
+    phRecur = r.recurOnly || {};
     phDates = r.dateFields || [];
     phBuild();
     renderPhases();
@@ -12245,7 +12454,7 @@ function phBuild() {
     let p = phList.filter(x => x.name === name)[0];
     if (!p) {
       const R = JSON.parse(JSON.stringify(phRules[pid + '|' + name] || {}));
-      p = { name: name, short: phShorts[pid + '|' + name] || '', limit: phLimits[pid + '|' + name] || '', tasks: [], own: R.own || { days: phLimits[pid + '|' + name] || '', work: false }, cum: R.cum || null, dates: R.dates || [] };
+      p = { name: name, short: phShorts[pid + '|' + name] || '', show: phShows[pid + '|' + name] !== undefined ? !!phShows[pid + '|' + name] : !phRecur[pid + '|' + name], limit: phLimits[pid + '|' + name] || '', tasks: [], own: R.own || { days: phLimits[pid + '|' + name] || '', work: false }, cum: R.cum || null, dates: R.dates || [] };
       phList.push(p);
     }
     p.tasks.push(t.name);
@@ -12257,7 +12466,7 @@ function renderPhases() {
   const box = document.getElementById('ph-wrap');
   if (!phList.length) { box.innerHTML = '<div class="report-meta">This project has no tasks yet.</div>'; return; }
   box.innerHTML = phList.map((p, i) => `<div class="ph-card">
-    <div class="ph-head"><span class="tev-ph" style="--ph:${phaseColor(p.name)}">${i + 1}</span><input type="text" value="${escapeHtml(p.name)}" onchange="phList[${i}].name = this.value.trim() || phList[${i}].name; renderPhases()" title="Phase name"><input type="text" class="ph-short" maxlength="8" value="${escapeHtml(p.short || '')}" placeholder="Short name" title="Short name used in report headers, e.g. LODNG" onchange="phList[${i}].short = this.value.trim().toUpperCase(); this.value = phList[${i}].short">
+    <div class="ph-head"><span class="tev-ph" style="--ph:${phaseColor(p.name)}">${i + 1}</span><input type="text" value="${escapeHtml(p.name)}" onchange="phList[${i}].name = this.value.trim() || phList[${i}].name; renderPhases()" title="Phase name"><input type="text" class="ph-short" maxlength="8" value="${escapeHtml(p.short || '')}" placeholder="Short name" title="Short name used in report headers, e.g. LODNG" onchange="phList[${i}].short = this.value.trim().toUpperCase(); this.value = phList[${i}].short"><label class="inline-label ph-show" title="Untick to leave this phase out of Rola Days"><input type="checkbox" ${p.show !== false ? 'checked' : ''} onchange="phList[${i}].show = this.checked"> Show in Rola Days</label>
 
       <button class="chain-btn" title="Move up" onclick="phMove(${i}, -1)"${i ? '' : ' disabled'}>&uarr;</button><button class="chain-btn" title="Move down" onclick="phMove(${i}, 1)"${i < phList.length - 1 ? '' : ' disabled'}>&darr;</button>
       ${p.tasks.length ? '' : `<button class="chain-btn" title="Remove this empty phase" onclick="phList.splice(${i}, 1); renderPhases()">&times;</button>`}
@@ -12322,7 +12531,7 @@ function phAddDate(i, k) {
 function phAdd() {
   let n = 'New phase', k = 2;
   while (phList.some(p => p.name.toLowerCase() === n.toLowerCase())) n = 'New phase ' + (k++);
-  phList.push({ name: n, short: '', limit: '', tasks: [], own: { days: '', work: false }, cum: null, dates: [] });
+  phList.push({ name: n, short: '', show: true, limit: '', tasks: [], own: { days: '', work: false }, cum: null, dates: [] });
   renderPhases();
 }
 
@@ -12352,12 +12561,12 @@ async function phSave() {
   const send = phList.filter(p => p.tasks.length || Number((p.own || {}).days) > 0);
   if (send.some(p => !p.tasks.length)) return toast('A phase with no tasks cannot be saved. Move a task into it or remove it.', true);
   try {
-    const r = await apiCall('phaseSave', { project: pid, phases: send.map(p => ({ name: p.name, short: p.short || '', limit: Number((p.own || {}).days) || 0, tasks: p.tasks, rules: { own: { days: Number((p.own || {}).days) || 0, work: !!(p.own || {}).work }, cum: p.cum, dates: p.dates || [] } })) });
+    const r = await apiCall('phaseSave', { project: pid, phases: send.map(p => ({ name: p.name, short: p.short || '', show: p.show !== false, limit: Number((p.own || {}).days) || 0, tasks: p.tasks, rules: { own: { days: Number((p.own || {}).days) || 0, work: !!(p.own || {}).work }, cum: p.cum, dates: p.dates || [] } })) });
     if (!r.ok) return toast(r.error || 'Could not save', true);
     toast('Phases saved.');
     await loadTasks();
     const g = await apiCall('phaseGet');
-    if (g.ok) { phLimits = g.limits || {}; phRules = g.rules || {}; phShorts = g.shorts || {}; phDates = g.dateFields || []; }
+    if (g.ok) { phLimits = g.limits || {}; phRules = g.rules || {}; phShorts = g.shorts || {}; phShows = g.shows || {}; phRecur = g.recurOnly || {}; phDates = g.dateFields || []; }
     phBuild();
     renderPhases();
     document.getElementById('ph-msg').innerText = 'Saved';
@@ -12468,6 +12677,41 @@ function rdmRows() {
 
 function rdmShort(p) { return p.short || p.name; }
 
+function rdmKinds(rd) {
+  const k = {};
+  ((rd && rd.checks) || []).forEach(c => { if (c.over) k[c.kind] = true; });
+  return ['own', 'cum', 'date'].filter(x => k[x]);
+}
+
+function rdmStrips(rd) {
+  const ks = rdmKinds(rd);
+  return ks.map((k, i) => `<span class="rdm-s ${k}" style="bottom:${2 + (ks.length - 1 - i) * 5}px"></span>`).join('');
+}
+
+function rdmLateCls(rd) {
+  const n = rdmKinds(rd).length;
+  return n ? ' rdm-late" style="padding-bottom:' + (6 + n * 5) + 'px' : '';
+}
+
+function rdmEditStart(td, i, j) {
+  const x = rdmRows()[i], v = x && x.dates[j], c = rdmData.dateCols[j];
+  if (!x || !v || td.querySelector('input')) return;
+  td.innerHTML = `<span class="rdm-edit" onclick="event.stopPropagation()"><input type="date" value="${escapeHtml(v.ymd || '')}"><button class="btn btn-small" onclick="rdmEditSave(this, ${i}, ${j})">Save</button><button class="btn btn-small btn-secondary" onclick="renderRdm()">&times;</button></span>`;
+  td.querySelector('input').focus();
+}
+
+async function rdmEditSave(btn, i, j) {
+  const x = rdmRows()[i], c = rdmData.dateCols[j];
+  const val = btn.parentNode.querySelector('input').value;
+  btn.disabled = true;
+  try {
+    const r = await apiCall('rdDateEdit', { task: c.task, col: c.col, refNo: x.refNo || '', caseNo: x.caseNo || '', value: val });
+    if (!r.ok) { toast(r.error || 'Could not save', true); btn.disabled = false; return; }
+    toast(c.label + ' changed');
+    loadRdm(true);
+  } catch (e) { toast('Network error', true); btn.disabled = false; }
+}
+
 function rdmTrailJs(k) { return escapeHtml(String(k).replace(/\\/g, '\\\\').replace(/'/g, "\\'")); }
 
 function renderRdm() {
@@ -12496,7 +12740,7 @@ function renderRdm() {
       const lines = rdTipLines(x.rd).filter(l => l.indexOf('Phase: ') !== 0);
       const ck = lines.length ? lines.map(l => `<div class="${l[0] === '✖' ? 'bad' : l[0] === '✔' ? 'ok' : l[0] === '?' ? 'q' : 'dim'}">${escapeHtml(l)}</div>`).join('') : '<div class="dim">No R-DAYS check here</div>';
       const stand = `<span class="tev-ph" style="--ph:${phaseColor(x.now)}">${escapeHtml(x.now)}</span>${x.finished ? ' <small class="report-meta">finished</small>' : ''}<div class="report-meta">${x.tasks.length ? escapeHtml(x.tasks.join(', ') + (x.who ? ' · ' + x.who : '')) : (x.finished ? '' : 'No open task, still counting')}</div>`;
-      return `<tr class="rdm-row${x.open ? '' : ' rdm-closed'}" onclick="lateOpenTrail('${rdmTrailJs(x.key)}')"><td class="rdm-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td><td class="rdm-ck">${stand}</td><td class="rdm-ck">${ck}</td><td class="${x.state ? 'rdm-' + x.state : ''}">${rdHtml(x.rd)}</td></tr>`;
+      return `<tr class="rdm-row${x.open ? '' : ' rdm-closed'}" onclick="lateOpenTrail('${rdmTrailJs(x.key)}')"><td class="rdm-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td><td class="rdm-ck">${stand}</td><td class="rdm-ck">${ck}</td><td class="${rdmLateCls(x.rd).replace(/^ /, '')}">${rdHtml(x.rd)}${rdmStrips(x.rd)}</td></tr>`;
     }).join('');
     box.innerHTML = `<table class="rdm"><thead><tr class="rdm-h rdm-h5"><th class="rdm-lbl">Consignment</th><th>Where it stands now</th><th>Checks</th><th>Mark</th></tr></thead><tbody>${body}</tbody></table>`;
     return;
@@ -12509,15 +12753,16 @@ function renderRdm() {
     + hdr('Running', 'rdm-h3', p => p.cum ? `<span title="from ${escapeHtml(p.cum.from)}">${p.cum.total}</span>` : none)
     + hdr('Own', 'rdm-h4', p => p.own != null ? p.own : none)
     + `<tr class="rdm-h rdm-h5"><th class="rdm-lbl">Phase</th>${P.map(p => `<th title="${escapeHtml(p.name)}">${escapeHtml(rdmShort(p))}</th>`).join('')}${d.dateCols.map(c => `<th>${escapeHtml(c.label)}</th>`).join('')}</tr>`;
-  const body = rows.map(x => {
+  const body = rows.map((x, ri) => {
     const cells = P.map(p => {
       const c = x.cells[p.name];
       if (!c) return '<td></td>';
-      const cls = (c.state ? 'rdm-' + c.state : '') + (c.cur ? ' rdm-cur' : '');
-      const tip = (c.rd ? rdTip(c.rd) + '\n' : '') + 'In ' + p.name + ' since ' + shortWhen(c.since) + (c.until ? ' until ' + shortWhen(c.until) : c.open ? ' (still here)' : ' (no open task, still counting)');
-      return `<td class="${cls}" title="${escapeHtml(tip)}">${c.days}</td>`;
+      const cls = (c.cur ? 'rdm-cur' : '') + rdmLateCls(c.rd);
+      const tip = (c.rd ? rdTip(c.rd) + '\n' : '') + 'In ' + p.name + ' since ' + shortWhen(c.since) + (c.until ? ' until ' + shortWhen(c.until) : c.open ? ' (still here)' : c.live ? ' (no open task, still counting)' : '');
+      return `<td class="${cls}" title="${escapeHtml(tip)}">${c.days}${rdmStrips(c.rd)}</td>`;
     }).join('');
-    const dates = x.dates.map(v => v ? `<td class="${v.diff > 0 ? 'rdm-dpos' : 'rdm-dneg'}" title="${escapeHtml(v.date.replace(/, \d.*$/, '') + (v.plus ? ' + ' + v.plus + ' days' : '') + ' · ' + (v.diff > 0 ? v.diff + ' days past' : -v.diff + ' days to go'))}"><b>${v.diff > 0 ? '+' : ''}${v.diff}</b></td>` : '<td title="Not filled yet"><span class="rdm-none">–</span></td>').join('');
+    const ce = can('rdedit');
+    const dates = x.dates.map((v, j) => v ? `<td class="${v.diff > 0 ? 'rdm-dpos' : 'rdm-dneg'}${ce ? ' rdm-ed' : ''}"${ce ? ` onclick="event.stopPropagation(); rdmEditStart(this, ${ri}, ${j})"` : ''} title="${escapeHtml(v.date.replace(/, \d.*$/, '') + (v.plus ? ' + ' + v.plus + ' days' : '') + ' · ' + (v.diff > 0 ? v.diff + ' days past' : -v.diff + ' days to go') + (v.edits && v.edits.length ? '\n' + v.edits.map(e => 'Was ' + e.from + ' → now ' + e.to + ' · by ' + e.by + ', ' + shortWhen(e.at)).join('\n') : '') + (ce ? '\nClick to change' : ''))}"><b>${v.diff > 0 ? '+' : ''}${v.diff}</b>${v.edits && v.edits.length ? '<span class="rdm-edm">&#9998;</span>' : ''}</td>` : '<td title="Not filled yet"><span class="rdm-none">–</span></td>').join('');
     return `<tr class="rdm-row${x.open ? '' : ' rdm-closed'}" onclick="lateOpenTrail('${rdmTrailJs(x.key)}')"><td class="rdm-key" title="${escapeHtml(rdTip(x.rd))}"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td>${cells}${dates}</tr>`;
   }).join('');
   box.innerHTML = `<table class="rdm"><thead>${head}</thead><tbody>${body}</tbody></table>`;
@@ -12526,7 +12771,7 @@ function renderRdm() {
 function rolaTableHtml(lines, noLimits) {
   if (noLimits) return '<div class="late-none" style="background:#fff4dc;color:#6b4500;">No phase has an R-DAYS check yet. Set them in Admin → Phases first.</div>';
   if (!lines.length) return '<div class="late-none">&#10003; Nothing is over its R-DAYS right now.</div>';
-  return `<div class="table-wrap rola-wrap-x"><table class="rdm rola-table"><thead><tr class="rdm-h rdm-h5"><th class="rdm-lbl">Consignment</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>Since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => { const tip = escapeHtml(x.rdays ? rdTip(x.rdays) : ''); return `<tr class="rola-row" title="${tip}" onclick="lateOpenTrail('${rdmTrailJs(x.key)}')"><td class="rdm-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${x.tasks.length ? escapeHtml(x.tasks.join(', ')) : '<span class="report-meta">No open task, still counting</span>'}</td><td>${escapeHtml(x.who)}</td><td>${escapeHtml(shortWhen(x.since))}</td><td class="${x.broke ? 'rdm-' + x.broke : ''}" title="${tip}">${x.days}${x.label ? ' <small>' + escapeHtml(x.label) + '</small>' : ''}</td><td>${x.limit}</td><td><span class="late-badge" title="${tip}">${x.over} days</span></td></tr>`; }).join('')}</tbody></table></div>`;
+  return `<div class="table-wrap rola-wrap-x"><table class="rdm rola-table"><thead><tr class="rdm-h rdm-h5"><th class="rdm-lbl">Consignment</th><th>Phase</th><th>Waiting at</th><th>Who</th><th>Since</th><th>Days</th><th>Allowed</th><th>Over by</th></tr></thead><tbody>${lines.map(x => { const tip = escapeHtml(x.rdays ? rdTip(x.rdays) : ''); return `<tr class="rola-row" title="${tip}" onclick="lateOpenTrail('${rdmTrailJs(x.key)}')"><td class="rdm-key"><b>${escapeHtml(x.key)}</b>${x.name ? '<small>' + escapeHtml(x.name) + '</small>' : ''}</td><td><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span></td><td class="left">${x.tasks.length ? escapeHtml(x.tasks.join(', ')) : '<span class="report-meta">No open task, still counting</span>'}</td><td>${escapeHtml(x.who)}</td><td>${escapeHtml(shortWhen(x.since))}</td><td class="${rdmLateCls(x.rdays).replace(/^ /, '')}" title="${tip}">${x.days}${x.label ? ' <small>' + escapeHtml(x.label) + '</small>' : ''}${rdmStrips(x.rdays)}</td><td>${x.limit}</td><td><span class="late-badge" title="${tip}">${x.over} days</span></td></tr>`; }).join('')}</tbody></table></div>`;
 }
 
 function renderRola() {
