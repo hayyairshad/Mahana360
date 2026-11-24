@@ -778,11 +778,14 @@ h2 { font-weight: 800; letter-spacing: -0.5px; }
 .case-chip.imp { border: 2px solid #d23f31; background: #fff4e5; box-shadow: 0 0 0 3px rgba(210,63,49,0.12); font-weight: 600; }
 .step-star { background: none; border: none; cursor: pointer; font-size: 1.05rem; color: #98a2b3; padding: 0 2px; line-height: 1; }
 .step-star.on { color: #b54708; }
+.step-flag { filter: grayscale(1); opacity: 0.45; } .step-flag.on { filter: none; opacity: 1; }
+.step-eye { font-size: 0.95rem; } .step-eye:not(.on) { opacity: 0.6; }
 .sidebar-must { color: #b54708; font-weight: 800; margin-right: 4px; }
 .case-chip.must { border: 2px solid #b54708; background: #fff7e6; }
 .case-chip.hold { opacity: 0.8; border-style: dashed; }
 .imp-tag.must-tag { background: #b54708; }
 .imp-tag.hold-tag { background: #667085; }
+tr.data-partial td { background: #f8f9fb; color: #475467; }
 .imp-tag { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 8px; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; background: #d23f31; color: #fff; vertical-align: middle; }
 .task-sidebar-item.imp { background: #fff4e5; border-color: #e7b07a; }
 .task-sidebar-item.imp .imp-star { color: #d23f31; font-size: 1.05em; margin-right: 4px; }
@@ -1650,11 +1653,24 @@ body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 620px; 
 .rdm-c.rdm-own { background: #378add; color: #fff; border-color: #378add; }
 .rdm-c.rdm-cum { background: #ef9f27; color: #412402; border-color: #ef9f27; }
 .rdm-c.rdm-date { background: #e24b4a; color: #fff; border-color: #e24b4a; }
-.rdm td.rdm-late { position: relative; font-weight: 800; padding-bottom: 12px; }
-.rdm-s { position: absolute; left: 4px; right: 4px; height: 4px; }
-.rdm-s.own { background: #378add; } .rdm-s.cum { background: #ef9f27; } .rdm-s.date { background: #e24b4a; }
+.rdm td.rdm-late { position: relative; font-weight: 800; padding-left: 26px; padding-right: 14px; }
+.rdm-m { position: absolute; top: 0; bottom: 0; pointer-events: none; }
+.rdm-m.own { left: 0; width: 22px; background: #378add; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.rdm-m.cum { left: 0; width: 22px; background: #ef9f27; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.rdm-m.date { right: 0; width: 7px; background: #e24b4a; }
 .rdm td.rdm-cur, .rdm-c.rdm-cur { outline: 2px solid #27500a; outline-offset: -3px; font-weight: 800; }
 .rdm td.rdm-ed { cursor: pointer; } .rdm td.rdm-ed:hover { background: #f4f0fa; }
+.subs { margin: 8px 0; padding: 8px 10px; background: #f8faf9; border: 1px solid #e3e8e5; border-radius: 10px; }
+.subs-head { font-weight: 700; font-size: 0.82rem; margin-bottom: 4px; display: flex; gap: 8px; align-items: center; }
+.sub-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.88rem; }
+.sub-row.done .sub-text { text-decoration: line-through; color: var(--text-dim); }
+.sub-tick { width: 20px; height: 20px; border: 2px solid #24533a; border-radius: 5px; background: #fff; color: #fff; font-size: 0.75rem; line-height: 1; cursor: pointer; flex: 0 0 auto; padding: 0; }
+.sub-row.done .sub-tick { background: #24533a; }
+.sub-del { background: none; border: none; color: #98a2b3; cursor: pointer; font-size: 1rem; margin-left: auto; }
+.sub-add { display: flex; gap: 6px; margin-top: 6px; } .sub-add input { margin: 0; flex: 1; padding: 4px 8px; font-size: 0.85rem; }
+.subs-badge { font-size: 0.72rem; font-weight: 700; color: #475467; background: #eef1f4; border-radius: 6px; padding: 1px 6px; } .subs-badge.all { color: #05603a; background: #e6f4ec; }
+.trail-dates { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.trail-date { background: #f4f0fa; border: 1px solid #d9cff0; border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
 .rdm-edm { color: #534ab7; font-size: 0.7rem; margin-left: 3px; }
 .rdm-edit { display: inline-flex; gap: 4px; align-items: center; } .rdm-edit input { margin: 0; padding: 2px 4px; font-size: 0.78rem; width: 130px; } .rdm-edit button { padding: 2px 8px; font-size: 0.75rem; }
 .rdm-closed td { opacity: 0.72; }
@@ -2987,7 +3003,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R47";
+const APP_VERSION = "R48";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -5386,6 +5402,44 @@ function remFiltered() {
   });
 }
 
+const subsMem = {};
+
+function subsKeyId(key) { return 'subs-' + key.replace(/[^A-Za-z0-9_-]/g, '_'); }
+
+function subsHtml(key, items, canEdit) {
+  subsMem[key] = items || [];
+  const list = subsMem[key];
+  const done = list.filter(x => x.done).length;
+  const kj = escapeHtml(key);
+  return `<div class="subs" id="${subsKeyId(key)}" onclick="event.stopPropagation()">
+    <div class="subs-head">Steps ${list.length ? '<span class="report-meta">' + done + ' of ' + list.length + ' done</span>' : ''}</div>
+    ${list.map(x => `<div class="sub-row${x.done ? ' done' : ''}"><button class="sub-tick" ${canEdit ? `onclick="subAct('${kj}', 'tick', '${escapeHtml(x.id)}')"` : 'disabled'} title="${x.done ? 'Done' + (x.doneBy ? ' by ' + escapeHtml(x.doneBy) : '') + ' · click to undo' : 'Mark this step done'}">${x.done ? '&#10003;' : ''}</button><span class="sub-text">${escapeHtml(x.text)}</span>${canEdit ? `<button class="sub-del" onclick="subAct('${kj}', 'del', '${escapeHtml(x.id)}')" title="Remove step">&times;</button>` : ''}</div>`).join('')}
+    ${canEdit ? `<div class="sub-add"><input type="text" placeholder="Add a step" onkeydown="if(event.key==='Enter'){subAct('${kj}', 'add', '', this)}"><button class="btn btn-small" onclick="subAct('${kj}', 'add', '', this.previousElementSibling)">Add</button></div>` : ''}
+  </div>`;
+}
+
+async function subAct(key, what, sid, input) {
+  const text = input ? input.value.trim() : '';
+  if (what === 'add' && !text) return toast('Write the step first', true);
+  try {
+    const r = await apiCall('subAct', { key: key, what: what, sid: sid, text: text });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    subsMem[key] = r.items || [];
+    const el = document.getElementById(subsKeyId(key));
+    if (el) el.outerHTML = subsHtml(key, subsMem[key], true);
+    const m = /^rem:(.+)$/.exec(key);
+    if (m && remData && remData.items) { const it = remData.items.filter(y => y.id === m[1])[0]; if (it) it.subs = subsMem[key]; }
+    if (what === 'add') { const el2 = document.getElementById(subsKeyId(key)); const inp = el2 && el2.querySelector('.sub-add input'); if (inp) inp.focus(); }
+  } catch (e) { toast('Network error', true); }
+}
+
+function subsBadge(items) {
+  const n = (items || []).length;
+  if (!n) return '';
+  const d = items.filter(x => x.done).length;
+  return `<span class="subs-badge${d === n ? ' all' : ''}" title="Steps done">&#9745; ${d}/${n}</span>`;
+}
+
 function remItemHtml(x) {
   const id = escapeHtml(x.id);
   const open = remOpen[x.id];
@@ -5395,11 +5449,12 @@ function remItemHtml(x) {
     <button class="rem-check" title="${x.status === 'Open' ? 'Mark done' : 'Open again'}" onclick="remAct('${id}', '${x.status === 'Open' ? 'done' : 'undo'}')">${x.status === 'Open' ? '' : '&#10003;'}</button>
     <button class="rem-del${remDelArm === x.id ? ' arm' : ''}" title="Delete for good" onclick="remDelete('${id}')">${remDelArm === x.id ? 'Delete?' : '&#128465;'}</button>
     <div class="rem-main" onclick="remOpen['${id}'] = !remOpen['${id}']; renderReminders()">
-      <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)}</div>
+      <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)} ${subsBadge(x.subs)}</div>
       <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group' + (valOf('rem-group') === x.group ? ' on' : '') + '" data-remf="group" data-remv="' + escapeHtml(x.group) + '" title="Click to show only this group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag' + (valOf('rem-tag') === t ? ' on' : '') + '" data-remf="tag" data-remv="' + escapeHtml(t) + '" title="Click to show only this tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
     </div>
     ${open ? `<div class="rem-more">
       ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : ''}
+      ${subsHtml('rem:' + x.id, x.subs, true)}
       <div class="rem-comments">${(x.comments || []).map(c => `<div class="rem-comment${c.done ? ' is-done' : ''}"><span class="report-meta">${escapeHtml(fmtWhen(c.ms))}</span> ${escapeHtml(c.text)}</div>`).join('') || '<div class="report-meta">No comments yet.</div>'}</div>
       <div class="report-bar"><input type="text" id="rc-${id}" placeholder="Add a comment or what you tried" onkeydown="if(event.key==='Enter')remComment('${id}')"><button class="btn btn-small" onclick="remComment('${id}')">Add</button></div>
       <div class="report-bar">
@@ -5448,7 +5503,7 @@ function renderReminders() {
   const order = ['Overdue', 'Today', 'Tomorrow', 'This week', 'Later', 'No date', 'Done'];
   const groups = {};
   list.forEach(x => { const b = remBucket(x); (groups[b] = groups[b] || []).push(x); });
-  const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)}</div><div class="rem-meta">${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
+  const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)} ${subsBadge(a.subs)}</div><div class="rem-meta">${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
   const cal = remView === 'cal' && remWho === 'mine' ? `<div class="rem-cal">${remCalendarHtml(list)}</div>` : '';
   ['mine', 'assigned'].forEach(k => { const b = document.getElementById('rem-who-' + k); if (b) { b.classList.toggle('active', remWho === k); if (k === 'assigned') b.innerHTML = 'Assigned' + ((remData.assigned || []).length ? ' <span class="sidebar-count">' + remData.assigned.length + '</span>' : ''); } });
   if (remWho === 'assigned') {
@@ -7158,14 +7213,21 @@ async function refreshAll() {
   refreshing = true;
   const btn = document.getElementById('btn-refresh');
   btn.classList.add('spinning');
-  try {
-    reportData = null; timingData = null; chequesLoaded = false; templatesLoaded = false; chainLoaded = false;
-    builderTasks = [];
-    await Promise.all([loadTasks(), loadChain(), loadProjects(), loadTemplates()]);
-    await loadPending();
+  try { Object.keys(localStorage).filter(k => k.indexOf('rc|') === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  reportData = null; timingData = null; chequesLoaded = false; templatesLoaded = false; chainLoaded = false;
+  builderTasks = [];
+  const redraw = () => {
     if (window.location.hash.indexOf('#/select') === 0) renderSelectionScreen();
     else if (profile) route();
-    toast('Up to date.');
+    try { repLiveUpdate(); } catch (e) {}
+  };
+  let timedOut = false;
+  const work = Promise.all([loadTasks(), loadChain(), loadProjects(), loadTemplates(), loadPending()]).then(() => { if (timedOut) { redraw(); toast('Up to date.'); } });
+  const cap = new Promise(r => setTimeout(() => r('slow'), 20000));
+  try {
+    const r = await Promise.race([work, cap]);
+    if (r === 'slow') { timedOut = true; toast('Still updating. The screen will refresh by itself when it is ready.'); }
+    else { redraw(); toast('Up to date.'); }
   } catch (e) { toast('Could not refresh. Check the internet and try again.', true); }
   btn.classList.remove('spinning');
   refreshing = false;
@@ -7852,7 +7914,7 @@ async function loadChain() {
 }
 
 function copySteps(steps, tasks) {
-  if (Array.isArray(steps) && steps.length) return steps.map(st => st.map(x => ({ task: x.task, optional: !!x.optional, must: !!x.must })));
+  if (Array.isArray(steps) && steps.length) return steps.map(st => st.map(x => ({ task: x.task, optional: !!x.optional, must: !!x.must, hide: !!x.hide, finish: !!x.finish })));
   return (tasks || []).map(t => [{ task: t, optional: false }]);
 }
 
@@ -7914,6 +7976,8 @@ function renderChainEditor() {
         <span class="step-task${x.optional ? ' opt' : ''}">
           ${multi ? `<button class="step-dot${x.optional ? ' off' : ''}" onclick="toggleStepOptional(${si},${ti})" title="${x.optional ? 'Optional: click to make it required' : 'Required: click to make it optional'}"></button>` : ''}
           <button class="step-star${x.must ? ' on' : ''}" onclick="toggleStepMust(${si},${ti})" title="${x.must ? 'Must do: if a later task is done without this one, it goes back to its owner at the top. Click to turn off.' : 'Click to make this a must-do step'}">${x.must ? '&#9733;' : '&#9734;'}</button>
+          <button class="step-star step-eye${x.hide ? '' : ' on'}" onclick="toggleStepFlag(${si},${ti},'hide')" title="${x.hide ? 'Hidden in the Presentation Report. Click to show it.' : 'Shown in the Presentation Report. Click to hide it.'}">${x.hide ? '&#128584;' : '&#128065;'}</button>
+          <button class="step-star step-flag${x.finish ? ' on' : ''}" onclick="toggleStepFlag(${si},${ti},'finish')" title="${x.finish ? 'This task completes the case. Click to undo.' : 'Click to make this the task that completes the case'}">&#127937;</button>
           <span>${escapeHtml(x.task)}</span>
           ${chainsOfTask(x.task).length > 1 ? `<span class="search-kind">also in ${chainsOfTask(x.task).filter(k => k !== activeChain).map(k => escapeHtml(chains[k].name)).join(', ')}</span>` : ''}
           ${multi ? `<button class="chain-btn" onclick="splitStepTask(${si},${ti})" title="Move to its own step below">&#8615;</button>` : ''}
@@ -8240,6 +8304,17 @@ function moveChainItem(si, delta) {
   arr.splice(to, 0, moved);
   syncChainTasks(chains[activeChain]);
   renderChainEditor();
+}
+
+function toggleStepFlag(si, ti, k) {
+  const steps = chains[activeChain].steps;
+  const st = steps[si];
+  if (!st || !st[ti]) return;
+  const on = !st[ti][k];
+  if (k === 'finish' && on) steps.forEach(s2 => s2.forEach(x => { x.finish = false; }));
+  st[ti][k] = on;
+  renderChainEditor();
+  toast(k === 'finish' ? (on ? st[ti].task + ' now completes the case. Save the chain to keep it.' : 'No completion task set. The last active task completes the case.') : (on ? st[ti].task + ' is hidden in the Presentation Report. Save to keep it.' : st[ti].task + ' shows in the Presentation Report. Save to keep it.'));
 }
 
 function toggleStepMust(si, ti) {
@@ -9599,7 +9674,7 @@ function renderPartials() {
   body.innerHTML = partialItems.map((p, i) => {
     const filled = task.fields.filter(f => p.data && p.data[f.id] !== undefined).map(f => f.label);
     return `<tr${p.partialId === currentPartialId ? ' class="row-selected"' : ''}>
-      <td style="color:var(--text-dim); font-size:0.85rem;">${escapeHtml(p.createdAt || '')}</td>
+      <td style="color:var(--text-dim); font-size:0.85rem;">${escapeHtml(p.createdAt || '')}${p.mine === false && p.by ? '<br><b style="color:var(--accent-color)">by ' + escapeHtml(p.by) + '</b>' : ''}</td>
       <td>${escapeHtml(p.refNo || '')}</td>
       <td>${escapeHtml(p.caseNo || '')}</td>
       <td class="partial-fill">${escapeHtml(filled.join(', ') || '-')}</td>
@@ -9785,7 +9860,7 @@ function renderDataReport() {
   const sums = list => nums.map(f => list.reduce((a, x) => a + dataNum(dataVal(x, f)), 0));
   const showFields = fields.filter(f => f.col !== g);
   const head = `<thead><tr><th>Saved</th><th>By</th>${showFields.map(f => `<th>${escapeHtml(f.label)}</th>`).join('')}</tr></thead>`;
-  const rowHtml = x => `<tr><td class="nowrap">${escapeHtml(x.savedAt)}</td><td>${escapeHtml(x.savedBy)}</td>${showFields.map(f => `<td class="${f.type === 'number' ? '' : 'left'}">${escapeHtml(dataVal(x, f))}</td>`).join('')}</tr>`;
+  const rowHtml = x => `<tr${x.partial ? ' class="data-partial" title="Partly saved, not finished yet"' : ''}><td class="nowrap">${escapeHtml(x.savedAt)}${x.partial ? ' <span class="imp-tag hold-tag">Partial</span>' : ''}</td><td>${escapeHtml(x.savedBy)}</td>${showFields.map(f => `<td class="${f.type === 'number' ? '' : 'left'}">${escapeHtml(dataVal(x, f))}</td>`).join('')}</tr>`;
   const totalCells = list => { const s = sums(list); return showFields.map(f => { const i = nums.indexOf(f); return `<td>${i === -1 ? '' : '<b>' + fmtN(s[i]) + '</b>'}</td>`; }).join(''); };
   document.getElementById('data-table').innerHTML = items.length ? head + `<tbody>${keys.map(k => (g ? `<tr class="section-row"><td class="left" colspan="2"><b>${escapeHtml(k)}</b> · ${groups[k].length}</td>${totalCells(groups[k])}</tr>` : '') + groups[k].map(rowHtml).join('')).join('')}</tbody><tfoot><tr class="section-row"><td class="left" colspan="2">Total · ${items.length}</td>${totalCells(items)}</tr></tfoot>` : '<tr><td class="report-meta">Nothing saved for this task in these dates.</td></tr>';
   const s = sums(items);
@@ -11446,6 +11521,7 @@ async function loadMyAssigned() {
         <div class="as-more hidden" id="am-${escapeHtml(x.id)}">${x.created ? '<span><b>Live since:</b> ' + escapeHtml(x.created) + '</span>' : ''}<span><b>Due:</b> ${escapeHtml(x.due)}</span>${x.late ? '<span class="band-late"><b>Late by ' + escapeHtml(x.lateBy || '') + '</b></span>' : x.left ? '<span><b>Working time left:</b> ' + escapeHtml(x.left) + '</span>' : ''}${x.by ? '<span><b>Given by:</b> ' + escapeHtml(x.by) + '</span>' : ''}${x.notes ? '<span style="flex-basis:100%"><b>Details:</b> ' + escapeHtml(x.notes) + '</span>' : ''}</div>
         <div class="report-meta">${x.by ? 'Assigned by <b>' + escapeHtml(x.by) + '</b> to <b>' + escapeHtml((x.people || []).join(', ')) + '</b> · ' : ''}${x.repeat ? '&#8635; ' + escapeHtml(scheduleSummary(x.repeat)) + ' · ' : ''}Due ${escapeHtml(x.due)}${x.next ? ' · Next: ' + escapeHtml(x.next) : ''}${x.shared ? ' · shared with ' + escapeHtml(x.people.filter(p => p !== profile.name).join(', ')) + ' (one Done closes it for all)' : ''}</div>
         ${x.notes ? `<div class="assign-notes">${escapeHtml(x.notes)}</div>` : '<div style="height:8px;"></div>'}
+        ${subsHtml('asg:' + x.id, x.subs, canDo || user.level === 0)}
         ${canDo ? `<div class="report-bar">
           <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for ${escapeHtml(x.by || 'Jawad')} (optional)">
           <button class="btn btn-primary btn-small" onclick="markAssignedDone('${escapeHtml(x.id)}')">Done</button>
@@ -12235,7 +12311,8 @@ let approvalItems = [];
 async function loadApprovals() {
   loadLeaveAdmin();
   const table = document.getElementById('approvals-table');
-  table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
+  if (approvalItems && approvalItems.length) renderApprovals();
+  else table.innerHTML = '<tr><td class="report-meta">Loading...</td></tr>';
   try {
     const r = await apiCall('timeReqList');
     if (!r.ok) { table.innerHTML = `<tr><td>${escapeHtml(r.error || 'Could not load')}</td></tr>`; return; }
@@ -12408,14 +12485,39 @@ function chequeLine(c) {
   return bits.join(' &middot; ');
 }
 
+let trailCur = null, trailGoFn = '';
+
+function trailDateEdit(i) {
+  const d = trailCur && trailCur.dateEdit && trailCur.dateEdit[i];
+  const el = document.getElementById('trd-' + i);
+  if (!d || !el) return;
+  el.innerHTML = `<b>${escapeHtml(d.label)}</b> <span class="rdm-edit"><input type="date" value="${escapeHtml(d.ymd)}"><button class="btn btn-small btn-primary" onclick="trailDateSave(this, ${i})">Save</button><button class="btn btn-small" onclick="window[trailGoFn] && window[trailGoFn](trailCur.q)">&times;</button></span>`;
+}
+
+async function trailDateSave(btn, i) {
+  const d = trailCur.dateEdit[i];
+  const val = btn.parentNode.querySelector('input').value;
+  btn.disabled = true;
+  try {
+    const r = await apiCall('rdDateEdit', { task: d.task, col: d.col, refNo: trailCur.refNo || '', caseNo: trailCur.caseNo || '', value: val });
+    if (!r.ok) { toast(r.error || 'Could not save', true); btn.disabled = false; return; }
+    toast(d.label + ' changed');
+    Object.keys(trailMem).forEach(k => { delete trailMem[k]; });
+    if (trailGoFn && window[trailGoFn]) window[trailGoFn](trailCur.q);
+  } catch (e) { toast('Network error', true); btn.disabled = false; }
+}
+
 function renderTrailHtml(r, go) {
   const head = [r.name, r.mobile, r.inputs, [r.salesman, r.branch].filter(Boolean).join(' · ')].filter(Boolean);
   const nav = `<div class="trail-nav">${r.prev ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.prev).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">&#9664; ${escapeHtml(r.prev)}</button>` : '<button class="btn btn-small" disabled>&#9664; First</button>'}
     <div class="nav-spacer"></div>${r.next ? `<button class="btn btn-small" onclick="${go}('${escapeHtml(String(r.next).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">${escapeHtml(r.next)} &#9654;</button>` : '<button class="btn btn-small" disabled>Last &#9654;</button>'}</div>`;
   const chains = (r.chains || []).length ? `<label>Where it is in each chain</label><div class="trail-chains">${r.chains.map(c => `<div class="trail-chain"><div class="trail-chain-name">${escapeHtml([c.project, c.name].filter(Boolean).join(' › '))}</div><div class="trail-steps">${c.tasks.map(t => { const S = TRAIL_SYM[t.sym] || TRAIL_SYM['']; return `<div class="trail-step${t.late ? ' late' : ''}${!t.sym || t.sym === 'skip' ? ' dim' : ''}" title="${escapeHtml(S[2])}"><b class="${S[1]}">${S[0] || '&nbsp;'}</b>${escapeHtml(t.task)}${t.took ? `<small>${escapeHtml(t.took)} / ${escapeHtml(t.allowed || '-')}</small>` : ''}</div>`; }).join('')}</div></div>`).join('')}</div>` : '';
   const cheques = (r.cheques || []).map(c => `<div class="trail-cheque">${chequeLine(c)}</div>`).join('');
+  trailCur = r; trailGoFn = go;
+  const ce = can('rdedit');
+  const dates = (r.dateEdit || []).length ? `<div class="trail-dates">${r.dateEdit.map((d, i) => `<span class="trail-date" id="trd-${i}" title="${escapeHtml(d.task + ' › ' + d.col + ((d.edits || []).length ? '\n' + d.edits.map(x => 'Was ' + x.from + ' → now ' + x.to + ' · by ' + x.by + ', ' + shortWhen(x.at)).join('\n') : ''))}"><b>${escapeHtml(d.label)}</b> ${escapeHtml(d.date)}${(d.edits || []).length ? ' <span class="rdm-edm">&#9998;</span>' : ''}${ce ? ` <button class="btn btn-small" onclick="trailDateEdit(${i})">Edit</button>` : ''}</span>`).join('')}</div>` : '';
   return `${nav}<div class="trail-head"><div class="trail-title">${escapeHtml(r.q)}${r.refs.length + r.cases.length > 2 ? ' <small class="report-meta">also ' + escapeHtml(r.refs.concat(r.cases).filter(x => x.toLowerCase() !== r.q.toLowerCase()).join(', ')) + '</small>' : ''}${r.canEditKey && (r.refNo || r.caseNo) ? ` <button class="btn btn-small imp-noprint" onclick="keyEditOpen('${go}')" title="Change the Ref No or Case No everywhere">&#9998; Edit Ref / Case No</button>` : ''}</div><div class="report-meta">${escapeHtml(head.join(' · '))}</div><div id="key-edit" class="key-edit hidden"></div></div>
-    ${cheques}${chains}
+    ${cheques}${dates}${chains}
     ${trailTablesHtml(r)}
     <label style="margin-top:16px;">Everything that happened <small class="report-meta">newest first</small></label>
     ${trailFeedHtml(r.events || [])}`;
@@ -12489,7 +12591,7 @@ function phRulesHtml(p, i) {
   return `<div class="ph-rules">
     <div class="ph-rule"><b>Own days</b><input type="number" min="0" step="0.5" value="${escapeHtml(String(own.days || ''))}" placeholder="none" onchange="phSetOwn(${i}, 'days', this.value)"> ${phUnitSel(own.work, `phSetOwn(${i}, 'work', this.value === '1')`)} <small class="report-meta">time spent inside this phase</small></div>
     <div class="ph-rule"><b>Running total</b><select onchange="phSetCum(${i}, this.value)"><option value="">off</option>${before.map(n => `<option value="${escapeHtml(n)}"${p.cum && p.cum.from === n ? ' selected' : ''}>count from ${escapeHtml(n)}</option>`).join('')}</select>${p.cum ? ' ' + phUnitSel(p.cum.work, `phList[${i}].cum.work = this.value === '1'`) + ` <small class="report-meta">limit = own days of every phase from ${escapeHtml(p.cum.from)} to here (${phCumTotal(i)} days)</small>` : ''}</div>
-    ${(p.dates || []).map((d, k) => `<div class="ph-rule"><b>Date check</b><span class="tev-ph" style="--ph:#3a86ff">${escapeHtml(d.task + ' › ' + d.label)}</span> + <input type="number" step="0.5" value="${escapeHtml(String(d.days))}" onchange="phList[${i}].dates[${k}].days = Number(this.value) || 0" title="Minus to warn before the date"> ${phUnitSel(d.work, `phList[${i}].dates[${k}].work = this.value === '1'`)}
+    ${(p.dates || []).map((d, k) => `<div class="ph-rule"><b>Date check</b><span class="tev-ph" style="--ph:#3a86ff" title="${escapeHtml(d.task + ' › ' + d.col)}">${escapeHtml(d.task + ' › ' + d.col)}</span> short name <input type="text" class="ph-short" maxlength="10" value="${escapeHtml(d.label || '')}" placeholder="ETA" title="Short name used in report headers" onchange="phList[${i}].dates[${k}].label = this.value.trim() || phList[${i}].dates[${k}].col"> + <input type="number" step="0.5" value="${escapeHtml(String(d.days))}" onchange="phList[${i}].dates[${k}].days = Number(this.value) || 0" title="Minus to warn before the date"> ${phUnitSel(d.work, `phList[${i}].dates[${k}].work = this.value === '1'`)}
       if empty <select onchange="phList[${i}].dates[${k}].missing = this.value"><option value="skip"${d.missing !== 'flag' ? ' selected' : ''}>skip it</option><option value="flag"${d.missing === 'flag' ? ' selected' : ''}>show "not filled"</option></select>
       <button class="chain-btn" title="Remove this check" onclick="phList[${i}].dates.splice(${k}, 1); renderPhases()">&times;</button></div>`).join('')}
     ${phDates.length ? `<div class="ph-rule"><b>+ Date check</b><select onchange="phAddDate(${i}, this.value)"><option value="">pick a date field…</option>${dateOpts}</select></div>` : '<div class="ph-rule"><small class="report-meta">No date fields in any task yet, so no date checks can be added.</small></div>'}
@@ -12685,12 +12787,11 @@ function rdmKinds(rd) {
 
 function rdmStrips(rd) {
   const ks = rdmKinds(rd);
-  return ks.map((k, i) => `<span class="rdm-s ${k}" style="bottom:${2 + (ks.length - 1 - i) * 5}px"></span>`).join('');
+  return ks.map(k => `<span class="rdm-m ${k}"></span>`).join('');
 }
 
 function rdmLateCls(rd) {
-  const n = rdmKinds(rd).length;
-  return n ? ' rdm-late" style="padding-bottom:' + (6 + n * 5) + 'px' : '';
+  return rdmKinds(rd).length ? ' rdm-late' : '';
 }
 
 function rdmEditStart(td, i, j) {
