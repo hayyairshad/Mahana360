@@ -561,6 +561,34 @@ header { padding: 10px 15px; }
 .status-open { background: var(--warn-soft); color: #9a6408; }
 .status-done { background: var(--ok-soft); color: #23784b; }
 .status-late { background: var(--danger-soft); color: #b2362d; }
+.status-cancel { background: #eceff3; color: #5b6573; text-decoration: line-through; }
+tr.row-cancel td { opacity: 0.6; }
+.assign-card.cancelled { opacity: 0.7; border-style: dashed; }
+.imp-line.imp-post { opacity: 0.5; }
+.imp-line.imp-post:hover, .imp-line.imp-post.sel { opacity: 0.9; }
+.imp-post-pill { background: #eceff3; color: #5b6573; }
+.imp-post-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0; padding: 6px 8px; border: 1px dashed var(--border-color); border-radius: 8px; }
+.imp-post-bar input[type=date] { width: auto; margin: 0; }
+.cq-quick { margin-bottom: 4px; }
+.cq-card { border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 10px; margin: 0 0 10px; background: var(--panel-color, #fff); }
+.cq-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 4px 0; }
+.cq-row + .cq-row { border-top: 1px solid var(--border-color); }
+.cq-row input, .cq-row select { width: auto; margin: 0; }
+.cq-add { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.cq-add label { display: flex; flex-direction: column; font-size: 0.78rem; color: var(--text-dim); }
+.cq-add input, .cq-add select { width: 160px; margin: 2px 0 0; }
+.grand-task { border: 1px solid var(--border-color); border-radius: 10px; margin: 0 0 8px; background: var(--panel-color, #fff); }
+.grand-task > summary { cursor: pointer; padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.grand-save { padding: 6px 12px 10px; border-top: 1px solid var(--border-color); }
+.grand-save.partial { background: #fffaf0; }
+.grand-save .report-meta { margin-bottom: 4px; }
+.grand-fields { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: 2px 12px; font-size: 0.88rem; }
+.grand-fields .gl { color: var(--text-dim); }
+.grand-fields .gv { white-space: pre-wrap; word-break: break-word; }
+.bonus-box { border: 1px dashed var(--border-color); border-radius: 10px; padding: 8px 10px; margin-bottom: 10px; }
+.bonus-box table { margin-top: 6px; }
+.stmt-table tr.bonus-row td { background: #f1f8ee; }
+.rr-table td, .rr-table th { padding: 4px 10px; }
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 18px; }
 .summary-card { background: #fff; border: 1px solid var(--border-color); border-top: 3px solid var(--accent-color); border-radius: 10px; padding: 12px; box-shadow: var(--shadow-sm); }
 .summary-card h4 { margin: 0 0 8px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); }
@@ -1660,6 +1688,45 @@ body.fabwin-open .container, body.fabwin-open #scr-entry { margin-right: 620px; 
 .rdm-m.date { right: 0; width: 7px; background: #e24b4a; }
 .rdm td.rdm-cur, .rdm-c.rdm-cur { outline: 2px solid #27500a; outline-offset: -3px; font-weight: 800; }
 .rdm td.rdm-ed { cursor: pointer; } .rdm td.rdm-ed:hover { background: #f4f0fa; }
+.hp-chip .hp-dot, .hp-ph-pill::before { content: ''; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--hpc); margin-right: 5px; }
+.hp-chip:not(.on) { opacity: 0.45; }
+.hp-ph-pill { display: inline-flex; align-items: center; font-size: 0.76rem; font-weight: 700; border: 1px solid var(--hpc); border-radius: 999px; padding: 1px 8px; color: #1f2937; background: color-mix(in srgb, var(--hpc) 14%, #fff); white-space: nowrap; }
+.hp-line { border-left: 4px solid var(--hpc); }
+.hp-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.hp-sub { flex-basis: 100%; }
+.hp-days { font-size: 0.8rem; font-weight: 700; color: #475467; } .hp-days.late { color: #b42318; }
+.hp-bal { font-weight: 800; }
+.hp-strip { display: inline-flex; gap: 3px; }
+.hp-i { width: 20px; height: 20px; border-radius: 5px; font-size: 0.68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #d0d5dd; color: #475467; background: #fff; }
+.hp-i.paid { background: #3fbf5f; border-color: #3fbf5f; color: #fff; } .hp-i.paid-late { background: #ef9f27; border-color: #ef9f27; color: #fff; } .hp-i.late { background: #e24b4a; border-color: #e24b4a; color: #fff; }
+.hp-more { padding: 8px 12px 12px; border-top: 1px solid var(--border-color); }
+.hp-facts { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; margin-bottom: 8px; }
+.hp-msgs { margin: 8px 0; } .hp-msg { display: flex; gap: 8px; align-items: flex-start; background: #f4fbf6; border: 1px solid #cfe9d8; border-radius: 10px; padding: 8px; margin-top: 6px; } .hp-msg-t { flex: 1; white-space: pre-wrap; font-size: 0.86rem; }
+.hp-recv input[type=checkbox] { width: auto !important; margin: 0; } .hp-more .report-bar input[type=text] { flex: 1; min-width: 200px; margin: 0; }
+.hp-recv { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; } .hp-recv input[type=date] { margin: 0; padding: 2px 4px; width: 130px; }
+.hp-ext { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; background: #fff8eb; border: 1px solid #f5d9a8; border-radius: 10px; padding: 8px; margin: 8px 0; } .hp-ext input { margin: 0; }
+.hp-trail { max-height: 320px; overflow-y: auto; border-top: 1px dashed var(--border-color); padding-top: 6px; }
+.hp-note { font-size: 0.85rem; padding: 3px 0; } .hp-note.k-recv { color: #05603a; } .hp-note.k-extend { color: #b54708; } .hp-note.k-old { color: #475467; } .hp-note.k-msg { color: #667085; font-style: italic; }
+.hp-ph-ed input[type=color] { width: 40px !important; height: 32px; padding: 0 2px; flex: 0 0 auto; } .hp-ph-ed select { width: auto !important; flex: 0 0 auto; } .hp-ph-ed .report-bar input[type=text] { flex: 0 0 auto; }
+.hp-ph-ed { border: 1px solid var(--border-color); border-left: 4px solid var(--hpc); border-radius: 10px; padding: 8px; margin-bottom: 8px; } .hp-ph-ed input, .hp-ph-ed select { margin: 0; }
+.hp-msg-ed { display: flex; gap: 6px; margin-top: 6px; } .hp-msg-ed textarea { flex: 1; margin: 0; }
+.dsh-today-banner { display: flex; align-items: center; gap: 10px; background: linear-gradient(90deg, #24533a, #2f6b4a); color: #fff; border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; cursor: pointer; overflow: hidden; animation: dshTbPulse 2.4s ease-in-out infinite; }
+.dsh-tb-h { white-space: nowrap; font-weight: 800; } .dsh-tb-h span { background: #fff; color: #24533a; border-radius: 10px; padding: 0 7px; margin-left: 4px; }
+.dsh-tb-track { overflow: hidden; flex: 1; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.dsh-tb-run { display: inline-flex; gap: 12px; white-space: nowrap; animation: dshTbRun linear infinite; }
+.dsh-today-banner:hover .dsh-tb-run { animation-play-state: paused; }
+.dsh-tb-i { background: rgba(255,255,255,0.14); border-radius: 8px; padding: 3px 10px; font-size: 0.88rem; } .dsh-tb-i.late { background: #e24b4a; }
+@keyframes dshTbRun { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes dshTbPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(36,83,58,0.0); } 50% { box-shadow: 0 0 0 4px rgba(36,83,58,0.18); } }
+.dsh-rola { margin-bottom: 12px; border-left: 4px solid #e24b4a; }
+.dsh-rola-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.dsh-rola-i { display: inline-flex; gap: 6px; align-items: center; background: #fff5f5; border: 1px solid #f7c1c1; border-radius: 10px; padding: 6px 10px; cursor: pointer; font-size: 0.85rem; }
+.dsh-rola-i small { color: var(--text-dim); }
+.rem-icons { display: inline-flex; gap: 2px; align-items: center; margin-left: 4px; flex: 0 0 auto; order: 3; }
+.rem-ic { background: none; border: 1px solid transparent; border-radius: 6px; cursor: pointer; font-size: 0.95rem; padding: 2px 4px; line-height: 1; color: #475467; position: relative; }
+.rem-ic:hover { border-color: #d0d5dd; background: #f8faf9; } .rem-ic.on { background: #eef1f4; }
+.rem-cal-ic input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.steps-in { min-height: 60px; }
 .subs { margin: 8px 0; padding: 8px 10px; background: #f8faf9; border: 1px solid #e3e8e5; border-radius: 10px; }
 .subs-head { font-weight: 700; font-size: 0.82rem; margin-bottom: 4px; display: flex; gap: 8px; align-items: center; }
 .sub-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.88rem; }
@@ -2003,7 +2070,7 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <button class="phase-btn" id="rep-tab-data" onclick="showReportTab('data')">Task data</button>
 <button class="phase-btn" id="rep-tab-times" onclick="showReportTab('times')">Task times</button>
 <button class="phase-btn rep-tab-late" id="rep-tab-late" onclick="showReportTab('late')">&#9888; Late</button>
-<button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button><button class="phase-btn" id="rep-tab-rdays" onclick="showReportTab('rdays')">&#9201; Rola Days</button>
+<button class="phase-btn" id="rep-tab-stmt" onclick="showReportTab('stmt')">&#128181; Points statement</button><button class="phase-btn" id="rep-tab-rdays" onclick="showReportTab('rdays')">&#9201; Rola Days</button><button class="phase-btn" id="rep-tab-grand" onclick="showReportTab('grand')">&#128203; Grand report</button>
 <button class="rep-picker-x" onclick="repPicker(false)" title="Close">&times;</button>
 </div>
 <div class="report-bar date-bar">
@@ -2069,6 +2136,11 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 <div class="emp-tiles" id="employee-cards"></div>
 </div>
 <div id="report-cheque" class="hidden">
+<div class="report-bar cq-quick">
+<input type="text" id="cq-q" class="report-search" placeholder="Receive one cheque: type Ref No or Case No" style="max-width:300px" onkeydown="if(event.key==='Enter')cqFind()">
+<button class="btn btn-small btn-primary" onclick="cqFind()">Find</button>
+</div>
+<div id="cq-quick-box"></div>
 <div class="report-bar">
 <label class="inline-label">Claimed by <select id="cq-user" onchange="renderChequeReport()"></select></label>
 <label class="inline-label">Branch <select id="cq-branch" onchange="renderChequeReport()"></select></label>
@@ -2082,6 +2154,15 @@ Each chain is its own order of tasks. A case enters a chain when that chain's fi
 </div>
 <div id="cheque-summary"></div>
 <div class="report-wrap"><table class="report-table cheque-table" id="cheque-report-table"></table></div>
+</div>
+<div id="report-grand" class="hidden">
+<div class="report-bar">
+<input type="text" id="grand-q" class="report-search" placeholder="Ref No, Case No or consignment name" style="max-width:300px" onkeydown="if(event.key==='Enter')grandLoad()">
+<button class="btn btn-small btn-primary" onclick="grandLoad()">Show</button>
+<label class="field-req-pick"><input type="checkbox" id="grand-partial" checked onchange="grandRender()"> Show partial saves</label>
+<button class="btn btn-small" onclick="grandOpenAll(true)">Open all</button><button class="btn btn-small" onclick="grandOpenAll(false)">Close all</button>
+</div>
+<div id="grand-box"><div class="report-wait">Type one Ref No, Case No or consignment name and press <b>Show</b>. You see every task, and every field that was filled in it, by whom and when.</div></div>
 </div>
 <div id="report-data" class="hidden">
 <div class="report-bar">
@@ -2228,6 +2309,20 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <button class="btn btn-small btn-primary" onclick="savePointsPct()">Save %</button>
 <span class="report-meta">Manual = My Assigned tasks and Mahana cases that did not come from the Google Form. They never get Before points or minus. Extra time approved = the new time counts, but no Before points.</span>
 </div>
+<div class="bonus-box">
+<div class="report-bar" style="margin:0">
+<b>&#127942; Special bonus</b>
+<label class="inline-label">Bonus <input type="number" id="bonus-pct" min="0" max="100" style="width:70px"> % extra</label>
+<button class="btn btn-small btn-primary" onclick="bonusSave({ pct: valOf('bonus-pct') })">Save %</button>
+</div>
+<div class="report-meta">Set a target date for a case or consignment. If every task in it was on time, no extra time was taken, and the chain finished by that date, each person who worked on it gets this % of their points from it as extra. It shows as a Bonus line in the Points statement.</div>
+<div class="report-bar" style="margin:6px 0 0">
+<input type="text" id="bonus-key" class="report-search" placeholder="Ref No or consignment" style="max-width:220px">
+<label class="inline-label">Target date <input type="date" id="bonus-day"></label>
+<button class="btn btn-small btn-primary" onclick="bonusSave({ key: valOf('bonus-key'), day: valOf('bonus-day') })">Add target</button>
+</div>
+<div id="bonus-list"></div>
+</div>
 <div class="report-bar" style="margin-bottom:10px;">
 <button class="btn btn-small" onclick="pointsCheck()">&#128269; Points check: who got 0 and why</button>
 </div>
@@ -2263,6 +2358,35 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <div id="board-body" style="margin-top:10px;"></div>
 </div>
 
+<div id="form-hp" class="hidden">
+<div class="imp-head"><div><b>HP Recovery</b> <small class="report-meta" id="hp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="hp-sync-btn" onclick="hpSyncNow()">Sync now</button></div>
+<div id="hp-error" class="imp-error hidden"></div>
+<details id="hp-admin" class="imp-setup hidden"><summary>HP Master link, phases and messages</summary>
+<p class="report-meta">In Dropbox: right-click HP Master &rarr; Share &rarr; Copy link. Paste it here. It is kept private on the server.</p>
+<div class="imp-link-row"><input type="text" id="hp-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small btn-primary" id="hp-link-btn" onclick="hpSaveLink()">Save and sync</button></div>
+<div id="hp-link-status" class="report-meta"></div>
+<label style="margin-top:12px;">Phases</label>
+<p class="report-meta">Days late of the most recent unpaid instalment decide the phase (paid ones are finished). Use minus days for instalments still to come (e.g. -7 to -1 = due in the next 7 days). Messages can use {Name} {Case} {Ref} {Amount} {Due} {Days} {Inst} {Balance}.</p>
+<div id="hp-phases-ed"></div>
+<div class="report-bar"><button class="btn btn-small" onclick="hpPhaseAdd()">+ Add phase</button><button class="btn btn-small btn-primary" onclick="hpSaveSetup()">Save phases</button></div>
+<label style="margin-top:12px;">Bring in old follow-up comments (once)</label>
+<p class="report-meta">Share the old recovery file (Main_HP_Recovery) on Dropbox and paste the link. Comments from its F-U_Trail sheet are added to each case's trail. Running it again does not add the same comment twice.</p>
+<div class="imp-link-row"><input type="text" id="hp-old-link" placeholder="https://www.dropbox.com/scl/fi/..." autocomplete="off"><button class="btn btn-small" id="hp-old-btn" onclick="hpImportOld()">Bring in comments</button></div>
+<p class="report-meta" style="margin-top:10px;">Who can see HP Recovery and who can tick payments as received is set in <b>Admin &rarr; Who sees what</b>.</p>
+</details>
+<input type="text" id="hp-q" class="report-search imp-search" placeholder="Search name, case no, ref no, mobile, area or salesman" oninput="hpSearchSoon()" autocomplete="off">
+<div class="imp-row">
+<select id="hp-person" onchange="renderHp()" title="Whose cases"></select>
+<select id="hp-branch" onchange="renderHp()" title="Branch"></select>
+<select id="hp-sales" onchange="renderHp()" title="Salesman"></select>
+<select id="hp-city" onchange="renderHp()" title="City"></select>
+<select id="hp-sort" onchange="renderHp()" title="Sort"><option value="late">Most late first</option><option value="due">Next due first</option><option value="bal">Biggest balance</option><option value="name">Name A-Z</option></select>
+<button class="btn btn-small" onclick="hpClear()">Clear</button>
+</div>
+<div id="hp-chips" class="imp-chips"></div>
+<div class="imp-row"><div class="fbox"><button class="phase-btn" id="hp-v-phase" onclick="hpSetView('phase')">By phase</button><button class="phase-btn" id="hp-v-list" onclick="hpSetView('list')">All cases</button></div><span class="report-meta" id="hp-count"></span></div>
+<div id="hp-body"></div>
+</div>
 <div id="form-imports" class="hidden">
 <div class="imp-head"><div><b>Import Data</b> <small class="report-meta" id="imp-sync-info"></small></div><div class="nav-spacer"></div><button class="btn btn-small hidden" id="imp-sync-btn" onclick="importSyncNow()">Sync now</button></div>
 <div id="imp-error" class="imp-error hidden"></div>
@@ -2291,7 +2415,7 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 </div>
 <div id="imp-chips" class="imp-chips"></div>
 <div class="imp-row">
-<div class="fbox"><button class="phase-btn" id="imp-v-sup" onclick="setImpView('sup')">By supplier</button><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button><button class="phase-btn" id="imp-v-diff" onclick="setImpView('diff')">Taskando vs C MSTR</button><button class="phase-btn imp-v-late" id="imp-v-late" onclick="setImpView('late')">&#9888; Late</button></div>
+<div class="fbox"><button class="phase-btn" id="imp-v-sup" onclick="setImpView('sup')">By supplier</button><button class="phase-btn" id="imp-v-group" onclick="setImpView('group')">By consignment</button><button class="phase-btn" id="imp-v-rows" onclick="setImpView('rows')">All rows</button><button class="phase-btn" id="imp-v-diff" onclick="setImpView('diff')">Taskando vs C MSTR</button><button class="phase-btn" id="imp-v-cost" onclick="setImpView('cost')" title="Consignments that passed Costing Calculation, with Purchases and Balance">&#129534; Costing report</button><button class="phase-btn imp-v-late" id="imp-v-late" onclick="setImpView('late')">&#9888; Late</button><button class="phase-btn" id="imp-sort-late" onclick="impSortToggle()" title="Put the most late consignments first">&#8645; Most late first</button></div>
 <button class="btn btn-small" onclick="impCollapseAll()">Collapse all</button>
 <button class="btn btn-small" onclick="clearImpFilters()">Clear</button>
 </div>
@@ -2365,6 +2489,14 @@ Start with <b>General</b>: those points apply to everyone who does the task. Pic
 <p class="report-meta">The dashboard takes Salesman and Branch from the <b>Save Contacts</b> task. For old cases that do not have them there, load the HP Master Excel file once: the app reads its <b>Data</b> tab (Case No, Ref No, Branch, Salesman) and keeps a copy. The cheque report is not changed. You can load the file again any time; the new copy replaces the old one.</p>
 <div class="report-bar"><input type="file" id="hp-file" accept=".xlsx" style="width:auto"><button class="btn btn-primary" onclick="hpLoad()">Load from this file</button></div>
 <div id="hp-msg" class="report-meta"></div>
+</div>
+
+<div id="form-removeref" class="hidden">
+<p class="report-meta">Removes a Ref No, Case No or consignment from Pending, Final, drafts, partial saves, cheques, out of the chain, time requests and Import Data messages, so it no longer shows in any report, Rola or points. The Google Form row is never deleted. A copy of every row is kept in the "Deleted Cases" tab, and you can bring it back below.</p>
+<div class="report-bar"><input type="text" id="rr-key" class="report-search" placeholder="Ref No, Case No or consignment, e.g. 9999" style="max-width:280px" onkeydown="if(event.key==='Enter')rrFind()"><button class="btn btn-small btn-primary" onclick="rrFind()">Check</button></div>
+<div id="rr-box"></div>
+<h4 style="margin:18px 0 6px">Removed before</h4>
+<div id="rr-old" class="report-meta">Loading...</div>
 </div>
 
 <div id="form-devices" class="hidden">
@@ -2703,6 +2835,8 @@ const ADMIN_TASKS = [
   { name: "Phases", phase: "Admin", panel: "phases", description: "Rename phases, change their order, move tasks and set the most days allowed",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
   { name: "Old Salesman / Branch", phase: "Admin", panel: "hpold", description: "Load salesman and branch of old cases from the HP Master Excel file",
+    temp: false, fields: [], owners: [], slots: [], active: true, admin: true },
+  { name: "Remove a case", phase: "Admin", panel: "removeref", description: "Remove a test case or consignment (like 9999) from everywhere",
     temp: false, fields: [], owners: [], slots: [], active: true, admin: true }
 ];
 
@@ -3003,7 +3137,7 @@ let builderDirty = false;
 let selectedIds = {};
 let rowEdits = {};
 
-const APP_VERSION = "R48";
+const APP_VERSION = "R50";
 let serverVersion = null;
 
 function showVersionBanner() {
@@ -3102,6 +3236,7 @@ async function repPrefetch() {
   try { L = JSON.parse(localStorage.getItem('rcp|' + ((user && user.name) || '')) || '{}'); } catch (e) { L = {}; }
   for (const k of Object.keys(L)) {
     const x = L[k];
+    if (x.a === 'rdaysMatrix') continue;
     try { await repCached(x.a, x.p); } catch (e) {}
     await new Promise(r => setTimeout(r, 400));
   }
@@ -3698,7 +3833,7 @@ function renderDash(animate, stale) {
   const want = dashRangeDates(dashRange);
   const wrong = !dashScreenMode && (D.from !== (dashRange === 'custom' ? dashFrom : want[0]) || D.to !== (dashRange === 'custom' ? dashTo : want[1]));
   const old = !!stale || wrong;
-  root.innerHTML = (old ? `<div class="dsh-loadbar">&#8635; ${wrong ? 'Loading ' + escapeHtml((ranges.filter(x => x[0] === dashRange)[0] || ['', 'new dates'])[1]) + '… the numbers below are still the old ones.' : 'Showing the last saved numbers, getting the newest…'}</div>` : '') + html;
+  root.innerHTML = (dashScreenMode ? '' : dashTodayBanner() + dashRolaHtml()) + (old ? `<div class="dsh-loadbar">&#8635; ${wrong ? 'Loading ' + escapeHtml((ranges.filter(x => x[0] === dashRange)[0] || ['', 'new dates'])[1]) + '… the numbers below are still the old ones.' : 'Showing the last saved numbers, getting the newest…'}</div>` : '') + html;
   root.classList.toggle('dsh-old', old);
   dashUpdText();
   root.classList.toggle('dsh-anim', !!animate);
@@ -3707,6 +3842,38 @@ function renderDash(animate, stale) {
 }
 
 let dashLoading = false;
+let dashRola = null, dashRolaAt = 0;
+
+function dashTodayBanner() {
+  if (!remData) return '';
+  const today = ymdLocal(new Date());
+  const r = (remData.items || []).filter(x => x.status === 'Open' && x.dueMs && x.dueDay && x.dueDay <= today && !(x.hideTill && x.hideTill > Date.now()));
+  const a = (remData.assigned || []).filter(x => x.dueMs && ymdLocal(new Date(x.dueMs)) <= today);
+  const items = r.map(x => ({ t: x.title, late: x.dueDay < today, k: 'rem' })).concat(a.map(x => ({ t: x.title, late: x.late, k: 'as' })));
+  if (!items.length) return '';
+  const chip = x => `<span class="dsh-tb-i${x.late ? ' late' : ''}">${x.k === 'as' ? '&#9873; ' : '&#128276; '}${escapeHtml(x.t)}</span>`;
+  const run = items.map(chip).join('');
+  return `<div class="dsh-today-banner" onclick="openReminders()" title="Open my reminders"><b class="dsh-tb-h">Today <span>${items.length}</span></b><div class="dsh-tb-track"><div class="dsh-tb-run" style="animation-duration:${Math.max(12, items.length * 5)}s">${run}${run}</div></div></div>`;
+}
+
+function dashRolaHtml() {
+  if (!(user && (user.level === 0 || can('rep:rdays')))) return '';
+  if (!dashRola || Date.now() - dashRolaAt > 300000) {
+    dashRolaAt = Date.now();
+    apiCall('rolaList', {}).then(r => { if (r && r.ok) { dashRola = r; renderDash(false); if (r.stale) apiCall('rolaList', { fresh: true }).then(r2 => { if (r2 && r2.ok) { dashRola = r2; renderDash(false); } }).catch(() => {}); } }).catch(() => {});
+  }
+  const lines = (dashRola && dashRola.lines) || [];
+  if (!lines.length) return '';
+  const top = lines.slice(0, 8);
+  return `<section class="dsh-card dsh-rola"><div class="dsh-card-h"><h3>&#9201; Critical Rola days</h3><span>${lines.length} over the limit</span></div><div class="dsh-rola-list">${top.map(x => `<div class="dsh-rola-i" title="${escapeHtml(x.rdays ? rdTip(x.rdays) : '')}" onclick="lateOpenTrail('${escapeHtml(String(x.key).replace(/'/g, "\\'"))}')"><b>${escapeHtml(x.key)}</b><small>${escapeHtml(x.name || '')}</small><span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span><span class="late-badge">+${x.over} days</span></div>`).join('')}${lines.length > 8 ? `<button class="btn btn-small" onclick="openRolaReport()">See all ${lines.length}</button>` : ''}</div></section>`;
+}
+
+function openRolaReport() {
+  reportTab = 'rdays';
+  const t = (typeof TASKS !== 'undefined' ? TASKS : []).filter(x => x.panel === 'reports')[0];
+  window.location.hash = '#/staff/' + encodeURIComponent(user.name) + '/Reports';
+  setTimeout(() => { try { showReportTab('rdays'); } catch (e) {} }, 600);
+}
 
 function dashUpdText() {
   const el = document.getElementById('dsh-upd');
@@ -3822,6 +3989,305 @@ function leaveImportsTo(pid, cid) {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name);
 }
 
+const HP_NAME = "HP Recovery";
+const HP_PROJECT = "__hp";
+const HP_TASK = { name: HP_NAME, phase: "HP Recovery", panel: "hp", description: "Instalment recovery from HP Master", temp: false, fields: [], owners: [], slots: [], active: true };
+let hpData = null, hpView = (() => { try { return localStorage.getItem('tk_hpView') || 'phase'; } catch (e) { return 'phase'; } })();
+let hpOpen = {}, hpPhOpen = {}, hpChipOff = {}, hpShowClosed = false, hpShowExempt = false, hpSetupDraft = null, hpLoadSeq = 0, hpSearchT = null;
+
+function hpPid() {
+  const ps = (typeof PROJECTS !== 'undefined' ? PROJECTS : []).filter(x => x.active !== false && x.id !== ADMIN_PROJECT);
+  const p = ps.filter(x => /mahana/i.test(x.name || ''))[0] || ps.filter(x => x.id === DEFAULT_PROJECT)[0];
+  return p ? p.id : '';
+}
+
+function canSeeHp(staffName) {
+  if (!user || !staffName || !hpPid()) return false;
+  if (staffName === user.name) return can('hp');
+  return user.level === 0;
+}
+
+function openHp() { window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(HP_NAME); }
+
+async function loadHp() {
+  const seq = ++hpLoadSeq;
+  if (!hpData) document.getElementById('hp-body').innerHTML = '<div class="report-meta">Loading...</div>';
+  try {
+    const r = await apiCall('hpData');
+    if (seq !== hpLoadSeq) return;
+    if (!r.ok) { document.getElementById('hp-body').innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    hpData = r;
+    try { localStorage.setItem('tk_hp_cache', JSON.stringify(r)); } catch (e) {}
+    renderHp();
+  } catch (e) { if (!hpData) document.getElementById('hp-body').innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function hpPhases() { return (hpData && hpData.setup && hpData.setup.phases) || []; }
+function hpPhaseById(id) { return hpPhases().filter(p => p.id === id)[0] || null; }
+function hpMoney(n) { return 'Rs ' + Math.round(Number(n) || 0).toLocaleString('en-US'); }
+function hpDay(ymd) { if (!ymd) return ''; const p = ymd.split('-'); return Number(p[2]) + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(p[1]) - 1] + ' ' + p[0].slice(2); }
+function hpJs(s) { return escapeHtml(String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")); }
+
+function hpSearchSoon() { clearTimeout(hpSearchT); hpSearchT = setTimeout(renderHp, 200); }
+
+function hpSetView(v) { hpView = v; try { localStorage.setItem('tk_hpView', v); } catch (e) {} renderHp(); }
+
+function hpClear() {
+  ['hp-q'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  ['hp-branch', 'hp-sales', 'hp-city'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  hpChipOff = {}; hpShowClosed = false; hpShowExempt = false;
+  renderHp();
+}
+
+function hpFill(id, label, vals, keep) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const cur = keep !== undefined ? keep : el.value;
+  el.innerHTML = `<option value="">${escapeHtml(label)}</option>` + vals.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if (vals.indexOf(cur) !== -1) el.value = cur;
+}
+
+let hpPersonInit = false, hpAdmOpened = false;
+
+function hpFiltered() {
+  const d = hpData;
+  const q = String(valOf('hp-q') || '').trim().toLowerCase();
+  const br = valOf('hp-branch'), sa = valOf('hp-sales'), ci = valOf('hp-city'), pe = valOf('hp-person');
+  return d.cases.filter(c => {
+    if (c.closed && !hpShowClosed) return false;
+    if (c.exempt && !c.closed && !hpShowExempt) return false;
+    if (br && c.branch !== br) return false;
+    if (sa && c.sales !== sa) return false;
+    if (ci && c.city !== ci) return false;
+    if (pe && c.person !== pe) return false;
+    if (hpChipOff[c.phase]) return false;
+    if (q && [c.cs, c.ref, c.name, c.mobile, c.area, c.city, c.sales, c.branch].join(' ').toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+}
+
+function hpSort(list) {
+  const s = valOf('hp-sort') || 'late';
+  const k = c => c.days === null ? -99999 : c.days;
+  if (s === 'late') list.sort((a, b) => k(b) - k(a) || b.overdueAmt - a.overdueAmt);
+  else if (s === 'due') list.sort((a, b) => String(a.curDue || '9').localeCompare(String(b.curDue || '9')));
+  else if (s === 'bal') list.sort((a, b) => b.balance - a.balance);
+  else list.sort((a, b) => a.name.localeCompare(b.name));
+  return list;
+}
+
+function renderHp() {
+  const d = hpData;
+  if (!d) return;
+  document.getElementById('hp-sync-info').innerText = d.syncedMs ? '· from Dropbox, updated ' + d.syncedAt : '· not synced yet';
+  document.getElementById('hp-sync-btn').classList.toggle('hidden', !d.canSync);
+  const err = document.getElementById('hp-error');
+  err.classList.toggle('hidden', !d.error);
+  err.innerText = d.error ? 'Last sync problem: ' + d.error : '';
+  const adm = document.getElementById('hp-admin');
+  adm.classList.toggle('hidden', !d.isAdmin);
+  if (d.isAdmin) {
+    document.getElementById('hp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
+    if (!d.linkSet && !hpAdmOpened) { adm.open = true; hpAdmOpened = true; }
+    if (!hpSetupDraft) hpSetupDraft = JSON.parse(JSON.stringify(d.setup.phases));
+    renderHpSetup();
+  }
+  const uniq = f => Array.from(new Set(d.cases.map(f).filter(v => v && v !== '0'))).sort();
+  hpFill('hp-branch', 'All branches', uniq(c => c.branch));
+  hpFill('hp-sales', 'All salesmen', uniq(c => c.sales));
+  hpFill('hp-city', 'All cities', uniq(c => c.city));
+  const people = Array.from(new Set(hpPhases().map(p => p.person).filter(Boolean))).sort();
+  hpFill('hp-person', 'Everyone', people, hpPersonInit ? undefined : (people.indexOf(d.me) !== -1 ? d.me : ''));
+  hpPersonInit = true;
+  ['phase', 'list'].forEach(v => document.getElementById('hp-v-' + v).classList.toggle('active', hpView === v));
+  const body = document.getElementById('hp-body');
+  if (!d.cases.length) { body.innerHTML = `<div class="report-meta">${d.isAdmin ? 'No data yet. Paste the HP Master Dropbox link above.' : 'No data yet. Jawad needs to add the HP Master link.'}</div>`; document.getElementById('hp-chips').innerHTML = ''; return; }
+  const all = hpFiltered();
+  const base = d.cases.filter(c => !c.closed && (hpShowExempt || !c.exempt));
+  const chips = hpPhases().map(p => {
+    const n = base.filter(c => c.phase === p.id).length;
+    return `<button class="imp-chip hp-chip${hpChipOff[p.id] ? '' : ' on'}" style="--hpc:${escapeHtml(p.color)}" onclick="hpChipOff['${hpJs(p.id)}'] = !hpChipOff['${hpJs(p.id)}']; renderHp()" title="${escapeHtml((p.from < 0 ? 'Due in ' + (-p.to) + ' to ' + (-p.from) + ' days' : p.from + ' to ' + (p.to > 9999 ? '∞' : p.to) + ' days late') + ' · ' + (p.person || '') + ' · ' + (p.task || ''))}"><span class="hp-dot"></span>${escapeHtml(p.name)} <b>${n}</b></button>`;
+  }).join('');
+  const nOk = base.filter(c => c.phase === 'ok').length;
+  const nEx = d.cases.filter(c => c.exempt && !c.closed).length;
+  const nCl = d.cases.filter(c => c.closed).length;
+  document.getElementById('hp-chips').innerHTML = chips
+    + `<button class="imp-chip${hpChipOff.ok ? '' : ' on'}" onclick="hpChipOff.ok = !hpChipOff.ok; renderHp()" title="Nothing due in the coming days">On track <b>${nOk}</b></button>`
+    + (nEx ? `<button class="imp-chip${hpShowExempt ? ' on' : ''}" onclick="hpShowExempt = !hpShowExempt; renderHp()" title="Cases marked Exempt in HP Master">Exempt <b>${nEx}</b></button>` : '')
+    + `<button class="imp-chip${hpShowClosed ? ' on' : ''}" onclick="hpShowClosed = !hpShowClosed; renderHp()" title="Fully paid">Fully paid <b>${nCl}</b></button>`;
+  const od = all.filter(c => c.days !== null && c.days >= 0);
+  document.getElementById('hp-count').innerText = all.length + ' cases · ' + od.length + ' late · ' + hpMoney(all.reduce((a, c) => a + c.overdueAmt, 0)) + ' overdue · ' + hpMoney(all.reduce((a, c) => a + c.balance, 0)) + ' balance';
+  hpSort(all);
+  if (hpView === 'list') { body.innerHTML = all.map(hpCaseHtml).join('') || '<div class="report-meta">Nothing matches.</div>'; return; }
+  const groups = hpPhases().map(p => ({ p: p, list: all.filter(c => c.phase === p.id) })).concat([{ p: { id: 'ok', name: 'On track', color: '#98a2b3', task: '', person: '' }, list: all.filter(c => c.phase === 'ok') }, { p: { id: 'closed', name: 'Fully paid', color: '#3fbf5f', task: '', person: '' }, list: all.filter(c => c.phase === 'closed') }]).filter(g => g.list.length);
+  groups.sort((a, b) => (hpPhases().indexOf(b.p) - hpPhases().indexOf(a.p)));
+  const auto = groups.length <= 2 || !!valOf('hp-q');
+  body.innerHTML = groups.map(g => {
+    const open = hpPhOpen[g.p.id] !== undefined ? hpPhOpen[g.p.id] : (auto || g.p.id !== 'ok' && g.p.id !== 'closed' && g.list.length <= 25);
+    return `<div class="imp-sup${open ? ' open' : ''}"><div class="imp-sup-head" onclick="hpPhOpen['${hpJs(g.p.id)}'] = ${open ? 'false' : 'true'}; renderHp()"><span class="imp-arrow">${open ? '&#9662;' : '&#9656;'}</span><span class="hp-ph-pill" style="--hpc:${escapeHtml(g.p.color)}">${escapeHtml(g.p.name)}</span><span class="report-meta">${escapeHtml([g.p.person, g.p.task].filter(Boolean).join(' · '))}</span><span class="nav-spacer"></span><b>${g.list.length}</b><span class="report-meta">${hpMoney(g.list.reduce((a, c) => a + c.overdueAmt, 0))} overdue</span></div>${open ? `<div class="imp-sup-body">${g.list.map(hpCaseHtml).join('')}</div>` : ''}</div>`;
+  }).join('') || '<div class="report-meta">Nothing matches.</div>';
+}
+
+function hpDaysTxt(c) {
+  if (c.closed) return 'Fully paid';
+  if (c.days === null) return 'Nothing due';
+  if (c.days > 0) return c.days + ' day' + (c.days === 1 ? '' : 's') + ' late';
+  if (c.days === 0) return 'Due today';
+  return 'Due in ' + (-c.days) + ' day' + (c.days === -1 ? '' : 's');
+}
+
+function hpStrip(c) {
+  return `<span class="hp-strip">${c.inst.map(it => {
+    let cls, tip;
+    if (it.recd) { cls = it.late > 0 ? 'paid-late' : 'paid'; tip = 'Instalment ' + it.n + ' · ' + hpMoney(it.amt) + ' · due ' + hpDay(it.due) + ' · received ' + hpDay(it.recd) + (it.late > 0 ? ' (' + it.late + ' days late)' : it.late < 0 ? ' (' + (-it.late) + ' days early)' : ' (on time)') + (it.recdBy ? ' · ticked by ' + it.recdBy : ''); }
+    else if (it.days !== undefined && it.days >= 0) { cls = 'late'; tip = 'Instalment ' + it.n + ' · ' + hpMoney(it.amt) + ' · due ' + hpDay(it.effDue) + ' · ' + it.days + ' days late'; }
+    else { cls = 'todo'; tip = 'Instalment ' + it.n + ' · ' + hpMoney(it.amt) + ' · due ' + hpDay(it.effDue); }
+    if (it.ext) tip += ' · extended ' + it.ext + ' days';
+    return `<span class="hp-i ${cls}" title="${escapeHtml(tip)}">${it.recd ? (it.late > 0 ? '!' : '&#10003;') : it.n}</span>`;
+  }).join('')}</span>`;
+}
+
+function hpFillMsg(t, c) {
+  const it = c.inst.filter(x => x.n === c.cur)[0] || {};
+  const map = { Name: c.name, Case: c.cs, Ref: c.ref, Amount: Math.round(c.curAmt || 0).toLocaleString('en-US'), Due: hpDay(c.curDue), Days: c.days === null ? '' : String(Math.abs(c.days)), Inst: String(c.cur || ''), Balance: Math.round(c.balance).toLocaleString('en-US') };
+  return String(t || '').replace(/\{(\w+)\}/g, (m, k) => map[k] !== undefined ? map[k] : m);
+}
+
+function hpCaseHtml(c) {
+  const p = hpPhaseById(c.phase);
+  const open = !!hpOpen[c.cs];
+  const cj = hpJs(c.cs);
+  const color = p ? p.color : (c.closed ? '#3fbf5f' : '#98a2b3');
+  const head = `<div class="imp-line-head hp-head" onclick="hpOpen['${cj}'] = !hpOpen['${cj}']; renderHp()">
+    <span class="hp-ph-pill" style="--hpc:${escapeHtml(color)}">${escapeHtml(p ? p.name : (c.closed ? 'Fully paid' : 'On track'))}</span>
+    <b>${escapeHtml(c.name)}</b> <span class="report-meta">Case ${escapeHtml(c.cs)}${c.ref && c.ref !== 'old' ? ' · Ref ' + escapeHtml(c.ref) : ''}</span>
+    ${c.exempt ? '<span class="imp-tag hold-tag">Exempt</span>' : ''}
+    <span class="hp-days${c.days > 0 ? ' late' : ''}">${escapeHtml(hpDaysTxt(c))}</span>
+    ${hpStrip(c)}
+    <span class="nav-spacer"></span>
+    <span class="hp-bal" title="Balance still to come">${hpMoney(c.balance)}</span>
+    ${c.noteN ? `<span class="report-meta" title="Comments in the trail">&#128172; ${c.noteN}</span>` : ''}
+    <div class="hp-sub report-meta">${escapeHtml([c.mobile, [c.area, c.city].filter(Boolean).join(', '), c.sales, c.branch].filter(Boolean).join(' · '))}${c.avgLate !== null ? ` · <span title="${escapeHtml('Days late on each paid instalment: ' + c.trend.join(', '))}">pays ${c.avgLate > 0 ? 'about ' + c.avgLate + ' days late' : c.avgLate < 0 ? 'about ' + (-c.avgLate) + ' days early' : 'on time'}</span>` : ''}${c.lastNote ? ' · last comment ' + escapeHtml(c.lastNote) : ''}</div>
+  </div>`;
+  if (!open) return `<div class="imp-line hp-line" style="--hpc:${escapeHtml(color)}">${head}</div>`;
+  const d = hpData;
+  const msgs = p && (p.messages || []).length ? `<div class="hp-msgs"><label>Messages for ${escapeHtml(p.name)}</label>${p.messages.map((m, i) => `<div class="hp-msg"><div class="hp-msg-t" id="hpm-${cj}-${i}">${escapeHtml(hpFillMsg(m, c))}</div><button class="btn btn-small" onclick="hpCopyMsg('${cj}', ${i})">&#128203; Copy</button></div>`).join('')}</div>` : '';
+  const rows = c.inst.map(it => {
+    const late = it.recd ? (it.late > 0 ? it.late + ' days late' : it.late < 0 ? (-it.late) + ' days early' : 'on time') : (it.days !== undefined && it.days >= 0 ? '<b class="band-late">' + it.days + ' days late</b>' : it.effDue ? 'due ' + hpDay(it.effDue) : '');
+    return `<tr class="${it.recd ? 'dim-row' : ''}"><td>${it.n}</td><td>${hpMoney(it.amt)}</td><td>${hpDay(it.due)}${it.ext ? `<br><small class="report-meta" title="${escapeHtml(it.exts.map(e => '+' + e.days + ' days · ' + e.reason + ' · ' + e.by + ', ' + e.at).join('\n'))}">+${it.ext} days → ${hpDay(it.effDue)}</small>` : ''}</td><td>${it.recd ? hpDay(it.recd) + (it.tk ? `<br><small class="report-meta">by ${escapeHtml(it.recdBy || '')}</small>` : '') : ''}</td><td>${late}</td>
+      <td class="nowrap">${d.canRecv ? (it.recd ? (it.tk ? `<button class="btn btn-small" onclick="hpAct('${cj}', 'unrecv', ${it.n})">Undo</button>` : '') : `<label class="hp-recv"><input type="checkbox" onchange="if (this.checked) hpAct('${cj}', 'recv', ${it.n}, { date: this.parentNode.querySelector('input[type=date]').value })"> Received <input type="date" value="${escapeHtml(d.today)}" onclick="event.stopPropagation()"></label>`) : ''}
+      ${!it.recd ? `<button class="btn btn-small" onclick="hpExtendOpen('${cj}', ${it.n})">+ Days</button>` : ''}</td></tr>`;
+  }).join('');
+  const trail = (c.notes || []).slice().reverse().map(n => `<div class="hp-note k-${escapeHtml(n.kind)}"><span class="report-meta">${escapeHtml(n.at)} · ${escapeHtml(n.by)}${n.inst ? ' · inst ' + escapeHtml(n.inst) : ''}</span> ${escapeHtml(n.text)}</div>`).join('') || '<div class="report-meta">No comments yet.</div>';
+  return `<div class="imp-line hp-line open" style="--hpc:${escapeHtml(color)}">${head}<div class="hp-more">
+    <div class="hp-facts">${[['Total', hpMoney(c.total)], ['Advance', hpMoney(c.adv) + (c.advDate ? ' · ' + hpDay(c.advDate) : '')], ['Paid so far', hpMoney(c.paid)], ['Balance', hpMoney(c.balance)], ['Overdue', hpMoney(c.overdueAmt) + (c.overdueN ? ' (' + c.overdueN + ')' : '')], ['Plan', c.plan ? c.plan + ' months' : ''], ['Sold', hpDay(c.date)], ['Address', c.addr], ['Corporate', c.corp]].filter(x => x[1]).map(x => `<span><b>${x[0]}:</b> ${escapeHtml(x[1])}</span>`).join('')}</div>
+    ${msgs}
+    <div class="report-wrap" style="max-height:none;"><table class="report-table hp-inst"><thead><tr><th>#</th><th>Amount</th><th>Due</th><th>Received</th><th></th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div id="hpx-${cj}" class="hp-ext hidden"></div>
+    <div class="report-bar"><input type="text" id="hpn-${cj}" placeholder="Add a comment (what the customer said, what you did)" onkeydown="if(event.key==='Enter')hpNote('${cj}')"><button class="btn btn-small btn-primary" onclick="hpNote('${cj}')">Add</button></div>
+    <div class="hp-trail">${trail}</div>
+  </div></div>`;
+}
+
+function hpExtendOpen(cs, n) {
+  const el = document.getElementById('hpx-' + cs);
+  if (!el) return;
+  el.classList.remove('hidden');
+  el.innerHTML = `<b>More days for instalment ${n}</b> <input type="number" id="hpxd-${escapeHtml(cs)}" min="1" max="120" value="3" style="width:70px"> days <input type="text" id="hpxr-${escapeHtml(cs)}" placeholder="What did the customer say?" style="flex:1"><button class="btn btn-small btn-primary" onclick="hpAct('${hpJs(cs)}', 'extend', ${n}, { days: valOf('hpxd-${hpJs(cs)}'), reason: valOf('hpxr-${hpJs(cs)}') })">Add days</button><button class="btn btn-small" onclick="this.parentNode.classList.add('hidden')">&times;</button>`;
+  const r = document.getElementById('hpxr-' + cs);
+  if (r) r.focus();
+}
+
+async function hpAct(cs, what, inst, extra) {
+  try {
+    const r = await apiCall('hpAct', Object.assign({ cs: cs, what: what, inst: inst || '' }, extra || {}));
+    if (!r.ok) { toast(r.error || 'Could not save', true); renderHp(); return; }
+    const i = hpData.cases.findIndex(x => x.cs === cs);
+    if (i !== -1 && r.item) hpData.cases[i] = r.item;
+    toast(what === 'recv' ? 'Marked received.' : what === 'unrecv' ? 'Marked not received.' : what === 'extend' ? 'Days added.' : 'Saved.');
+    renderHp();
+  } catch (e) { toast('Network error', true); }
+}
+
+function hpNote(cs) {
+  const t = valOf('hpn-' + cs);
+  if (!t.trim()) return toast('Write the comment first', true);
+  hpAct(cs, 'note', '', { text: t });
+}
+
+async function hpCopyMsg(cs, i) {
+  const el = document.getElementById('hpm-' + cs + '-' + i);
+  if (!el) return;
+  const txt = el.innerText;
+  try { await navigator.clipboard.writeText(txt); toast('Copied. Paste it in WhatsApp.'); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Copied. Paste it in WhatsApp.'); } catch (e2) { toast('Could not copy', true); } ta.remove(); }
+  const c = hpData.cases.filter(x => x.cs === cs)[0];
+  const p = c && hpPhaseById(c.phase);
+  apiCall('hpAct', { cs: cs, what: 'msg', inst: c ? c.cur : '', label: (p ? p.name : '') + ' message ' + (i + 1) }).then(r => { if (r && r.ok && r.item) { const k = hpData.cases.findIndex(x => x.cs === cs); if (k !== -1) { hpData.cases[k] = r.item; } } }).catch(() => {});
+}
+
+async function hpSyncNow() {
+  const b = document.getElementById('hp-sync-btn');
+  b.disabled = true;
+  try { const r = await apiCall('hpSync'); toast(r.ok ? (r.same ? 'Already up to date.' : 'Synced ' + (r.cases || '') + ' cases.') : (r.error || 'Could not sync'), !r.ok); await loadHp(); }
+  catch (e) { toast('Network error', true); }
+  b.disabled = false;
+}
+
+async function hpSaveLink() {
+  const link = valOf('hp-link');
+  if (!link) return toast('Paste the Dropbox link first', true);
+  const b = document.getElementById('hp-link-btn');
+  b.disabled = true;
+  try { const r = await apiCall('hpLinkSave', { link: link }); toast(r.ok ? 'Saved. ' + (r.cases || 0) + ' cases synced.' : (r.error || 'Could not save'), !r.ok); if (r.ok) document.getElementById('hp-link').value = ''; await loadHp(); }
+  catch (e) { toast('Network error', true); }
+  b.disabled = false;
+}
+
+async function hpImportOld() {
+  const link = valOf('hp-old-link');
+  if (!link) return toast('Paste the Dropbox link first', true);
+  const b = document.getElementById('hp-old-btn');
+  b.disabled = true;
+  toast('Reading the old file. This can take a minute.');
+  try { const r = await apiCall('hpTrailImport', { link: link }); toast(r.ok ? r.added + ' old comments added.' : (r.error || 'Could not read it'), !r.ok); if (r.ok) document.getElementById('hp-old-link').value = ''; await loadHp(); }
+  catch (e) { toast('Network error', true); }
+  b.disabled = false;
+}
+
+function renderHpSetup() {
+  const el = document.getElementById('hp-phases-ed');
+  if (!el || !hpSetupDraft) return;
+  const staff = (hpData && hpData.staff) || [];
+  el.innerHTML = hpSetupDraft.map((p, i) => `<div class="hp-ph-ed" style="--hpc:${escapeHtml(p.color)}">
+    <div class="report-bar" style="margin:0;gap:6px;">
+      <input type="color" value="${escapeHtml(p.color)}" onchange="hpSetupDraft[${i}].color = this.value; renderHpSetup()" title="Colour">
+      <input type="text" value="${escapeHtml(p.name)}" placeholder="Phase name" style="width:130px" onchange="hpSetupDraft[${i}].name = this.value">
+      <label class="inline-label">from <input type="number" value="${p.from}" style="width:70px" onchange="hpSetupDraft[${i}].from = Number(this.value)"></label>
+      <label class="inline-label">to <input type="number" value="${p.to > 9999 ? '' : p.to}" placeholder="∞" style="width:70px" onchange="hpSetupDraft[${i}].to = this.value === '' ? 100000 : Number(this.value)"></label> days
+      <select onchange="hpSetupDraft[${i}].person = this.value" title="Who works this phase"><option value="">Nobody</option>${staff.map(n => `<option${n === p.person ? ' selected' : ''}>${escapeHtml(n)}</option>`).join('')}</select>
+      <input type="text" value="${escapeHtml(p.task || '')}" placeholder="What to do (Calls, Visit...)" style="width:150px" onchange="hpSetupDraft[${i}].task = this.value">
+      <button class="btn btn-small" title="Move up" onclick="hpPhaseMove(${i}, -1)">&#8593;</button>
+      <button class="btn btn-small icon-cross" title="Remove phase" onclick="hpSetupDraft.splice(${i}, 1); renderHpSetup()">&times;</button>
+    </div>
+    ${(p.messages || []).map((m, k) => `<div class="hp-msg-ed"><textarea rows="3" onchange="hpSetupDraft[${i}].messages[${k}] = this.value">${escapeHtml(m)}</textarea><button class="btn btn-small icon-cross" onclick="hpSetupDraft[${i}].messages.splice(${k}, 1); renderHpSetup()">&times;</button></div>`).join('')}
+    <button class="btn btn-small" onclick="(hpSetupDraft[${i}].messages = hpSetupDraft[${i}].messages || []).push(''); renderHpSetup()">+ Message</button>
+  </div>`).join('');
+}
+
+function hpPhaseAdd() { hpSetupDraft.push({ id: 'p' + Date.now().toString(36), name: 'New phase', from: 0, to: 0, person: '', task: '', color: '#98a2b3', messages: [] }); renderHpSetup(); }
+function hpPhaseMove(i, d) { const j = i + d; if (j < 0 || j >= hpSetupDraft.length) return; const t = hpSetupDraft[i]; hpSetupDraft[i] = hpSetupDraft[j]; hpSetupDraft[j] = t; renderHpSetup(); }
+
+async function hpSaveSetup() {
+  try {
+    const r = await apiCall('hpSetupSave', { phases: hpSetupDraft });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast('Phases saved.');
+    hpSetupDraft = null;
+    await loadHp();
+  } catch (e) { toast('Network error', true); }
+}
+
 function openImports() {
   window.location.hash = '#/staff/' + encodeURIComponent(profile.name) + '/' + encodeURIComponent(IMPORTS_NAME);
 }
@@ -3864,7 +4330,8 @@ function impStatusClass(s) {
 const IMP_STATUS_ORDER = ['informal order', 'formal order', 'production', 'foreign banking', 'loaded', 'on road', 'clearance', 'short load', 'recently recd', 'already recd', 'cancel'];
 
 function impStatusRank(s) {
-  const i = IMP_STATUS_ORDER.indexOf(String(s || '').trim().toLowerCase());
+  const so = impData && Array.isArray(impData.statusOrder) && impData.statusOrder.length ? impData.statusOrder.map(x => String(x).trim().toLowerCase()) : IMP_STATUS_ORDER;
+  const i = so.indexOf(String(s || '').trim().toLowerCase());
   return i === -1 ? 50 : i;
 }
 
@@ -4025,6 +4492,34 @@ function impExtraLine(g) {
   return bits.length ? ' · <span class="imp-extra">' + escapeHtml(bits.join(' · ')) + '</span>' : '';
 }
 
+function impPost(g) {
+  const p = (impData && impData.postpones) || {};
+  const today = ymdLocal(new Date());
+  for (const k of [String(g.name || '').replace(/\s+/g, ' ').trim().toLowerCase()].concat(g.keys || [])) { if (p[k] && p[k].till >= today) return p[k]; }
+  return null;
+}
+
+let impPostEdit = '';
+
+function impPostOpen(g) {
+  impPostEdit = impPostEdit === g.name ? '' : g.name;
+  renderImports();
+  setTimeout(() => { const el = document.getElementById('imp-post-day'); if (el) el.focus(); }, 30);
+}
+
+async function impPostSave(g, clear) {
+  const till = clear ? '' : valOf('imp-post-day');
+  if (!clear && !till) return toast('Pick the date', true);
+  try {
+    const r = await apiCall('importPostpone', { key: g.name, till: till });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    impData.postpones = r.postpones || {};
+    impPostEdit = '';
+    toast(clear ? 'Back to normal.' : 'Postponed till ' + formatDateDMY(till) + '. It stays dim at the bottom till then.');
+    renderImports();
+  } catch (e) { toast('Network error', true); }
+}
+
 function importPinned(g) {
   const pins = (impData && impData.pins) || {};
   return g.keys.some(k => pins[k]);
@@ -4152,15 +4647,34 @@ function impBuild(showAll) {
     .filter(g => !fcc || g.extra.cca.indexOf(fcc) !== -1)
     .filter(g => !g.st.length || g.st.some(x => impHidden.indexOf(x.toLowerCase()) === -1))
     .filter(g => !q || g.hay.indexOf(q) !== -1);
-  all.sort((a, b) => (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0));
+  all.sort((a, b) => (impPost(a) ? 1 : 0) - (impPost(b) ? 1 : 0) || (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0));
   const base = all;
   const shown = base.filter(g => !fs || g.st.indexOf(fs) !== -1);
-  shown.sort((a, b) => (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0) || Math.min(...a.st.map(impStatusRank), 99) - Math.min(...b.st.map(impStatusRank), 99) || a.name.localeCompare(b.name));
+  shown.sort((a, b) => (impPost(a) ? 1 : 0) - (impPost(b) ? 1 : 0) || (importPinned(b) ? 1 : 0) - (importPinned(a) ? 1 : 0) || (impSortLate ? impLateScore(b) - impLateScore(a) : 0) || Math.min(...a.st.map(impStatusRank), 99) - Math.min(...b.st.map(impStatusRank), 99) || a.name.localeCompare(b.name));
   return { C: C, NUM: NUM, base: base, shown: shown, q: q, fs: fs };
+}
+
+let impSortLate = (() => { try { return localStorage.getItem('tk_impSortLate') === '1'; } catch (e) { return false; } })();
+
+function impSortToggle() {
+  impSortLate = !impSortLate;
+  try { localStorage.setItem('tk_impSortLate', impSortLate ? '1' : '0'); } catch (e) {}
+  renderImports();
+}
+
+function impLateScore(g) {
+  const rd = gRdays(g);
+  let sc = 0;
+  if (rd && !rd.none) sc = rd.over ? 100000 + (rd.by || 0) * 100 : -(rd.left || 0);
+  else sc = -100000;
+  const lateOpen = ((g.prog && g.prog.open) || []).filter(x => x.late).length;
+  return sc + lateOpen;
 }
 
 function renderImports() {
   if (!impData) return;
+  const sl = document.getElementById('imp-sort-late');
+  if (sl) sl.classList.toggle('active', impSortLate);
   const d = impData;
   const info = document.getElementById('imp-sync-info');
   info.innerText = d.syncedMs ? '· from Dropbox, updated ' + d.syncedAt + ' (' + impAgo(d.syncedMs) + ')' + (d.checkedMs && d.checkedMs > d.syncedMs ? ' · checked ' + impAgo(d.checkedMs) : '') : '· not synced yet';
@@ -4178,7 +4692,7 @@ function renderImports() {
     document.getElementById('imp-link-status').innerText = d.linkSet ? 'A link is saved. Paste a new one only if the file moved.' : 'No link saved yet.';
     if (!d.linkSet) adm.open = true;
   }
-  ['sup', 'group', 'rows', 'diff', 'late'].forEach(v => document.getElementById('imp-v-' + v).classList.toggle('active', impView === v));
+  ['sup', 'group', 'rows', 'diff', 'late', 'cost'].forEach(v => document.getElementById('imp-v-' + v).classList.toggle('active', impView === v));
   const body = document.getElementById('imp-body');
   if (!d.rows.length) { body.innerHTML = `<div class="report-meta">${d.isAdmin ? 'No data yet. Paste the Dropbox link above.' : 'No data yet. Jawad needs to add the Dropbox link.'}</div>`; document.getElementById('imp-chips').innerHTML = ''; return; }
   const C0 = impCols();
@@ -4204,11 +4718,13 @@ function renderImports() {
   if (impView === 'late') body.innerHTML = impLateHtml();
   else if (impView === 'rows') body.innerHTML = impRowsHtml(B);
   else if (impView === 'diff') body.innerHTML = impDiffHtml(B);
+  else if (impView === 'cost') body.innerHTML = impCostHtml(B);
   else if (impView === 'group') body.innerHTML = B.shown.map(g => impLineHtml(g, B)).join('') || '<div class="report-meta">Nothing matches.</div>';
   else {
     const bySup = {}, sorder = [];
     B.shown.forEach(g => { if (!bySup[g.supplier]) { bySup[g.supplier] = []; sorder.push(g.supplier); } bySup[g.supplier].push(g); });
-    sorder.sort((a, b) => a.localeCompare(b));
+    if (impSortLate) { const top = {}; sorder.forEach(n => { top[n] = Math.max(...bySup[n].map(impLateScore)); }); sorder.sort((a, b) => top[b] - top[a] || a.localeCompare(b)); }
+    else sorder.sort((a, b) => a.localeCompare(b));
     const auto = B.q || fs ? sorder.length <= 6 : false;
     body.innerHTML = sorder.map(sname => {
       const list = bySup[sname];
@@ -4321,14 +4837,17 @@ function impLineHtml(g, B) {
   const pin = g.notes.filter(n => n.pinned).slice(-1)[0];
   const det = impDetailText(g);
   const nOpen = g.prog.open.length;
-  return `<div class="imp-line${sel ? ' sel' : ''}" id="imp-line-${i}">
+  const post = impPost(g);
+  return `<div class="imp-line${sel ? ' sel' : ''}${post ? ' imp-post' : ''}" id="imp-line-${i}">
     <div class="imp-line-head" onclick="impSelect(${i})">
       <span class="imp-name">${escapeHtml(g.title || g.name)}</span>${g.prog.open.some(x => x.late) ? '<span class="imp-dot imp-dot-late imp-dot-after" title="A task here is late"></span>' : ''}${impMine(g) ? '<span class="imp-dot imp-dot-me imp-dot-after" title="A task here is waiting on you"></span>' : ''}${importPinned(g) ? '<span class="imp-pinned" title="Pinned on top">&#128204;</span>' : ''}
       ${g.st.map(s => `<span class="imp-pill ${impStatusClass(s)}">${escapeHtml(s)}</span>`).join(' ')}
       ${impTkPill(g)}
       ${g.bm.map(b => `<span class="box-tag">${escapeHtml(b)}</span>`).join(' ')}
       ${st && st.state !== 'Open' ? `<span class="imp-pill imp-st-cancel">${escapeHtml(st.state)}</span>` : ''}
-      <span class="imp-icons">${impData.canPin ? `<button class="imp-ico" title="${importPinned(g) ? 'Unpin' : 'Pin on top'}" onclick="event.stopPropagation(); impPinToggle(impFlat[${i}])">${importPinned(g) ? '&#128204;' : '<span style=\'opacity:0.45\'>&#128204;</span>'}</button>` : ''}${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      ${post ? `<span class="imp-pill imp-post-pill" title="${escapeHtml('Postponed by ' + (post.by || '') + ' · ' + (post.at || ''))}">&#9208; till ${escapeHtml(formatDateDMY(post.till))}</span>` : ''}
+      <span class="imp-icons"><button class="imp-ico" title="${post ? 'Postponed till ' + escapeHtml(formatDateDMY(post.till)) + '. Click to change' : 'Postpone till a date: it goes dim at the bottom'}" onclick="event.stopPropagation(); impPostOpen(impFlat[${i}])">${post ? '&#9208;' : '<span style=\'opacity:0.45\'>&#9208;</span>'}</button>${impData.canPin ? `<button class="imp-ico" title="${importPinned(g) ? 'Unpin' : 'Pin on top'}" onclick="event.stopPropagation(); impPinToggle(impFlat[${i}])">${importPinned(g) ? '&#128204;' : '<span style=\'opacity:0.45\'>&#128204;</span>'}</button>` : ''}${rdHtml(gRdays(g))}${impData.level === 0 && impRefs(g).length ? `<button class="imp-ico" title="Edit the name used in tasks" onclick="event.stopPropagation(); keyEditPop(impRefs(impFlat[${i}]).map(n => ({ ref: n, cs: '' })), this, true)">&#9998;</button>` : ''}${g.notes.length ? `<button class="imp-ico" title="Messages" onclick="event.stopPropagation(); impSelect(${i}, true)">&#128172; ${g.notes.length}</button>` : ''}</span>
+      ${impPostEdit === g.name ? `<div class="imp-post-bar" onclick="event.stopPropagation()">Postpone till <input type="date" id="imp-post-day" min="${ymdLocal(new Date())}" value="${post ? escapeHtml(post.till) : ''}" onkeydown="if(event.key==='Enter')impPostSave(impFlat[${i}])"><button class="btn btn-small btn-primary" onclick="impPostSave(impFlat[${i}])">Save</button>${post ? `<button class="btn btn-small" onclick="impPostSave(impFlat[${i}], true)">Not postponed</button>` : ''}<button class="btn btn-small" onclick="impPostEdit = ''; renderImports()">Close</button><span class="report-meta">Points and timers keep running as normal.</span></div>` : ''}
       ${nOpen && !sel ? `<div class="imp-open-row">${g.prog.open.map(o => impTileHtml(o, g, 'open', `event.stopPropagation(); impSelect(${i}, true)`)).join('')}</div>` : ''}
       <div class="imp-sub">${impCount('box', g.list.length, 'Rows in C MSTR')}${impCount('task', nOpen, 'Open tasks')}${hl.length ? escapeHtml(hl.join(' | ')) : ''}</div>
       ${det.length && !sel ? `<div class="imp-det">${det.map(x => `<span><small>${escapeHtml(x.label)}</small> ${escapeHtml(x.value)}</span>`).join('')}</div>` : ''}
@@ -4420,8 +4939,29 @@ async function loadStmt() {
     if (!person) return;
     document.getElementById('stmt-meta').innerText = r.lines.length + ' entries' + (r.zero ? ' · ' + r.zero + ' got no points (reason shown on each line)' : '');
     box.innerHTML = `<div class="stmt-sum"><div><small>Points added</small><b class="pos">+${r.plus}</b></div><div><small>Points taken away</small><b class="neg">${r.minus}</b></div><div><small>Balance</small><b class="${r.balance < 0 ? 'neg' : 'pos'}">${r.balance > 0 ? '+' : ''}${r.balance}</b></div></div>
-      ${r.lines.length ? `<div class="table-wrap"><table class="report-table stmt-table"><thead><tr><th>Date</th><th>Project</th><th>Task</th><th>Case</th><th>Result</th><th class="num">Points</th><th class="num">Balance</th></tr></thead><tbody>${r.lines.slice().reverse().map(x => `<tr class="${x.points < 0 ? 'neg-row' : ''}"><td class="nowrap">${escapeHtml(shortWhen(x.when))}</td><td>${escapeHtml(x.project)}</td><td>${x.phase ? `<span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span> ` : ''}${escapeHtml(x.task)}${x.assigned ? ' <small class="report-meta">(assigned)</small>' : ''}</td><td>${escapeHtml(x.key)}</td><td>${x.band ? escapeHtml(STMT_BAND[x.band] || x.band) : '<b class="neg">No points: ' + escapeHtml(x.why || 'not worked out') + '</b>'}${x.lateBy ? ' · ' + escapeHtml(x.lateBy) : ''}${x.manual ? ' · manual' : ''}${x.grace ? ' · extra time ' + escapeHtml(x.grace) : ''}${x.edited ? ' · edited by ' + escapeHtml(x.edited) : ''}<div class="report-meta">took ${escapeHtml(x.took || '-')}${x.allowed ? ' of ' + escapeHtml(x.allowed) : ''}</div></td><td class="num"><b class="${x.points < 0 ? 'neg' : 'pos'}">${x.points > 0 ? '+' : ''}${x.points}</b></td><td class="num">${x.balance}</td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No points in these dates.</div>'}`;
+      ${r.lines.length ? `<div class="table-wrap"><table class="report-table stmt-table"><thead><tr><th>Date</th><th>Project</th><th>Task</th><th>Case</th><th>Result</th><th class="num">Points</th><th class="num">Balance</th></tr></thead><tbody>${r.lines.slice().reverse().map(x => `<tr class="${x.bonus ? 'bonus-row' : x.points < 0 ? 'neg-row' : ''}"><td class="nowrap">${escapeHtml(shortWhen(x.when))}</td><td>${escapeHtml(x.project)}</td><td>${x.phase ? `<span class="tev-ph" style="--ph:${phaseColor(x.phase)}">${escapeHtml(x.phase)}</span> ` : ''}${escapeHtml(x.task)}${x.assigned ? ' <small class="report-meta">(assigned)</small>' : ''}</td><td>${escapeHtml(x.key)}</td><td>${x.bonus ? '&#127942; <b>Bonus</b> ' + escapeHtml(String(x.bonusPct)) + '% of ' + escapeHtml(String(x.bonusOf)) + ' points, all on time' : x.band ? escapeHtml(STMT_BAND[x.band] || x.band) : '<b class="neg">No points: ' + escapeHtml(x.why || 'not worked out') + '</b>'}${x.lateBy ? ' · ' + escapeHtml(x.lateBy) : ''}${x.manual ? ' · manual' : ''}${x.grace ? ' · extra time ' + escapeHtml(x.grace) : ''}${x.edited ? stmtEditTxt(x) : ''}${x.bonus ? '' : `<div class="report-meta">took ${escapeHtml(x.took || '-')}${x.allowed ? ' of ' + escapeHtml(x.allowed) : ''}</div>`}</td><td class="num" id="stp-${escapeHtml(x.id || '')}"><b class="${x.points < 0 ? 'neg' : 'pos'}">${x.points > 0 ? '+' : ''}${x.points}</b>${user && user.level === 0 && x.id && !x.bonus ? ` <button class="imp-x" title="Change points for this one" onclick="stmtEdit('${escapeHtml(x.id)}', ${Number(x.points) || 0}, ${x.edited ? 'true' : 'false'})">&#9998;</button>` : ''}</td><td class="num">${x.balance}</td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No points in these dates.</div>'}`;
   } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function stmtEdit(id, pts, edited) {
+  const td = document.getElementById('stp-' + id);
+  if (!td || td.querySelector('.pts-edit')) return;
+  td.insertAdjacentHTML('beforeend', `<div class="pts-edit"><input type="number" id="ste-${escapeHtml(id)}" value="${pts}" style="width:70px;margin:2px 0"><input type="text" id="stn-${escapeHtml(id)}" placeholder="Why (optional)" style="width:120px;margin:2px 0"><button class="btn btn-small btn-primary" onclick="stmtEditSave('${escapeHtml(id)}', false)">Save</button>${edited ? ` <button class="btn btn-small" onclick="stmtEditSave('${escapeHtml(id)}', true)">Back to auto</button>` : ''}</div>`);
+  const el = document.getElementById('ste-' + id);
+  if (el) el.focus();
+}
+
+async function stmtEditSave(id, clear) {
+  const v = clear ? '' : valOf('ste-' + id);
+  if (!clear && v === '') return toast('Type the points', true);
+  try {
+    const r = await apiCall('pointsOverride', { pendingId: id, points: v, note: clear ? '' : valOf('stn-' + id) });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    toast(clear ? 'Back to automatic points' : 'Points changed');
+    timingData = null;
+    try { Object.keys(localStorage).filter(k => k.indexOf('rc|') === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    loadStmt();
+  } catch (e) { toast('Network error', true); }
 }
 
 let lateData = null;
@@ -4628,8 +5168,20 @@ function impPurchAfter(cols, B) {
   return cols.indexOf(B.C.status) !== -1 ? B.C.status : cols[cols.length - 1];
 }
 
-function impPurchKey(r, B) {
+function impPurchBase(r, B) {
   return [impKey(r[B.C.each] || r[B.C.group] || r[B.C.main]), String(r[B.C.product] || '').trim().toLowerCase(), String(r[B.C.model] || '').trim().toLowerCase()].join('|').replace(/\s+/g, ' ');
+}
+
+let impPkSrc = null, impPkMap = null;
+
+function impPurchKey(r, B) {
+  if (impPkSrc !== impData.rows) {
+    impPkSrc = impData.rows;
+    impPkMap = new Map();
+    const n = {};
+    (impData.rows || []).forEach(x => { const b = impPurchBase(x, B); n[b] = (n[b] || 0) + 1; impPkMap.set(x, n[b] > 1 ? b + '#' + n[b] : b); });
+  }
+  return (impPkMap && impPkMap.get(r)) || impPurchBase(r, B);
 }
 
 function impPurchOf(r, B) {
@@ -4855,6 +5407,40 @@ function impRowsHtml(B) {
   }</tbody></table></div>`;
 }
 
+function impCostTask() {
+  const list = (impData.tasks || []);
+  return list.filter(t => /costing/i.test(t))[0] || list.filter(t => /cost/i.test(t))[0] || '';
+}
+
+function impCostHtml(B) {
+  const task = impCostTask();
+  if (!task) return '<div class="report-meta">No Costing Calculation task found in the Import project.</div>';
+  const H = (impData.headers || []).map(x => String(x).trim().toLowerCase());
+  const at = (re, fb) => { const i = H.findIndex(x => re.test(x)); return i === -1 ? fb : i; };
+  const C = B.C, oc = impOmerCol();
+  const cFac = at(/^factory/, -1), cSupM = at(/^supplier model/, -1), cMake = at(/^(make|brand)$/, C.supplier);
+  const groups = B.shown.filter(g => g.prog.done.some(x => x.task === task));
+  const v = (r, j) => j >= 0 ? String(r[j] === undefined || r[j] === null ? '' : r[j]).trim() : '';
+  const rows = [];
+  groups.forEach(g => {
+    const cd = g.prog.done.filter(x => x.task === task).slice(-1)[0];
+    g.list.forEach(r => rows.push({ g: g, r: r, costed: cd ? cd.done : '' }));
+  });
+  if (!rows.length) return `<div class="report-meta">No consignment has passed <b>${escapeHtml(task)}</b> yet (with these filters).</div>`;
+  const seen = {};
+  let tq = 0, tp = 0;
+  const body = rows.map(x => {
+    const r = x.r, p = impPurchOf(r, B), qty = oc >= 0 ? Number(r[oc]) || 0 : 0;
+    const k = impPurchKey(r, B);
+    tq += qty;
+    if (!seen[k]) { seen[k] = true; tp += p || 0; }
+    const bal = qty - (p || 0);
+    return `<tr><td class="left"><b>${escapeHtml(x.g.title || x.g.name)}</b><br><small class="report-meta">costed ${escapeHtml(shortWhenImp(x.costed))}</small></td><td class="left">${escapeHtml(v(r, C.product))}</td><td class="left">${escapeHtml(v(r, cMake))}</td><td class="left">${escapeHtml(v(r, C.model))}</td><td class="left">${escapeHtml(v(r, cFac) === '0' ? '' : v(r, cFac))}</td><td class="left">${escapeHtml(v(r, cSupM) === '0' ? '' : v(r, cSupM))}</td><td class="left">${escapeHtml(v(r, C.each))}</td><td class="left">${impTkPill(x.g)}</td><td>${qty || ''}</td><td class="imp-purch-c">${impData.canPurchase ? `<input type="number" min="0" class="imp-purch" value="${p === null ? '' : p}" placeholder="0" data-k="${escapeHtml(k)}" onchange="impPurchSave(this)" onkeydown="if (event.key === 'Enter') this.blur()">` : (p === null ? '' : p)}</td><td class="imp-bal${bal < 0 ? ' neg' : bal === 0 && qty ? ' zero' : ''}"><b>${qty || p !== null ? bal : ''}</b></td></tr>`;
+  }).join('');
+  const qh = oc >= 0 ? escapeHtml(impData.headers[oc]) : 'Qty';
+  return `<div class="report-meta" style="margin-bottom:6px">${groups.length} consignments passed <b>${escapeHtml(task)}</b> · Balance = ${qh} (costing) − Purchases</div><div class="report-wrap"><table class="report-table"><thead><tr><th>Consignment</th><th>Product</th><th>Make</th><th>Model</th><th>Factory model</th><th>Supplier model</th><th>Consign</th><th>Taskando status</th><th>${qh}</th><th class="imp-purch-h">Purchases</th><th class="imp-purch-h">Balance</th></tr></thead><tbody>${body}</tbody><tfoot><tr><td class="left"><b>Total</b></td><td colspan="7"></td><td><b>${tq}</b></td><td><b>${tp}</b></td><td><b>${tq - tp}</b></td></tr></tfoot></table></div>`;
+}
+
 function impDiffHtml(B) {
   const d = impData;
   const C = B.C;
@@ -4862,7 +5448,7 @@ function impDiffHtml(B) {
   d.rows.forEach(r => [r[C.group], r[C.each], r[C.main]].forEach(v => { const k = impKey(v); if (k && k !== '0' && k !== 'order') excelKeys[k] = true; }));
   impAliasKeys(Object.keys(excelKeys)).forEach(k => { excelKeys[k] = true; });
   const P = d.progress || {};
-  const onlyTask = Object.keys(P).filter(k => !excelKeys[k]).map(k => ({ name: P[k].name, open: P[k].open, done: P[k].done })).sort((a, b) => (b.open.length - a.open.length) || a.name.localeCompare(b.name));
+  const onlyTask = Object.keys(P).filter(k => !excelKeys[k] && !(P[k].finished && !(P[k].open || []).length)).map(k => ({ name: P[k].name, open: P[k].open, done: P[k].done })).sort((a, b) => (b.open.length - a.open.length) || a.name.localeCompare(b.name));
   const onlyExcel = B.shown.filter(g => !g.prog.open.length && !g.prog.done.length && g.st.every(s => !/recd|cancel/i.test(s)));
   return `<div class="imp-diff"><label>In Taskando tasks, not in C MSTR (${onlyTask.length})</label>
     <div class="report-wrap" style="max-height:none;"><table class="report-table"><thead><tr><th>Consignment</th><th>Waiting at</th><th>Last done</th></tr></thead><tbody>${
@@ -5278,6 +5864,7 @@ function renderRemEditor() {
     <input type="text" id="rem-title" value="${escapeHtml(d.title)}" placeholder="What to remember, e.g. Order Homa /12th Nov 16" oninput="remTitleTyped(this.value)" onkeydown="if(event.key==='Enter')saveRem()">
     <div id="rem-parse" class="rem-parse"></div>
     <textarea placeholder="Notes (optional)" oninput="remSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
+    ${d.id ? '' : `<textarea class="steps-in" placeholder="Steps (optional, one per line)" oninput="remSet('steps', this.value)">${escapeHtml(d.steps || '')}</textarea>`}
     <div class="report-bar">
       <label class="inline-label">Date <input type="date" value="${escapeHtml(d.date)}" onchange="remSet('date', this.value, true)"></label>
       ${d.date ? `<label class="field-req-pick"><input type="checkbox"${d.allDay ? ' checked' : ''} onchange="remSet('allDay', this.checked, true)"> All day</label>
@@ -5315,7 +5902,7 @@ async function saveRem() {
   const btn = document.getElementById('btn-rem-save');
   btn.disabled = true;
   try {
-    const r = await apiCall('remSave', { id: d.id, title: d.title.trim(), notes: d.notes, group: d.group, tags: d.tags, priority: d.priority, dueMs: dueMs, allDay: !!(d.date && d.allDay), repeat: d.date && d.repeatOn ? d.repeat : null, remindMins: d.date ? d.remind : '' });
+    const r = await apiCall('remSave', { steps: d.id ? undefined : String(d.steps || '').split('\n').map(x => x.trim()).filter(Boolean), id: d.id, title: d.title.trim(), notes: d.notes, group: d.group, tags: d.tags, priority: d.priority, dueMs: dueMs, allDay: !!(d.date && d.allDay), repeat: d.date && d.repeatOn ? d.repeat : null, remindMins: d.date ? d.remind : '' });
     if (!r.ok) { btn.disabled = false; return toast(r.error || 'Could not save', true); }
     toast(d.id ? 'Saved.' : 'Reminder added.');
     remDraft = null;
@@ -5389,7 +5976,7 @@ function remWhoSet(w) {
   renderReminders();
 }
 
-function remFiltered() {
+function remFilteredAll() {
   const g = valOf('rem-group'), tag = valOf('rem-tag'), q = valOf('rem-q').toLowerCase(), show = valOf('rem-show');
   return (remData.items || []).filter(x => {
     if (g && x.group !== g) return false;
@@ -5400,6 +5987,11 @@ function remFiltered() {
     if (q && [x.title, x.notes, x.group, x.tags.join(' ')].join(' ').toLowerCase().indexOf(q) === -1) return false;
     return true;
   });
+}
+
+function remFiltered() {
+  const all = remFilteredAll();
+  return remShowHidden ? all : all.filter(x => !remIsHidden(x));
 }
 
 const subsMem = {};
@@ -5440,6 +6032,34 @@ function subsBadge(items) {
   return `<span class="subs-badge${d === n ? ' all' : ''}" title="Steps done">&#9745; ${d}/${n}</span>`;
 }
 
+let remShowHidden = false;
+
+function remOpenFocus(id, inputId, subsKey) {
+  remOpen[id] = true;
+  renderReminders();
+  setTimeout(() => {
+    let el = inputId ? document.getElementById(inputId) : null;
+    if (!el && subsKey) { const box = document.getElementById(subsKeyId(subsKey)); el = box && box.querySelector('.sub-add input'); }
+    if (el) { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); el.focus(); }
+  }, 50);
+}
+
+function remIsHidden(x) { return x.status === 'Open' && x.hideTill && x.hideTill > Date.now(); }
+
+async function asgHideToggle(id, on) {
+  try {
+    const r = await apiCall('asgHide', { id: id, on: on });
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    asgHiddenMap = r.hidden || {};
+    if (remData) remData.asgHidden = asgHiddenMap;
+    toast(on ? 'Hidden till its due date.' : 'Showing again.');
+    renderReminders();
+    if (document.getElementById('myassigned-list') && !document.getElementById('myassigned-list').closest('.hidden')) loadMyAssigned();
+  } catch (e) { toast('Network error', true); }
+}
+
+let asgHiddenMap = {};
+
 function remItemHtml(x) {
   const id = escapeHtml(x.id);
   const open = remOpen[x.id];
@@ -5448,6 +6068,13 @@ function remItemHtml(x) {
   return `<div class="rem-item${x.late ? ' late' : ''}${x.status !== 'Open' ? ' done' : ''}">
     <button class="rem-check" title="${x.status === 'Open' ? 'Mark done' : 'Open again'}" onclick="remAct('${id}', '${x.status === 'Open' ? 'done' : 'undo'}')">${x.status === 'Open' ? '' : '&#10003;'}</button>
     <button class="rem-del${remDelArm === x.id ? ' arm' : ''}" title="Delete for good" onclick="remDelete('${id}')">${remDelArm === x.id ? 'Delete?' : '&#128465;'}</button>
+    <span class="rem-icons">
+      <button class="rem-ic" title="Edit" onclick="remEdit('${id}')">&#9998;</button>
+      <button class="rem-ic" title="Add a comment" onclick="remOpenFocus('${id}', 'rc-${id}')">&#128172;</button>
+      <label class="rem-ic rem-cal-ic" title="Change the date">&#128197;<input type="date" value="${escapeHtml(x.dueDay || '')}" onchange="remAct('${id}', 'move', { date: this.value })"></label>
+      <button class="rem-ic" title="Steps" onclick="remOpenFocus('${id}', '', 'rem:${id}')">&#9745;</button>
+      ${x.status === 'Open' && x.dueMs ? (x.hideTill && x.hideTill > Date.now() ? `<button class="rem-ic on" title="Hidden till it is due. Click to show it now." onclick="remAct('${id}', 'unhide')">&#128584;</button>` : `<button class="rem-ic" title="Hide till its due date" onclick="remAct('${id}', 'hide')">&#128065;</button>`) : ''}
+    </span>
     <div class="rem-main" onclick="remOpen['${id}'] = !remOpen['${id}']; renderReminders()">
       <div class="rem-title">${escapeHtml(x.title)} ${priorityBadge(x.priority)} ${subsBadge(x.subs)}</div>
       <div class="rem-meta">${[x.due ? (x.late ? '<b class="band-late">' + escapeHtml(x.due) + '</b>' : escapeHtml(x.due)) : '', rp, x.remindMins !== null ? '&#128276;' : '', x.group ? '<span class="rem-group' + (valOf('rem-group') === x.group ? ' on' : '') + '" data-remf="group" data-remv="' + escapeHtml(x.group) + '" title="Click to show only this group">' + escapeHtml(x.group) + '</span>' : '', x.tags.map(t => '<span class="rem-tag' + (valOf('rem-tag') === t ? ' on' : '') + '" data-remf="tag" data-remv="' + escapeHtml(t) + '" title="Click to show only this tag">#' + escapeHtml(t) + '</span>').join(' '), comments.length ? '&#128172; ' + comments.length : '', x.doneCount ? 'Done ' + x.doneCount + '×' : ''].filter(Boolean).join(' · ')}</div>
@@ -5459,7 +6086,7 @@ function remItemHtml(x) {
       <div class="report-bar"><input type="text" id="rc-${id}" placeholder="Add a comment or what you tried" onkeydown="if(event.key==='Enter')remComment('${id}')"><button class="btn btn-small" onclick="remComment('${id}')">Add</button></div>
       <div class="report-bar">
         <button class="btn btn-small" onclick="remEdit('${id}')">Edit</button>
-        ${x.status === 'Open' ? `<button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 60 })">Later +1h</button><button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 1440 })">Tomorrow</button>` : ''}
+        ${x.status === 'Open' ? `<button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 60 })">Later +1h</button><button class="btn btn-small" onclick="remAct('${id}', 'today')">Today</button><button class="btn btn-small" onclick="remAct('${id}', 'snooze', { mins: 1440 })">Tomorrow</button>` : ''}
       </div>
     </div>` : ''}
   </div>`;
@@ -5499,20 +6126,24 @@ function renderReminders() {
   fillSelect('rem-tag', remData.tags, 'All tags');
   const list = remFiltered();
   const box = document.getElementById('rem-list');
-  const ass = (remData.assigned || []).filter(a => !valOf('rem-group') && !valOf('rem-tag') && valOf('rem-show') !== 'done' && (!remDayPick || (a.dueMs && (a.occurrence || ymdLocal(new Date(a.dueMs))) === remDayPick)));
+  asgHiddenMap = remData.asgHidden || asgHiddenMap || {};
+  const assAll = (remData.assigned || []).filter(a => !valOf('rem-group') && !valOf('rem-tag') && valOf('rem-show') !== 'done' && (!remDayPick || (a.dueMs && (a.occurrence || ymdLocal(new Date(a.dueMs))) === remDayPick)));
+  const ass = remShowHidden ? assAll : assAll.filter(a => !(asgHiddenMap[a.id] > Date.now()));
+  const nHid = remFilteredAll().filter(remIsHidden).length + assAll.filter(a => asgHiddenMap[a.id] > Date.now()).length;
   const order = ['Overdue', 'Today', 'Tomorrow', 'This week', 'Later', 'No date', 'Done'];
   const groups = {};
   list.forEach(x => { const b = remBucket(x); (groups[b] = groups[b] || []).push(x); });
-  const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)} ${subsBadge(a.subs)}</div><div class="rem-meta">${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
+  const assHtml = ass.length ? `<div class="rem-section"><div class="rem-sec-head">Assigned to me <span class="sidebar-count">${ass.length}</span></div>${ass.map(a => `<div class="rem-item as${a.late ? ' late' : ''}"><span class="rem-check as" title="Assigned task">&#9873;</span><span class="rem-icons">${a.dueMs ? (asgHiddenMap[a.id] > Date.now() ? `<button class="rem-ic on" title="Hidden till it is due. Click to show it now." onclick="event.stopPropagation(); asgHideToggle('${escapeHtml(a.id)}', false)">&#128584;</button>` : `<button class="rem-ic" title="Hide till its due date" onclick="event.stopPropagation(); asgHideToggle('${escapeHtml(a.id)}', true)">&#128065;</button>`) : ''}<button class="rem-ic" title="Steps and notes" onclick="event.stopPropagation(); openMyAssigned()">&#9745;</button></span><div class="rem-main" onclick="openMyAssigned()"><div class="rem-title">${escapeHtml(a.title)} ${priorityBadge(a.priority)} ${subsBadge(a.subs)}</div><div class="rem-meta">${asgHiddenMap[a.id] > Date.now() ? '&#128584; hidden till due · ' : ''}${a.late ? '<b class="band-late">Due ' + escapeHtml(a.due) + '</b>' : 'Due ' + escapeHtml(a.due)} · from ${escapeHtml(a.by || 'Jawad')}</div></div></div>`).join('')}</div>` : '';
   const cal = remView === 'cal' && remWho === 'mine' ? `<div class="rem-cal">${remCalendarHtml(list)}</div>` : '';
   ['mine', 'assigned'].forEach(k => { const b = document.getElementById('rem-who-' + k); if (b) { b.classList.toggle('active', remWho === k); if (k === 'assigned') b.innerHTML = 'Assigned' + ((remData.assigned || []).length ? ' <span class="sidebar-count">' + remData.assigned.length + '</span>' : ''); } });
+  const hidBar = nHid ? `<div class="report-bar"><button class="btn btn-small" onclick="remShowHidden = !remShowHidden; renderReminders()">${remShowHidden ? 'Hide the hidden ones' : '&#128584; Show hidden (' + nHid + ')'}</button></div>` : '';
   if (remWho === 'assigned') {
-    box.innerHTML = assHtml || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned to you right now.</div>';
+    box.innerHTML = hidBar + assHtml || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned to you right now.</div>';
     document.getElementById('rem-view-list').classList.toggle('btn-primary', remView === 'list');
     document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
     return;
   }
-  box.innerHTML = cal + (remDayPick ? `<div class="report-bar"><span class="report-meta">Showing ${escapeHtml(formatDateDMY(remDayPick))}</span><button class="btn btn-small" onclick="remDayPick=''; renderReminders()">Show all days</button><button class="btn btn-small btn-primary" onclick="remEdit('')">+ Add on this day</button></div>` : '') +
+  box.innerHTML = hidBar + cal + (remDayPick ? `<div class="report-bar"><span class="report-meta">Showing ${escapeHtml(formatDateDMY(remDayPick))}</span><button class="btn btn-small" onclick="remDayPick=''; renderReminders()">Show all days</button><button class="btn btn-small btn-primary" onclick="remEdit('')">+ Add on this day</button></div>` : '') +
     order.filter(k => groups[k]).map(k => `<div class="rem-section"><div class="rem-sec-head">${k} <span class="sidebar-count${k === 'Overdue' ? ' late' : ''}">${groups[k].length}</span></div>${groups[k].map(remItemHtml).join('')}</div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing here. Press + New reminder to add one.</div>';
   document.getElementById('rem-view-list').classList.toggle('btn-primary', remView === 'list');
   document.getElementById('rem-view-cal').classList.toggle('btn-primary', remView === 'cal');
@@ -5596,7 +6227,7 @@ const MY_ASSIGNED_TASK = { name: MY_ASSIGNED, phase: "Assigned", panel: "myassig
   temp: false, fields: [], owners: [], slots: [], active: true };
 
 function allTasks() {
-  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK, DASH_TASK, BOARD_TASK]).concat(importPid() ? [IMPORTS_TASK] : []);
+  return ADMIN_TASKS.concat(TASKS).concat([MY_ASSIGNED_TASK, MY_REMINDERS_TASK, DASH_TASK, BOARD_TASK]).concat(importPid() ? [IMPORTS_TASK] : []).concat(hpPid() ? [HP_TASK] : []);
 }
 
 function taskByName(name) {
@@ -5628,7 +6259,7 @@ function taskListFor(staffName, all) {
   const meKey = String(staffName || '').trim().toLowerCase();
   let list = TASKS.filter(t => t.active && (t.owners.some(o => String(o).trim().toLowerCase() === meKey) || t.owners.some(o => covering.indexOf(o) !== -1)));
   if (!all && !(user && user.level === 0)) list = list.filter(t => !recurringHidden(t) || pendingItems.some(p => p.taskName === t.name));
-  return list.map(t => t.name).concat(canAssigned() ? [MY_ASSIGNED] : []).concat([BOARD_NAME]).concat(user && staffName === user.name ? (canRem() ? [MY_REMINDERS] : []).concat(canDash() ? [DASH_NAME] : []) : (user && user.level <= 1 ? [DASH_NAME] : [])).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(extraPanelsFor(staffName));
+  return list.map(t => t.name).concat(canAssigned() ? [MY_ASSIGNED] : []).concat([BOARD_NAME]).concat(user && staffName === user.name ? (canRem() ? [MY_REMINDERS] : []).concat(canDash() ? [DASH_NAME] : []) : (user && user.level <= 1 ? [DASH_NAME] : [])).concat(canSeeImports(staffName) ? [IMPORTS_NAME] : []).concat(canSeeHp(staffName) ? [HP_NAME] : []).concat(extraPanelsFor(staffName));
 }
 
 function extraPanelsFor(staffName) {
@@ -5667,6 +6298,7 @@ function projOfTask(name) {
   if (t.name === MY_ASSIGNED) return ASSIGNED_PROJECT;
   if (t.name === MY_REMINDERS) return REMINDERS_PROJECT;
   if (t.name === IMPORTS_NAME) return IMPORTS_PROJECT;
+  if (t.name === HP_NAME) return HP_PROJECT;
   if (t.name === BOARD_NAME) return BOARD_PROJECT;
   if (t.name === DASH_NAME) return DASH_PROJECT;
   return t.project || DEFAULT_PROJECT;
@@ -5677,6 +6309,7 @@ function projectName(pid) {
   if (pid === ASSIGNED_PROJECT) return MY_ASSIGNED;
   if (pid === REMINDERS_PROJECT) return MY_REMINDERS;
   if (pid === IMPORTS_PROJECT) return IMPORTS_NAME;
+  if (pid === HP_PROJECT) return HP_NAME;
   if (pid === BOARD_PROJECT) return BOARD_NAME;
   if (pid === DASH_PROJECT) return DASH_NAME;
   if (String(pid || '').indexOf(PANEL_PREFIX) === 0) { const t = ADMIN_TASKS.filter(x => PANEL_PREFIX + x.panel === pid)[0]; return t ? t.name : pid; }
@@ -5917,19 +6550,21 @@ function renderProjectNav() {
   const adminTab = adminP ? `<button class="ftab${currentProject === ADMIN_PROJECT ? ' active' : ''}" onclick="setProject('${escapeHtml(ADMIN_PROJECT)}')">${escapeHtml(adminP.name)}</button>` : '';
   const projTabs = projs.filter(p => p.id !== ADMIN_PROJECT).map(p => {
     const n = pendingCountForProject(p.id);
-    const on = p.id === currentProject || (currentProject === IMPORTS_PROJECT && p.id === importPid());
+    const on = p.id === currentProject || (currentProject === IMPORTS_PROJECT && p.id === importPid()) || (currentProject === HP_PROJECT && p.id === hpPid());
     return `<button class="ftab${on ? ' active' : ''}" onclick="setProject('${escapeHtml(p.id)}')">${escapeHtml(p.name)}${n ? `<span class="sidebar-count">${n.count}</span>` : ''}</button>`;
   }).join('') + (importPid() && !projs.some(p => p.id === importPid()) && canSeeImports(profile.name) ? `<button class="ftab${currentProject === IMPORTS_PROJECT ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '') + (jw ? '' : `<button class="ftab${currentProject === BOARD_PROJECT ? ' active' : ''}" onclick="openBoard()">&#128203; ${BOARD_NAME}</button>`);
   const assignedTab = `<button class="ftab ftab-right${currentProject === ASSIGNED_PROJECT ? ' active' : ''}" onclick="openMyAssigned()">${MY_ASSIGNED}${mineAssigned ? '<span class="sidebar-count' + (assignedMine.some(a => a.late) ? ' late' : '') + '">' + mineAssigned + '</span>' : ''}</button>`;
   const inImp = currentProject === IMPORTS_PROJECT && importPid() && projs.some(p => p.id === importPid());
-  const chPid = inImp ? importPid() : currentProject;
-  const ch = inImp ? projectChains(chPid) : (isPanelProject(currentProject) ? [] : projectChains(currentProject));
-  const impStab = chPid === importPid() && canSeeImports(profile.name) && projs.some(p => p.id === importPid()) ? `<button class="stab stab-right${inImp ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '';
+  const inHp = currentProject === HP_PROJECT && hpPid() && projs.some(p => p.id === hpPid());
+  const chPid = inImp ? importPid() : inHp ? hpPid() : currentProject;
+  const ch = inImp || inHp ? projectChains(chPid) : (isPanelProject(currentProject) ? [] : projectChains(currentProject));
+  const impStab = (chPid === importPid() && canSeeImports(profile.name) && projs.some(p => p.id === importPid()) ? `<button class="stab stab-right${inImp ? ' active' : ''}" onclick="openImports()">&#128230; ${IMPORTS_NAME}</button>` : '')
+    + (chPid === hpPid() && canSeeHp(profile.name) && projs.some(p => p.id === hpPid()) ? `<button class="stab stab-right${inHp ? ' active' : ''}" onclick="openHp()">&#128179; ${HP_NAME}</button>` : '');
   nav.innerHTML = `<div class="ftabs">${(profile && user && (profile.name === user.name ? canDash() : user.level <= 1) ? `<button class="ftab dash-tab${currentProject === DASH_PROJECT ? ' active' : ''}" onclick="openDashboard()">&#10024; Dashboard</button>` : '')}${projTabs}${extraTabsHtml(false)}${jw ? adminTab : ''}<div class="nav-spacer"></div>${jw ? '' : adminTab + remTab + assignedTab}</div>
     ${ch.length || impStab ? `<div class="ftabs-sub">${ch.map(c => {
       const pend = c.tasks.reduce((a, t) => a.concat(pendingForTask(t)), []);
       const cid = escapeHtml(c.id).replace(/'/g, "\\'");
-      return `<button class="stab${!inImp && c.id === currentChain ? ' active' : ''}" onclick="${inImp ? `leaveImportsTo('${escapeHtml(chPid)}', '${cid}')` : `setChain('${cid}')`}"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
+      return `<button class="stab${!inImp && !inHp && c.id === currentChain ? ' active' : ''}" onclick="${inImp || inHp ? `leaveImportsTo('${escapeHtml(chPid)}', '${cid}')` : `setChain('${cid}')`}"><span class="chain-dot" style="background:${c.color}"></span>${escapeHtml(c.name)}${pendBubble(pend)}</button>`;
     }).join('')}${impStab}</div>` : ''}`;
   try { fabStackRender(); } catch (e) {}
 }
@@ -6066,7 +6701,7 @@ async function completeLogin() {
     serverVersion = result.version || 'old';
     showVersionBanner();
     readPendingCache();
-    setTimeout(() => { repPrefetch(); }, 8000);
+    setTimeout(() => { repPrefetch(); }, 45000);
 
     statusEl.innerText = "";
     document.getElementById('scr-login').classList.add('hidden');
@@ -8910,7 +9545,7 @@ function hideAllForms() {
   document.querySelectorAll('.fs-on').forEach(x => x.classList.remove('fs-on'));
   document.body.classList.remove('fs-mode');
   closeColFilter();
-  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-access', 'form-board', 'partial-section', 'recent-section']
+  ['form-dynamic', 'form-templates', 'form-chain', 'form-tasks', 'form-reports', 'form-cheques', 'form-work', 'form-open', 'form-points', 'form-assign', 'form-myassigned', 'form-projects', 'form-approvals', 'form-push', 'form-reminders', 'form-devices', 'form-phases', 'form-rola', 'form-hpold', 'form-removeref', 'form-access', 'form-board', 'partial-section', 'recent-section']
     .forEach(id => { const el = document.getElementById(id); if (el && !(id === 'form-reminders' && remDrawerOpen) && !(el.closest && el.closest('#fab-win'))) el.classList.add('hidden'); });
   document.querySelectorAll('#scr-entry [id^="form-"]').forEach(el => { if (!(el.closest && el.closest('#fab-win'))) el.classList.add('hidden'); });
 }
@@ -9001,6 +9636,14 @@ function renderFormInterface() {
     loadBoard();
     return;
   }
+  if (t.panel === "hp") {
+    document.getElementById('form-hp').classList.remove('hidden');
+    document.getElementById('entry-layout').classList.add('dash-full');
+    if (!hpData) { try { const c = JSON.parse(localStorage.getItem('tk_hp_cache') || 'null'); if (c && c.me === (user && user.name)) hpData = c; } catch (e) {} }
+    if (hpData) renderHp();
+    loadHp();
+    return;
+  }
   if (t.panel === "imports") {
     document.getElementById('form-imports').classList.remove('hidden');
     document.getElementById('entry-layout').classList.add('dash-full');
@@ -9017,6 +9660,7 @@ function renderFormInterface() {
   if (t.panel === "phases") { document.getElementById('form-phases').classList.remove('hidden'); loadPhases(); return; }
   if (t.panel === "rola") { document.getElementById('form-rola').classList.remove('hidden'); loadRola(); return; }
   if (t.panel === "hpold") { document.getElementById('form-hpold').classList.remove('hidden'); hpInfo(); return; }
+  if (t.panel === "removeref") { document.getElementById('form-removeref').classList.remove('hidden'); rrFind(true); return; }
   if (t.panel === "access") {
     document.getElementById('form-access').classList.remove('hidden');
     loadAccess();
@@ -9723,7 +10367,7 @@ function staffReportsOnly() {
   return !isAdminPanel();
 }
 
-const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt', 'rdays'];
+const REPORT_TABS = ['simple', 'timing', 'employee', 'cheque', 'exits', 'trail', 'data', 'times', 'late', 'stmt', 'rdays', 'grand'];
 
 function repPicker(on) {
   const el = document.getElementById('rep-picker');
@@ -9746,7 +10390,8 @@ function showReportTab(tab, keepPicker) {
     document.getElementById('rep-tab-' + k).classList.toggle('active', tab === k);
     document.getElementById('report-' + k).classList.toggle('hidden', tab !== k);
   });
-  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt' || tab === 'rdays' || tab === 'exits');
+  document.querySelector('#form-reports .date-bar').classList.toggle('hidden', tab === 'trail' || tab === 'times' || tab === 'late' || tab === 'stmt' || tab === 'rdays' || tab === 'exits' || tab === 'grand');
+  if (tab === 'grand') { document.getElementById('report-meta').innerText = ''; setTimeout(() => { const el = document.getElementById('grand-q'); if (el) el.focus(); }, 30); return; }
   if (tab === 'rdays') { document.getElementById('report-meta').innerText = ''; loadRdm(); return; }
   if (tab === 'stmt') { document.getElementById('report-meta').innerText = ''; loadStmt(); return; }
   if (tab === 'late') { document.getElementById('report-meta').innerText = ''; loadLate(); return; }
@@ -9781,6 +10426,7 @@ function showReportWait(tab) {
 
 function refreshReports() {
   if (reportTab === 'trail') return loadTrail();
+  if (reportTab === 'grand') return grandLoad();
   if (!reportApplied[reportTab === 'employee' ? 'timing' : reportTab] && reportTab !== 'exits') return applyReportDates();
   if (reportTab === 'data') return loadDataReport();
   if (reportTab === 'simple') loadReport();
@@ -9956,7 +10602,7 @@ function renderTiming() {
       <td class="${caseCellClass(it)}">${it.recurring ? escapeHtml(formatDateDMY(it.occurrence)) : escapeHtml(chequeKey(it))}</td>
       <td>${escapeHtml(it.arrived)}${it.clockFrom ? '<br><small class="report-meta">from visit time</small>' : ''}</td><td>${escapeHtml(it.allowed)}</td><td>${escapeHtml(it.taken || '')}</td>
       <td>${escapeHtml(it.done || '')}${it.by ? ' <small class="report-meta">' + escapeHtml(it.by) + '</small>' : ''}</td><td>${timingStatus(it)}</td>
-      <td id="ptc-${escapeHtml(it.pendingId || '')}">${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : (it.noPts ? `<small class="no-pts">${escapeHtml(it.noPts)}</small>` : '')}${it.pointsEdited ? `<br><small class="report-meta" title="${escapeHtml(it.pointsEdited)}">edited${it.autoPoints !== null && it.autoPoints !== undefined ? ' (was ' + it.autoPoints + ')' : ''}</small>` : ''}${it.grace ? `<br><small class="report-meta">+${escapeHtml(it.grace)} approved</small>` : ''}${it.timeFixed ? `<br><small class="report-meta">time fixed</small>` : ''}${user && user.level === 0 && !it.open && it.pendingId && !it.assigned ? ` <button class="imp-x" title="Change points for this one" onclick="editPts('${escapeHtml(it.pendingId)}')">&#9998;</button>` : ''}</td>
+      <td id="ptc-${escapeHtml(it.pendingId || '')}">${it.band ? `<span class="band-${it.band}">${it.points > 0 ? '+' : ''}${it.points}</span> <small class="report-meta">${BAND_NAME[it.band]}</small>` : (it.noPts ? `<small class="no-pts">${escapeHtml(it.noPts)}</small>` : '')}${it.pointsEdited ? `<br><small class="report-meta" title="${escapeHtml(it.pointsEdited)}">edited${it.autoPoints !== null && it.autoPoints !== undefined ? ' (was ' + it.autoPoints + ')' : ''}</small>` : ''}${it.grace ? `<br><small class="report-meta">+${escapeHtml(it.grace)} approved</small>` : ''}${it.timeFixed ? `<br><small class="report-meta">time fixed</small>` : ''} ${user && user.level === 0 && !it.open && it.pendingId && !it.bonus ? ` <button class="imp-x" title="Change points for this one" onclick="editPts('${escapeHtml(it.pendingId)}')">&#9998;</button>` : ''}</td>
       <td class="left ${caseCellClass(it)}">${escapeHtml(it.name || '')}</td>
     </tr>`).join('') || `<tr><td colspan="9" style="color:var(--text-dim)">Nothing to show.</td></tr>`
   }</tbody>`;
@@ -10878,6 +11524,7 @@ async function loadPoints() {
     pointsFrom = result.pointsFrom || '';
     const pctEl = document.getElementById('points-manual-pct');
     if (pctEl) pctEl.value = result.manualPct === undefined ? 30 : result.manualPct;
+    bonusLoad();
     const people = pointsPeople();
     if (!pointsPerson || people.indexOf(pointsPerson) === -1) pointsPerson = people[0] || null;
     renderPoints();
@@ -11087,11 +11734,12 @@ function renderAssignForm() {
   document.getElementById('assign-form').innerHTML = `
     <div class="report-bar" style="margin-bottom:10px;"><b>${d.id ? 'Edit assigned task' : 'Assign a new task'}</b>${d.id ? '<button class="btn btn-small" onclick="cancelAssignEdit()">Start a new one instead</button>' : ''}</div>
     <label>Title</label>
-    ${user && user.level === 0 ? `<div class="report-bar" style="margin-bottom:6px;">${tplBar('assign')}</div>` : ''}
+    ${user && user.level <= 1 ? `<div class="report-bar" style="margin-bottom:6px;">${tplBar('assign')}</div>` : ''}
     <input type="text" id="as-title" value="${escapeHtml(d.title)}" placeholder="e.g. Send branch report to Taha" oninput="asTitleTyped(this.value)" onchange="asApplySlash(true)" onkeydown="if (event.key === 'Enter') { event.preventDefault(); asApplySlash(true); saveAssign(); }">
     <div id="as-parse" class="as-parse"></div>
     <label>Notes (optional)</label>
     <textarea id="as-notes" placeholder="Details, links, what done looks like" oninput="asSet('notes', this.value)">${escapeHtml(d.notes)}</textarea>
+    ${d.id ? '' : `<textarea class="steps-in" placeholder="Steps (optional, one per line)" oninput="asSet('steps', this.value)">${escapeHtml(d.steps || '')}</textarea>`}
     <label>Assign to</label>
     <div class="owner-grid">${staff.map(n => `<label class="owner-pick${d.people.indexOf(n) !== -1 ? ' on' : ''}"><input type="checkbox"${d.people.indexOf(n) !== -1 ? ' checked' : ''} onchange="asTogglePerson('${escapeHtml(n).replace(/'/g, "\\'")}')"> ${escapeHtml(n)}</label>`).join('')}</div>
     ${d.people.length > 1 ? `<div class="report-bar"><select class="report-search" onchange="asSet('mode', this.value)">
@@ -11136,8 +11784,8 @@ function renderAssignForm() {
       <label class="inline-label">Phone reminder <select onchange="asSet('remind', this.value); renderAssignForm()">${ASSIGN_REMINDS.filter(r => !(d.repeat && r[0] === 'at')).map(r => `<option value="${r[0]}"${String(d.remind) === r[0] ? ' selected' : ''}>${r[1]}</option>`).join('')}</select></label>
       ${d.remind === 'at' && !d.repeat ? `<label class="inline-label">on <input type="date" value="${escapeHtml(d.remindDate)}" onchange="asSet('remindDate', this.value)"></label><label class="inline-label">at ${clockPicker('as_rem', d.remindTime, "asSet('remindTime', readClock('as_rem'))")}</label>` : ''}
     </div>
-    <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.important ? ' on' : ''}"><input type="checkbox"${d.important ? ' checked' : ''} onchange="assignDraft.important = this.checked; renderAssignForm()"> &#9733; Important</label>${user && user.level === 0 ? `<label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label>` : ''}</div>
-    ${d.pointsOn && user && user.level === 0 ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
+    <div class="owner-grid" style="margin-top:8px;"><label class="owner-pick${d.important ? ' on' : ''}"><input type="checkbox"${d.important ? ' checked' : ''} onchange="assignDraft.important = this.checked; renderAssignForm()"> &#9733; Important</label>${user && user.level <= 1 ? `<label class="owner-pick${d.pointsOn ? ' on' : ''}"><input type="checkbox"${d.pointsOn ? ' checked' : ''} onchange="assignDraft.pointsOn = this.checked; renderAssignForm()"> Give points for this task</label>` : ''}</div>
+    ${d.pointsOn && user && user.level <= 1 ? `<div class="schedule-box"><div class="report-bar" style="margin:0; gap:14px;">
       <span class="pt-cell"><b>Before</b> at least <input type="number" class="pt-in" value="${pv('bd')}" placeholder="d" oninput="asPointSet('bd', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('bh')}" placeholder="h" oninput="asPointSet('bh', this.value)"><small>h early</small> = <input type="number" class="pt-in" value="${pv('bp')}" placeholder="0" oninput="asPointSet('bp', this.value)"></span>
       <span class="pt-cell"><b>On</b> time = <input type="number" class="pt-in" value="${pv('op')}" placeholder="0" oninput="asPointSet('op', this.value)"></span>
       <span class="pt-cell"><b>After</b> up to <input type="number" class="pt-in" value="${pv('ad')}" placeholder="d" oninput="asPointSet('ad', this.value)"><small>d</small><input type="number" class="pt-in" value="${pv('ah')}" placeholder="h" oninput="asPointSet('ah', this.value)"><small>h late</small> = <input type="number" class="pt-in" value="${pv('ap')}" placeholder="0" oninput="asPointSet('ap', this.value)"></span>
@@ -11249,13 +11897,18 @@ async function saveAssign() {
   asApplySlash(false);
   if (!d.title.trim()) return toast("Give the task a title.", true);
   if (!d.people.length) return toast("Pick at least one person.", true);
-  if (PROJECTS.length > 1 && !d.project) { renderAssignForm(); return toast("Pick a project, or type / and its name in the title.", true); }
+  if (PROJECTS.length > 1 && !d.project) {
+    const cp = currentProject && currentProject !== ADMIN_PROJECT && PROJECTS.some(p => p.id === currentProject) ? currentProject : '';
+    const first = PROJECTS.filter(p => p.active !== false && p.id !== ADMIN_PROJECT)[0];
+    d.project = cp || (first && first.id) || DEFAULT_PROJECT;
+  }
   if (d.repeat && d.schedule.freq === 'weekly' && !(d.schedule.days || []).length) return toast("Pick at least one day.", true);
   const payload = {
+    steps: d.id ? undefined : String(d.steps || '').split('\n').map(x => x.trim()).filter(Boolean),
     id: d.id, title: d.title.trim(), notes: d.notes, people: d.people, mode: d.people.length > 1 ? d.mode : 'each',
     dueMs: d.repeat ? 0 : endOfDayMs(d.dueDate, d.dueTime),
     schedule: d.repeat ? Object.assign({}, d.schedule, { on: true }) : null,
-    points: d.pointsOn && user.level === 0 ? d.points : null,
+    points: d.pointsOn && user.level <= 1 ? d.points : null,
     important: !!d.important,
     priority: d.priority || 'Normal',
     project: d.project || DEFAULT_PROJECT,
@@ -11300,7 +11953,17 @@ function setAssignTab(tab) {
   renderAssignList();
 }
 
+function stmtEditTxt(x) {
+  const who = x.editBy || 'Jawad';
+  const note = String(x.edited || '').indexOf(':') !== -1 ? String(x.edited).slice(String(x.edited).indexOf(':') + 1).trim() : '';
+  if (x.autoPoints === null || x.autoPoints === undefined) return ' · <b>' + escapeHtml(who) + ' set ' + x.points + ' points</b>' + (note ? ' (' + escapeHtml(note) + ')' : '');
+  const d = x.points - x.autoPoints;
+  const t = d > 0 ? ' gave +' + d + ' extra' : d < 0 ? ' took ' + d : ' kept the same points';
+  return ' · <b>' + escapeHtml(who) + t + '</b> (was ' + x.autoPoints + ')' + (note ? ' · ' + escapeHtml(note) : '');
+}
+
 function assignStatusPill(x) {
+  if (x.status === 'Cancelled') return '<span class="status-pill status-cancel" title="' + escapeHtml((x.cancelledBy ? 'by ' + x.cancelledBy + ' ' : '') + (x.cancelledAt || '')) + '">Cancelled</span>';
   if (x.status === 'Done') return x.late ? '<span class="status-pill status-late">Done late</span>' : '<span class="status-pill status-done">Done</span>';
   return x.late ? '<span class="status-pill status-late">Late</span>' : '<span class="status-pill status-open">Open</span>';
 }
@@ -11308,7 +11971,7 @@ function assignStatusPill(x) {
 function renderAssignList() {
   const q = String(valOf('as-search') || '').trim().toLowerCase();
   const items = assignData.items.filter(x => {
-    if (assignTab === 'open' && x.status !== 'Open') return false;
+    if (assignTab === 'open' && x.status !== 'Open' && x.status !== 'Cancelled') return false;
     if (assignTab === 'late' && !(x.status === 'Open' && x.late)) return false;
     if (assignTab === 'done' && x.status !== 'Done') return false;
     if (q && [x.title, (x.people || []).join(' '), x.doneBy].join(' ').toLowerCase().indexOf(q) === -1) return false;
@@ -11320,11 +11983,11 @@ function renderAssignList() {
   document.getElementById('as-tab-late').innerText = 'Late (' + counts.late + ')';
   document.getElementById('as-tab-done').innerText = 'Done (' + counts.done + ')';
   document.getElementById('assign-table').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Due</th><th>Status</th><th>Done by</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>${
-    items.map(x => `<tr class="${x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
+    items.map(x => `<tr class="${x.status === 'Cancelled' ? 'row-cancel' : x.status === 'Done' && !x.seen ? 'row-new' : (x.status === 'Open' && x.late ? 'overdue' : '')}">
       <td class="left">${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}<b>${escapeHtml(x.title)}</b> ${priorityBadge(x.priority)}${x.by ? `<br><small class="report-meta">by ${escapeHtml(x.by)}</small>` : ''}${assignProjectPick(x)}</td><td class="left">${escapeHtml((x.people || []).join(', '))}</td>
       <td>${escapeHtml(x.due)}</td><td>${assignStatusPill(x)}</td><td>${escapeHtml(x.doneBy || '')}</td><td>${escapeHtml(x.doneAt || '')}</td>
       <td class="left">${escapeHtml(x.note || '')}</td>
-      <td class="nowrap">${assignMineById(x.assignId) ? `${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button>` : ''}</td>
+      <td class="nowrap">${user && user.level === 0 && x.status === 'Open' ? `<button class="btn btn-small" id="cx-item-${escapeHtml(x.id)}" onclick="cancelAssign('${escapeHtml(x.id)}')">Cancel</button> ` : ''}${x.status === 'Cancelled' ? '' : assignMineById(x.assignId) ? `${assignDefById(x.assignId) ? `<button class="btn btn-small" onclick="editAssign('${escapeHtml(x.assignId)}')">Edit</button> ` : ''}<button class="btn btn-small icon-cross" id="del-item-${escapeHtml(x.id)}" onclick="deleteAssign('', '${escapeHtml(x.id)}')">Delete</button>` : ''}</td>
     </tr>`).join('') || '<tr><td colspan="8" class="report-meta">Nothing here.</td></tr>'}</tbody>`;
   const defs = assignData.assignments.filter(a => a.schedule && a.schedule.on);
   document.getElementById('assign-defs').innerHTML = `<thead><tr><th>Task</th><th>For</th><th>Repeat</th><th>Status</th><th></th></tr></thead><tbody>${
@@ -11411,6 +12074,24 @@ async function stopAssign(id) {
     loadAssign();
     loadPending();
   } catch (e) { toast("Network error", true); }
+}
+
+async function cancelAssign(id) {
+  const btn = document.getElementById('cx-item-' + id);
+  if (btn && btn.dataset.confirm !== '1') {
+    btn.dataset.confirm = '1';
+    btn.innerText = 'Press again to cancel';
+    setTimeout(() => { if (btn) { btn.dataset.confirm = ''; btn.innerText = 'Cancel'; } }, 4000);
+    return;
+  }
+  if (btn) btn.disabled = true;
+  try {
+    const r = await apiCall('assignCancel', { id: id });
+    if (!r.ok) { if (btn) btn.disabled = false; return toast(r.error || 'Could not cancel', true); }
+    toast('Cancelled. It shows as Cancelled for 12 hours, then hides.');
+    loadAssign();
+    loadPending();
+  } catch (e) { if (btn) btn.disabled = false; toast('Network error', true); }
 }
 
 async function deleteAssign(id, itemId) {
@@ -11513,9 +12194,13 @@ async function loadMyAssigned() {
     if (!result.ok) { list.innerHTML = `<div class="report-meta">${escapeHtml(result.error || 'Could not load')}</div>`; return; }
     const canDo = user.name === profile.name || user.level === 0;
     const items = result.items || [];
-    const open = items.filter(x => x.status === 'Open');
+    asgHiddenMap = result.asgHidden || {};
+    const openAll = items.filter(x => x.status === 'Open');
+    const nHidA = openAll.filter(x => asgHiddenMap[x.id] > Date.now()).length;
+    const open = remShowHidden ? openAll : openAll.filter(x => !(asgHiddenMap[x.id] > Date.now()));
     const done = items.filter(x => x.status === 'Done');
-    list.innerHTML = open.map(x => `
+    const cancelled = items.filter(x => x.status === 'Cancelled');
+    list.innerHTML = cancelled.map(x => `<div class="assign-card cancelled"><h3>${escapeHtml(x.title)} <span class="status-pill status-cancel">Cancelled</span></h3><div class="report-meta">Cancelled${x.cancelledBy ? ' by <b>' + escapeHtml(x.cancelledBy) + '</b>' : ''}${x.cancelledAt ? ' · ' + escapeHtml(x.cancelledAt) : ''}. Nothing to do. It goes away by itself.</div></div>`).join('') + open.map(x => `
       <div class="assign-card${x.late ? ' late' : ''}">
         <h3 class="clicky" title="Click for details" onclick="document.getElementById('am-${escapeHtml(x.id)}').classList.toggle('hidden')">${user.name === profile.name ? `<span class="card-rem" title="Remind me about this one" data-t="${escapeHtml(x.title)}" onclick="event.stopPropagation(); taskRemStart(this.getAttribute('data-t'), 'From My Assigned', '', this)">&#128276;</span>` : ''}${x.important ? '<span class="imp-star">&#9733;</span> ' : ''}${escapeHtml(x.title)}${x.important ? '<span class="imp-badge">Important</span>' : ''} ${priorityBadge(x.priority)}${x.late ? '<span class="late-badge">Late' + (x.lateBy ? ' ' + escapeHtml(x.lateBy) : '') + '</span>' : ''}</h3>
         <div class="as-more hidden" id="am-${escapeHtml(x.id)}">${x.created ? '<span><b>Live since:</b> ' + escapeHtml(x.created) + '</span>' : ''}<span><b>Due:</b> ${escapeHtml(x.due)}</span>${x.late ? '<span class="band-late"><b>Late by ' + escapeHtml(x.lateBy || '') + '</b></span>' : x.left ? '<span><b>Working time left:</b> ' + escapeHtml(x.left) + '</span>' : ''}${x.by ? '<span><b>Given by:</b> ' + escapeHtml(x.by) + '</span>' : ''}${x.notes ? '<span style="flex-basis:100%"><b>Details:</b> ' + escapeHtml(x.notes) + '</span>' : ''}</div>
@@ -11525,6 +12210,7 @@ async function loadMyAssigned() {
         ${canDo ? `<div class="report-bar">
           <input type="text" class="assign-note" id="an-${escapeHtml(x.id)}" placeholder="Note for ${escapeHtml(x.by || 'Jawad')} (optional)">
           <button class="btn btn-primary btn-small" onclick="markAssignedDone('${escapeHtml(x.id)}')">Done</button>
+          ${user.name === profile.name && x.dueMs ? `<button class="btn btn-small" onclick="asgHideToggle('${escapeHtml(x.id)}', ${asgHiddenMap[x.id] > Date.now() ? 'false' : 'true'})">${asgHiddenMap[x.id] > Date.now() ? '&#128584; Show now' : '&#128065; Hide till due'}</button>` : ''}
           ${user.name === profile.name ? `<button class="btn btn-small" onclick="document.getElementById('ag-${escapeHtml(x.id)}').classList.toggle('hidden')">Ask for more time</button>` : ''}
         </div>
         <div id="ag-${escapeHtml(x.id)}" class="report-bar grace-form hidden">
@@ -11532,7 +12218,7 @@ async function loadMyAssigned() {
           <input type="text" id="agr-${escapeHtml(x.id)}" placeholder="Why do you need more time?">
           <button class="btn btn-small btn-primary" onclick="sendAssignGrace('${escapeHtml(x.id)}')">Send to Jawad</button>
         </div>` : ''}
-      </div>`).join('') || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned right now.</div>';
+      </div>`).join('') + (nHidA ? `<div class="report-bar"><button class="btn btn-small" onclick="remShowHidden = !remShowHidden; loadMyAssigned()">${remShowHidden ? 'Hide the hidden ones' : '&#128584; Show hidden (' + nHidA + ')'}</button></div>` : '') || '<div class="empty-tile" style="padding:30px 20px;">Nothing assigned right now.</div>';
     document.getElementById('myassigned-done').innerHTML = done.map(x => `
       <div class="assign-card done">
         <h3>${escapeHtml(x.title)} ${x.late ? '<span class="status-pill status-late">Done late</span>' : '<span class="status-pill status-done">Done</span>'}</h3>
@@ -12226,7 +12912,7 @@ function exitReasonAsk(r) {
   return new Promise(resolve => {
     let box = document.getElementById('exit-reason-box');
     if (!box) { box = document.createElement('div'); box.id = 'exit-reason-box'; box.className = 'exit-reason-wrap'; document.body.appendChild(box); }
-    box.innerHTML = `<div class="exit-reason"><b>Out of the chain?</b><p class="report-meta">${escapeHtml(r.exitField || '')}: <b>${escapeHtml(r.exitValue || '')}</b> takes this case out of the chain. Write why. Jawad has to approve it first. Until then the next task stays on hold.</p><textarea id="exit-reason-text" rows="3" placeholder="Reason"></textarea><div class="report-bar" style="justify-content:flex-end;margin:8px 0 0"><button class="btn btn-small" id="exit-reason-no">Cancel</button><button class="btn btn-small btn-primary" id="exit-reason-yes">Send to Jawad</button></div></div>`;
+    box.innerHTML = `<div class="exit-reason"><b>Out of the chain?</b><p class="report-meta">${escapeHtml(r.exitField || '')}: <b>${escapeHtml(r.exitValue || '')}</b> takes this case out of the chain. Write why. Jawad has to approve it first. Until then the chain waits.</p><textarea id="exit-reason-text" rows="3" placeholder="Reason"></textarea><div class="report-bar" style="justify-content:flex-end;margin:8px 0 0"><button class="btn btn-small" id="exit-reason-no">Cancel</button><button class="btn btn-small btn-primary" id="exit-reason-yes">Send to Jawad</button></div></div>`;
     box.classList.remove('hidden');
     const ta = document.getElementById('exit-reason-text');
     ta.focus();
@@ -12419,7 +13105,7 @@ async function decideTimeReq(id, approve) {
   try {
     const r = await apiCall('timeReqDecide', Object.assign({ id: id, approve: approve }, extra));
     if (!r.ok) { if (it) { it.status = was; renderApprovals(); } return toast(r.error || 'Could not save', true); }
-    toast(it && it.type === 'exit' ? (approve ? 'Approved. The case is out of the chain.' : 'Rejected. The case stays in the chain and its timer starts now.') : approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
+    toast(it && it.type === 'exit' ? (approve ? 'Approved. The case is out of the chain.' : 'Rejected. The case stays in the chain and its next task starts now.') : approve ? 'Approved. Timing and points now use it.' : 'Rejected.');
     loadApprovals();
     loadPending();
   } catch (e) { toast('Network error', true); }
@@ -12701,7 +13387,7 @@ function rdmView(v) {
 async function loadRdmList(fresh) {
   const box = document.getElementById('rdm-body');
   box.innerHTML = '<div class="report-meta">Loading...</div>';
-  try { const r = await apiCall('rolaList', { project: valOf('rdm-proj'), fresh: !!fresh }); rdmList = r; renderRdm(); } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+  try { const r = await apiCall('rolaList', { project: valOf('rdm-proj'), fresh: !!fresh }); rdmList = r; renderRdm(); if (r && r.stale && !fresh) loadRdmList(true); } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
 }
 
 async function loadRdm(fresh) {
@@ -13596,6 +14282,214 @@ async function savePushAdmin() {
 
 function hideAll() {
   document.querySelectorAll('.glass-panel').forEach(p => p.classList.add('hidden'));
+}
+
+let bonusData = null;
+
+async function bonusLoad() {
+  const box = document.getElementById('bonus-list');
+  if (!box) return;
+  try {
+    const r = await apiCall('bonusGet');
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    bonusData = r;
+    bonusRender();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function bonusRender() {
+  const r = bonusData;
+  const box = document.getElementById('bonus-list');
+  if (!r || !box) return;
+  const pe = document.getElementById('bonus-pct');
+  if (pe && document.activeElement !== pe) pe.value = r.pct || '';
+  const list = (r.targets || []).slice().sort((a, b) => String(a.day).localeCompare(String(b.day)));
+  box.innerHTML = list.length ? `<div class="table-wrap"><table class="report-table"><thead><tr><th>Case / consignment</th><th>Target date</th><th>Result</th><th>Bonus points</th><th>Set by</th><th></th></tr></thead><tbody>${list.map(t => `<tr><td class="left"><b>${escapeHtml(t.key)}</b></td><td>${escapeHtml(formatDateDMY(t.day))}</td><td class="left">${t.ok ? '<span class="status-pill status-done">Bonus given</span>' + (t.done ? ' <small class="report-meta">finished ' + escapeHtml(t.done) + '</small>' : '') : '<span class="report-meta">' + escapeHtml(t.why || 'Waiting') + '</span>'}</td><td>${t.points ? '+' + t.points : ''}</td><td class="report-meta">${escapeHtml(t.by || '')}${t.at ? ' · ' + escapeHtml(t.at) : ''}</td><td><button class="btn btn-small icon-cross" onclick="bonusSave({ key: '${escapeHtml(String(t.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}', remove: true })">Remove</button></td></tr>`).join('')}</tbody></table></div>` : '<div class="report-meta">No targets yet.</div>';
+  if (!r.pct) box.insertAdjacentHTML('afterbegin', '<div class="report-meta"><b>Set the bonus % first.</b> With 0% no bonus is given.</div>');
+}
+
+async function bonusSave(p) {
+  if (p.key !== undefined && !String(p.key || '').trim()) return toast('Type the Ref No or consignment', true);
+  if (p.key !== undefined && !p.remove && !p.day) return toast('Pick the target date', true);
+  try {
+    const r = await apiCall('bonusSave', p);
+    if (!r.ok) return toast(r.error || 'Could not save', true);
+    bonusData = r;
+    if (p.key !== undefined && !p.remove) { document.getElementById('bonus-key').value = ''; document.getElementById('bonus-day').value = ''; }
+    toast(p.remove ? 'Target removed.' : p.pct !== undefined ? 'Bonus % saved.' : 'Target added.');
+    bonusRender();
+  } catch (e) { toast('Network error', true); }
+}
+
+let cqQuick = null;
+
+async function cqFind() {
+  const q = String(valOf('cq-q') || '').trim();
+  const box = document.getElementById('cq-quick-box');
+  if (!q) return toast('Type the Ref No or Case No', true);
+  box.innerHTML = '<div class="report-meta">Looking…</div>';
+  try {
+    const r = await apiCall('chequeFind', { q: q });
+    if (!r.ok) { box.innerHTML = ''; return toast(r.error || 'Could not find', true); }
+    cqQuick = Object.assign({ q: q }, r);
+    cqRender();
+  } catch (e) { box.innerHTML = ''; toast('Network error', true); }
+}
+
+function cqRender() {
+  const box = document.getElementById('cq-quick-box');
+  const r = cqQuick;
+  if (!box) return;
+  if (!r) { box.innerHTML = ''; return; }
+  const close = `<button class="btn btn-small" onclick="cqQuick = null; document.getElementById('cq-q').value = ''; cqRender()">Close</button>`;
+  if (r.items.length) {
+    box.innerHTML = `<div class="cq-card">${r.items.map(c => {
+      const id = escapeHtml(c.id);
+      return `<div class="cq-row"><b>${escapeHtml(chequeKey(c))}</b><span>${escapeHtml(c.customerName || '')}</span><span class="report-meta">${escapeHtml([c.branch, c.salesman].filter(Boolean).join(' · '))}${c.dateClaimed ? ' · claimed ' + escapeHtml(c.dateClaimed) + (c.claimedBy ? ' by ' + escapeHtml(c.claimedBy) : '') : ''}${c.dateReceived ? ' · received ' + escapeHtml(c.dateReceived) + (c.receivedBy ? ' by ' + escapeHtml(c.receivedBy) : '') : ''}</span>${chequeStatusPill(c)}${c.status === 'With Salesman' && r.canReceive ? `<input type="text" id="cqb-${id}" placeholder="Envelope / Box No" style="width:150px" onkeydown="if(event.key==='Enter')cqReceive('${id}')"><button class="btn btn-small btn-primary" onclick="cqReceive('${id}')">Receive</button>` : ''}</div>`;
+    }).join('')}<div class="cq-row">${close}</div></div>`;
+    return;
+  }
+  box.innerHTML = `<div class="cq-card"><div class="cq-row"><b>No cheque for ${escapeHtml(r.q)} yet.</b>${r.canAdd ? '<span class="report-meta">Add it by hand below. It is saved as received.</span>' : '<span class="report-meta">It shows here once Adv &amp; Chq is closed.</span>'}</div>
+    ${r.canAdd ? `<div class="cq-add">
+      <label>Ref No<input type="text" id="cqa-ref" value="${escapeHtml(r.q)}"></label>
+      <label>Case No<input type="text" id="cqa-case"></label>
+      <label>Customer name<input type="text" id="cqa-name" value="${escapeHtml(r.name || '')}"></label>
+      <label>Branch${chequeSelect('cqa-branch', 'Branch', '')}</label>
+      <label>Salesman${chequeSelect('cqa-sales', 'Salesman', '')}</label>
+      <label>Envelope / Box No<input type="text" id="cqa-box"></label>
+      <label>Received on<input type="date" id="cqa-day" value="${ymdLocal(new Date())}" max="${ymdLocal(new Date())}"></label>
+      <label>Note<input type="text" id="cqa-note"></label>
+      <button class="btn btn-small btn-primary" id="cqa-save" onclick="cqAdd()">Add cheque</button>
+    </div>` : ''}<div class="cq-row">${close}</div></div>`;
+}
+
+async function cqReceive(id) {
+  const box = valOf('cqb-' + id);
+  try {
+    const r = await apiCall('chequeUpdate', { id: id, changes: { status: 'Received', box: box } });
+    if (!r.ok) return toast(r.error || 'Could not receive', true);
+    if (cqQuick) cqQuick.items = cqQuick.items.map(c => c.id === id ? Object.assign({}, c, r.item) : c);
+    const i = (chequeItems || []).findIndex(c => c.id === id);
+    if (i !== -1) chequeItems[i] = Object.assign({}, chequeItems[i], r.item);
+    toast('Marked received' + (box ? ' · kept in ' + box : '') + '.');
+    cqRender();
+    if (chequesLoaded && reportApplied.cheque) renderChequeReport();
+  } catch (e) { toast('Network error', true); }
+}
+
+async function cqAdd() {
+  const p = { refNo: valOf('cqa-ref'), caseNo: valOf('cqa-case'), name: valOf('cqa-name'), branch: valOf('cqa-branch'), salesman: valOf('cqa-sales'), box: valOf('cqa-box'), day: valOf('cqa-day'), notes: valOf('cqa-note') };
+  if (!String(p.refNo || '').trim() && !String(p.caseNo || '').trim()) return toast('Type the Ref No or Case No', true);
+  if (!p.day) return toast('Pick the date received', true);
+  const btn = document.getElementById('cqa-save');
+  if (btn) btn.disabled = true;
+  try {
+    const r = await apiCall('chequeAdd', p);
+    if (!r.ok) { if (btn) btn.disabled = false; return toast(r.error || 'Could not add', true); }
+    cqQuick.items = [r.item];
+    if (chequesLoaded) chequeItems.push(r.item);
+    toast('Cheque added as received.');
+    cqRender();
+    if (chequesLoaded && reportApplied.cheque) renderChequeReport();
+  } catch (e) { if (btn) btn.disabled = false; toast('Network error', true); }
+}
+
+let rrData = null;
+
+async function rrFind(onlyOld) {
+  const key = onlyOld ? '' : String(valOf('rr-key') || '').trim();
+  const box = document.getElementById('rr-box');
+  if (!onlyOld && !key) return toast('Type the Ref No, Case No or consignment', true);
+  if (!onlyOld) box.innerHTML = '<div class="report-meta">Checking…</div>';
+  try {
+    const r = await apiCall('removeRefFind', { key: key });
+    if (!r.ok) { if (!onlyOld) box.innerHTML = ''; return toast(r.error || 'Could not check', true); }
+    rrData = Object.assign({ key: key }, r);
+    rrRender(onlyOld);
+  } catch (e) { if (!onlyOld) box.innerHTML = ''; toast('Network error', true); }
+}
+
+function rrRender(onlyOld) {
+  const r = rrData;
+  const box = document.getElementById('rr-box'), old = document.getElementById('rr-old');
+  if (!r) return;
+  old.innerHTML = (r.removed || []).length ? `<table class="report-table rr-table"><thead><tr><th>Removed</th><th>When</th><th>By</th><th>Rows</th><th></th></tr></thead><tbody>${r.removed.map(x => `<tr><td><b>${escapeHtml(x.key)}</b></td><td>${escapeHtml(x.at)}</td><td>${escapeHtml(x.by)}</td><td>${x.rows}</td><td><button class="btn btn-small" id="rru-${escapeHtml(x.key)}" onclick="rrUndo(this, '${escapeHtml(String(x.key).replace(/\\/g, '\\\\').replace(/'/g, "\\'"))}')">Bring back</button></td></tr>`).join('')}</tbody></table>` : 'Nothing removed yet.';
+  if (onlyOld) return;
+  if (!r.counts.length) { box.innerHTML = `<div class="report-meta">Nothing found for <b>${escapeHtml(r.key)}</b>.</div>`; return; }
+  const nr = r.counts.reduce((a, c) => a + c.ref, 0), nc = r.counts.reduce((a, c) => a + c.cs, 0);
+  box.innerHTML = `<table class="report-table rr-table"><thead><tr><th>Tab</th><th>As Ref No / consignment</th><th>As Case No</th></tr></thead><tbody>${r.counts.map(c => `<tr><td class="left">${escapeHtml(c.tab)}</td><td>${c.ref || ''}</td><td>${c.cs || ''}</td></tr>`).join('')}</tbody></table>
+    <div class="report-bar" style="margin-top:8px">${nr && nc ? `<label class="inline-label">Remove rows where it is <select id="rr-which"><option value="both">Ref No or Case No (${nr + nc})</option><option value="ref">Ref No / consignment only (${nr})</option><option value="case">Case No only (${nc})</option></select></label>` : ''}
+    <input type="text" id="rr-confirm" class="report-search" placeholder="Type ${escapeHtml(r.key)} again to confirm" style="max-width:240px">
+    <button class="btn btn-small icon-cross" id="rr-go" onclick="rrRemove()">Remove from everywhere</button></div>
+    <div class="report-meta">Check the Case No column: a real Mahana case can have the same number as a test consignment. Pick "Ref No / consignment only" if so.</div>`;
+}
+
+async function rrRemove() {
+  const r = rrData;
+  if (!r || !r.key) return;
+  const confirm = valOf('rr-confirm');
+  if (String(confirm).trim().toLowerCase() !== r.key.toLowerCase()) return toast('Type ' + r.key + ' again to confirm', true);
+  const btn = document.getElementById('rr-go');
+  if (btn) btn.disabled = true;
+  try {
+    const res = await apiCall('removeRef', { key: r.key, confirm: confirm, which: valOf('rr-which') || 'both' });
+    if (!res.ok) { if (btn) btn.disabled = false; return toast(res.error || 'Could not remove', true); }
+    toast('Removed ' + res.removed + ' rows. A copy is in Deleted Cases.');
+    try { Object.keys(localStorage).filter(k => k.indexOf('rc|') === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    document.getElementById('rr-key').value = '';
+    document.getElementById('rr-box').innerHTML = '';
+    rrFind(true);
+    loadPending();
+  } catch (e) { if (btn) btn.disabled = false; toast('Network error', true); }
+}
+
+async function rrUndo(btn, key) {
+  if (btn.dataset.confirm !== '1') { btn.dataset.confirm = '1'; btn.innerText = 'Press again'; setTimeout(() => { btn.dataset.confirm = ''; btn.innerText = 'Bring back'; }, 4000); return; }
+  btn.disabled = true;
+  try {
+    const r = await apiCall('removeRefUndo', { key: key });
+    if (!r.ok) { btn.disabled = false; return toast(r.error || 'Could not bring back', true); }
+    toast('Brought back ' + r.restored + ' rows.');
+    try { Object.keys(localStorage).filter(k => k.indexOf('rc|') === 0).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    rrFind(true);
+    loadPending();
+  } catch (e) { btn.disabled = false; toast('Network error', true); }
+}
+
+let grandData = null;
+
+async function grandLoad() {
+  const q = String(valOf('grand-q') || '').trim();
+  const box = document.getElementById('grand-box');
+  if (!q) return toast('Type a Ref No, Case No or consignment name', true);
+  box.innerHTML = '<div class="report-meta">Loading…</div>';
+  try {
+    const r = await apiCall('grandReport', { q: q });
+    if (!r.ok) { box.innerHTML = `<div class="report-meta">${escapeHtml(r.error || 'Could not load')}</div>`; return; }
+    grandData = r;
+    grandRender();
+  } catch (e) { box.innerHTML = '<div class="report-meta">Network error</div>'; }
+}
+
+function grandRender() {
+  const r = grandData;
+  const box = document.getElementById('grand-box');
+  if (!r || !box) return;
+  if (!r.found) { box.innerHTML = `<div class="report-meta">Nothing found for <b>${escapeHtml(r.q)}</b>.</div>`; return; }
+  const withPartial = document.getElementById('grand-partial').checked;
+  const kindTxt = { final: 'Saved', auto: 'Moved on by itself', partial: 'Partly saved' };
+  const stTxt = s => s === 'Pending' ? '<span class="status-pill status-open">Waiting</span>' : s === 'Done' ? '<span class="status-pill status-done">Done</span>' : s ? '<span class="status-pill status-cancel">' + escapeHtml(s) + '</span>' : '';
+  const nFields = r.tasks.reduce((a, t) => a + t.saves.filter(x => x.kind !== 'partial').reduce((b, x) => b + x.fields.length, 0), 0);
+  document.getElementById('report-meta').innerText = r.tasks.length + ' tasks · ' + nFields + ' fields filled';
+  box.innerHTML = `<div class="summary-line"><b>${escapeHtml(r.name || r.q)}</b>${r.ref ? ' · Ref ' + escapeHtml(r.ref) : ''}${r.cs ? ' · Case ' + escapeHtml(r.cs) : ''}</div>` + r.tasks.map(t => {
+    const saves = t.saves.filter(x => withPartial || x.kind !== 'partial');
+    const n = saves.filter(x => x.kind !== 'partial').length, np = saves.length - n;
+    return `<details class="grand-task"${saves.length ? ' open' : ''}><summary>${t.phase ? `<span class="tev-ph" style="--ph:${phaseColor(t.phase)}">${escapeHtml(t.phase)}</span>` : ''}<b>${escapeHtml(t.task)}</b>${stTxt(t.status)}<span class="report-meta">${n ? n + ' save' + (n === 1 ? '' : 's') : 'nothing saved yet'}${np ? ' · ' + np + ' partial' : ''}</span></summary>${saves.map(x => `<div class="grand-save${x.kind === 'partial' ? ' partial' : ''}"><div class="report-meta"><b>${kindTxt[x.kind] || x.kind}</b>${x.by && x.kind !== 'auto' ? ' by ' + escapeHtml(x.by) : ''}${x.when ? ' · ' + escapeHtml(x.when) : ''}</div>${x.fields.length ? `<div class="grand-fields">${x.fields.map(f => `<div class="gl">${escapeHtml(f.label)}</div><div class="gv">${escapeHtml(f.value)}</div>`).join('')}</div>` : '<div class="report-meta">No fields filled.</div>'}</div>`).join('')}</details>`;
+  }).join('');
+}
+
+function grandOpenAll(on) {
+  document.querySelectorAll('#grand-box details.grand-task').forEach(d => { d.open = on; });
 }
 </script>
 </body>
